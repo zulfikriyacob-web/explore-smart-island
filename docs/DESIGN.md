@@ -159,16 +159,43 @@ Skrin telefon dibahagi tiga. Segala yang kanak-kanak sentuh berulang kali berada
 
 ```
 ┌──────────────────────────┐
-│  BACA / TONTON           │  ← teks soalan, imej, mascot
+│  BACA / TONTON           │  ← kad soalan: flex 1, mengecut dahulu
 │  (jangan letak butang)   │
 ├──────────────────────────┤
 │  main audio · kemajuan   │  ← kawalan jarang, boleh dijangkau
 ├──────────────────────────┤
 │                          │
-│   BUTANG JAWAPAN         │  ← 55% bawah skrin
+│   BUTANG JAWAPAN         │  ← berlabuh ke bawah; ~55% ialah sasaran
 │                          │
 └──────────────────────────┘
 ```
+
+**55% bukan kotak keras.** Ia sasaran ketinggian di mana timbunan jawapan *bermula* pada
+skrin bersaiz biasa — bukan ketinggian tetap yang dipaksa pada setiap peranti. Memaksanya
+sebagai nilai tetap memecahkan skrin pendek: sama ada butang keluar dari paparan, atau teks
+soalan dipotong.
+
+Susun atur sebenar:
+
+- **Timbunan jawapan berlabuh ke dasar.** Ia mengambil ketinggian semula jadinya dan tidak
+  pernah mengecut. Butang 88px kekal 88px.
+  ```css
+  padding-bottom: max(16px, env(safe-area-inset-bottom));
+  ```
+  `max()` diperlukan sebab `env()` menjadi `0px` pada peranti tanpa takuk atau bar rumah —
+  guna `env()` sendirian dan butang melekat pada tepi skrin di kebanyakan telefon Android.
+- **Kad soalan `flex: 1`.** Ia mengambil baki ruang dan **mengecut dahulu** apabila ruang
+  sempit. Imej dalam kad mengecut bersamanya; teks soalan menatal dalam kad kalau terpaksa.
+  Kanak-kanak boleh menatal untuk membaca; mereka tidak boleh menatal untuk mencari butang
+  yang tiada.
+
+> **Keperluan `index.html`:** tag viewport **mesti** ada `viewport-fit=cover`:
+> ```html
+> <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+> ```
+> Tanpanya `env(safe-area-inset-bottom)` sentiasa `0px` pada iOS, dan padding dasar senyap
+> menjadi 16px pada setiap peranti. Ia tidak akan gagal dengan ralat — ia cuma salah pada
+> iPhone berbar rumah.
 
 Butang "Seterusnya" muncul di **kedudukan yang sama tepat** setiap kali. Kanak-kanak
 membina memori otot; memindahkannya mematahkan aliran.
@@ -309,6 +336,27 @@ Nilai spring dan tempoh tepat berada dalam SPEC.md §7. Bahagian ini menerangkan
 
 **F1 dan F2 dimatikan sepenuhnya pada `prefers-reduced-motion`.** Semua yang lain merosot
 kepada silang-pudar 150 ms.
+
+### Slot yang ditempah — **tiada elemen berganjak**
+
+Dua elemen datang dan pergi semasa sesi. Ruang untuk kedua-duanya ditempah sejak awal dan
+**tidak pernah dilepaskan**, supaya kemunculannya tidak menolak apa-apa.
+
+| Slot | Saiz | Tempat | Semasa rehat |
+|---|---|---|---|
+| **Kancil** | 88 × 88 | Penjuru kanan atas kad soalan | Kosong, ruang kekal ditempah |
+| **Seterusnya** | tinggi 88 | Dasar timbunan jawapan | Kosong, ruang kekal ditempah |
+
+Kancil masuk dan keluar dalam slotnya sendiri. Butang Seterusnya muncul dalam slotnya
+sendiri. Kad soalan tidak berubah tinggi, butang jawapan tidak bergerak, dan kedudukan
+Seterusnya tepat sama pada setiap soalan.
+
+Ini kelihatan membazir ruang pada skrin rehat. Ia memang begitu, dengan sengaja: alternatifnya
+ialah susun atur beralih tepat pada saat kanak-kanak menghulurkan jari, dan mereka menekan
+apa yang baru sahaja berpindah ke situ. Ruang kosong lebih murah daripada salah tekan.
+
+Ini peraturan susun atur, bukan animasi — jangan animasikan slot itu sendiri berkembang atau
+mengecut. Slot statik; hanya isinya yang bergerak.
 
 ### Apa yang **tidak** kita animasikan
 
