@@ -1,0 +1,242 @@
+{
+  "packVersion": 1,
+  "topicId": "science-y1-hidup-bukan-hidup",
+  "subject": "science",
+  "year": 1,
+  "islandId": "pulau-hidupan",
+  "title": { "ms": "Hidup dan Bukan Hidup", "en": "Living and Non-living" },
+  "kssr": {
+    "document": "DSKP Sains Tahun 1 (Semakan 2017)",
+    "contentStandard": "5.1",
+    "learningStandards": ["5.1.1", "5.1.2"],
+    "verified": false
+  },
+  "activities": [
+    {
+      "activityId": "science-y1-hidup-bukan-hidup-a1",
+      "title": { "ms": "Isih Hidup atau Bukan", "en": "Sort Living or Not" },
+      "questionCount": 6,
+      "questionIds": ["s001", "s002", "s003", "s004", "s005", "s006"]
+    }
+  ],
+  "questions": [
+    {
+      "id": "s001",
+      "type": "drag-bucket",
+      "difficulty": 1,
+      "learningStandard": "5.1.1",
+      "prompt": { "ms": "Isih: hidup atau bukan hidup?", "en": "Sort: living or non-living?" },
+      "promptAudio": { "ms": "/audio/ms/inst_sort.mp3", "en": "/audio/en/inst_sort.mp3" },
+      "explain": {
+        "ms": "Benda hidup bernafas, makan dan membesar.",
+        "en": "Living things breathe, eat and grow."
+      },
+      "payload": {
+        "buckets": [
+          {
+            "id": "hidup",
+            "label": { "ms": "Hidup", "en": "Living" },
+            "icon": "/img/ui/leaf.svg"
+          },
+          {
+            "id": "bukan",
+            "label": { "ms": "Bukan Hidup", "en": "Non-living" },
+            "icon": "/img/ui/rock.svg"
+          }
+        ],
+        "items": [
+          {
+            "id": "i1",
+            "image": "/img/sci/cat.svg",
+            "alt": { "ms": "Kucing", "en": "Cat" },
+            "bucketId": "hidup"
+          },
+          {
+            "id": "i2",
+            "image": "/img/sci/chair.svg",
+            "alt": { "ms": "Kerusi", "en": "Chair" },
+            "bucketId": "bukan"
+          },
+          {
+            "id": "i3",
+            "image": "/img/sci/fern.svg",
+            "alt": { "ms": "Paku pakis", "en": "Fern" },
+            "bucketId": "hidup"
+          }
+        ]
+      }
+    },
+    {
+      "id": "s002",
+      "type": "drag-bucket",
+      "difficulty": 1,
+      "learningStandard": "5.1.1",
+      "prompt": { "ms": "Isih: hidup atau bukan hidup?", "en": "Sort: living or non-living?" },
+      "promptAudio": { "ms": "/audio/ms/inst_sort.mp3", "en": "/audio/en/inst_sort.mp3" },
+      "payload": {
+        "buckets": [
+          {
+            "id": "hidup",
+            "label": { "ms": "Hidup", "en": "Living" },
+            "icon": "/img/ui/leaf.svg"
+          },
+          {
+            "id": "bukan",
+            "label": { "ms": "Bukan Hidup", "en": "Non-living" },
+            "icon": "/img/ui/rock.svg"
+          }
+        ],
+        "items": [
+          {
+            "id": "i1",
+            "image": "/img/sci/bird.svg",
+            "alt": { "ms": "Burung", "en": "Bird" },
+            "bucketId": "hidup"
+          },
+          {
+            "id": "i2",
+            "image": "/img/sci/stone.svg",
+            "alt": { "ms": "Batu", "en": "Stone" },
+            "bucketId": "bukan"
+          },
+          {
+            "id": "i3",
+            "image": "/img/sci/bicycle.svg",
+            "alt": { "ms": "Basikal", "en": "Bicycle" },
+            "bucketId": "bukan"
+          }
+        ]
+      }
+    },
+    {
+      "id": "s003",
+      "type": "drag-bucket",
+      "difficulty": 2,
+      "learningStandard": "5.1.2",
+      "prompt": { "ms": "Isih: hidup atau bukan hidup?", "en": "Sort: living or non-living?" },
+      "promptAudio": { "ms": "/audio/ms/inst_sort.mp3", "en": "/audio/en/inst_sort.mp3" },
+      "payload": {
+        "buckets": [
+          {
+            "id": "hidup",
+            "label": { "ms": "Hidup", "en": "Living" },
+            "icon": "/img/ui/leaf.svg"
+          },
+          {
+            "id": "bukan",
+            "label": { "ms": "Bukan Hidup", "en": "Non-living" },
+            "icon": "/img/ui/rock.svg"
+          }
+        ],
+        "items": [
+          {
+            "id": "i1",
+            "image": "/img/sci/hibiscus.svg",
+            "alt": { "ms": "Bunga raya", "en": "Hibiscus" },
+            "bucketId": "hidup"
+          },
+          {
+            "id": "i2",
+            "image": "/img/sci/umbrella.svg",
+            "alt": { "ms": "Payung", "en": "Umbrella" },
+            "bucketId": "bukan"
+          },
+          {
+            "id": "i3",
+            "image": "/img/sci/fish.svg",
+            "alt": { "ms": "Ikan", "en": "Fish" },
+            "bucketId": "hidup"
+          },
+          {
+            "id": "i4",
+            "image": "/img/sci/cup.svg",
+            "alt": { "ms": "Cawan", "en": "Cup" },
+            "bucketId": "bukan"
+          }
+        ]
+      }
+    },
+    {
+      "id": "s004",
+      "type": "mcq-image",
+      "difficulty": 1,
+      "learningStandard": "5.1.1",
+      "prompt": { "ms": "Yang mana benda hidup?", "en": "Which one is living?" },
+      "promptAudio": { "ms": "/audio/ms/s004.mp3", "en": "/audio/en/s004.mp3" },
+      "payload": {
+        "options": [
+          {
+            "id": "a",
+            "image": "/img/sci/stone.svg",
+            "alt": { "ms": "Batu", "en": "Stone" }
+          },
+          {
+            "id": "b",
+            "image": "/img/sci/fern.svg",
+            "alt": { "ms": "Paku pakis", "en": "Fern" }
+          },
+          {
+            "id": "c",
+            "image": "/img/sci/cup.svg",
+            "alt": { "ms": "Cawan", "en": "Cup" }
+          }
+        ],
+        "correctOptionId": "b",
+        "shuffle": true
+      }
+    },
+    {
+      "id": "s005",
+      "type": "mcq",
+      "difficulty": 2,
+      "learningStandard": "5.1.2",
+      "prompt": {
+        "ms": "Apa yang semua benda hidup perlukan?",
+        "en": "What do all living things need?"
+      },
+      "promptAudio": { "ms": "/audio/ms/s005.mp3", "en": "/audio/en/s005.mp3" },
+      "hint": { "ms": "Fikir apa yang kamu perlukan setiap hari.", "en": "Think what you need every day." },
+      "payload": {
+        "options": [
+          { "id": "a", "text": { "ms": "Makanan dan air", "en": "Food and water" } },
+          { "id": "b", "text": { "ms": "Bateri", "en": "Batteries" } },
+          { "id": "c", "text": { "ms": "Cat", "en": "Paint" } }
+        ],
+        "correctOptionId": "a",
+        "shuffle": true
+      }
+    },
+    {
+      "id": "s006",
+      "type": "mcq-image",
+      "difficulty": 3,
+      "learningStandard": "5.1.2",
+      "prompt": {
+        "ms": "Yang mana bukan benda hidup?",
+        "en": "Which one is not a living thing?"
+      },
+      "promptAudio": { "ms": "/audio/ms/s006.mp3", "en": "/audio/en/s006.mp3" },
+      "payload": {
+        "options": [
+          {
+            "id": "a",
+            "image": "/img/sci/bird.svg",
+            "alt": { "ms": "Burung", "en": "Bird" }
+          },
+          {
+            "id": "b",
+            "image": "/img/sci/bicycle.svg",
+            "alt": { "ms": "Basikal", "en": "Bicycle" }
+          },
+          {
+            "id": "c",
+            "image": "/img/sci/fish.svg",
+            "alt": { "ms": "Ikan", "en": "Fish" }
+          }
+        ],
+        "correctOptionId": "b",
+        "shuffle": true
+      }
+    }
+  ]
+}

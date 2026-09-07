@@ -1,0 +1,10 @@
+node_modules/
+coverage/
+dist/
+.vite/
+*.local
+.DS_Store
+Thumbs.db
+
+# Session scratch space, if it is ever pointed inside the repo.
+scratchpad/

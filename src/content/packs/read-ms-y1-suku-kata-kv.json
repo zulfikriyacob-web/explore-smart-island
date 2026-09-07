@@ -1,0 +1,138 @@
+{
+  "packVersion": 1,
+  "topicId": "read-ms-y1-suku-kata-kv",
+  "subject": "reading",
+  "year": 1,
+  "islandId": "pulau-huruf",
+  "title": { "ms": "Suku Kata Terbuka KV", "en": "Open Syllables (KV)" },
+  "kssr": {
+    "document": "DSKP Bahasa Melayu Tahun 1 (Semakan 2017)",
+    "contentStandard": "2.1",
+    "learningStandards": ["2.1.1", "2.1.2"],
+    "verified": false
+  },
+  "activities": [
+    {
+      "activityId": "read-ms-y1-suku-kata-kv-a1",
+      "title": { "ms": "Dengar dan Pilih", "en": "Listen and Choose" },
+      "questionCount": 6,
+      "questionIds": ["r001", "r002", "r003", "r004", "r005", "r006"]
+    }
+  ],
+  "questions": [
+    {
+      "id": "r001",
+      "type": "listen-choose",
+      "difficulty": 1,
+      "learningStandard": "2.1.1",
+      "prompt": { "ms": "Dengar, kemudian pilih perkataan.", "en": "Listen, then pick the word." },
+      "promptAudio": { "ms": "/audio/ms/inst_listen.mp3", "en": "/audio/en/inst_listen.mp3" },
+      "payload": {
+        "contentLang": "ms",
+        "targetAudio": "/audio/ms/words/bulan.mp3",
+        "options": [
+          { "id": "a", "text": { "ms": "bulan", "en": "bulan" } },
+          { "id": "b", "text": { "ms": "bulat", "en": "bulat" } },
+          { "id": "c", "text": { "ms": "bulu", "en": "bulu" } }
+        ],
+        "correctOptionId": "a",
+        "replayLimit": 3
+      }
+    },
+    {
+      "id": "r002",
+      "type": "listen-choose",
+      "difficulty": 1,
+      "learningStandard": "2.1.1",
+      "prompt": { "ms": "Dengar, kemudian pilih perkataan.", "en": "Listen, then pick the word." },
+      "promptAudio": { "ms": "/audio/ms/inst_listen.mp3", "en": "/audio/en/inst_listen.mp3" },
+      "payload": {
+        "contentLang": "ms",
+        "targetAudio": "/audio/ms/words/bola.mp3",
+        "options": [
+          { "id": "a", "text": { "ms": "bola", "en": "bola" } },
+          { "id": "b", "text": { "ms": "bola-bola", "en": "bola-bola" } },
+          { "id": "c", "text": { "ms": "boleh", "en": "boleh" } }
+        ],
+        "correctOptionId": "a",
+        "replayLimit": 3
+      }
+    },
+    {
+      "id": "r003",
+      "type": "listen-choose",
+      "difficulty": 1,
+      "learningStandard": "2.1.2",
+      "prompt": { "ms": "Dengar, kemudian pilih perkataan.", "en": "Listen, then pick the word." },
+      "promptAudio": { "ms": "/audio/ms/inst_listen.mp3", "en": "/audio/en/inst_listen.mp3" },
+      "payload": {
+        "contentLang": "ms",
+        "targetAudio": "/audio/ms/words/meja.mp3",
+        "options": [
+          { "id": "a", "text": { "ms": "muka", "en": "muka" } },
+          { "id": "b", "text": { "ms": "meja", "en": "meja" } },
+          { "id": "c", "text": { "ms": "mata", "en": "mata" } }
+        ],
+        "correctOptionId": "b",
+        "replayLimit": 3
+      }
+    },
+    {
+      "id": "r004",
+      "type": "listen-choose",
+      "difficulty": 2,
+      "learningStandard": "2.1.2",
+      "prompt": { "ms": "Dengar, kemudian pilih perkataan.", "en": "Listen, then pick the word." },
+      "promptAudio": { "ms": "/audio/ms/inst_listen.mp3", "en": "/audio/en/inst_listen.mp3" },
+      "payload": {
+        "contentLang": "ms",
+        "targetAudio": "/audio/ms/words/buku.mp3",
+        "options": [
+          { "id": "a", "text": { "ms": "baku", "en": "baku" } },
+          { "id": "b", "text": { "ms": "buku", "en": "buku" } },
+          { "id": "c", "text": { "ms": "bakul", "en": "bakul" } }
+        ],
+        "correctOptionId": "b",
+        "replayLimit": 3
+      }
+    },
+    {
+      "id": "r005",
+      "type": "listen-choose",
+      "difficulty": 2,
+      "learningStandard": "2.1.2",
+      "prompt": { "ms": "Dengar, kemudian pilih perkataan.", "en": "Listen, then pick the word." },
+      "promptAudio": { "ms": "/audio/ms/inst_listen.mp3", "en": "/audio/en/inst_listen.mp3" },
+      "payload": {
+        "contentLang": "ms",
+        "targetAudio": "/audio/ms/words/batu.mp3",
+        "options": [
+          { "id": "a", "text": { "ms": "batu", "en": "batu" } },
+          { "id": "b", "text": { "ms": "bata", "en": "bata" } },
+          { "id": "c", "text": { "ms": "baju", "en": "baju" } }
+        ],
+        "correctOptionId": "a",
+        "replayLimit": 3
+      }
+    },
+    {
+      "id": "r006",
+      "type": "listen-choose",
+      "difficulty": 3,
+      "learningStandard": "2.1.2",
+      "prompt": { "ms": "Dengar, kemudian pilih perkataan.", "en": "Listen, then pick the word." },
+      "promptAudio": { "ms": "/audio/ms/inst_listen.mp3", "en": "/audio/en/inst_listen.mp3" },
+      "payload": {
+        "contentLang": "ms",
+        "targetAudio": "/audio/ms/words/baju.mp3",
+        "options": [
+          { "id": "a", "text": { "ms": "baru", "en": "baru" } },
+          { "id": "b", "text": { "ms": "bahu", "en": "bahu" } },
+          { "id": "c", "text": { "ms": "baju", "en": "baju" } }
+        ],
+        "correctOptionId": "c",
+        "replayLimit": 3
+      }
+    }
+  ]
+}
