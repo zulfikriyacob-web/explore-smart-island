@@ -170,6 +170,16 @@ subset ini mesti diluaskan dengan sengaja, dalam skema, sebelum kandungan dituli
 }
 ```
 
+**Had `mcq`** — dikuatkuasakan dalam Zod dan `validate:content`, bukan sekadar garis panduan:
+
+| Had | Nilai | Sebab |
+|---|---|---|
+| `options.length` | maksimum **3** | Empat butang setinggi 88px tidak muat dalam zon ibu jari (DESIGN §5.2) tanpa menatal, dan menatal semasa memilih jawapan menyebabkan salah tekan |
+| `option.text` setiap bahasa | maksimum **40 aksara** | Melebihi ini teks membalut kepada tiga baris pada 320px dan tinggi butang bergerak. Had dikira setiap bahasa: BM biasanya lebih panjang daripada EN untuk maksud yang sama |
+
+Had aksara dikira pada `ms` dan `en` secara berasingan. Satu pilihan yang muat dalam EN
+tetapi melimpah dalam BM tetap gagal validasi — pek tidak boleh lulus separuh.
+
 #### `mcq-image` — Aneka pilihan (imej)
 ```json
 {
@@ -189,6 +199,15 @@ subset ini mesti diluaskan dengan sengaja, dalam skema, sebelum kandungan dituli
   }
 }
 ```
+
+**Had `mcq-image`** — dikuatkuasakan dalam Zod dan `validate:content`:
+
+| Had | Nilai | Sebab |
+|---|---|---|
+| Tinggi jubin | maksimum **142px** | Dua baris jubin dalam grid 2 lajur, ditambah jurang 16px dan padding kad, mesti muat dalam timbunan jawapan tanpa memaksa kad soalan mengecut melebihi hadnya (DESIGN §5.2) |
+
+142px adalah tinggi jubin yang **dilukis**, bukan saiz semula jadi imej sumber. SVG diskala
+untuk muat; had ini menentukan kotak susun atur.
 
 #### `listen-choose` — Dengar & pilih (teras modul Membaca)
 ```json
@@ -715,9 +734,19 @@ Input (nama tepat, case-sensitive — jangan ubah):
   isCorrect    Trigger   -- jawapan betul
   isWrong      Trigger   -- jawapan salah
   celebrate    Trigger   -- skrin ganjaran, 3 bintang
-  mood         Number    -- 0=melahu, 1=fikir, 2=gembira, 3=simpati
   isThinking   Boolean   -- soalan dipapar, belum jawab
 ```
+
+**`mood` dibuang.** Kontrak ini kini empat input, bukan lima.
+
+`isThinking` sudah memandu peralihan MELAHU ⇄ FIKIR, jadi `mood` 0 dan 1 bertindih dengannya.
+`mood` 2 dan 3 pula tidak menggerakkan apa-apa dalam mesin keadaan Rive — menetapkannya
+tidak akan menyebabkan ralat, ia cuma tidak berbuat apa-apa. Itu kegagalan senyap: kod
+kelihatan memandu emosi mascot sedangkan skrin tidak berubah langsung, dan tiada sesiapa
+perasan sehingga seseorang membuka fail `.riv`.
+
+Gembira dan simpati datang daripada `isCorrect` dan `isWrong` yang sememangnya sudah dipicu
+pada saat yang sama.
 
 Fail .riv adalah aset produksi. Ia masuk repo dan disemak oleh validate:content
 sama seperti imej dan audio.
