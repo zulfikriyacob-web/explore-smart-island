@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
 import {
-  HINT_PENALTY,
   POINTS_BY_ATTEMPT,
   accuracy,
   bestStars,
@@ -19,7 +18,7 @@ function answer(over: Partial<AnswerRecord> = {}): AnswerRecord {
     attempts: 1,
     correct: true,
     firstTry: true,
-    hintUsed: false,
+    hintShown: false,
     msSpent: 4_200,
     ...over,
   };
@@ -39,20 +38,20 @@ describe('scoreQuestion', () => {
     expect(POINTS_BY_ATTEMPT).toEqual({ 1: 100, 2: 60, 3: 30 });
   });
 
-  it('subtracts the hint penalty once, at every attempt level', () => {
-    expect(scoreQuestion(answer({ attempts: 1, hintUsed: true }))).toBe(100 - HINT_PENALTY);
-    expect(scoreQuestion(answer({ attempts: 2, hintUsed: true }))).toBe(60 - HINT_PENALTY);
-    expect(scoreQuestion(answer({ attempts: 3, hintUsed: true }))).toBe(30 - HINT_PENALTY);
-  });
-
-  it('never goes below zero', () => {
-    expect(scoreQuestion(answer({ attempts: 3, hintUsed: true }))).toBeGreaterThanOrEqual(0);
+  it('charges nothing for the hint, at every attempt level', () => {
+    // The hint is automatic and free. Attempts already carry the cost of a
+    // mistake; charging again would price the same mistake twice.
+    for (const attempts of [1, 2, 3]) {
+      expect(scoreQuestion(answer({ attempts, hintShown: true }))).toBe(
+        scoreQuestion(answer({ attempts, hintShown: false })),
+      );
+    }
   });
 
   it('scores a wrong answer as zero whatever else happened', () => {
     expect(scoreQuestion(answer({ correct: false, attempts: 3, firstTry: false }))).toBe(0);
     expect(
-      scoreQuestion(answer({ correct: false, attempts: 3, firstTry: false, hintUsed: true })),
+      scoreQuestion(answer({ correct: false, attempts: 3, firstTry: false, hintShown: true })),
     ).toBe(0);
   });
 
@@ -101,9 +100,9 @@ describe('accuracy', () => {
       answer({ questionId: 'q1', attempts: 1 }), // 100
       answer({ questionId: 'q2', attempts: 2, firstTry: false }), // 60
       answer({ questionId: 'q3', correct: false, firstTry: false, attempts: 3 }), // 0
-      answer({ questionId: 'q4', attempts: 1, hintUsed: true }), // 90
+      answer({ questionId: 'q4', attempts: 1, hintShown: true }), // 100, hint is free
     ];
-    expect(accuracy(answers)).toBeCloseTo(250 / 400, 10);
+    expect(accuracy(answers)).toBeCloseTo(260 / 400, 10);
   });
 });
 
@@ -157,7 +156,7 @@ describe('summarise', () => {
     const answers = [
       answer({ questionId: 'q1' }),
       answer({ questionId: 'q2' }),
-      answer({ questionId: 'q3', attempts: 2, firstTry: false }),
+      answer({ questionId: 'q3', attempts: 2, firstTry: false, hintShown: true }),
     ];
     expect(summarise(answers, true)).toEqual({
       accuracy: 260 / 300,
@@ -165,6 +164,7 @@ describe('summarise', () => {
       gems: 20,
       points: 260,
       firstTryCount: 2,
+      hintShownCount: 1,
     });
   });
 
@@ -175,6 +175,7 @@ describe('summarise', () => {
       gems: 0,
       points: 0,
       firstTryCount: 0,
+      hintShownCount: 0,
     });
   });
 });

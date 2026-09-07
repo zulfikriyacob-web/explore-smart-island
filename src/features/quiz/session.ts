@@ -33,13 +33,11 @@ export interface SessionState {
   /** Attempts spent on the current question, 0-3. */
   attempts: number;
   /**
-   * True only when the child asked for the hint. The hint also appears on its
-   * own after a first wrong answer (SPEC 4.2) — that automatic appearance sets
-   * `hintVisible` but NOT `hintUsed`, so a second-attempt answer is not
-   * penalised twice for the same mistake. See POINTS_BY_ATTEMPT in SPEC 5.1.
+   * Is the hint on screen? It appears on its own after a first wrong answer and
+   * costs nothing — there is no button to ask for one. Recorded for analytics,
+   * never for scoring. (SPEC 4.2)
    */
-  hintUsed: boolean;
-  hintVisible: boolean;
+  hintShown: boolean;
   /** Options struck out so far on this question. (SPEC 4.2) */
   disabledOptionIds: readonly string[];
   /** Outcome of the most recent attempt; null before the first one. */
@@ -55,7 +53,6 @@ export interface SessionState {
 export type SessionEvent =
   | { type: 'LOADED'; questions: readonly Question[] }
   | { type: 'START'; nowMs: number }
-  | { type: 'REQUEST_HINT' }
   | { type: 'ANSWER'; response: Response; nowMs: number }
   | { type: 'NEXT'; nowMs: number };
 
@@ -67,8 +64,7 @@ export function createSession(activityId: string, isFirstClear = true): SessionS
     answers: [],
     status: 'loading',
     attempts: 0,
-    hintUsed: false,
-    hintVisible: false,
+    hintShown: false,
     disabledOptionIds: [],
     lastAnswerCorrect: null,
     revealed: false,
@@ -105,8 +101,7 @@ function beginQuestion(s: SessionState, nowMs: number): SessionState {
     ...s,
     status: 'question',
     attempts: 0,
-    hintUsed: false,
-    hintVisible: false,
+    hintShown: false,
     disabledOptionIds: [],
     lastAnswerCorrect: null,
     revealed: false,
@@ -141,11 +136,6 @@ export function sessionReducer(state: SessionState, event: SessionEvent): Sessio
       if (state.status !== 'intro') return state;
       return beginQuestion(state, event.nowMs);
 
-    case 'REQUEST_HINT':
-      if (state.status !== 'question') return state;
-      if (state.hintUsed) return state;
-      return { ...state, hintUsed: true, hintVisible: true };
-
     case 'ANSWER': {
       if (state.status !== 'question') return state;
       const question = currentQuestion(state);
@@ -160,7 +150,7 @@ export function sessionReducer(state: SessionState, event: SessionEvent): Sessio
           attempts,
           correct: true,
           firstTry: attempts === 1,
-          hintUsed: state.hintUsed,
+          hintShown: state.hintShown,
           msSpent: elapsed(state, event.nowMs),
         };
         return {
@@ -187,7 +177,7 @@ export function sessionReducer(state: SessionState, event: SessionEvent): Sessio
           attempts,
           correct: false,
           firstTry: false,
-          hintUsed: state.hintUsed,
+          hintShown: true,
           msSpent: elapsed(state, event.nowMs),
         };
         return {
@@ -197,7 +187,7 @@ export function sessionReducer(state: SessionState, event: SessionEvent): Sessio
           answers: [...state.answers, record],
           disabledOptionIds: disabled,
           lastAnswerCorrect: false,
-          hintVisible: true,
+          hintShown: true,
           revealed: true,
         };
       }
@@ -209,7 +199,7 @@ export function sessionReducer(state: SessionState, event: SessionEvent): Sessio
         attempts,
         disabledOptionIds: disabled,
         lastAnswerCorrect: false,
-        hintVisible: true,
+        hintShown: true,
       };
     }
 

@@ -15,7 +15,13 @@ export interface AnswerRecord {
   correct: boolean;
   /** Correct on attempt 1? */
   firstTry: boolean;
-  hintUsed: boolean;
+  /**
+   * Was the hint on screen? The hint appears on its own after a first wrong
+   * answer and costs nothing. Logged for analytics, NOT scored — attempts
+   * already carry the cost of a mistake, and charging again would price the
+   * same mistake twice. (SPEC 4.2, 5.1)
+   */
+  hintShown: boolean;
   /** Logged for analytics, NOT scored. */
   msSpent: number;
 }
@@ -23,22 +29,19 @@ export interface AnswerRecord {
 export type Stars = 0 | 1 | 2 | 3;
 
 export const POINTS_BY_ATTEMPT = { 1: 100, 2: 60, 3: 30 } as const;
-export const HINT_PENALTY = 10;
 export const MAX_ATTEMPTS = 3;
 
 /** Points per question. Full marks only for a clean first attempt. (SPEC 5.1) */
 export function scoreQuestion(a: AnswerRecord): number {
   if (!a.correct) return 0;
-  // SPEC 5.1 indexes POINTS_BY_ATTEMPT directly. Guarding instead of letting an
-  // out-of-range attempts value produce NaN, because NaN would flow straight
-  // into accuracy() and from there into stored mastery.
+  // Guarding instead of indexing past the table and producing NaN, because NaN
+  // would flow straight into accuracy() and from there into stored mastery.
   if (!Number.isInteger(a.attempts) || a.attempts < 1 || a.attempts > MAX_ATTEMPTS) {
     throw new RangeError(
       `attempts must be an integer 1-${MAX_ATTEMPTS}, got ${a.attempts} (question ${a.questionId})`,
     );
   }
-  const base = POINTS_BY_ATTEMPT[a.attempts as 1 | 2 | 3];
-  return Math.max(0, base - (a.hintUsed ? HINT_PENALTY : 0));
+  return POINTS_BY_ATTEMPT[a.attempts as 1 | 2 | 3];
 }
 
 /**
@@ -86,6 +89,8 @@ export interface SessionResult {
   gems: number;
   points: number;
   firstTryCount: number;
+  /** Analytics only: how many questions ended up showing their hint. */
+  hintShownCount: number;
 }
 
 export function summarise(
@@ -100,5 +105,6 @@ export function summarise(
     gems: gemsFor(stars, isFirstClear),
     points: answers.reduce((sum, a) => sum + scoreQuestion(a), 0),
     firstTryCount: answers.filter((a) => a.firstTry).length,
+    hintShownCount: answers.filter((a) => a.hintShown).length,
   };
 }

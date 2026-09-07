@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import type { Question } from '../../content/schema.ts';
+import { scoreQuestion } from '../../lib/scoring.ts';
 import {
   checkAnswer,
   createSession,
@@ -120,7 +121,6 @@ describe('session lifecycle', () => {
     expect(sessionReducer(s, { type: 'START', nowMs: 1 })).toBe(s);
     expect(sessionReducer(s, { type: 'ANSWER', response: pick('b'), nowMs: 1 })).toBe(s);
     expect(sessionReducer(s, { type: 'NEXT', nowMs: 1 })).toBe(s);
-    expect(sessionReducer(s, { type: 'REQUEST_HINT' })).toBe(s);
 
     const playing = started();
     expect(sessionReducer(playing, { type: 'LOADED', questions: [countTap] })).toBe(playing);
@@ -140,7 +140,7 @@ describe('attempt rules', () => {
         attempts: 1,
         correct: true,
         firstTry: true,
-        hintUsed: false,
+        hintShown: false,
         msSpent: 3_000,
       },
     ]);
@@ -150,34 +150,33 @@ describe('attempt rules', () => {
     const s = sessionReducer(started(), { type: 'ANSWER', response: pick('a'), nowMs: 2_000 });
     expect(s.status).toBe('question');
     expect(s.attempts).toBe(1);
-    expect(s.hintVisible).toBe(true);
+    expect(s.hintShown).toBe(true);
     expect(s.disabledOptionIds).toEqual(['a']);
     expect(s.answers).toEqual([]);
   });
 
-  it('does not charge the hint penalty for the hint that appears on its own', () => {
-    const s = run(started(), [
+  it('records the hint for analytics but costs the child nothing', () => {
+    const withHint = run(started(), [
       { type: 'ANSWER', response: pick('a'), nowMs: 2_000 },
       { type: 'ANSWER', response: pick('b'), nowMs: 3_000 },
     ]);
-    expect(s.hintVisible).toBe(true);
-    expect(s.answers[0]?.hintUsed).toBe(false);
-    expect(s.answers[0]?.attempts).toBe(2);
-    expect(s.answers[0]?.firstTry).toBe(false);
+    expect(withHint.hintShown).toBe(true);
+    expect(withHint.answers[0]?.hintShown).toBe(true);
+    expect(withHint.answers[0]?.attempts).toBe(2);
+    expect(withHint.answers[0]?.firstTry).toBe(false);
+
+    // Same two attempts, scored the same whether or not a hint was on screen.
+    const record = withHint.answers[0]!;
+    expect(scoreQuestion(record)).toBe(scoreQuestion({ ...record, hintShown: false }));
   });
 
-  it('charges the hint penalty when the child asks for the hint', () => {
-    const s = run(started(), [
-      { type: 'REQUEST_HINT' },
-      { type: 'ANSWER', response: pick('b'), nowMs: 3_000 },
-    ]);
-    expect(s.answers[0]?.hintUsed).toBe(true);
-    expect(s.answers[0]?.attempts).toBe(1);
-  });
-
-  it('treats a repeated hint request as a no-op', () => {
-    const once = sessionReducer(started(), { type: 'REQUEST_HINT' });
-    expect(sessionReducer(once, { type: 'REQUEST_HINT' })).toBe(once);
+  it('has no way to ask for a hint before answering', () => {
+    const s = started();
+    expect(s.hintShown).toBe(false);
+    // The only route to a hint is a wrong answer.
+    expect(sessionReducer(s, { type: 'ANSWER', response: pick('a'), nowMs: 2 }).hintShown).toBe(
+      true,
+    );
   });
 
   it('strikes out a second option on the second miss', () => {
@@ -214,7 +213,7 @@ describe('attempt rules', () => {
         attempts: 3,
         correct: false,
         firstTry: false,
-        hintUsed: false,
+        hintShown: true,
         msSpent: 4_000,
       },
     ]);
@@ -242,8 +241,7 @@ describe('progression', () => {
     expect(s.status).toBe('question');
     expect(s.index).toBe(1);
     expect(s.attempts).toBe(0);
-    expect(s.hintVisible).toBe(false);
-    expect(s.hintUsed).toBe(false);
+    expect(s.hintShown).toBe(false);
     expect(s.disabledOptionIds).toEqual([]);
     expect(s.revealed).toBe(false);
     expect(s.questionStartedMs).toBe(3_500);
@@ -264,6 +262,7 @@ describe('progression', () => {
       gems: 30,
       points: 200,
       firstTryCount: 2,
+      hintShownCount: 0,
     });
   });
 
@@ -288,6 +287,7 @@ describe('progression', () => {
       gems: 10,
       points: 0,
       firstTryCount: 0,
+      hintShownCount: 2,
     });
   });
 
