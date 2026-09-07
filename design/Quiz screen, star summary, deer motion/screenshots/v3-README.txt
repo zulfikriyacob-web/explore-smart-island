@@ -1,0 +1,1 @@
+v3-1a = rehat, v3-1g = maklum balas. Inset simulasi 34px (garis putus-putus bawah).

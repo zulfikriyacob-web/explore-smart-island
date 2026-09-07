@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="ms">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prototaip gerakan kancil — KancilSM</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--k:1} /* pengganda tempoh: 1 = biasa, 4 = perlahan */
+  [data-slow="1"]{--k:4}
+  body{margin:0;background:#F4F6F5;color:#1F3A34;font-family:Lexend,system-ui,sans-serif;font-size:15px;display:grid;place-items:center;min-height:100vh}
+  .panel{width:min(520px,100vw - 32px);background:#fff;border:1px solid #D3E8E3;border-radius:28px;padding:24px;display:flex;flex-direction:column;gap:20px}
+  .pentas{background:#E6F7F4;border-radius:20px;padding:16px;display:flex;justify-content:center;position:relative}
+  .pentas small{position:absolute;left:16px;top:12px;font-weight:500;font-size:12px;color:#5C7A72;background:#fff;border-radius:6px;padding:5px 8px}
+  .baca{display:flex;gap:12px;color:#5C7A72;font-weight:500;font-variant-numeric:tabular-nums}
+  .baca b{font-weight:600;letter-spacing:.04em;font-size:13px;color:#1F3A34}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  button{min-height:64px;border-radius:20px;background:#fff;border:4px solid var(--c,#0FB5A6);box-shadow:0 4px 0 0 var(--e,var(--c,#0FB5A6));font:600 18px/1 Lexend,system-ui,sans-serif;color:#1F3A34;cursor:pointer;transition:transform .12s cubic-bezier(.16,1,.3,1)}
+  button:active{transform:translateY(4px);box-shadow:none}
+  button[aria-pressed="true"]{background:#D6F5F1}
+  button:focus-visible{outline:4px solid #5B5BD6;outline-offset:2px}
+  .kecil{min-height:44px;border-width:2px;border-color:#D3E8E3;box-shadow:none;font-weight:500;font-size:14px;padding:0 16px;border-radius:12px;align-self:flex-start}
+  .kecil[aria-pressed="true"]{background:#E4E4FB}
+
+  /* ===== Kancil ===== */
+  svg{overflow:visible}
+  [data-part]{transform-box:fill-box}
+  [data-part=all]{transform-origin:50% 100%}
+  [data-part=body]{transform-origin:50% 100%;animation:breathe calc(3s*var(--k)) ease-in-out infinite}
+  [data-part=head-pose]{transform-origin:0% 100%;transition:transform calc(.3s*var(--k)) cubic-bezier(.16,1,.3,1)}
+  [data-part=head]{transform-origin:50% 100%;animation:headBob calc(3s*var(--k)) ease-in-out infinite;animation-delay:calc(-.1s*var(--k))}
+  [data-part=ear-l],[data-part=ear-r]{transform-origin:50% 100%;animation:earIdle calc(3s*var(--k)) ease-in-out infinite}
+  [data-part=ear-r]{animation-delay:calc(-1.5s*var(--k))}
+  [data-part^=eye]{transform-origin:50% 50%;animation:blink calc(4.2s*var(--k)) linear infinite}
+
+  /* MELAHU (mood 0) */
+  @keyframes breathe{0%,100%{transform:scale(1,1)}50%{transform:scale(1.015,1.03)}}
+  @keyframes headBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
+  @keyframes earIdle{0%,100%{transform:rotate(0)}50%{transform:rotate(-3deg)}}
+  @keyframes blink{0%,93%,99%,100%{transform:scaleY(1)}96%{transform:scaleY(.1)}}
+
+  /* FIKIR (mood 1, isThinking) */
+  @keyframes breatheSoft{0%,100%{transform:scale(1,1)}50%{transform:scale(1.006,1.012)}}
+  [data-mood="1"] [data-part=head-pose]{transform:rotate(-8deg) translateY(-2px)}
+  [data-mood="1"] [data-part=body]{animation-name:breatheSoft}
+  [data-mood="1"] [data-part=head],[data-mood="1"] [data-part=ear-l],[data-mood="1"] [data-part=ear-r]{animation:none}
+  [data-mood="1"] [data-part^=eye]{animation-duration:calc(6s*var(--k))}
+
+  /* GEMBIRA (isCorrect) — 0.8 s */
+  @keyframes jump{0%{transform:translateY(0) scale(1,1)}18%{transform:translateY(4px) scale(1.04,.96)}45%{transform:translateY(-30px) scale(.98,1.04)}72%{transform:translateY(0) scale(1.03,.97)}86%{transform:translateY(-5px) scale(1,1)}100%{transform:translateY(0) scale(1,1)}}
+  @keyframes earUpL{0%{transform:rotate(0)}20%,65%{transform:rotate(-22deg)}100%{transform:rotate(0)}}
+  @keyframes earUpR{0%{transform:rotate(0)}20%,65%{transform:rotate(18deg)}100%{transform:rotate(0)}}
+  @keyframes squint{0%,20%{transform:scaleY(1)}35%,70%{transform:scaleY(.35)}100%{transform:scaleY(1)}}
+  [data-anim=correct] [data-part=all]{animation:jump calc(.8s*var(--k)) cubic-bezier(.34,1.56,.64,1) 1}
+  [data-anim=correct] [data-part=ear-l]{animation:earUpL calc(.8s*var(--k)) cubic-bezier(.16,1,.3,1) 1}
+  [data-anim=correct] [data-part=ear-r]{animation:earUpR calc(.8s*var(--k)) cubic-bezier(.16,1,.3,1) 1}
+  [data-anim=correct] [data-part^=eye]{animation:squint calc(.8s*var(--k)) ease-in-out 1}
+
+  /* SIMPATI (isWrong) — 1.6 s */
+  @keyframes tilt{0%{transform:rotate(0)}16%,80%{transform:rotate(12deg)}100%{transform:rotate(0)}}
+  @keyframes earSoft{0%{transform:rotate(0)}16%,80%{transform:rotate(8deg)}100%{transform:rotate(0)}}
+  @keyframes blinkOnce{0%,28%,36%,100%{transform:scaleY(1)}32%{transform:scaleY(.1)}}
+  [data-anim=wrong] [data-part=head-pose]{animation:tilt calc(1.6s*var(--k)) cubic-bezier(.16,1,.3,1) 1}
+  [data-anim=wrong] [data-part=ear-l],[data-anim=wrong] [data-part=ear-r]{animation:earSoft calc(1.6s*var(--k)) cubic-bezier(.16,1,.3,1) 1}
+  [data-anim=wrong] [data-part^=eye]{animation:blinkOnce calc(1.6s*var(--k)) linear 1}
+
+  /* RAYA (celebrate) — 1.6 s */
+  @keyframes cheer{0%{transform:translateY(0)}6%{transform:translateY(4px) scale(1.04,.96)}16%{transform:translateY(-28px) scale(.98,1.04)}31%{transform:translateY(0) scale(1.03,.97)}37%{transform:translateY(3px) scale(1.03,.97)}47%{transform:translateY(-28px) scale(.98,1.04)}62%{transform:translateY(0) scale(1.02,.98)}72%{transform:translateY(-5px)}80%,100%{transform:translateY(0) scale(1,1)}}
+  @keyframes wiggleL{0%,100%{transform:rotate(0)}10%,30%,50%,70%{transform:rotate(-16deg)}20%,40%,60%{transform:rotate(-4deg)}85%{transform:rotate(-8deg)}}
+  @keyframes wiggleR{0%,100%{transform:rotate(0)}10%,30%,50%,70%{transform:rotate(14deg)}20%,40%,60%{transform:rotate(2deg)}85%{transform:rotate(6deg)}}
+  [data-anim=celebrate] [data-part=all]{animation:cheer calc(1.6s*var(--k)) cubic-bezier(.34,1.56,.64,1) 1}
+  [data-anim=celebrate] [data-part=ear-l]{animation:wiggleL calc(1.6s*var(--k)) ease-in-out 1}
+  [data-anim=celebrate] [data-part=ear-r]{animation:wiggleR calc(1.6s*var(--k)) ease-in-out 1}
+  [data-anim=celebrate] [data-part^=eye]{animation:squint calc(1.6s*var(--k)) ease-in-out 1}
+
+  @media (prefers-reduced-motion: reduce){[data-part]{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="panel" id="root" data-slow="0">
+  <div class="pentas">
+    <small>soalan ↖</small>
+    <svg id="kancil" data-mood="0" viewBox="0 0 260 200" width="390" height="300" aria-hidden="true">
+      <ellipse cx="128" cy="188" rx="76" ry="6" fill="#D3E8E3"/>
+      <g data-part="all">
+        <g data-part="leg-bl"><rect x="78" y="150" width="12" height="36" rx="6" fill="#4A625B"/></g>
+        <g data-part="leg-br"><rect x="98" y="152" width="12" height="34" rx="6" fill="#4A625B"/></g>
+        <g data-part="leg-fl"><rect x="138" y="150" width="12" height="36" rx="6" fill="#4A625B"/></g>
+        <g data-part="leg-fr"><rect x="158" y="152" width="12" height="34" rx="6" fill="#4A625B"/></g>
+        <g data-part="tail"><ellipse cx="58" cy="118" rx="6" ry="10" fill="#7A958D"/></g>
+        <g data-part="body"><ellipse cx="118" cy="132" rx="60" ry="40" fill="#5C7A72"/></g>
+        <g data-part="head-pose"><g data-part="head">
+          <g data-part="ear-l"><ellipse cx="168" cy="56" rx="8" ry="18" fill="#7A958D"/></g>
+          <g data-part="ear-r"><ellipse cx="196" cy="54" rx="8" ry="18" fill="#7A958D"/></g>
+          <circle cx="182" cy="88" r="28" fill="#5C7A72"/><ellipse cx="206" cy="96" rx="14" ry="10" fill="#5C7A72"/><circle cx="216" cy="94" r="4" fill="#1F3A34"/>
+          <g data-part="eye-l"><circle cx="176" cy="84" r="4" fill="#1F3A34"/></g>
+          <g data-part="eye-r"><circle cx="194" cy="82" r="4" fill="#1F3A34"/></g>
+        </g></g>
+      </g>
+    </svg>
+  </div>
+  <div class="baca"><b>KancilSM</b><span id="readout">mood = 0 · melahu</span><span id="think">isThinking = false</span></div>
+  <div class="grid">
+    <button style="--c:#2FBF71" onclick="SM.isCorrect()">isCorrect ↯</button>
+    <button style="--c:#FF6B6B" onclick="SM.isWrong()">isWrong ↯</button>
+    <button style="--c:#FFB627" onclick="SM.celebrate()">celebrate ↯</button>
+    <button id="btnThink" style="--c:#0FB5A6;--e:#087A70" aria-pressed="false" onclick="SM.toggleThinking()">isThinking</button>
+  </div>
+  <button class="kecil" id="btnSlow" aria-pressed="false" onclick="SM.toggleSlow()">Perlahan 4× : mati</button>
+</div>
+<script>
+  // Meniru kontrak SPEC.md §11. Nama input tepat; kod sebenar memanggil Rive dengan nama yang sama.
+  const svg = document.getElementById('kancil'), root = document.getElementById('root');
+  const NAMES = ['melahu','fikir','gembira','simpati'];
+  const S = { mood: 0, isThinking: false, anim: null, slow: false, t: null };
+  const k = () => S.slow ? 4 : 1;
+  function render(){
+    svg.dataset.mood = S.mood;
+    if (S.anim) svg.dataset.anim = S.anim; else delete svg.dataset.anim;
+    root.dataset.slow = S.slow ? '1' : '0';
+    document.getElementById('readout').textContent = `mood = ${S.mood} · ${NAMES[S.mood]}`;
+    document.getElementById('think').textContent = `isThinking = ${S.isThinking}`;
+    document.getElementById('btnThink').setAttribute('aria-pressed', S.isThinking);
+    const b = document.getElementById('btnSlow'); b.setAttribute('aria-pressed', S.slow); b.textContent = `Perlahan 4× : ${S.slow ? 'hidup' : 'mati'}`;
+  }
+  // Trigger: potong terus (blend 0) dan mula semula dari bingkai 0 jika sedang bermain.
+  function fire(name, mood, ms){
+    clearTimeout(S.t);
+    const go = () => { S.anim = name; S.mood = mood; render();
+      S.t = setTimeout(() => { S.anim = null; S.mood = S.isThinking ? 1 : 0; render(); }, ms * k()); };
+    if (S.anim) { S.anim = null; render(); requestAnimationFrame(go); } else go();
+  }
+  window.SM = {
+    isCorrect: () => fire('correct', 2, 800),
+    isWrong:   () => fire('wrong', 3, 1600),
+    celebrate: () => fire('celebrate', 2, 1600),
+    toggleThinking(){ S.isThinking = !S.isThinking; if (!S.anim) S.mood = S.isThinking ? 1 : 0; render(); },
+    toggleSlow(){ S.slow = !S.slow; render(); },
+  };
+  render();
+</script>
+</body>
+</html>
