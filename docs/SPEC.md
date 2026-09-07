@@ -336,6 +336,14 @@ kanak-kanak.
 - Percubaan 3 salah → tunjukkan jawapan betul + `explain`, teruskan (0 markah, tiada hukuman lain).
 - **Jangan sekali-kali sekat kemajuan.** Kanak-kanak sentiasa boleh sampai ke skrin ringkasan.
 
+**Pancingan adalah automatik dan percuma.** Ia muncul sendiri selepas satu jawapan salah.
+Tiada butang "minta pancingan", dan tiada potongan markah kerana melihatnya — bilangan
+percubaan sudah menanggung kos kesilapan itu (§5.1). Mengenakan caj kedua bermakna
+kesilapan yang sama dihukum dua kali.
+
+`AnswerRecord.hintShown` merekod sama ada pancingan sempat dipaparkan. Ia untuk analitik
+sahaja dan **tidak pernah** masuk formula pemarkahan.
+
 ### 4.3 Bentuk keadaan sesi
 
 ```ts
@@ -352,7 +360,7 @@ interface AnswerRecord {
   attempts: number;             // 1–3
   correct: boolean;             // akhirnya betul?
   firstTry: boolean;            // betul pada percubaan 1?
-  hintUsed: boolean;
+  hintShown: boolean;           // dilog untuk analitik, TIDAK dimarkahkan
   msSpent: number;              // dilog untuk analitik, TIDAK dimarkahkan
 }
 ```
@@ -367,14 +375,24 @@ Semua di dalam `lib/scoring.ts`. Fungsi tulen, boleh diuji unit, tiada masa dala
 
 ```ts
 const POINTS_BY_ATTEMPT = { 1: 100, 2: 60, 3: 30 } as const;
-const HINT_PENALTY = 10;
+const MAX_ATTEMPTS = 3;
 
 export function scoreQuestion(a: AnswerRecord): number {
   if (!a.correct) return 0;
-  const base = POINTS_BY_ATTEMPT[a.attempts as 1 | 2 | 3];
-  return Math.max(0, base - (a.hintUsed ? HINT_PENALTY : 0));
+  // Mengindeks jadual secara terus akan menghasilkan NaN bagi nilai di luar 1–3.
+  // NaN itu akan mengalir ke accuracy(), kemudian ke mastery yang disimpan, dan
+  // merosakkan rekod anak tanpa sebarang tanda. Baling ralat, jangan senyap.
+  if (!Number.isInteger(a.attempts) || a.attempts < 1 || a.attempts > MAX_ATTEMPTS) {
+    throw new RangeError(
+      `attempts must be an integer 1-${MAX_ATTEMPTS}, got ${a.attempts} (question ${a.questionId})`,
+    );
+  }
+  return POINTS_BY_ATTEMPT[a.attempts as 1 | 2 | 3];
 }
 ```
+
+**Tiada penalti pancingan.** Jadual percubaan sudah menanggung kos kesilapan; pancingan
+automatik dan percuma (§4.2). `hintShown` direkod untuk analitik sahaja.
 
 ### 5.2 Ketepatan & bintang
 
@@ -457,6 +475,25 @@ export function updateStreak(s: Streak, todayISO: string): Streak {
   return { ...s, count: 1, lastActiveDate: todayISO };  // set semula, tanpa drama
 }
 ```
+
+**Amaran menghurai tarikh — `parseISODate`.** `Date.parse` **tidak** menolak tarikh yang
+mustahil; ia menggolekkannya. `Date.parse('2026-02-30T00:00:00Z')` memulangkan 2 Mac 2026,
+bukan `NaN`. Menyemak `Number.isNaN` sahaja tidak memadai: tarikh rosak diterima senyap dan
+kiraan siri menjadi salah tanpa sesiapa perasan.
+
+`daysBetween` mesti membuat **semakan pergi-balik** — hurai, format semula kepada
+`YYYY-MM-DD`, dan bandingkan dengan input asal. Tidak sepadan bermakna tarikh itu palsu:
+
+```ts
+const ms = Date.parse(`${iso}T00:00:00Z`);
+if (Number.isNaN(ms)) throw new RangeError(`"${iso}" is not a real date`);
+if (new Date(ms).toISOString().slice(0, 10) !== iso) {
+  throw new RangeError(`"${iso}" is not a real date`);
+}
+```
+
+Tarikh dihurai sebagai tengah malam UTC supaya anjakan waktu jimat siang tidak menggerakkan
+sempadan hari.
 
 ---
 
