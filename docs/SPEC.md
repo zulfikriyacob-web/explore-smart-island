@@ -43,9 +43,7 @@ src/
   content/
     schema.ts             # Skema Zod
     packs/                # JSON kandungan, satu fail setiap topik
-      math-y1-nombor-100.json
-      read-ms-y1-suku-kata-kv.json
-      science-y1-hidup-bukan-hidup.json
+      math-y1-nombor-100.json     # satu pek contoh; selebihnya datang Fasa 3
   lib/
     scoring.ts            # Fungsi tulen (pure functions), diuji unit
     mastery.ts
@@ -138,9 +136,15 @@ type QuestionType =
   | 'build-word';    // ketuk suku kata untuk membina perkataan
 ```
 
-**Subset MVP:** `mcq`, `mcq-image`, `listen-choose`, `count-tap`, `drag-bucket`.
-Tiga yang lain datang dalam Fasa 3. Jangan bina komponen untuk jenis yang belum
-mempunyai kandungan.
+**Subset MVP:** `mcq`, `mcq-image`, `count-tap`. Tiga jenis, satu pek contoh.
+
+Lima yang lain — `listen-choose`, `drag-match`, `drag-bucket`, `sequence`, `build-word` —
+datang dalam Fasa 3. Jangan bina komponen untuk jenis yang belum mempunyai kandungan.
+
+Ini bukan sekadar nota. `QuestionSchema` hanya mengandungi tiga jenis dalam subset, dan
+satu ujian dalam `src/content/schema.test.ts` menegaskan **kelima-lima** jenis lain gagal
+dihurai. Sebuah pek tidak boleh memasukkan semula jenis yang tiada komponen di belakangnya;
+subset ini mesti diluaskan dengan sengaja, dalam skema, sebelum kandungan ditulis.
 
 ### 3.4 Muatan (payload) mengikut jenis — dengan contoh
 
