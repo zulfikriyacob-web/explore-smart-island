@@ -1,6 +1,6 @@
 # PRD.md — Aplikasi Pembelajaran Kanak-Kanak (Tahun 1–3)
 
-**Nama kerja projek:** Pulau Pintar
+**Nama kerja projek:** Explore Smart Island
 **Versi dokumen:** 0.1
 **Pemilik:** Zul
 **Status:** Draf untuk pembangunan MVP
@@ -346,7 +346,7 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
 |---|---|---|
 | Kandungan KSSR salah dipeta | Ibu bapa hilang kepercayaan | Semakan guru berbayar sebelum pelancaran; kod SP kelihatan dalam papan pemuka |
 | Produksi audio pantas melebihi bajet | Modul Membaca tersekat | Rakam Tahun 1 dahulu; tulis skrip semua di awal; guna satu pelakon suara setiap bahasa |
-| Animasi tersekat pada telefon Android murah | Kanak-kanak berputus asa | Anggaran prestasi pada peranti sasaran ~RM600; hanya animasi `transform`/`opacity` |
+| Animasi tersekat pada peranti di bawah baseline | Kanak-kanak berputus asa | Baseline disokong: Chrome 100+ / Safari 15.4+ (peranti 2022 ke atas), diperlukan oleh Framer Motion v11 dan Rive; hanya animasi `transform`/`opacity` (SPEC §7.6) |
 | Sesi terlalu panjang untuk umur 7 tahun | Kadar berhenti tinggi | 10 soalan maksimum; sasaran 4–6 minit setiap aktiviti; uji dengan kanak-kanak sebenar |
 | Kekeliruan dwibahasa dalam Membaca | Pembelajaran fonik rosak | Kunci bahasa kandungan setiap trek (§12) |
 

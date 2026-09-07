@@ -1,6 +1,6 @@
 # DESIGN.md — Sistem Reka Bentuk
 
-**Projek:** Pulau Pintar
+**Projek:** Explore Smart Island
 **Rujukan:** PRD.md v0.1 · SPEC.md v0.1
 **Versi:** 0.1
 

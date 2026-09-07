@@ -1,6 +1,6 @@
 # SPEC.md — Spesifikasi Teknikal
 
-**Projek:** Pulau Pintar
+**Projek:** Explore Smart Island
 **Rujukan:** PRD.md v0.1
 **Versi:** 0.1
 
@@ -20,6 +20,8 @@
 | Storan tempatan | IndexedDB melalui `idb-keyval` | Barisan luar talian + cache pek kandungan |
 | Audio | Howler.js | Kumpulan bunyi, bekerja mengelilingi kunci autoplay iOS |
 | Validasi | Zod | Skema kandungan disahkan semasa bina **dan** semasa jalan |
+| Hos frontend | Cloudflare Pages | CDN global, bina Vite terus, tier percuma benarkan guna komersial |
+| Aset (.riv, audio, SVG) | Dalam repo pada mulanya | Pindah ke Cloudflare R2 jika melebihi ~100 MB |
 
 ---
 
@@ -610,10 +612,14 @@ Apabila `prefers-reduced-motion: reduce` aktif:
 
 | Metrik | Sasaran | Diukur pada |
 |---|---|---|
-| Kadar bingkai animasi | ≥ 55 fps | Android pertengahan-rendah (cth. Redmi kelas RM600) |
+| Kadar bingkai animasi | ≥ 55 fps | Chrome 100+ / Safari 15.4+ (peranti 2022 ke atas) |
 | Masa ke soalan pertama boleh berinteraksi | < 1.5 s | 4G, cache panas |
 | Aset setiap aktiviti | < 2 MB | Termasuk audio |
 | Nod DOM setiap skrin kuiz | < 400 | Tidak termasuk zarah |
+
+**Baseline peranti & pelayar:** Chrome 100+ / Safari 15.4+, iaitu peranti keluaran 2022 ke atas.
+Ini menggantikan baseline lama (Android pertengahan-rendah / Chrome 87). Sebabnya: Framer Motion v11
+dan Rive memerlukan baseline moden. Peranti di bawah baseline ini tidak disokong secara rasmi.
 
 Prapuat aset **satu soalan ke hadapan** semasa soalan semasa dipaparkan. Jangan prapuat
 semua 10 di muka — ini mematikan sambungan yang perlahan.
@@ -654,3 +660,26 @@ semua 10 di muka — ini mematikan sambungan yang perlahan.
 6. `prefers-reduced-motion: reduce` melumpuhkan semua gelung tak terhingga (disahkan dengan DevTools).
 7. Kanak-kanak sebenar berumur 7 tahun menyiapkan satu aktiviti tanpa arahan lisan
    daripada orang dewasa. Ini adalah ujian yang paling penting dalam senarai ini.
+
+---
+
+## 11. Kontrak Rive
+
+```
+Fail:  /public/rive/kancil.riv
+Artboard:      "Kancil"
+State Machine: "KancilSM"
+
+Input (nama tepat, case-sensitive — jangan ubah):
+  isCorrect    Trigger   -- jawapan betul
+  isWrong      Trigger   -- jawapan salah
+  celebrate    Trigger   -- skrin ganjaran, 3 bintang
+  mood         Number    -- 0=melahu, 1=fikir, 2=gembira, 3=simpati
+  isThinking   Boolean   -- soalan dipapar, belum jawab
+```
+
+Fail .riv adalah aset produksi. Ia masuk repo dan disemak oleh validate:content
+sama seperti imej dan audio.
+
+Jika designer minta input tambahan, kontrak ini kena dikemas kini dahulu
+sebelum kod ditulis. Jangan tambah input secara ad-hoc.
