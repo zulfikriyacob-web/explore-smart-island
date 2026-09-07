@@ -15,11 +15,9 @@ function issueMessages(result: { success: boolean; error?: { issues: { message: 
 }
 
 describe('shipped packs', () => {
-  const names = [
-    'math-y1-nombor-100.json',
-    'read-ms-y1-suku-kata-kv.json',
-    'science-y1-hidup-bukan-hidup.json',
-  ];
+  // Brief 01 scope: one sample pack. The reading and science packs return in
+  // Phase 3, from the commit that removed them.
+  const names = ['math-y1-nombor-100.json'];
 
   for (const name of names) {
     it(`${name} parses`, async () => {
@@ -112,27 +110,20 @@ describe('question rules', () => {
     expect(issueMessages(result)).toContain('does not match itemCount');
   });
 
-  it('rejects a sort item pointing at a bucket that does not exist', () => {
-    const result = QuestionSchema.safeParse({
-      ...base,
-      type: 'drag-bucket',
-      payload: {
-        buckets: [
-          { id: 'hidup', label: { ms: 'H', en: 'L' }, icon: '/img/ui/leaf.svg' },
-          { id: 'bukan', label: { ms: 'B', en: 'N' }, icon: '/img/ui/rock.svg' },
-        ],
-        items: [
-          { id: 'i1', image: '/img/sci/cat.svg', alt: { ms: 'K', en: 'C' }, bucketId: 'hantu' },
-        ],
-      },
-    });
-    expect(result.success).toBe(false);
-    expect(issueMessages(result)).toContain('unknown bucket');
-  });
-
-  it('rejects a Phase 3 question type that has no content yet', () => {
-    const result = QuestionSchema.safeParse({ ...base, type: 'build-word', payload: {} });
-    expect(result.success).toBe(false);
+  it('rejects every question type that is out of scope for this brief', () => {
+    // Three types are in scope: mcq, mcq-image, count-tap. Anything else must
+    // fail to parse, so a pack cannot quietly reintroduce a type that has no
+    // component behind it.
+    for (const type of [
+      'listen-choose',
+      'drag-bucket',
+      'drag-match',
+      'sequence',
+      'build-word',
+    ]) {
+      const result = QuestionSchema.safeParse({ ...base, type, payload: {} });
+      expect(result.success, `${type} should not parse`).toBe(false);
+    }
   });
 
   it('requires bilingual prompt audio', () => {

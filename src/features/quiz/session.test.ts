@@ -45,24 +45,6 @@ const mcqImage: Question = {
   },
 };
 
-const listenChoose: Question = {
-  id: 'r001',
-  type: 'listen-choose',
-  difficulty: 1,
-  prompt: { ms: 'Dengar, kemudian pilih perkataan.', en: 'Listen, then pick the word.' },
-  promptAudio: { ms: '/audio/ms/inst_listen.mp3', en: '/audio/en/inst_listen.mp3' },
-  payload: {
-    contentLang: 'ms',
-    targetAudio: '/audio/ms/words/bulan.mp3',
-    options: [
-      { id: 'a', text: { ms: 'bulan', en: 'bulan' } },
-      { id: 'b', text: { ms: 'bulat', en: 'bulat' } },
-    ],
-    correctOptionId: 'a',
-    replayLimit: 3,
-  },
-};
-
 const countTap: Question = {
   id: 'q003',
   type: 'count-tap',
@@ -75,29 +57,6 @@ const countTap: Question = {
     layout: 'scatter',
     answerInput: 'number-pad',
     correctAnswer: 7,
-  },
-};
-
-const dragBucket: Question = {
-  id: 's001',
-  type: 'drag-bucket',
-  difficulty: 2,
-  prompt: { ms: 'Isih: hidup atau bukan hidup?', en: 'Sort: living or non-living?' },
-  promptAudio: { ms: '/audio/ms/inst_sort.mp3', en: '/audio/en/inst_sort.mp3' },
-  payload: {
-    buckets: [
-      { id: 'hidup', label: { ms: 'Hidup', en: 'Living' }, icon: '/img/ui/leaf.svg' },
-      { id: 'bukan', label: { ms: 'Bukan Hidup', en: 'Non-living' }, icon: '/img/ui/rock.svg' },
-    ],
-    items: [
-      { id: 'i1', image: '/img/sci/cat.svg', alt: { ms: 'Kucing', en: 'Cat' }, bucketId: 'hidup' },
-      {
-        id: 'i2',
-        image: '/img/sci/chair.svg',
-        alt: { ms: 'Kerusi', en: 'Chair' },
-        bucketId: 'bukan',
-      },
-    ],
   },
 };
 
@@ -120,8 +79,7 @@ describe('checkAnswer', () => {
     expect(checkAnswer(mcq, pick('b'))).toBe(true);
     expect(checkAnswer(mcq, pick('a'))).toBe(false);
     expect(checkAnswer(mcqImage, pick('b'))).toBe(true);
-    expect(checkAnswer(listenChoose, pick('a'))).toBe(true);
-    expect(checkAnswer(listenChoose, pick('b'))).toBe(false);
+    expect(checkAnswer(mcqImage, pick('a'))).toBe(false);
   });
 
   it('marks count-tap against the tally, not the item count field alone', () => {
@@ -129,23 +87,9 @@ describe('checkAnswer', () => {
     expect(checkAnswer(countTap, { kind: 'count', value: 6 })).toBe(false);
   });
 
-  it('scores a multi-item sort as one: everything or nothing', () => {
-    expect(
-      checkAnswer(dragBucket, { kind: 'placements', placements: { i1: 'hidup', i2: 'bukan' } }),
-    ).toBe(true);
-    expect(
-      checkAnswer(dragBucket, { kind: 'placements', placements: { i1: 'hidup', i2: 'hidup' } }),
-    ).toBe(false);
-    // A half-finished sort is not a pass.
-    expect(checkAnswer(dragBucket, { kind: 'placements', placements: { i1: 'hidup' } })).toBe(
-      false,
-    );
-  });
-
   it('rejects a response shaped for a different question type', () => {
     expect(() => checkAnswer(mcq, { kind: 'count', value: 1 })).toThrow(TypeError);
     expect(() => checkAnswer(countTap, pick('a'))).toThrow(TypeError);
-    expect(() => checkAnswer(dragBucket, pick('a'))).toThrow(TypeError);
   });
 });
 
@@ -364,27 +308,19 @@ describe('progression', () => {
     expect(replay.result?.gems).toBeLessThan(first.result?.gems ?? 0);
   });
 
-  it('runs every MVP question type end to end', () => {
+  it('runs every in-scope question type end to end', () => {
     const s = run(createSession('mixed'), [
-      { type: 'LOADED', questions: [mcq, mcqImage, listenChoose, countTap, dragBucket] },
+      { type: 'LOADED', questions: [mcq, mcqImage, countTap] },
       { type: 'START', nowMs: 0 },
       { type: 'ANSWER', response: pick('b'), nowMs: 10 },
       { type: 'NEXT', nowMs: 20 },
       { type: 'ANSWER', response: pick('b'), nowMs: 30 },
       { type: 'NEXT', nowMs: 40 },
-      { type: 'ANSWER', response: pick('a'), nowMs: 50 },
+      { type: 'ANSWER', response: { kind: 'count', value: 7 }, nowMs: 50 },
       { type: 'NEXT', nowMs: 60 },
-      { type: 'ANSWER', response: { kind: 'count', value: 7 }, nowMs: 70 },
-      { type: 'NEXT', nowMs: 80 },
-      {
-        type: 'ANSWER',
-        response: { kind: 'placements', placements: { i1: 'hidup', i2: 'bukan' } },
-        nowMs: 90,
-      },
-      { type: 'NEXT', nowMs: 100 },
     ]);
     expect(s.status).toBe('summary');
-    expect(s.answers).toHaveLength(5);
+    expect(s.answers).toHaveLength(3);
     expect(s.result?.stars).toBe(3);
   });
 

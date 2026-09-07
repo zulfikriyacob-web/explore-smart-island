@@ -112,21 +112,6 @@ export const McqImageSchema = z
   })
   .superRefine((q, ctx) => checkOptions(q.payload.options, q.payload.correctOptionId, ctx));
 
-export const ListenChooseSchema = z
-  .object({
-    ...questionBaseShape,
-    type: z.literal('listen-choose'),
-    payload: z.object({
-      /** Locks the content language; the UI switch does not touch it. (SPEC 3.4) */
-      contentLang: LangSchema,
-      targetAudio: AssetPathSchema,
-      options: z.array(TextOptionSchema).min(2),
-      correctOptionId: z.string().min(1),
-      replayLimit: z.number().int().min(1).max(10).default(3),
-    }),
-  })
-  .superRefine((q, ctx) => checkOptions(q.payload.options, q.payload.correctOptionId, ctx));
-
 export const CountTapSchema = z
   .object({
     ...questionBaseShape,
@@ -149,56 +134,17 @@ export const CountTapSchema = z
     }
   });
 
-export const DragBucketSchema = z
-  .object({
-    ...questionBaseShape,
-    type: z.literal('drag-bucket'),
-    payload: z.object({
-      buckets: z
-        .array(
-          z.object({
-            id: z.string().min(1),
-            label: LocalizedTextSchema,
-            icon: AssetPathSchema,
-          }),
-        )
-        .min(2),
-      items: z
-        .array(
-          z.object({
-            id: z.string().min(1),
-            image: AssetPathSchema,
-            alt: LocalizedTextSchema,
-            bucketId: z.string().min(1),
-          }),
-        )
-        .min(1),
-    }),
-  })
-  .superRefine((q, ctx) => {
-    const bucketIds = q.payload.buckets.map((b) => b.id);
-    for (const [i, item] of q.payload.items.entries()) {
-      if (!bucketIds.includes(item.bucketId)) {
-        ctx.addIssue({
-          code: 'custom',
-          path: ['payload', 'items', i, 'bucketId'],
-          message: `item "${item.id}" targets unknown bucket "${item.bucketId}"`,
-        });
-      }
-    }
-  });
-
 /**
- * MVP subset only (SPEC 3.3): mcq, mcq-image, listen-choose, count-tap,
- * drag-bucket. drag-match, sequence and build-word arrive in Phase 3 and are
- * deliberately absent so no component gets built ahead of its content.
+ * Brief 01 scope: three question types, one sample pack. Every other type named
+ * in SPEC 3.3 — listen-choose, drag-bucket, drag-match, sequence, build-word —
+ * arrives in Phase 3 and is deliberately absent, so no component gets built
+ * ahead of its content. Their schemas and packs are in git history, at the
+ * commit that removed them.
  */
 export const QuestionSchema = z.discriminatedUnion('type', [
   McqSchema,
   McqImageSchema,
-  ListenChooseSchema,
   CountTapSchema,
-  DragBucketSchema,
 ]);
 
 export type Question = z.infer<typeof QuestionSchema>;
@@ -313,15 +259,8 @@ export function collectAssetPaths(pack: TopicPack): string[] {
       case 'mcq-image':
         paths.push(...q.payload.options.map((o) => o.image));
         break;
-      case 'listen-choose':
-        paths.push(q.payload.targetAudio);
-        break;
       case 'count-tap':
         paths.push(q.payload.itemImage);
-        break;
-      case 'drag-bucket':
-        paths.push(...q.payload.buckets.map((b) => b.icon));
-        paths.push(...q.payload.items.map((i) => i.image));
         break;
     }
   }

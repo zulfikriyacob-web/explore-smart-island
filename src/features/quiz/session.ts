@@ -20,8 +20,7 @@ export type SessionStatus = 'loading' | 'intro' | 'question' | 'feedback' | 'sum
 /** What the child sent back, shaped per question type. (SPEC 3.4) */
 export type Response =
   | { kind: 'option'; optionId: string }
-  | { kind: 'count'; value: number }
-  | { kind: 'placements'; placements: Readonly<Record<string, string>> };
+  | { kind: 'count'; value: number };
 
 export interface SessionState {
   activityId: string;
@@ -83,15 +82,11 @@ export function currentQuestion(s: SessionState): Question | null {
   return s.questions[s.index] ?? null;
 }
 
-/**
- * Is this response correct? A multi-item drag-bucket question scores as ONE:
- * correct means every item landed in the right bucket. (SPEC 3.4)
- */
+/** Is this response correct? (SPEC 3.4) */
 export function checkAnswer(question: Question, response: Response): boolean {
   switch (question.type) {
     case 'mcq':
     case 'mcq-image':
-    case 'listen-choose':
       if (response.kind !== 'option') {
         throw new TypeError(`question ${question.id} (${question.type}) expects an option response`);
       }
@@ -102,14 +97,6 @@ export function checkAnswer(question: Question, response: Response): boolean {
         throw new TypeError(`question ${question.id} (count-tap) expects a count response`);
       }
       return response.value === question.payload.correctAnswer;
-
-    case 'drag-bucket': {
-      if (response.kind !== 'placements') {
-        throw new TypeError(`question ${question.id} (drag-bucket) expects a placements response`);
-      }
-      const placed = response.placements;
-      return question.payload.items.every((item) => placed[item.id] === item.bucketId);
-    }
   }
 }
 
