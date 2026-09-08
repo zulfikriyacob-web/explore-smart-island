@@ -53,9 +53,21 @@ const questionBaseShape = {
   tags: z.array(z.string().min(1)).optional(),
 };
 
+/** SPEC 3.4: at most 3 options, at most 40 characters per language. */
+export const MCQ_MAX_OPTIONS = 3;
+export const MCQ_MAX_OPTION_CHARS = 40;
+
+/**
+ * Text option, mcq only. The character cap is per language and applied to each
+ * separately: an option that fits in English but overflows in Malay still
+ * fails, because the pack has to be shippable in both. (SPEC 3.4)
+ */
 const TextOptionSchema = z.object({
   id: z.string().min(1),
-  text: LocalizedTextSchema,
+  text: z.object({
+    ms: z.string().min(1).max(MCQ_MAX_OPTION_CHARS),
+    en: z.string().min(1).max(MCQ_MAX_OPTION_CHARS),
+  }),
 });
 
 const ImageOptionSchema = z.object({
@@ -93,7 +105,9 @@ export const McqSchema = z
     ...questionBaseShape,
     type: z.literal('mcq'),
     payload: z.object({
-      options: z.array(TextOptionSchema).min(2),
+      // Four 88px buttons do not fit the thumb zone without scrolling, and
+      // scrolling while choosing an answer causes mis-taps. (SPEC 3.4)
+      options: z.array(TextOptionSchema).min(2).max(MCQ_MAX_OPTIONS),
       correctOptionId: z.string().min(1),
       shuffle: z.boolean().default(true),
     }),

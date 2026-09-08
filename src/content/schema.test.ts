@@ -2,7 +2,12 @@ import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 
-import { QuestionSchema, TopicPackSchema, collectAssetPaths } from './schema.ts';
+import {
+  MCQ_MAX_OPTION_CHARS,
+  QuestionSchema,
+  TopicPackSchema,
+  collectAssetPaths,
+} from './schema.ts';
 
 const PACKS = path.join(process.cwd(), 'src', 'content', 'packs');
 
@@ -108,6 +113,75 @@ describe('question rules', () => {
     });
     expect(result.success).toBe(false);
     expect(issueMessages(result)).toContain('does not match itemCount');
+  });
+
+  const textOption = (id: string, text: string) => ({ id, text: { ms: text, en: text } });
+
+  it('accepts an mcq at exactly the option limit', () => {
+    const result = QuestionSchema.safeParse({
+      ...base,
+      payload: {
+        options: [textOption('a', '1'), textOption('b', '2'), textOption('c', '3')],
+        correctOptionId: 'a',
+      },
+    });
+    expect(issueMessages(result)).toBe('');
+    expect(result.success).toBe(true);
+  });
+
+  it('rejects an mcq with a fourth option', () => {
+    const result = QuestionSchema.safeParse({
+      ...base,
+      payload: {
+        options: [
+          textOption('a', '1'),
+          textOption('b', '2'),
+          textOption('c', '3'),
+          textOption('d', '4'),
+        ],
+        correctOptionId: 'a',
+      },
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it('accepts option text at exactly 40 characters', () => {
+    const forty = 'x'.repeat(MCQ_MAX_OPTION_CHARS);
+    expect(forty).toHaveLength(40);
+    const result = QuestionSchema.safeParse({
+      ...base,
+      payload: {
+        options: [textOption('a', forty), textOption('b', 'short')],
+        correctOptionId: 'a',
+      },
+    });
+    expect(issueMessages(result)).toBe('');
+    expect(result.success).toBe(true);
+  });
+
+  it('rejects option text at 41 characters, in either language alone', () => {
+    const long = 'x'.repeat(MCQ_MAX_OPTION_CHARS + 1);
+    const shortOne = { id: 'b', text: { ms: 'pendek', en: 'short' } };
+
+    // Too long in Malay, fine in English.
+    const msOnly = QuestionSchema.safeParse({
+      ...base,
+      payload: {
+        options: [{ id: 'a', text: { ms: long, en: 'short' } }, shortOne],
+        correctOptionId: 'a',
+      },
+    });
+    expect(msOnly.success).toBe(false);
+
+    // Too long in English, fine in Malay.
+    const enOnly = QuestionSchema.safeParse({
+      ...base,
+      payload: {
+        options: [{ id: 'a', text: { ms: 'pendek', en: long } }, shortOne],
+        correctOptionId: 'a',
+      },
+    });
+    expect(enOnly.success).toBe(false);
   });
 
   it('rejects every question type that is out of scope for this brief', () => {

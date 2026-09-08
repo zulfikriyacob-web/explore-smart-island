@@ -1,0 +1,34 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+    margin: 0;
+  }
+
+  body {
+    /* DESIGN 2.1: pale aqua ground, deep green-black text, 18px base. */
+    background-color: theme('colors.laut.shallow');
+    color: theme('colors.arang.DEFAULT');
+    font-family: theme('fontFamily.sans');
+    font-size: 18px;
+    line-height: 1.5;
+    /* DESIGN 3: no all-caps, and digits must not shift on counters. */
+    -webkit-font-smoothing: antialiased;
+  }
+
+  button {
+    font-family: inherit;
+    cursor: pointer;
+  }
+
+  /* DESIGN 5.4: visible keyboard focus, for a parent on a desktop. */
+  button:focus-visible {
+    outline: 4px solid theme('colors.nila.DEFAULT');
+    outline-offset: 2px;
+  }
+}
