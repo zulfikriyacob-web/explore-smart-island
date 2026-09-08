@@ -19,3 +19,45 @@
    plainly which values the environment did not compute — a frozen renderer
    suppresses the very animation whose end state you are claiming to check.
    Passing your own test is not evidence. Ask what the test cannot see.
+
+## Working notes
+
+Things that cost a session real time to discover. Not principles — facts.
+
+### This machine
+
+- **The Bash tool does not work here.** It fails with
+  `fork: Resource temporarily unavailable`. Use PowerShell for everything,
+  including git.
+- **`git commit -m` with a here-string containing quotes breaks the PowerShell
+  parser**, and git receives the message as stray pathspecs. Write the message to
+  a file and use `git commit -F <file>`.
+- **Do not pipe a native command through `2>&1` in PowerShell.** stderr lines
+  become ErrorRecords and `$LASTEXITCODE` reads as failure even when the command
+  succeeded — a fully passing test run reported `-1` this way. stderr is captured
+  for you already.
+- **No `gh` CLI, no `GITHUB_TOKEN`, no connected Chrome.** Pull requests cannot be
+  opened from here. Push the branch and hand over the `.../pull/new/<branch>` URL
+  with a title and a body.
+
+### Verifying visual work
+
+- **The Browser pane runs the page with `document.hidden === true`, so
+  `requestAnimationFrame` never fires** — measured at 0 frames in 400ms. Framer
+  Motion animations do not run at all. An element with `initial={{ opacity: 0 }}`
+  stays invisible, a CSS `transition` freezes at its start value, and an entry
+  `scale` stays at its starting size.
+- **Measure with `getBoundingClientRect` and `getComputedStyle`, not
+  screenshots.** Screenshots from the pane time out, come back tiled, or return a
+  cropped view.
+- This is not only an obstacle. It is a free adversarial test for principle 5:
+  anything that has to be legible without an animation frame fails loudly here.
+  Three real bugs were found this way — a first card that rendered blank, a
+  correct/wrong icon that only appeared once its animation ran, and a Next button
+  that never mounted because `AnimatePresence mode="wait"` was waiting for an exit
+  animation to finish.
+- **Node 22+ defines a global `localStorage`**, so `globalThis.localStorage`
+  exists in tests. Do not write a test that assumes it is absent.
+- A saved session in localStorage freezes the questions, so **content edits do not
+  appear until the session is cleared**. Clear site data before testing new prompt
+  text. See PRD section 16.

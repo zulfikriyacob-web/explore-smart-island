@@ -23,6 +23,12 @@
 | Hos frontend | Cloudflare Pages | CDN global, bina Vite terus, tier percuma benarkan guna komersial |
 | Aset (.riv, audio, SVG) | Dalam repo pada mulanya | Pindah ke Cloudflare R2 jika melebihi ~100 MB |
 
+> **React 18 dan Framer Motion 11 ialah versi yang disengajakan, bukan yang lalai.**
+> `npm install react framer-motion` tanpa julat menyelesaikan kepada **React 19 dan Framer
+> Motion 13** pada hari ini, dan ia berlaku senyap. Kedua-duanya diturunkan semula secara
+> eksplisit supaya sepadan jadual di atas. Kalau versi ini dinaikkan, naikkan di sini dahulu
+> — jangan biarkan `npm` memutuskannya.
+
 ---
 
 ## 2. Struktur folder
