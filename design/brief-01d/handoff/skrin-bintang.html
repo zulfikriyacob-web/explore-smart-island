@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="ms">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ringkasan bintang — Explore Smart Island</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700&family=Lexend:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --laut-cetek:#E6F7F4; --putih:#FFFFFF; --arang:#1F3A34; --arang-lembut:#5C7A72; --garis:#D3E8E3;
+    --laut:#0FB5A6; --laut-gelap:#087A70; --mangga:#FFB627; --pirus:#22D3EE; --nila:#5B5BD6;
+    --ease-back:cubic-bezier(.34,1.56,.64,1);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{background:var(--laut-cetek);color:var(--arang);font-family:Lexend,system-ui,sans-serif;font-size:18px;line-height:1.5}
+  button{font-family:inherit;cursor:pointer}
+  button:focus-visible{outline:4px solid var(--nila);outline-offset:2px}
+
+  .skrin{height:100dvh;min-height:700px;max-width:430px;margin:0 auto;display:flex;flex-direction:column;align-items:center;padding:56px 16px 24px}
+  .label{font-size:15px;line-height:1.35;font-weight:500;color:var(--arang-lembut)}
+  .tajuk{font-family:'Baloo 2',system-ui,sans-serif;font-weight:700;font-size:40px;line-height:1.1;letter-spacing:-.01em;margin-top:8px}
+
+  .bintang{display:flex;gap:16px;margin-top:24px}
+  .bintang svg{width:88px;height:88px;transform-origin:50% 50%}
+  .bintang svg:nth-child(2){margin-top:-16px}
+  .bintang .ada{fill:var(--mangga);opacity:0;animation:star .45s var(--ease-back) both}     /* E1 — spring.cheer */
+  .bintang .ada:nth-child(2){animation-delay:.18s}
+  .bintang .ada:nth-child(3){animation-delay:.36s}
+  .bintang .kosong{fill:none;stroke:var(--garis);stroke-width:1.6;stroke-linejoin:round}
+  @keyframes star{0%{transform:scale(0) rotate(-25deg);opacity:0}60%{transform:scale(1.25) rotate(4deg);opacity:1}100%{transform:scale(1) rotate(0);opacity:1}}
+
+  .kiraan{font-family:'Baloo 2',system-ui,sans-serif;font-weight:600;font-size:24px;line-height:1.25;margin-top:12px}
+  .nota{font-size:15px;line-height:1.35;color:var(--arang-lembut);margin-top:6px;text-align:center}
+  .permata{margin-top:20px;display:flex;align-items:center;gap:10px;background:var(--putih);border:2px solid var(--garis);border-radius:9999px;padding:10px 18px;font-weight:600;font-variant-numeric:tabular-nums}
+  .permata i{width:14px;height:14px;border-radius:4px;background:var(--pirus);transform:rotate(45deg)}
+
+  .tindakan{margin-top:auto;width:100%;display:flex;flex-direction:column;gap:16px}
+  .blok{width:100%;border-radius:20px;background:var(--putih);color:var(--arang);font-family:'Baloo 2',system-ui,sans-serif;font-weight:600;transition:transform .12s cubic-bezier(.16,1,.3,1)}
+  .blok:active{transform:translateY(4px);box-shadow:none}
+  .sekunder{min-height:72px;font-size:22px;border:4px solid var(--garis);box-shadow:0 4px 0 0 var(--garis)}
+  .utama{min-height:88px;font-size:24px;border:4px solid var(--laut);box-shadow:0 4px 0 0 var(--laut-gelap)} /* slot sama seperti skrin kuiz */
+
+  /* Kancil pengganti (bentuk asas) — GEMBIRA sekali pada muat */
+  .kancil{width:234px;height:180px;overflow:visible;margin-top:24px}
+  .kancil [data-part]{transform-box:fill-box}
+  .kancil [data-part=all]{transform-origin:50% 100%;animation:jump .8s var(--ease-back) 1}
+  .kancil [data-part=body]{transform-origin:50% 100%;animation:breathe 3s ease-in-out infinite}
+  .kancil [data-part=ear-l]{transform-origin:50% 100%;animation:earL .8s cubic-bezier(.16,1,.3,1) 1}
+  .kancil [data-part=ear-r]{transform-origin:50% 100%;animation:earR .8s cubic-bezier(.16,1,.3,1) 1}
+  .kancil [data-part^=eye]{transform-origin:50% 50%;animation:squint .8s ease-in-out 1}
+  @keyframes breathe{0%,100%{transform:scale(1,1)}50%{transform:scale(1.015,1.03)}}
+  @keyframes jump{0%{transform:translateY(0)}18%{transform:translateY(4px) scale(1.04,.96)}45%{transform:translateY(-30px) scale(.98,1.04)}72%{transform:translateY(0) scale(1.03,.97)}86%{transform:translateY(-5px)}100%{transform:translateY(0)}}
+  @keyframes earL{0%{transform:rotate(0)}20%,65%{transform:rotate(-22deg)}100%{transform:rotate(0)}}
+  @keyframes earR{0%{transform:rotate(0)}20%,65%{transform:rotate(18deg)}100%{transform:rotate(0)}}
+  @keyframes squint{0%,20%{transform:scaleY(1)}35%,70%{transform:scaleY(.35)}100%{transform:scaleY(1)}}
+
+  @media (prefers-reduced-motion: reduce){.bintang .ada,.kancil [data-part]{animation:none!important;opacity:1}}
+</style>
+</head>
+<body>
+<main class="skrin">
+  <div class="label">Aktiviti selesai</div>
+  <h1 class="tajuk">Syabas!</h1>
+
+  <svg class="kancil" viewBox="0 0 260 200" aria-hidden="true">
+    <ellipse cx="128" cy="188" rx="76" ry="6" fill="#D3E8E3"/>
+    <g data-part="all">
+      <g data-part="leg-bl"><rect x="78" y="150" width="12" height="36" rx="6" fill="#4A625B"/></g>
+      <g data-part="leg-br"><rect x="98" y="152" width="12" height="34" rx="6" fill="#4A625B"/></g>
+      <g data-part="leg-fl"><rect x="138" y="150" width="12" height="36" rx="6" fill="#4A625B"/></g>
+      <g data-part="leg-fr"><rect x="158" y="152" width="12" height="34" rx="6" fill="#4A625B"/></g>
+      <g data-part="tail"><ellipse cx="58" cy="118" rx="6" ry="10" fill="#7A958D"/></g>
+      <g data-part="body"><ellipse cx="118" cy="132" rx="60" ry="40" fill="#5C7A72"/></g>
+      <g data-part="head">
+        <g data-part="ear-l"><ellipse cx="168" cy="56" rx="8" ry="18" fill="#7A958D"/></g>
+        <g data-part="ear-r"><ellipse cx="196" cy="54" rx="8" ry="18" fill="#7A958D"/></g>
+        <circle cx="182" cy="88" r="28" fill="#5C7A72"/><ellipse cx="206" cy="96" rx="14" ry="10" fill="#5C7A72"/><circle cx="216" cy="94" r="4" fill="#1F3A34"/>
+        <g data-part="eye-l"><circle cx="176" cy="84" r="4" fill="#1F3A34"/></g>
+        <g data-part="eye-r"><circle cx="194" cy="82" r="4" fill="#1F3A34"/></g>
+      </g>
+    </g>
+  </svg>
+
+  <div class="bintang" role="img" aria-label="2 daripada 3 bintang">
+    <svg class="ada" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+    <svg class="ada" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+    <svg class="kosong" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+  </div>
+  <div class="kiraan">2 daripada 3 bintang</div>
+  <div class="nota">8 daripada 10 betul pada cubaan pertama</div>
+  <div class="permata"><i></i>+10 permata</div>
+
+  <div class="tindakan">
+    <button class="blok sekunder">Main lagi</button>
+    <button class="blok utama">Seterusnya</button>
+  </div>
+</main>
+</body>
+</html>
