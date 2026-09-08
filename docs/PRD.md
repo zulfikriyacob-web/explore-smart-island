@@ -358,3 +358,9 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
 2. Berapa banyak soalan setiap topik diperlukan sebelum pengulangan terasa? (Dicadangkan: minimum 40.)
 3. Adakah Tahun 3 memerlukan sesi lebih panjang (15 soalan)? Uji sebelum memutuskan.
 4. Model perniagaan — percuma dengan langganan ibu bapa, atau bayar sekali? Belum diputuskan.
+5. **Peta pulau 3D.** Kepulauan dengan kedalaman sebenar dan kamera terbang ke pulau bila
+   topik dipilih. Calon untuk Fasa 3+, bukan lebih awal. Spline atau React Three Fiber.
+   Ia satu skrin, dimuat sekali, di luar laluan panas kuiz — jadi belanjawan 2 MB
+   SPEC.md §7.6 terpakai pada skrin itu sahaja, bukan pada setiap aktiviti.
+   Risiko: runtime 3D besar, GPU pada telefon pertengahan, dan ia mesti tidak bercanggah
+   dengan vektor rata DESIGN.md §8.
