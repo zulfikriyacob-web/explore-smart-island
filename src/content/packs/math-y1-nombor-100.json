@@ -85,7 +85,7 @@
         "itemImage": "/img/fruit/rambutan.svg",
         "itemCount": 7,
         "layout": "scatter",
-        "answerInput": "number-pad",
+        "answerInput": "tap-count",
         "correctAnswer": 7
       }
     },
@@ -149,7 +149,7 @@
         "itemImage": "/img/fruit/pisang.svg",
         "itemCount": 5,
         "layout": "grid",
-        "answerInput": "number-pad",
+        "answerInput": "tap-count",
         "correctAnswer": 5
       }
     },

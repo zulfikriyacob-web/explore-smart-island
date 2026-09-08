@@ -134,7 +134,13 @@ export const CountTapSchema = z
       itemImage: AssetPathSchema,
       itemCount: z.number().int().min(1).max(20),
       layout: z.enum(['scatter', 'grid']),
-      answerInput: z.enum(['number-pad', 'choices']),
+      /**
+       * Tapping the objects is the answer; the tally is submitted as-is. The
+       * number pad this used to name is gone — user testing showed it made
+       * counting two steps, and a 7-year-old could not tell which step had
+       * failed. (SPEC 3.4)
+       */
+      answerInput: z.literal('tap-count'),
       correctAnswer: z.number().int().min(0),
     }),
   })

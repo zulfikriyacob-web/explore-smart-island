@@ -74,21 +74,23 @@ export function QuizScreen() {
             exit="exit"
             className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto rounded-lg bg-white p-6 shadow-float"
           >
-            <div className="flex items-start justify-between gap-4">
-              <AudioButton src={question.promptAudio[LANG]} />
-              {/*
-                Reserved kancil slot, 88x88, empty for now. It holds real layout
-                space so the mascot's arrival will not move anything.
-                (DESIGN 7, "slot yang ditempah")
-              */}
-              <div aria-hidden className="h-[88px] w-[88px] shrink-0" data-slot="kancil" />
-            </div>
+            <AudioButton src={question.promptAudio[LANG]} />
 
             <motion.p
               variants={reduce ? reducedItem : optionItem}
               lang={LANG}
-              className="m-0 text-left font-sans text-prompt font-medium"
+              className="m-0 min-h-[88px] text-left font-sans text-prompt font-medium"
             >
+              {/*
+                Reserved kancil slot, 88x88, in the card's top-right corner.
+                It floats, so the prompt wraps around it for the first 88px and
+                then reflows to full width — the corner stays clear without the
+                slot costing the card a whole 88px row of its own. min-h-[88px]
+                on the paragraph keeps the float contained even when the prompt
+                is one line. Nothing moves when the mascot arrives.
+                (DESIGN 7, "slot yang ditempah")
+              */}
+              <span aria-hidden data-slot="kancil" className="float-right ml-4 h-[88px] w-[88px]" />
               {question.prompt[LANG]}
             </motion.p>
 
@@ -116,9 +118,10 @@ export function QuizScreen() {
               )}
             </AnimatePresence>
 
-            {session.revealed && question.explain && (
+            {session.revealed && (question.explain || question.type === 'count-tap') && (
               <p className="m-0 rounded-md bg-pasir px-4 py-3 font-sans text-body text-arang">
-                {question.explain[LANG]}
+                {question.explain?.[LANG] ??
+                  `Jawapannya ${question.type === 'count-tap' ? question.payload.correctAnswer : ''}.`}
               </p>
             )}
           </motion.div>
@@ -146,25 +149,36 @@ export function QuizScreen() {
         />
 
         {/*
-          Reserved Next slot, 88px, empty at rest. Next always appears in exactly
-          the same place, so the muscle memory a child builds keeps working.
-          (DESIGN 5.2, DESIGN 7)
+          Reserved 88px slot. Seterusnya always appears here, and for count-tap
+          so does its submit button — same place, same size, so the muscle memory
+          a child builds keeps working. (DESIGN 5.2, DESIGN 7)
+        */}
+        {/*
+          No AnimatePresence here, and no entry animation. This slot is the
+          child's only route forward, and an exit-then-enter swap makes that
+          route wait for an animation frame that may never arrive — a
+          backgrounded tab, a throttled device. The swap is instant on purpose.
         */}
         <div className="min-h-answer" data-slot="seterusnya">
-          <AnimatePresence>
-            {locked && (
-              <motion.div
-                initial={reduce ? { opacity: 0 } : { opacity: 0, y: 8 }}
-                animate={reduce ? { opacity: 1 } : { opacity: 1, y: 0 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.2, ease: ease.out }}
-              >
-                <BlockButton onPress={next} ariaLabel="Soalan seterusnya">
-                  Seterusnya
-                </BlockButton>
-              </motion.div>
-            )}
-          </AnimatePresence>
+          {locked ? (
+            <BlockButton onPress={next} ariaLabel="Soalan seterusnya">
+              Seterusnya
+            </BlockButton>
+          ) : question.type === 'count-tap' ? (
+            /*
+              Tapping the objects is the answer. There is no number pad: user
+              testing showed the pad made counting two steps — count, then find
+              the digit — and a 7-year-old could not tell which step had failed.
+              One action, one skill tested.
+            */
+            <BlockButton
+              onPress={() => answer({ kind: 'count', value: counted.length })}
+              state={counted.length === 0 ? 'disabled' : 'rest'}
+              ariaLabel={`Hantar jawapan, ${counted.length} dibilang`}
+            >
+              Sedia
+            </BlockButton>
+          ) : null}
         </div>
       </section>
     </main>
