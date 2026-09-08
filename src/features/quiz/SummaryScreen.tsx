@@ -9,10 +9,18 @@ import { useQuizStore } from './store.ts';
 const STAR_PATH =
   '12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2';
 
-/** D3 — gems count up, so the reward feels earned rather than handed over. */
+/**
+ * D3 — gems count up, so the reward feels earned rather than handed over.
+ *
+ * The state starts at the real number, not at zero. The count-up is the
+ * flourish; the number is the reward. Starting at zero meant a child who never
+ * got an animation frame read "0 permata" after winning thirty — not a missing
+ * animation but a false statement about what they had just earned.
+ * (CLAUDE.md principle 5.)
+ */
 function CountUp({ to }: { to: number }) {
   const value = useMotionValue(0);
-  const [shown, setShown] = useState(0);
+  const [shown, setShown] = useState(to);
   const reduce = useReducedMotion();
 
   useEffect(() => {
@@ -20,6 +28,10 @@ function CountUp({ to }: { to: number }) {
       setShown(to);
       return;
     }
+    // Rewind before subscribing, so the rewind itself never reaches the screen.
+    // Only frames the animation actually produces move `shown` off the true
+    // number, which means no frames leaves it telling the truth.
+    value.set(0);
     const unsubscribe = value.on('change', (v) => setShown(Math.round(v)));
     const controls = animate(value, to, { duration: 0.6, ease: ease.out });
     return () => {
@@ -31,15 +43,25 @@ function CountUp({ to }: { to: number }) {
   return <span className="tabular-nums">{shown}</span>;
 }
 
-/** E1 — stars drop in one at a time. The peak moment of the session. */
+/**
+ * E1 — stars drop in one at a time. The peak moment of the session.
+ *
+ * They arrive at 85% of their size, never from `scale: 0` and never
+ * transparent. A star whose appearance *is* its animation is simply absent when
+ * the frame does not come, and on this screen the stars are the whole message —
+ * the child would be told they had earned nothing. `spring.cheer` is
+ * underdamped, so the arrival still overshoots and bounces on its own; the
+ * rotation is gone, because a star frozen at -25 degrees reads as broken rather
+ * than as mid-animation. (CLAUDE.md principle 5.)
+ */
 function Star({ filled, index }: { filled: boolean; index: number }) {
   const reduce = useReducedMotion();
   return (
     <motion.svg
       viewBox="0 0 24 24"
       className={`h-[88px] w-[88px] ${index === 1 ? '-mt-4' : ''}`}
-      initial={filled && !reduce ? { scale: 0, rotate: -25, opacity: 0 } : false}
-      animate={filled && !reduce ? { scale: 1, rotate: 0, opacity: 1 } : { opacity: 1 }}
+      initial={filled && !reduce ? { scale: 0.85 } : false}
+      animate={{ scale: 1, opacity: 1 }}
       transition={{ ...spring.cheer, delay: index * 0.18 }}
       aria-hidden
     >
