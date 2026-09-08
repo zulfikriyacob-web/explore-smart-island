@@ -20,6 +20,38 @@
    suppresses the very animation whose end state you are claiming to check.
    Passing your own test is not evidence. Ask what the test cannot see.
 
+   **The rule this earns: content must be mounted and visible on frame 0.
+   Animation refines an appearance; it never causes one.** An animation frame
+   is not a guarantee — a backgrounded tab, a throttled device, a renderer that
+   never calls `requestAnimationFrame`. Anything whose visibility waits on a
+   frame is simply missing when the frame does not come, and the child is not
+   told that an animation failed. They are told the wrong thing.
+
+   Concretely, in this codebase:
+
+   - No entry animation starts at `opacity: 0`, `scale: 0`, or far from where it
+     lands. Start at the settled state, slightly smaller, and animate to rest.
+   - No `AnimatePresence mode="wait"` around content. It withholds the incoming
+     element until the outgoing one finishes animating away, so a frameless exit
+     means the next thing never mounts at all.
+   - No `layout` prop on a container whose size carries meaning. It resizes by
+     projecting a transform over later frames; with no frames the projection
+     stays, and the box keeps the wrong shape. Reflow instead.
+   - A counter, score or tally renders its real value first. The count-up may
+     rewind it only once the animation is actually producing frames.
+   - Feedback that must be legible — a tick, a cross, a number badge — is never
+     drawn by an animation alone.
+
+   This has been the same bug five times: a blank first card, a correct/wrong
+   icon that only appeared once animated, a Next button that never mounted, a
+   hint at `opacity: 0`, and a question card that showed the previous question
+   while the engine had moved on. The last one is the shape of the harm — not a
+   missing flourish, but wrong content presented as current.
+
+   The Browser pane here runs with `document.hidden === true` and fires no
+   animation frames, so it is a free test for all of this. Drive the screen in
+   it and measure; anything that depends on a frame fails loudly.
+
 ## Working notes
 
 Things that cost a session real time to discover. Not principles — facts.

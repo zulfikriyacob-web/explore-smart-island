@@ -652,27 +652,56 @@ export const ease = {
 } as const;
 ```
 
-**Peraturan keras:** hanya animasikan `transform` dan `opacity`. Tiada `width`, `height`,
+**Peraturan keras 1:** hanya animasikan `transform` dan `opacity`. Tiada `width`, `height`,
 `top`, `left`, `box-shadow`, atau `filter` yang dianimasikan pada laluan panas.
-Untuk perubahan saiz, gunakan prop `layout` Framer Motion, bukan animasi `width`.
+
+**Peraturan keras 2 — kandungan mesti dipasang dan kelihatan pada bingkai 0.**
+Animasi memperhalusi kemunculan; ia tidak pernah menyebabkannya. Bingkai animasi bukan
+jaminan — tab latar belakang, peranti terhad, penyaji yang tidak pernah memanggil
+`requestAnimationFrame`. Apa sahaja yang kelihatannya menunggu bingkai akan **hilang**
+apabila bingkai itu tidak tiba, dan anak tidak diberitahu bahawa satu animasi gagal; dia
+diberitahu perkara yang salah.
+
+Yang dilarang, dan sebabnya:
+
+| Larangan | Kenapa |
+|---|---|
+| Keadaan masuk pada `opacity: 0` atau `scale: 0` | Beku = tidak kelihatan langsung |
+| Keadaan masuk jauh daripada tempat mendarat | Beku = kandungan di tempat salah |
+| `AnimatePresence mode="wait"` mengelilingi kandungan | Menahan elemen masuk sehingga elemen keluar habis beranimasi. Keluar yang beku bermakna kandungan seterusnya **tidak pernah dipasang** |
+| Prop `layout` pada bekas yang saiznya membawa makna | Ia mengubah saiz dengan unjuran transform merentas bingkai kemudian; tanpa bingkai, unjuran itu kekal dan kotak kekal salah bentuk. Ukur: `matrix(0.985, 0, 0, 0.59, 0, -47)` — kad dihimpit 59% menegak |
+| Kaunter atau skor yang bermula pada 0 | Beku = nombor palsu tentang apa yang anak baru menang |
+
+Untuk perubahan saiz, biarkan reflow CSS biasa melakukannya. Ia serta-merta dan betul pada
+bingkai 0; prop `layout` menukar ketepatan itu dengan kehalusan yang mungkin tidak pernah
+tiba.
 
 ### 7.2 Variasi boleh guna semula — `motion/variants.ts`
+
+Keadaan dinamakan `arriving` dan `settled`, bukan `hidden` dan `visible`. Tiada apa yang
+pernah tersembunyi — perkataan itulah yang membentuk pepijat lama. Tiada keadaan masuk
+membawa `opacity: 0`, dan tiada keadaan keluar langsung: kad ditukar serta-merta.
 
 ```ts
 /** Kad soalan masuk; anak-anaknya berperingkat */
 export const questionCard = {
-  hidden:  { opacity: 0, y: 24, scale: 0.96 },
-  visible: {
-    opacity: 1, y: 0, scale: 1,
+  arriving: { opacity: 1, scale: 0.985 },
+  settled: {
+    opacity: 1, scale: 1,
     transition: { ...spring.settle, staggerChildren: 0.06, delayChildren: 0.08 },
   },
-  exit:    { opacity: 0, y: -20, scale: 0.97, transition: { duration: duration.base, ease: ease.in } },
 };
 
-/** Setiap butang pilihan */
+/** Setiap anak kad yang berperingkat */
 export const optionItem = {
-  hidden:  { opacity: 0, y: 16, scale: 0.94 },
-  visible: { opacity: 1, y: 0, scale: 1, transition: spring.pop },
+  arriving: { opacity: 1, scale: 0.98 },
+  settled:  { opacity: 1, scale: 1, transition: spring.pop },
+};
+
+/** B5 — pancingan masuk di bawah soalan */
+export const hintItem = {
+  arriving: { opacity: 1, scale: 0.98 },
+  settled:  { opacity: 1, scale: 1, transition: { duration: duration.base, ease: ease.out } },
 };
 
 /** Goncang jawapan salah — pendek, mendatar, tidak menakutkan */
@@ -694,14 +723,14 @@ export const correctPulse = {
 |---|---|---|---|---|
 | **Tekan butang** | `scale: 0.94` | `whileTap`, `spring.pop` | ~120 ms | Ditambah `y: 2` untuk butang 3D (lihat DESIGN.md) |
 | **Butang lepas** | `scale: 1` | `spring.pop` | ~180 ms | Terlajak kecil terasa memuaskan |
-| **Kad soalan masuk** | `opacity`, `y`, `scale` | `questionCard` | 0.22 s + 0.06 s berperingkat | `AnimatePresence mode="wait"` |
+| **Kad soalan masuk** | `scale` sahaja | `questionCard` | 0.22 s + 0.06 s berperingkat | **Tiada `AnimatePresence`, tiada animasi keluar.** Kad berkunci pada `question.id` dan ditukar serta-merta. `origin-top`, supaya skala tidak menggerakkan teks soalan |
 | **Jawapan betul** | `scale` denyut + cincin | `correctPulse` | 0.32 s | Gelang hijau berkembang keluar, `scale 0.8→1.6`, `opacity 0.6→0` |
 | **Jawapan salah** | `x` goncang | `shake` | 0.34 s | **Tiada kilat merah penuh skrin.** Sempadan sahaja |
-| **Pancingan muncul** | `opacity`, `height` | `layout` + `spring.settle` | 0.25 s | Guna prop `layout`, jangan animasi `height` secara manual |
+| **Pancingan muncul** | `scale` sahaja | `hintItem` | 0.22 s | Kad tumbuh melalui reflow CSS biasa. **Bukan prop `layout`**, bukan animasi `height` |
 | **Pilihan dilumpuhkan** | `opacity → 0.35`, `scale → 0.96` | tween, `ease.out` | 0.2 s | Berperingkat 0.05 s jika berbilang |
 | **Bar kemajuan** | `scaleX` | `spring.settle` | ~0.4 s | `transformOrigin: left`. Jangan animasi `width` |
-| **Anugerah bintang** | `scale 0→1.25→1`, `rotate -25→0` | `spring.cheer` | 0.45 s setiap satu | Berperingkat 0.18 s antara bintang |
-| **Kiraan permata** | teks kira naik + `scale` denyut | tween 0.6 s | 0.6 s | Kira naik dengan `useMotionValue` + `animate()` |
+| **Anugerah bintang** | `scale 0.85→1` | `spring.cheer` | 0.45 s setiap satu | Berperingkat 0.18 s antara bintang. Bermula pada 0.85, bukan 0, dan tidak pernah lut sinar — bintang ialah mesej skrin itu. Tiada `rotate`: bintang beku pada −25° nampak rosak, bukan pertengahan animasi. `spring.cheer` redaman rendah, jadi terlajak tetap ada |
+| **Kiraan permata** | teks kira naik + `scale` denyut | tween 0.6 s | 0.6 s | Kira naik dengan `useMotionValue` + `animate()`. **Keadaan bermula pada nombor sebenar**; kiraan hanya menggantikannya setelah animasi benar-benar menghasilkan bingkai |
 | **Mula seret** | `scale: 1.08`, bayang naik | `spring.pop` | 0.15 s | `dragElastic: 0.15`, `dragMomentum: false` |
 | **Jatuh betul** | petak berdenyut `scale 1→1.06→1` | `spring.cheer` | 0.3 s | Item terkunci melalui `layoutId` |
 | **Jatuh salah** | kembali ke asal | `spring.snap` | ~0.35 s | Item kembali, tiada goncang — jangan hukum penerokaan |
@@ -732,10 +761,15 @@ const enter = reduce
 ```
 
 Apabila `prefers-reduced-motion: reduce` aktif:
-- Gantikan semua pergerakan/skala dengan silang-pudar `opacity` 150 ms
+- **Buang animasi masuk sepenuhnya** — render terus pada keadaan `settled` (`initial={false}`)
 - Matikan semua gelung `repeat: Infinity`
 - Matikan zarah sepenuhnya
 - **Kekalkan** perubahan warna dan ikon — maklum balas betul/salah masih perlu terbaca
+
+Versi awal bahagian ini menetapkan silang-pudar `opacity` 150 ms sebagai ganti. Itu
+bermula pada `opacity: 0`, iaitu tepat corak yang §7.1 peraturan keras 2 melarang — ia
+menukar satu masalah kebolehcapaian dengan satu lagi, dan bagi pengguna yang meminta
+kurang gerakan, ketiadaan animasi masuk memang jawapan yang lebih baik daripada pudar.
 
 ### 7.6 Bajet prestasi
 
