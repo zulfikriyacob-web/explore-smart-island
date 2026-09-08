@@ -392,11 +392,43 @@ mengecut. Slot statik; hanya isinya yang bergerak.
 
 - **Vektor rata dengan garis luar tebal.** Lebar strok 4px pada 100px, hujung dan sambungan bulat.
 - Palet terhad kepada token dalam §2 tambah dua neutral. Tiada kecerunan (gradient) dalam ikon.
+- **Dua ton setiap objek.** Warna asas, plus satu ton lebih gelap bagi warna itu sebagai
+  bahagian berbayang. Kedua-duanya **rata** — dua bentuk berasingan, bukan kecerunan. Ton gelap
+  ialah bentuk penuh yang digariskan; ton asas ialah bentuk sama dianjak sedikit ke kiri atas
+  tanpa garis luar, jadi yang tinggal di bawah kanan membaca sebagai bayang.
+- **Satu sorotan putih kecil setiap objek**, di bahagian bercahaya. Satu sahaja.
 - Satu bayang lembut sahaja setiap objek, tidak pernah bertindan.
+
+> Ton gelap itu bukan token §2 — ia versi digelapkan bagi warna asas objek berkenaan, dan
+> hidup dalam fail SVG itu sendiri. Ia tidak ditambah kepada palet, sebab ia bukan warna UI
+> dan tidak membawa makna. Objek rata satu warna kelihatan **membosankan** kepada
+> kanak-kanak, walaupun mereka mengenalinya — itu penemuan ujian pengguna, bukan pilihan
+> estetik.
 - Objek adalah **konkrit dan tempatan**: rambutan, pisang, bola sepak, teh tarik, kucing,
   bunga raya, payung, basikal. Bukan gambar rajah abstrak.
 - Setiap imej memerlukan `alt` dwibahasa (SPEC.md §3.4).
 - SVG dioptimumkan melalui SVGO; sasaran < 4 KB setiap ikon.
+
+### Aset ilustrasi disahkan oleh kanak-kanak, bukan oleh pengukuran
+
+Satu-satunya ujian yang penting untuk aset ilustrasi: **tunjukkan kepada kanak-kanak umur
+sasaran, tanpa petunjuk, dan tanya "ini apa?"** Kalau dia menamakannya, aset itu lulus. Kalau
+tidak, ia gagal — tidak kira betapa tepat bentuknya, betapa kemas palet dipatuhi, atau berapa
+banyak nombor yang boleh diukur padanya.
+
+Ini bukan peraturan teori. Lukisan rambutan pertama lulus setiap semakan teknikal — token §2
+sahaja, strok 4px, `validate:content` hijau — dan seorang kanak-kanak melihatnya sebagai
+**matahari**. Bulatan sepusat dengan pancaran lurus sekata. Yang membetulkannya ialah bentuk:
+bulu tak sekata dan melengkung, badan lebih gelap, tangkai dan daun. Ujian kedua dengan
+kanak-kanak sebenar: dia jawab "rambutan".
+
+Yang **tidak** membetulkannya, dan yang kita hampir habiskan masa mengejar, ialah warna.
+Rambutan sebenar kirmizi dan palet tiada merah sebenar; kami hampir menambah satu.
+Tidak perlu — bentuk yang menanggung pengecaman.
+
+Jadi: jangan tambah warna kepada §2 untuk menyelamatkan lukisan sebelum bentuknya diuji pada
+seorang kanak-kanak. Dan jangan tandakan aset ilustrasi siap atas kekuatan semakan teknikal
+sahaja.
 
 ---
 

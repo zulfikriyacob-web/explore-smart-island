@@ -77,8 +77,8 @@
       "difficulty": 1,
       "learningStandard": "1.1.1",
       "prompt": {
-        "ms": "Ketuk setiap rambutan. Kemudian tekan Sedia.",
-        "en": "Tap every rambutan. Then press Sedia."
+        "ms": "Ketuk setiap rambutan sambil mengira. Kemudian tekan Sedia.",
+        "en": "Tap every rambutan as you count. Then press Sedia."
       },
       "promptAudio": { "ms": "/audio/ms/q003.mp3", "en": "/audio/en/q003.mp3" },
       "payload": {
@@ -144,8 +144,8 @@
       "difficulty": 1,
       "learningStandard": "1.1.1",
       "prompt": {
-        "ms": "Ketuk setiap pisang. Kemudian tekan Sedia.",
-        "en": "Tap every banana. Then press Sedia."
+        "ms": "Ketuk setiap pisang sambil mengira. Kemudian tekan Sedia.",
+        "en": "Tap every banana as you count. Then press Sedia."
       },
       "promptAudio": { "ms": "/audio/ms/q006.mp3", "en": "/audio/en/q006.mp3" },
       "payload": {
