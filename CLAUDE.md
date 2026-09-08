@@ -27,10 +27,27 @@
    frame is simply missing when the frame does not come, and the child is not
    told that an animation failed. They are told the wrong thing.
 
-   Concretely, in this codebase:
+   **This does not ban entry animations. It constrains where they start.** An
+   entry animation is wanted wherever it does a job (DESIGN §7); what it may not
+   do is be the reason something is on screen. The test is simple: freeze the
+   animation at its first frame and look. If that frame is legible, in roughly
+   the right place, and tells the truth, the animation is free to be as lively
+   as it likes.
 
-   - No entry animation starts at `opacity: 0`, `scale: 0`, or far from where it
-     lands. Start at the settled state, slightly smaller, and animate to rest.
+   Two patterns satisfy it, and both are already in the codebase:
+
+   - **Start at the settled state and animate away from it and back.** The
+     tick and cross icons do this — `opacity: 1` throughout, only `scale`
+     moves. Keyframes whose first value equals `initial` (`scale: [1, 1.25, 1]`)
+     land the same way: frozen, the element is simply finished.
+   - **Animate one harmless property from a small offset.** The hint slides
+     `y: -8 → 0` at full opacity: frozen, it is 8px high and completely
+     readable.
+
+   Concretely, what is not allowed:
+
+   - No entry animation starts at `opacity: 0`, `scale: 0`, or far enough from
+     where it lands to read as misplaced.
    - No `AnimatePresence mode="wait"` around content. It withholds the incoming
      element until the outgoing one finishes animating away, so a frameless exit
      means the next thing never mounts at all.
@@ -38,7 +55,8 @@
      projecting a transform over later frames; with no frames the projection
      stays, and the box keeps the wrong shape. Reflow instead.
    - A counter, score or tally renders its real value first. The count-up may
-     rewind it only once the animation is actually producing frames.
+     rewind it only once the animation is actually producing frames — drive it
+     from an `onUpdate` callback, which fires on a frame or not at all.
    - Feedback that must be legible — a tick, a cross, a number badge — is never
      drawn by an animation alone.
 

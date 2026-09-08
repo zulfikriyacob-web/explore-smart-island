@@ -163,14 +163,15 @@ export function QuizScreen() {
           />
 
           {/*
-            B5 — the hint arrives under the question.
+            B5 — the hint slides down into place under the question.
 
             No AnimatePresence and no fade. It used to start at opacity 0, so
             the one piece of help a stuck child gets was invisible whenever the
             animation frame did not arrive — measured at opacity 0 with the full
-            text sitting in the DOM. Its own initial and animate are set rather
-            than inherited from the card, because the card has already settled
-            by the time a hint appears.
+            text sitting in the DOM. Now only `y` moves, from -8 to 0: opaque and
+            readable on frame 0, and it still slides in when frames run. Its own
+            initial and animate are set rather than inherited from the card,
+            because the card has already settled by the time a hint appears.
           */}
           {showHint && (
             <motion.p

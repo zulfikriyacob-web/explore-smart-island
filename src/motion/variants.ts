@@ -4,12 +4,12 @@
  * Every animation in here answers "what just changed?" or "what can I touch?".
  * DESIGN section 7 throws out any that does not.
  *
- * **No entry variant starts at `opacity: 0`, and none starts far from where it
- * lands.** An animation frame is not a guarantee — a backgrounded tab, a
- * throttled device, a renderer that never calls requestAnimationFrame — and
- * content whose appearance is caused by an animation is simply missing when the
- * frame does not arrive. Entry states here are the settled state, slightly
- * smaller: visible and correctly placed on frame 0, refined afterwards.
+ * Entry animations are wanted here. What is not allowed is an entry state that
+ * cannot be read: **no variant starts at `opacity: 0` or `scale: 0`, and none
+ * starts far enough from where it lands to look misplaced.** An animation frame
+ * is not a guarantee — a backgrounded tab, a throttled device, a renderer that
+ * never calls requestAnimationFrame — so an `arriving` state has to be a
+ * perfectly serviceable final frame on its own. Start legible, animate to rest.
  * (CLAUDE.md principle 5.)
  *
  * The states are named `arriving` and `settled` rather than `hidden` and
@@ -42,10 +42,17 @@ export const optionItem: Variants = {
   settled: { opacity: 1, scale: 1, transition: spring.pop },
 };
 
-/** B5 — the hint arrives under the question. Never fades in; see above. */
+/**
+ * B5 — the hint slides down into place under the question.
+ *
+ * Opaque and full size from the first frame; `y` is the only property that
+ * moves. Frozen at `arriving` the hint is fully readable, 8px above where it
+ * settles — present and legible, which is what frame 0 has to deliver. The
+ * slide is the polish on top.
+ */
 export const hintItem: Variants = {
-  arriving: { opacity: 1, scale: 0.98 },
-  settled: { opacity: 1, scale: 1, transition: { duration: duration.base, ease: ease.out } },
+  arriving: { opacity: 1, y: -8 },
+  settled: { opacity: 1, y: 0, transition: { duration: duration.base, ease: ease.out } },
 };
 
 /** B3 — wrong answer shake. Short, horizontal, not frightening. */

@@ -662,6 +662,19 @@ jaminan — tab latar belakang, peranti terhad, penyaji yang tidak pernah memang
 apabila bingkai itu tidak tiba, dan anak tidak diberitahu bahawa satu animasi gagal; dia
 diberitahu perkara yang salah.
 
+**Ini bukan larangan ke atas animasi masuk.** Ia menetapkan di mana animasi itu bermula.
+Animasi masuk dikehendaki di mana-mana ia mempunyai tugas (DESIGN §7); yang dilarang ialah
+menjadi sebab sesuatu ada pada skrin. Ujiannya mudah: bekukan animasi pada bingkai
+pertamanya dan pandang. Kalau bingkai itu terbaca, lebih kurang di tempat betul, dan
+menyatakan perkara yang benar — animasi itu bebas jadi seceria mana pun.
+
+Dua corak yang lulus, kedua-duanya sudah wujud dalam kod:
+
+| Corak | Contoh |
+|---|---|
+| Mula pada keadaan akhir, beranimasi keluar daripadanya dan kembali | Ikon ✓/✕: `opacity: 1` sepanjang masa, hanya `scale` bergerak. Bingkai kunci yang nilai pertamanya sama dengan `initial` — `scale: [1, 1.25, 1]` — mendarat sama: beku, elemen itu sekadar sudah siap |
+| Beranimasi satu sifat tidak memudaratkan daripada ofset kecil | Pancingan meluncur `y: -8 → 0` pada legap penuh: beku, ia 8px tinggi dan terbaca sepenuhnya |
+
 Yang dilarang, dan sebabnya:
 
 | Larangan | Kenapa |
@@ -698,10 +711,10 @@ export const optionItem = {
   settled:  { opacity: 1, scale: 1, transition: spring.pop },
 };
 
-/** B5 — pancingan masuk di bawah soalan */
+/** B5 — pancingan meluncur masuk di bawah soalan; hanya `y` bergerak */
 export const hintItem = {
-  arriving: { opacity: 1, scale: 0.98 },
-  settled:  { opacity: 1, scale: 1, transition: { duration: duration.base, ease: ease.out } },
+  arriving: { opacity: 1, y: -8 },
+  settled:  { opacity: 1, y: 0, transition: { duration: duration.base, ease: ease.out } },
 };
 
 /** Goncang jawapan salah — pendek, mendatar, tidak menakutkan */
@@ -726,11 +739,11 @@ export const correctPulse = {
 | **Kad soalan masuk** | `scale` sahaja | `questionCard` | 0.22 s + 0.06 s berperingkat | **Tiada `AnimatePresence`, tiada animasi keluar.** Kad berkunci pada `question.id` dan ditukar serta-merta. `origin-top`, supaya skala tidak menggerakkan teks soalan |
 | **Jawapan betul** | `scale` denyut + cincin | `correctPulse` | 0.32 s | Gelang hijau berkembang keluar, `scale 0.8→1.6`, `opacity 0.6→0` |
 | **Jawapan salah** | `x` goncang | `shake` | 0.34 s | **Tiada kilat merah penuh skrin.** Sempadan sahaja |
-| **Pancingan muncul** | `scale` sahaja | `hintItem` | 0.22 s | Kad tumbuh melalui reflow CSS biasa. **Bukan prop `layout`**, bukan animasi `height` |
+| **Pancingan meluncur masuk** | `y: -8 → 0` sahaja | `hintItem` | 0.22 s | Legap penuh sepanjang masa. Kad tumbuh melalui reflow CSS biasa. **Bukan prop `layout`**, bukan animasi `height` |
 | **Pilihan dilumpuhkan** | `opacity → 0.35`, `scale → 0.96` | tween, `ease.out` | 0.2 s | Berperingkat 0.05 s jika berbilang |
 | **Bar kemajuan** | `scaleX` | `spring.settle` | ~0.4 s | `transformOrigin: left`. Jangan animasi `width` |
-| **Anugerah bintang** | `scale 0.85→1` | `spring.cheer` | 0.45 s setiap satu | Berperingkat 0.18 s antara bintang. Bermula pada 0.85, bukan 0, dan tidak pernah lut sinar — bintang ialah mesej skrin itu. Tiada `rotate`: bintang beku pada −25° nampak rosak, bukan pertengahan animasi. `spring.cheer` redaman rendah, jadi terlajak tetap ada |
-| **Kiraan permata** | teks kira naik + `scale` denyut | tween 0.6 s | 0.6 s | Kira naik dengan `useMotionValue` + `animate()`. **Keadaan bermula pada nombor sebenar**; kiraan hanya menggantikannya setelah animasi benar-benar menghasilkan bingkai |
+| **Anugerah bintang** | `scale: [1, 1.25, 1]`, `rotate: [0, -25, 0]` | tween `ease.back` | 0.45 s setiap satu | Berperingkat 0.18 s antara bintang. **Bingkai kunci pertama sama dengan `initial`**, jadi beku ialah bintang terisi bersaiz penuh dan legap — keputusan sebenar — sementara yang menyaji dapat kembang dan tunduk. Bintang ialah mesej skrin itu; ia tidak pernah bermula pada sifar |
+| **Kiraan permata** | teks kira naik + `scale` denyut | tween 0.6 s | 0.6 s | `useState` bermula pada **nombor sebenar**; `animate(0, to, { onUpdate })` menaikkannya. `onUpdate` hanya menyala pada bingkai, jadi tanpa bingkai tiada apa menyentuh nombor itu |
 | **Mula seret** | `scale: 1.08`, bayang naik | `spring.pop` | 0.15 s | `dragElastic: 0.15`, `dragMomentum: false` |
 | **Jatuh betul** | petak berdenyut `scale 1→1.06→1` | `spring.cheer` | 0.3 s | Item terkunci melalui `layoutId` |
 | **Jatuh salah** | kembali ke asal | `spring.snap` | ~0.35 s | Item kembali, tiada goncang — jangan hukum penerokaan |
