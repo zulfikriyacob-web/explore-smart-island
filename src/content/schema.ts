@@ -132,7 +132,15 @@ export const CountTapSchema = z
     type: z.literal('count-tap'),
     payload: z.object({
       itemImage: AssetPathSchema,
-      itemCount: z.number().int().min(1).max(20),
+      /**
+       * At most 9. The card fits three objects per row and three rows on a
+       * 360x780 screen: 72px tap targets with 16px gaps (DESIGN 5.1, DESIGN 4)
+       * need 88px each across 280px of card width, and the 301px left over
+       * after the prompt, audio button, tally and padding takes three rows.
+       * A tenth object does not fail gracefully — it pushes the card into a
+       * scrollbar, which is the bug two children got stuck on.
+       */
+      itemCount: z.number().int().min(1).max(9),
       layout: z.enum(['scatter', 'grid']),
       /**
        * Tapping the objects is the answer; the tally is submitted as-is. The

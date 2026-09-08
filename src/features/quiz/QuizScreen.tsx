@@ -98,7 +98,12 @@ export function QuizScreen() {
               question={question}
               counted={counted}
               lang={LANG}
-              onCount={(i) => setCounted((c) => (c.includes(i) ? c : [...c, i]))}
+              // Tapping toggles: a numbered object taps back off, and the ones
+              // after it renumber themselves because the number is just the
+              // position in this array.
+              onCount={(i) =>
+                setCounted((c) => (c.includes(i) ? c.filter((x) => x !== i) : [...c, i]))
+              }
             />
 
             {/* B5 — the hint grows in under the question. The card's `layout`

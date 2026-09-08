@@ -252,8 +252,23 @@ untuk muat; had ini menentukan kotak susun atur.
 `layout`: `"scatter"` (rawak, benih tetap supaya boleh diulang) atau `"grid"`.
 
 **`answerInput: "tap-count"` — ketukan itu sendiri ialah jawapan.** Kanak-kanak mengetuk
-setiap objek, kiraan dipaparkan bersebelahan objek yang dikira, dan butang hantar menghantar
-kiraan itu sebagaimana adanya. Tiada papan nombor.
+setiap objek, dan setiap ketukan meletakkan **nombor** pada objek itu: 1, 2, 3. Butang hantar
+menghantar kiraan itu sebagaimana adanya. Tiada papan nombor.
+
+Nombor itu bukan hiasan — ia perbuatan membilang. Objek yang terlepas ialah satu-satunya yang
+tiada nombor, jadi anak nampak silapnya tanpa perlu tahu jawapan dahulu. Mengetuk semula
+membuang nombor itu dan nombor selepasnya dikira semula, jadi silap ketuk boleh dipulihkan
+tanpa membazir percubaan.
+
+**Had `itemCount`: maksimum 9.**
+
+| Had | Nilai | Sebab |
+|---|---|---|
+| `itemCount` | maksimum **9** | 3 objek sebaris × 3 baris pada 360×780. Sasaran 72px dengan jurang 16px (DESIGN §5.1, §4) memerlukan 88px setiap satu merentas 280px lebar kad; 301px yang tinggal selepas soalan, butang audio, kiraan dan padding memuatkan tiga baris |
+
+Objek kesepuluh tidak gagal dengan elok — ia menolak kad ke dalam skrol, iaitu pepijat yang
+menyekat dua kanak-kanak dalam ujian pengguna. Had ini dikuatkuasakan dalam Zod dan
+`validate:content`, bukan garis panduan.
 
 Papan nombor dibuang selepas ujian pengguna. Ia menjadikan membilang **dua langkah** — bilang,
 kemudian cari digit — dan kanak-kanak 7 tahun tidak dapat membezakan langkah mana yang gagal:
