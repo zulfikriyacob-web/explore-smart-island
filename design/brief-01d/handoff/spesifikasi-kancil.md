@@ -1,7 +1,20 @@
-# Spesifikasi gerakan kancil — Rive
+# Spesifikasi gerakan kancil
 
-Fail: /public/rive/kancil.riv · Artboard "Kancil" · State Machine "KancilSM" · 60 fps
-Rujukan: SPEC.md §11 (kontrak), DESIGN.md §6–7.
+Dilaksana sebagai `src/components/ui/Kancil.tsx` — SVG berlapis + Framer Motion.
+Geometri: `kancil-layered.svg`, viewBox 1254 · 60 fps.
+Rujukan: SPEC.md §11 (kontrak keadaan), DESIGN.md §6–7.
+
+> **Rive ditinggalkan.** Eksport `.riv` berbayar, dan Framer Motion sudah memandu setiap
+> animasi lain dalam app. Kontrak keadaan §1 dikekalkan sebagaimana adanya — ia kini
+> dipandu oleh prop `state` dan bukan oleh input state machine. Bahagian yang bercakap
+> tentang artboard, lapisan Rive dan blend masih berguna sebagai niat gerakan;
+> mekanismenya sahaja yang berubah.
+>
+> SPEC.md §11 masih menerangkan kontrak Rive dan belum dikemas kini.
+
+**Anjakan px dalam §3 ditulis untuk artboard 512.** Komponen mendarabkannya dengan
+1254/512 = 2.449 supaya gerakan kekal pada saiz berkadar yang sama; putaran dan skala
+tidak berunit dan tidak disentuh.
 
 ## 1. Input (tepat, case-sensitive — dari SPEC.md §11, tiada tambahan)
 
@@ -72,22 +85,75 @@ KOSONG tiada keyframe supaya nafas lapisan Mood terus kelihatan semasa tiada rea
 
 prefers-reduced-motion: dikawal kod, bukan Rive — hentikan state machine, papar bingkai 0 MELAHU. Betul/salah kekal disampaikan oleh ikon + bunyi (DESIGN §7.5).
 
-## 5. Lapisan SVG yang ilustrator perlu hantar
+## 5. Lapisan dan pangsi — geometri 1254
 
-| Lapisan (id) | Pangsi & nota |
+Geometri yang dilaksana ialah `kancil-layered.svg`, viewBox **1254**, bukan artboard 512
+yang bahagian ini pernah andaikan. Setiap pangsi di bawah dikira daripada `getBBox()`
+geometri itu dalam pelayar; **jangan salin nilai daripada versi lama dokumen ini** — ia
+anggaran untuk lukisan yang berbeza.
+
+Nama dalam kod ialah `data-part`, bukan `id`. Dua kancil boleh dirender serentak (slot kad
+soalan dan skrin ringkasan), jadi `id` diberi awalan `useId()` setiap instance dan tidak
+boleh diharapkan sebagai pemilih; `data-part` yang stabil.
+
+| Lapisan (`data-part`) | Pangsi (unit viewBox) | Asal ukuran |
+|---|---|---|
+| `bayang-tanah` | **624, 1154** | pusat elips; kekal di tanah semasa lompatan, mengecil 15 % pada puncak |
+| `kancil-tubuh` | **624, 1103** | bawah-tengah pada paras kaki; kuku terendah pada y 1103.3 |
+| `badan` | **529, 784** | bawah-tengah badan; bbox 181.9–877.0 × 412.1–783.6 |
+| `ekor` | **191, 583** | pangkal, tempat bertemu badan. Tiada animasi dalam v1 |
+| `kepala-rig` | **802, 736** | pangkal leher, tempat leher bertemu badan — bukan sendi kepala/leher di atas |
+| `telinga-kanan` | **940, 272** | pangkal, tepi bawah telinga jauh (891,257)–(959,282)–(987,252) |
+| `telinga-kiri` | **888, 296** | pangkal, hujung telinga dekat yang bertemu kepala |
+| `mata-kiri` | **986, 368** | tengah mata; elips cx/cy |
+| `mata-kedip` | **986, 332** | tepi atas mata |
+| `kaki-belakang-kiri` | 309, 581 | atas (pinggul). Pegun dalam v1 |
+| `kaki-belakang-kanan` | 373, 695 | atas (pinggul). Pegun dalam v1 |
+| `kaki-depan-kiri` | 716, 672 | atas (bahu). Pegun dalam v1 |
+| `kaki-depan-kanan` | 809, 693 | atas (bahu). Pegun dalam v1 |
+
+**Kenapa pangsi kepala di pangkal leher dan bukan di atas.** Geometri ini melukis leher
+sebagai sebahagian kumpulan kepala, memanjang ke bawah hingga y 774, jauh ke dalam dada.
+Berpangsi di sendi atas akan mengayunkan hujung bawah leher paling jauh dan mengoyakkannya
+daripada badan. Berpangsi di pangkal, hujung bawah kekal dan kepala yang berayun.
+
+Diukur pada putaran SIMPATI +12°: isian leher terpisah daripada isian badan sebanyak
+849 unit², purata lebar 3.09 unit (0.22 px pada 88 px). Strok 20 unit yang dibawa
+kedua-dua bentuk menutup hampir kesemuanya — **49 unit² kekal terdedah**, di bahu, bukan
+di sendi. Pose FIKIR −8° lebih teruk (1293 unit² kekal terdedah); ia belum dirender di
+mana-mana skrin dan patut diukur semula sebelum digunakan.
+
+### Bahagian baharu dalam geometri ini
+
+| `data-part` | Nota |
 |---|---|
-| telinga-kiri | Pangsi pangkal. Bentuk penuh hingga ke dalam kepala supaya putaran 22° tidak menampakkan celah. |
-| telinga-kanan | Sama; lapisan berasingan, bukan salinan cermin dalam satu kumpulan. |
-| kepala | Termasuk muncung dan hidung. Pangsi di leher. Bertindih 8–10 px ke dalam badan. |
-| mata-kiri, mata-kanan | Setiap satu: putih-mata, anak-mata, kelopak (warna kulit kepala, di atas mata, tersembunyi di luar bentuk mata pada rehat). Kedip = kelopak turun, bukan skala mata. |
-| badan | Pangsi bawah-tengah. Tanpa bayang terbakar. |
-| kaki-depan-kiri, kaki-depan-kanan, kaki-belakang-kiri, kaki-belakang-kanan | Pangsi atas (bahu/pinggul). Pegun dalam v1 tetapi berasingan untuk lompatan kemas dan gerakan masa depan. |
-| ekor | Pangsi pangkal. Pilihan. |
-| bayang-tanah | Elips berasingan di luar kumpulan badan — kekal di tanah semasa lompatan, mengecil 15 % pada puncak. |
+| `leher` | Dalam kumpulan kepala. Menentukan pangsi kepala (lihat atas) |
+| `kening` | Tiada dalam spesifikasi asal. Dikekalkan; bahagian muka, tidak dianimasikan, tidak picing bersama mata |
+| `hidung` | Bentuk berasingan, bukan sebahagian `kepala` |
+| `mulut` | Satu-satunya garis halus: strok 55 % daripada strok utama (11 pada lalai 20) |
 
-Syarat fail:
-- Satu SVG, setiap lapisan `<g id="…">` dengan nama di atas. Susunan Z (bawah→atas): bayang-tanah, kaki belakang, ekor, badan, kaki depan, telinga, kepala, mata.
+### Kedip tanpa lapisan kelopak
+
+Geometri ini **tiada** kelopak berasingan, jadi peraturan lama "kedip = kelopak turun,
+bukan skala mata" tidak boleh dilaksana sebagaimana ditulis. Kedip kini skala Y pada
+kumpulan mata itu sendiri: rehat pada `scaleY: 1`, menghimpit ke `0.06` selama 4 bingkai,
+berpangsi pada **tepi atas mata (986, 332)** — nilai pangsi kelopak yang asal dikekalkan,
+supaya tepi yang bersendi pada kening kekal dan bahagian bawah naik.
+
+Ia hidup dalam kumpulannya sendiri di dalam `mata-kiri`, kerana `mata-kiri` sudah memandu
+`scaleY` untuk picing GEMBIRA. Dua kumpulan bersarang mendarab skala masing-masing, jadi
+kedip dan picing tidak berebut sifat yang sama.
+
+Bingkai kunci pertama ialah **1, bukan 0**: mata terbuka pada bingkai 0 (CLAUDE.md
+prinsip 5).
+
+### Syarat fail
+
+- Satu SVG, setiap lapisan `<g data-part="…">` dengan nama di atas. Susunan Z (bawah→atas):
+  bayang-tanah, kaki jauh, ekor, badan, kepala, kaki dekat. Kaki dekat di ATAS kepala —
+  kaki depan menutup hujung bawah leher.
 - Pose neutral menghadap kanan, kepala 3/4, sesuai untuk putaran ±12°.
 - Laluan (path) sahaja — tiada teks, raster, kecerunan, topeng.
-- Strok 4 px pada 100 px, hujung bulat (DESIGN §8). Palet: token §2 + dua neutral.
-- Artboard 240 × 200 pada 1×; kancil ~70 % tinggi supaya lompatan −30 px tidak terpotong.
+- Strok **20 unit pada viewBox 1254** (1.595 % lebar, 1.40 px pada 88 px), hujung bulat
+  (DESIGN §8). Lapan — nilai dalam fail sumber — ialah 0.638 %, iaitu 0.56 px pada 88 px,
+  dan kaki hilang jadi benang.

@@ -145,6 +145,21 @@ beralih ke arah kelabu-kuning dan menjadi **lebih** serupa. Ini diterima kerana 
 pun membawa makna melalui keserupaan itu — warna buah hiasan subjek, dan "salah" disampaikan
 oleh ikon, goncangan dan bunyi, bukan warna sahaja (SPEC §9).
 
+### 2.6 Bulu kaki jauh
+
+| Peranan | Token | Hex |
+|---|---|---|
+| Anggota jauh kancil | `--bulu-jauh` | `#9E6842` |
+
+Satu nilai, dan satu-satunya isian maskot yang direkod di sini. Selebihnya bulu kancil
+mengikut §2.5 — isian ilustrasi, bebas, tidak membawa makna.
+
+Yang ini berbeza sebab ia membawa **kedalaman**, bukan hiasan. Kaki di sebelah jauh badan
+mesti lebih gelap daripada kaki dekat, atau keempat-empat kaki bergabung menjadi satu
+bidang dan kancil kehilangan bentuknya pada 88 px — saiz slot dalam kad soalan, di mana
+seluruh haiwan hanya 88 px tinggi. Beza itu satu peranan, jadi ia mendapat satu nilai
+yang tetap dan bukan pilihan setiap kali.
+
 ---
 
 ## 3. Tipografi
