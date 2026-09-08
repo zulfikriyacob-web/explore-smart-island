@@ -24,6 +24,18 @@
 
 Things that cost a session real time to discover. Not principles — facts.
 
+### Run the work yourself
+
+**Do not fan out to sub-agents for work in this repo.** Run tasks sequentially in
+the main session.
+
+The reason is token cost. The work here is surgical edits to a small codebase
+with repeated verification between them — measure, change one thing, measure
+again. That loop does not divide across agents: each one has to be given the same
+context, and each returns a report the main session has to read and reconcile
+before it can take the next step. The coordination overhead is larger than the
+work, and it burns through usage limits fast.
+
 ### This machine
 
 - **The Bash tool does not work here.** It fails with
