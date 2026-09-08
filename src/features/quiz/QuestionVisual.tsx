@@ -58,7 +58,17 @@ export function QuestionVisual({
           </motion.button>
         );
       })}
-      <span className="sr-only">{lang === 'ms' ? 'Ketuk untuk membilang' : 'Tap to count'}</span>
+      {/*
+        The tally sits with the objects it counts, not down in the answer stack.
+        It used to live above the number pad, which cost the stack a whole extra
+        row on a 360x780 screen.
+      */}
+      <span
+        aria-live="polite"
+        className="col-span-full w-full text-center font-sans text-label text-arang-soft"
+      >
+        {lang === 'ms' ? `Dibilang: ${counted.length}` : `Counted: ${counted.length}`}
+      </span>
     </div>
   );
 }

@@ -23,7 +23,6 @@ interface AnswerControlsProps {
   revealed: boolean;
   locked: boolean;
   lang: 'ms' | 'en';
-  counted: number;
   onAnswer: (response: Response) => void;
 }
 
@@ -131,7 +130,6 @@ function CountAnswers({
   lastAnswerCorrect,
   revealed,
   locked,
-  counted,
   onAnswer,
 }: AnswerControlsProps & { question: CountQuestion }) {
   const reduce = useReducedMotion();
@@ -150,27 +148,6 @@ function CountAnswers({
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="flex items-center justify-between gap-3">
-        <span className="font-sans text-label text-arang-soft">Dibilang: {counted}</span>
-        <div className="flex items-center gap-2">
-          <span
-            aria-live="polite"
-            aria-label="Jawapan anda"
-            className="grid min-h-tap min-w-[88px] place-items-center rounded-md border-4 border-garis bg-white font-display text-h2 tabular-nums"
-          >
-            {entry === '' ? '—' : entry}
-          </span>
-          <button
-            type="button"
-            aria-label="Padam satu digit"
-            onPointerDown={() => setEntry((e) => e.slice(0, -1))}
-            className="grid h-16 w-16 place-items-center rounded-md border-4 border-garis bg-white font-display text-h2"
-          >
-            ⌫
-          </button>
-        </div>
-      </div>
-
       <div className="grid grid-cols-5 gap-2">
         {PAD_KEYS.map((k) => (
           <motion.button
@@ -186,15 +163,47 @@ function CountAnswers({
         ))}
       </div>
 
-      <BlockButton
-        onPress={submit}
-        state={
-          lastAnswerCorrect === true ? 'correct' : revealed ? 'revealed' : locked ? 'disabled' : 'rest'
-        }
-        ariaLabel="Hantar jawapan"
-      >
-        {revealed ? `Jawapan: ${question.payload.correctAnswer}` : 'Sedia'}
-      </BlockButton>
+      {/*
+        Entry, backspace and submit share one 88px row. They used to be a
+        separate 64px row plus a 12px gap above the submit button; user testing
+        showed the extra 76px was enough to push the question card into its own
+        scrollbar on a 360x780 screen.
+      */}
+      <div className="flex items-stretch gap-2">
+        <span
+          aria-live="polite"
+          aria-label="Jawapan anda"
+          className="grid min-h-answer w-[88px] shrink-0 place-items-center rounded-md border-4 border-garis bg-white font-display text-h2 tabular-nums"
+        >
+          {entry === '' ? '—' : entry}
+        </span>
+        <button
+          type="button"
+          aria-label="Padam satu digit"
+          onPointerDown={() => setEntry((e) => e.slice(0, -1))}
+          className="min-h-answer w-16 shrink-0 rounded-md border-4 border-garis bg-white font-display text-h2"
+        >
+          ⌫
+        </button>
+        <div className="flex-1">
+          <BlockButton
+            onPress={submit}
+            state={
+              lastAnswerCorrect === true
+                ? 'correct'
+                : revealed
+                  ? 'revealed'
+                  : locked
+                    ? 'disabled'
+                    : 'rest'
+            }
+            ariaLabel="Hantar jawapan"
+            className="!px-3"
+          >
+            {revealed ? String(question.payload.correctAnswer) : 'Sedia'}
+          </BlockButton>
+        </div>
+      </div>
 
       <AnimatePresence>
         {lastAnswerCorrect === false && !revealed && !reduce && (

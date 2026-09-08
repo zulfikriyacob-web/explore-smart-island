@@ -75,7 +75,7 @@ export function QuizScreen() {
             className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto rounded-lg bg-white p-6 shadow-float"
           >
             <div className="flex items-start justify-between gap-4">
-              <AudioButton />
+              <AudioButton src={question.promptAudio[LANG]} />
               {/*
                 Reserved kancil slot, 88x88, empty for now. It holds real layout
                 space so the mascot's arrival will not move anything.
@@ -142,7 +142,6 @@ export function QuizScreen() {
           revealed={session.revealed}
           locked={locked}
           lang={LANG}
-          counted={counted.length}
           onAnswer={answer}
         />
 

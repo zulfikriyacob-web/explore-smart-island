@@ -1,20 +1,37 @@
 import { motion, useReducedMotion } from 'framer-motion';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
+import { isAudioAvailable } from '../../lib/audio.ts';
 import { ease } from '../../motion/tokens.ts';
 
 /**
  * A3 — the speaker icon pulses while audio plays, so a child who cannot read
  * still sees that something is being said.
  *
- * The audio files in public/ are zero-byte placeholders (PRD 8), so playback is
- * a no-op for now and the pulse runs on a fixed 900ms timer. When real
- * recordings land, drive `playing` from the Howler instance instead — that is
- * the only change this component needs.
+ * The button renders nothing until the file behind `src` has real bytes. The
+ * recordings in public/ are still zero-byte placeholders (PRD 8), and user
+ * testing showed a 7-year-old pressing this first, before anything else: a
+ * button that plays nothing teaches a child that buttons do nothing. When real
+ * recordings land the button reappears on its own — no code change, because the
+ * check is the file itself.
  */
-export function AudioButton({ label = 'Main audio soalan' }: { label?: string }) {
+export function AudioButton({ src, label = 'Main audio soalan' }: { src: string; label?: string }) {
   const reduce = useReducedMotion();
   const [playing, setPlaying] = useState(false);
+  const [available, setAvailable] = useState(false);
+
+  useEffect(() => {
+    let live = true;
+    setAvailable(false);
+    void isAudioAvailable(src).then((ok) => {
+      if (live) setAvailable(ok);
+    });
+    return () => {
+      live = false;
+    };
+  }, [src]);
+
+  if (!available) return null;
 
   return (
     <motion.button
@@ -23,12 +40,14 @@ export function AudioButton({ label = 'Main audio soalan' }: { label?: string })
       onPointerDown={() => {
         if (playing) return;
         setPlaying(true);
+        // Playback itself still has to be wired to Howler (SPEC 8); the pulse
+        // is driven by a timer until then.
         window.setTimeout(() => setPlaying(false), 900);
       }}
       whileTap={reduce ? undefined : { scale: 0.94 }}
       animate={playing && !reduce ? { scale: [1, 1.15, 1, 1.15, 1] } : { scale: 1 }}
       transition={playing && !reduce ? { duration: 0.9, ease: ease.out } : { duration: 0.12 }}
-      className="grid h-16 w-16 place-items-center rounded-full border-[3px] border-laut bg-white p-0 transition-colors active:bg-laut-light"
+      className="grid h-16 w-16 shrink-0 place-items-center rounded-full border-[3px] border-laut bg-white p-0 transition-colors active:bg-laut-light"
     >
       <svg
         width="28"
