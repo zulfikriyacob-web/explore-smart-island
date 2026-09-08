@@ -75,6 +75,15 @@ Semua pasangan teks disahkan pada ≥ 4.5:1:
 > Teks putih di atas teal cerah gagal. Ini kesilapan biasa dalam app kanak-kanak. Butang
 > teal utama menggunakan **teks arang gelap**, bukan putih.
 
+**Jurang yang diketahui dan belum diputuskan: sempadan butang.** Sempadan `--laut` `#0FB5A6`
+di atas latar `--laut-cetek` `#E6F7F4` diukur pada **2.32:1**, di bawah lantai 3:1 untuk
+sempadan butang (§10). Ini pada setiap butang jawapan sejak Brief 02, diwarisi daripada
+prototaip handoff.
+
+Butang itu sendiri terbaca — teksnya 11.08:1 dan tepi bawah pepejal `--laut` gelap `#087A70`
+memberi kelihatan tambahan. Yang gagal ialah sempadan sahaja. Belum dibaiki kerana ia
+menyentuh warna modul dan setiap butang serentak; keputusan itu belum dibuat.
+
 ### 2.5 Pemisahan palet — UI dan ilustrasi
 
 **Isian ilustrasi boleh melebihi §2. Permukaan UI, chrome, dan warna semantik tidak boleh.**
@@ -588,6 +597,24 @@ Pengecualian separa — buang garis luar pada objek `count-tap` sahaja — sudah
 dan **ditolak**. Slot kancil duduk di penjuru kanan atas kad soalan dan objek count-tap
 duduk tepat di bawahnya, dalam jarak kira-kira 100px pada skrin yang sama. Pengecualian itu
 akan mendarat di satu-satunya tempat di mana percanggahannya dipamerkan.
+
+### Keputusan tertunda: tepukan jubin `mcq-image`
+
+Ketepuan §2.5 dilaksana pada objek `count-tap` **sahaja**. Jubin `mcq-image` sengaja tidak
+disentuh — mereka masih guna isian pucat asal.
+
+Sebabnya kedudukan. Objek count-tap terapung pada kad putih kosong; jubin `mcq-image` duduk
+**di dalam** butang bersempadan, bersebelahan UI lembut. Itu satu-satunya tempat di mana
+kandungan tepu berisiko "nampak asing" terhadap antara muka di sekelilingnya, dan kita belum
+tahu sama ada ia berlaku.
+
+Tunggu keputusan ujian pengguna untuk objek count-tap yang tepu sebelum memutuskan jubin.
+Kalau ketepuan berjaya di sana, tiada sebab ia gagal di sini — tetapi itu andaian, bukan
+pemerhatian.
+
+Nota berkaitan: SVG bentuk (`square`, `triangle`, `circle`) ialah isian pucat yang bergantung
+pada garis luar untuk kelihatan pada kad putih. Menepukannya dan membuang garis luarnya ialah
+**satu** keputusan, bukan dua.
 
 ---
 
