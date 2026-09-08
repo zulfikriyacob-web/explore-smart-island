@@ -2,6 +2,7 @@ import { animate, motion, useReducedMotion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 
 import { BlockButton } from '../../components/ui/BlockButton.tsx';
+import { Kancil, type KancilState } from '../../components/ui/Kancil.tsx';
 import { duration, ease } from '../../motion/tokens.ts';
 import type { SessionResult } from '../../lib/scoring.ts';
 import { useQuizStore } from './store.ts';
@@ -81,6 +82,7 @@ export function SummaryScreen({ result }: { result: SessionResult }) {
   const restart = useQuizStore((s) => s.restart);
   const session = useQuizStore((s) => s.session);
   const total = session.questions.length;
+  const [kancil, setKancil] = useState<KancilState>('happy');
 
   return (
     <main className="mx-auto flex h-[100dvh] max-w-[430px] flex-col items-center px-4 pb-6 pt-14">
@@ -88,26 +90,12 @@ export function SummaryScreen({ result }: { result: SessionResult }) {
       <h1 className="mt-2 font-display text-display font-bold">Syabas!</h1>
 
       {/*
-        Placeholder kancil. Static on purpose: the Rive mascot is out of scope
-        for this brief, and its idle breathing is a Group F animation, which this
-        brief also excludes.
+        The real kancil, replacing the grey placeholder blob. It lands on
+        `happy` — one jump, ears up, eyes squeezed — and settles into idle
+        breathing when that finishes. DESIGN 6 puts the mascot on the reward
+        screen; this is the screen it was drawn for.
       */}
-      <svg className="mt-6 h-[180px] w-[234px] overflow-visible" viewBox="0 0 260 200" aria-hidden>
-        <ellipse cx="128" cy="188" rx="76" ry="6" fill="#D3E8E3" />
-        <rect x="78" y="150" width="12" height="36" rx="6" fill="#4A625B" />
-        <rect x="98" y="152" width="12" height="34" rx="6" fill="#4A625B" />
-        <rect x="138" y="150" width="12" height="36" rx="6" fill="#4A625B" />
-        <rect x="158" y="152" width="12" height="34" rx="6" fill="#4A625B" />
-        <ellipse cx="58" cy="118" rx="6" ry="10" fill="#7A958D" />
-        <ellipse cx="118" cy="132" rx="60" ry="40" fill="#5C7A72" />
-        <ellipse cx="168" cy="56" rx="8" ry="18" fill="#7A958D" />
-        <ellipse cx="196" cy="54" rx="8" ry="18" fill="#7A958D" />
-        <circle cx="182" cy="88" r="28" fill="#5C7A72" />
-        <ellipse cx="206" cy="96" rx="14" ry="10" fill="#5C7A72" />
-        <circle cx="216" cy="94" r="4" fill="#1F3A34" />
-        <circle cx="176" cy="84" r="4" fill="#1F3A34" />
-        <circle cx="194" cy="82" r="4" fill="#1F3A34" />
-      </svg>
+      <Kancil state={kancil} size={200} onDone={() => setKancil('idle')} className="mt-6" />
 
       <div
         className="mt-6 flex gap-4"
