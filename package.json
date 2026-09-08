@@ -11,7 +11,8 @@
     "test": "vitest run --coverage",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
-    "validate:content": "node scripts/validate-content.js"
+    "validate:content": "node scripts/validate-content.js",
+    "audio:script": "node scripts/audio-script.js"
   },
   "engines": {
     "node": ">=22.18.0"
