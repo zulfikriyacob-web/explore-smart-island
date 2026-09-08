@@ -17,7 +17,7 @@
 | Penghalaan | React Router v6 | Standard |
 | Bina | Vite | Bina pantas, PWA melalui `vite-plugin-pwa` |
 | Backend | Supabase (Postgres + Auth) | Auth + RLS + storan dalam satu; boleh dihoskan sendiri kemudian |
-| Storan tempatan | IndexedDB melalui `idb-keyval` | Barisan luar talian + cache pek kandungan |
+| Storan tempatan | `localStorage` | Satu sesi di bawah satu kunci; segerak, tiada upacara async. IndexedDB ialah pilihan masa depan — lihat §6 |
 | Audio | Howler.js | Kumpulan bunyi, bekerja mengelilingi kunci autoplay iOS |
 | Validasi | Zod | Skema kandungan disahkan semasa bina **dan** semasa jalan |
 | Hos frontend | Cloudflare Pages | CDN global, bina Vite terus, tier percuma benarkan guna komersial |
@@ -557,7 +557,41 @@ sempadan hari.
 
 ## 6. Ketekalan & penyegerakan
 
-**Tempatan dahulu.** Sesi ditulis ke IndexedDB serta-merta, kemudian dibaris gilir untuk sync.
+**Tempatan dahulu.** Sesi ditulis ke `localStorage` serta-merta, kemudian dibaris gilir untuk sync.
+
+### Kenapa `localStorage`, bukan IndexedDB
+
+Bahagian ini pernah menetapkan IndexedDB melalui `idb-keyval`. Kod tidak pernah
+melaksanakannya, dan setelah diperiksa, kod yang betul — dokumen yang dipinda di sini,
+bukan sebaliknya.
+
+Yang disimpan ialah **satu** sesi: sepuluh soalan dan rekod jawapannya, beberapa kilobait,
+di bawah satu kunci (`esi.session.v1`). `localStorage` memegang itu secara segerak, dalam
+satu baris, tanpa transaksi, tanpa migrasi skema, dan tanpa menjadikan setiap pembacaan
+async. IndexedDB menyelesaikan masalah yang belum kita ada.
+
+Ia juga sudah kukuh terhadap kes yang benar-benar berlaku. Setiap akses dibalut, kerana
+`localStorage` membaling terus dalam sesetengah mod privasi; `loadSession` menolak blob
+rosak, sesi bagi aktiviti lain, dan indeks yang melepasi hujung senarai soalan. Anak
+kehilangan tempatnya itu buruk — app yang tidak mahu bermula lebih buruk. Tingkah laku itu
+diuji dalam `src/lib/persistence.test.ts`.
+
+PRD §16 soalan 6 sudah menganggapnya begitu ketika mencatat bahawa soalan dibekukan dalam
+`localStorage` sehingga sesi dikosongkan.
+
+**IndexedDB ialah pilihan masa depan, bukan hutang.** Ia dipilih apabila saiz atau bentuk
+data menuntutnya, bukan lebih awal. Tiga perkara akan menuntutnya, dan tiada satu pun wujud
+hari ini:
+
+- **Cache pek kandungan luar talian** (PRD §5). Pek berserta audio dan SVG yang dirujuknya
+  melepasi had ~5 MB `localStorage` sebaik sahaja lebih daripada satu topik dicache.
+- **Barisan sync yang bertahan.** `SyncQueueItem` di bawah mengandaikan berbilang entri
+  yang ditulis, dibaca dan dipadam mengikut urutan. Itu jadual, bukan satu kunci.
+- **Empat profil anak** (PRD §11), setiap satu dengan kemajuannya sendiri — data berstruktur
+  yang perlu disoal, bukan satu blob yang dibaca sepenuhnya setiap kali.
+
+Sehingga salah satu daripadanya wujud, menukar storan menambah kerumitan tanpa menambah
+keupayaan.
 
 ```ts
 interface SyncQueueItem {
@@ -751,7 +785,7 @@ semua 10 di muka — ini mematikan sambungan yang perlahan.
    0 jawapan, semua salah, semua betul percubaan pertama, penggunaan pancingan.
 3. Satu aktiviti penuh 10 soalan boleh disiapkan pada iPhone SE dan Android 8 tanpa ranap.
 4. Bintang yang diberikan sepadan dengan jadual ambang bagi 20 sesi sintetik.
-5. Menutup app di tengah aktiviti dan membuka semula memulihkan sesi daripada IndexedDB.
+5. Menutup app di tengah aktiviti dan membuka semula memulihkan sesi daripada `localStorage`.
 6. `prefers-reduced-motion: reduce` melumpuhkan semua gelung tak terhingga (disahkan dengan DevTools).
 7. Kanak-kanak sebenar berumur 7 tahun menyiapkan satu aktiviti tanpa arahan lisan
    daripada orang dewasa. Ini adalah ujian yang paling penting dalam senarai ini.
