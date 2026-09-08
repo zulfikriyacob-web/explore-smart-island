@@ -1,8 +1,8 @@
-import { animate, motion, useMotionValue, useReducedMotion } from 'framer-motion';
+import { animate, motion, useReducedMotion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 
 import { BlockButton } from '../../components/ui/BlockButton.tsx';
-import { ease, spring } from '../../motion/tokens.ts';
+import { duration, ease } from '../../motion/tokens.ts';
 import type { SessionResult } from '../../lib/scoring.ts';
 import { useQuizStore } from './store.ts';
 
@@ -12,14 +12,13 @@ const STAR_PATH =
 /**
  * D3 — gems count up, so the reward feels earned rather than handed over.
  *
- * The state starts at the real number, not at zero. The count-up is the
- * flourish; the number is the reward. Starting at zero meant a child who never
- * got an animation frame read "0 permata" after winning thirty — not a missing
- * animation but a false statement about what they had just earned.
- * (CLAUDE.md principle 5.)
+ * State starts at the real number, and the count-up runs from zero up to it.
+ * `onUpdate` only ever fires on an animation frame, so with no frames nothing
+ * touches `shown` and the child reads the true total; with frames it rewinds on
+ * the first one and climbs. The number is the reward and the climb is the
+ * flourish, in that order. (CLAUDE.md principle 5.)
  */
 function CountUp({ to }: { to: number }) {
-  const value = useMotionValue(0);
   const [shown, setShown] = useState(to);
   const reduce = useReducedMotion();
 
@@ -28,41 +27,44 @@ function CountUp({ to }: { to: number }) {
       setShown(to);
       return;
     }
-    // Rewind before subscribing, so the rewind itself never reaches the screen.
-    // Only frames the animation actually produces move `shown` off the true
-    // number, which means no frames leaves it telling the truth.
-    value.set(0);
-    const unsubscribe = value.on('change', (v) => setShown(Math.round(v)));
-    const controls = animate(value, to, { duration: 0.6, ease: ease.out });
-    return () => {
-      controls.stop();
-      unsubscribe();
-    };
-  }, [to, reduce, value]);
+    const controls = animate(0, to, {
+      duration: 0.6,
+      ease: ease.out,
+      onUpdate: (v) => setShown(Math.round(v)),
+    });
+    return () => controls.stop();
+  }, [to, reduce]);
 
   return <span className="tabular-nums">{shown}</span>;
 }
 
 /**
- * E1 — stars drop in one at a time. The peak moment of the session.
+ * E1 — stars land one at a time, staggered. The peak moment of the session.
  *
- * They arrive at 85% of their size, never from `scale: 0` and never
- * transparent. A star whose appearance *is* its animation is simply absent when
- * the frame does not come, and on this screen the stars are the whole message —
- * the child would be told they had earned nothing. `spring.cheer` is
- * underdamped, so the arrival still overshoots and bounces on its own; the
- * rotation is gone, because a star frozen at -25 degrees reads as broken rather
- * than as mid-animation. (CLAUDE.md principle 5.)
+ * The trick is the one the tick and cross icons already use: start at the final
+ * state and animate away from it and back, rather than starting at nothing. The
+ * first keyframe of each track equals `initial`, so a frozen render is three
+ * filled stars at full size and full opacity — the true result — while a
+ * rendering one gets the swell and the tip, 180ms apart.
+ *
+ * Starting at `scale: 0, opacity: 0` meant a child who got no frame reached the
+ * end of an activity and was shown three empty outlines: told they had won
+ * nothing. (CLAUDE.md principle 5.)
  */
 function Star({ filled, index }: { filled: boolean; index: number }) {
   const reduce = useReducedMotion();
+  const animated = filled && !reduce;
   return (
     <motion.svg
       viewBox="0 0 24 24"
       className={`h-[88px] w-[88px] ${index === 1 ? '-mt-4' : ''}`}
-      initial={filled && !reduce ? { scale: 0.85 } : false}
-      animate={{ scale: 1, opacity: 1 }}
-      transition={{ ...spring.cheer, delay: index * 0.18 }}
+      initial={animated ? { opacity: 1, scale: 1, rotate: 0 } : false}
+      animate={
+        animated
+          ? { opacity: 1, scale: [1, 1.25, 1], rotate: [0, -25, 0] }
+          : { opacity: 1, scale: 1 }
+      }
+      transition={{ duration: duration.cheer, ease: ease.back, delay: index * 0.18 }}
       aria-hidden
     >
       <polygon
