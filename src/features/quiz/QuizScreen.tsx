@@ -1,11 +1,10 @@
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
-import { useEffect, useRef, useState } from 'react';
+import { motion, useReducedMotion } from 'framer-motion';
+import { useEffect, useState } from 'react';
 
 import { AudioButton } from '../../components/ui/AudioButton.tsx';
 import { BlockButton } from '../../components/ui/BlockButton.tsx';
 import { ProgressBar } from '../../components/ui/ProgressBar.tsx';
-import { ease } from '../../motion/tokens.ts';
-import { questionCard, reducedCard, reducedItem, optionItem } from '../../motion/variants.ts';
+import { hintItem, optionItem, questionCard } from '../../motion/variants.ts';
 import { AnswerControls } from './AnswerControls.tsx';
 import { QuestionVisual } from './QuestionVisual.tsx';
 import { currentQuestion } from './session.ts';
@@ -42,16 +41,6 @@ export function QuizScreen() {
   // Counting state belongs to one question only.
   useEffect(() => setCounted([]), [session.index]);
 
-  // The very first card renders at its final state instead of animating in.
-  // D2 is about swapping one question for the next; there is nothing to swap
-  // from on load, and starting at opacity 0 means a child sees a blank card
-  // whenever the animation frame does not arrive — a backgrounded tab, a
-  // throttled device. Later cards animate normally.
-  const firstRender = useRef(true);
-  useEffect(() => {
-    firstRender.current = false;
-  }, []);
-
   if (!question) return null;
 
   const locked = session.status === 'feedback';
@@ -77,98 +66,129 @@ export function QuizScreen() {
       <section className="flex min-h-0 flex-1 flex-col gap-5 px-4 pt-6">
         <ProgressBar current={session.index + 1} total={session.questions.length} />
 
-        <AnimatePresence mode="wait">
-          {/* D2 — one card out, the next in. */}
-          <motion.div
-            key={question.id}
-            layout={!reduce}
-            variants={reduce ? reducedCard : questionCard}
-            initial={firstRender.current ? false : 'hidden'}
-            animate="visible"
-            exit="exit"
-            /*
-              The card is its content's height, not the height left over.
+        {/*
+          D2 — the next question replaces this one.
 
-              It used to be flex-1, so it took whatever the answer stack did not
-              want — 284px to hold 59px of text on an mcq, 596px on a count-tap.
-              The stack's height decided the card's, and the question had nothing
-              to do with it. Centring the content inside only split that excess
-              between top and bottom; the white was the same and now it was in
-              two places.
+          No AnimatePresence, and no exit animation. `mode="wait"` withheld the
+          incoming card until the outgoing one finished animating away, so when
+          no animation frame arrived the exit never finished and the next card
+          never mounted at all: the child sat looking at the previous question
+          while the engine had already moved on. Not a missing animation — the
+          wrong content, which is worse. The swap is instant on purpose, the
+          same decision already made for the Seterusnya slot below.
 
-              With flex-1 gone the card sizes to its content and the leftover
-              space lives between the card and the stack, as background rather
-              than as blank white card. flex-shrink stays at its default, so a
-              card too tall for the screen still gives way and overflow-y-auto
-              catches the remainder.
+          The card is still keyed on the question id, so React replaces it, and
+          `arriving` is a visible state. (CLAUDE.md principle 5.)
+        */}
+        <motion.div
+          key={question.id}
+          /*
+            No `layout` prop. It resizes by projecting a transform and settling
+            it over the next frames, so with no frames the card stays projected:
+            measured at matrix(0.985, 0, 0, 0.59, 0, -47) the moment a hint
+            appeared — the card squashed to 59% of its height with the prompt
+            pulled 10px up the screen, off the Y a child builds muscle memory
+            for (DESIGN 5.2). Growing by plain reflow is instant and correct on
+            frame 0. B5's smooth grow is what this costs; the card being the
+            right shape is worth more.
+          */
+          variants={questionCard}
+          initial={reduce ? false : 'arriving'}
+          animate="settled"
+          /*
+            The card is its content's height, not the height left over.
 
-              Anchored to the top, not centred: the prompt then starts at the
-              same Y on every question. A child builds muscle memory for where
-              to read, the same way they do for where the buttons are, and
-              centring hands back the movement we just removed.
-            */
-            className="flex min-h-0 flex-col gap-4 overflow-y-auto rounded-lg bg-white p-6 shadow-float"
+            It used to be flex-1, so it took whatever the answer stack did not
+            want — 284px to hold 59px of text on an mcq, 596px on a count-tap.
+            The stack's height decided the card's, and the question had nothing
+            to do with it. Centring the content inside only split that excess
+            between top and bottom; the white was the same and now it was in
+            two places.
+
+            With flex-1 gone the card sizes to its content and the leftover
+            space lives between the card and the stack, as background rather
+            than as blank white card. flex-shrink stays at its default, so a
+            card too tall for the screen still gives way and overflow-y-auto
+            catches the remainder.
+
+            Anchored to the top, not centred: the prompt then starts at the
+            same Y on every question. A child builds muscle memory for where
+            to read, the same way they do for where the buttons are, and
+            centring hands back the movement we just removed.
+          */
+          /*
+            origin-top, because the arriving scale is 1.5% and a centred origin
+            spends half of that pushing the prompt down — by more on a tall card
+            than a short one. Measured frozen at `arriving`: the prompt sat at Y
+            89.9 on an mcq and 92.6 on a count-tap, and DESIGN 5.2 asks for the
+            same Y on every question. Anchored to the top the card scales about
+            its own top edge and the difference goes away.
+          */
+          className="flex min-h-0 origin-top flex-col gap-4 overflow-y-auto rounded-lg bg-white p-6 shadow-float"
+        >
+          <AudioButton src={question.promptAudio[LANG]} />
+
+          <motion.p
+            variants={optionItem}
+            lang={LANG}
+            className="m-0 text-left font-sans text-prompt font-medium"
           >
-            <AudioButton src={question.promptAudio[LANG]} />
+            {/*
+              Reserved kancil slot, 88x88, in the card's top-right corner. It
+              floats, so the prompt wraps around it for the first 88px and then
+              reflows to full width — the corner stays clear without the slot
+              costing the card a whole 88px row of its own. Nothing moves when
+              the mascot arrives. (DESIGN 7)
 
+              No min-height here. This paragraph is a flex item, and a flex item
+              is a block formatting context, so it already contains its own
+              float — measured: with the float present and min-height forced to
+              0, the paragraph is still 88px. The rule that used to sit here did
+              nothing, and its comment claimed otherwise.
+            */}
+            <span aria-hidden data-slot="kancil" className="float-right ml-4 h-[88px] w-[88px]" />
+            {question.prompt[LANG]}
+          </motion.p>
+
+          <QuestionVisual
+            question={question}
+            counted={counted}
+            lang={LANG}
+            // Tapping toggles: a numbered object taps back off, and the ones
+            // after it renumber themselves because the number is just the
+            // position in this array.
+            onCount={(i) =>
+              setCounted((c) => (c.includes(i) ? c.filter((x) => x !== i) : [...c, i]))
+            }
+          />
+
+          {/*
+            B5 — the hint arrives under the question.
+
+            No AnimatePresence and no fade. It used to start at opacity 0, so
+            the one piece of help a stuck child gets was invisible whenever the
+            animation frame did not arrive — measured at opacity 0 with the full
+            text sitting in the DOM. Its own initial and animate are set rather
+            than inherited from the card, because the card has already settled
+            by the time a hint appears.
+          */}
+          {showHint && (
             <motion.p
-              variants={reduce ? reducedItem : optionItem}
-              lang={LANG}
-              className="m-0 text-left font-sans text-prompt font-medium"
+              variants={hintItem}
+              initial={reduce ? false : 'arriving'}
+              animate="settled"
+              className="m-0 rounded-md bg-laut-light px-4 py-3 font-sans text-body text-arang"
             >
-              {/*
-                Reserved kancil slot, 88x88, in the card's top-right corner. It
-                floats, so the prompt wraps around it for the first 88px and then
-                reflows to full width — the corner stays clear without the slot
-                costing the card a whole 88px row of its own. Nothing moves when
-                the mascot arrives. (DESIGN 7)
-
-                No min-height here. This paragraph is a flex item, and a flex item
-                is a block formatting context, so it already contains its own
-                float — measured: with the float present and min-height forced to
-                0, the paragraph is still 88px. The rule that used to sit here did
-                nothing, and its comment claimed otherwise.
-              */}
-              <span aria-hidden data-slot="kancil" className="float-right ml-4 h-[88px] w-[88px]" />
-              {question.prompt[LANG]}
+              {question.hint?.[LANG]}
             </motion.p>
+          )}
 
-            <QuestionVisual
-              question={question}
-              counted={counted}
-              lang={LANG}
-              // Tapping toggles: a numbered object taps back off, and the ones
-              // after it renumber themselves because the number is just the
-              // position in this array.
-              onCount={(i) =>
-                setCounted((c) => (c.includes(i) ? c.filter((x) => x !== i) : [...c, i]))
-              }
-            />
-
-            {/* B5 — the hint grows in under the question. The card's `layout`
-                prop does the resizing; height is never animated directly. */}
-            <AnimatePresence>
-              {showHint && (
-                <motion.p
-                  key="hint"
-                  initial={reduce ? { opacity: 0 } : { opacity: 0, y: -8 }}
-                  animate={reduce ? { opacity: 1 } : { opacity: 1, y: 0 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.25, ease: ease.out }}
-                  className="m-0 rounded-md bg-laut-light px-4 py-3 font-sans text-body text-arang"
-                >
-                  {question.hint?.[LANG]}
-                </motion.p>
-              )}
-            </AnimatePresence>
-
-            {revealText !== null && (
-              <p className="m-0 rounded-md bg-pasir px-4 py-3 font-sans text-body text-arang">
-                {revealText}
-              </p>
-            )}
-          </motion.div>
-        </AnimatePresence>
+          {revealText !== null && (
+            <p className="m-0 rounded-md bg-pasir px-4 py-3 font-sans text-body text-arang">
+              {revealText}
+            </p>
+          )}
+        </motion.div>
 
         {/*
           The feedback area's live region (SPEC 9). The hint and the revealed
