@@ -57,6 +57,20 @@ export function QuizScreen() {
   const locked = session.status === 'feedback';
   const showHint = session.hintShown && question.hint !== undefined;
 
+  // One source for the revealed answer, so the paragraph a child reads and the
+  // text a screen reader hears cannot drift apart.
+  const revealText =
+    session.revealed && (question.explain || question.type === 'count-tap')
+      ? (question.explain?.[LANG] ??
+        `Jawapannya ${question.type === 'count-tap' ? question.payload.correctAnswer : ''}.`)
+      : null;
+
+  // Everything the feedback area has to say right now, in the order it appears
+  // on screen. Empty between questions, which announces nothing.
+  const spokenFeedback = [showHint ? question.hint?.[LANG] : null, revealText]
+    .filter(Boolean)
+    .join(' ');
+
   return (
     <main className="mx-auto flex h-[100dvh] max-w-[430px] flex-col">
       {/* Read / watch. No answer buttons up here. (DESIGN 5.2) */}
@@ -148,14 +162,35 @@ export function QuizScreen() {
               )}
             </AnimatePresence>
 
-            {session.revealed && (question.explain || question.type === 'count-tap') && (
+            {revealText !== null && (
               <p className="m-0 rounded-md bg-pasir px-4 py-3 font-sans text-body text-arang">
-                {question.explain?.[LANG] ??
-                  `Jawapannya ${question.type === 'count-tap' ? question.payload.correctAnswer : ''}.`}
+                {revealText}
               </p>
             )}
           </motion.div>
         </AnimatePresence>
+
+        {/*
+          The feedback area's live region (SPEC 9). The hint and the revealed
+          answer are what this area says, and until now neither was announced:
+          aria-live sat on the answer stack below, where the only thing that
+          changes is a button's disabled state, which a live region does not
+          report anyway.
+
+          It sits out here rather than inside the card because the card is keyed
+          on the question id, so AnimatePresence remounts it on every question.
+          A live region that enters the accessibility tree together with its
+          text is announced unreliably or not at all; this one is mounted once
+          and only its text changes, which is the case screen readers handle.
+
+          Visually hidden and out of flow, so it costs the layout nothing. An
+          always-present visible wrapper around the hint would instead add a
+          16px flex gap to every question that has no hint — exactly the dead
+          space DESIGN 5.2 exists to keep out of the card.
+        */}
+        <p className="sr-only" aria-live="polite">
+          {spokenFeedback}
+        </p>
       </section>
 
       {/*
@@ -164,7 +199,6 @@ export function QuizScreen() {
         alone would glue the buttons to the screen edge. (DESIGN 5.2)
       */}
       <section
-        aria-live="polite"
         className="flex flex-col gap-4 px-4 pt-4"
         style={{ paddingBottom: 'max(16px, env(safe-area-inset-bottom))' }}
       >
