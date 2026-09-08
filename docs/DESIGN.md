@@ -344,12 +344,32 @@ Dua elemen datang dan pergi semasa sesi. Ruang untuk kedua-duanya ditempah sejak
 
 | Slot | Saiz | Tempat | Semasa rehat |
 |---|---|---|---|
-| **Kancil** | 88 × 88 | Penjuru kanan atas kad soalan | Kosong, ruang kekal ditempah |
-| **Seterusnya** | tinggi 88 | Dasar timbunan jawapan | Kosong, ruang kekal ditempah |
+| **Kancil** | 88 × 88 | Penjuru kanan atas kad soalan | Kosong, penjuru kekal lapang |
+| **Seterusnya** | tinggi 88 | Dasar timbunan jawapan | Kosong, atau butang hantar soalan itu |
 
-Kancil masuk dan keluar dalam slotnya sendiri. Butang Seterusnya muncul dalam slotnya
-sendiri. Kad soalan tidak berubah tinggi, butang jawapan tidak bergerak, dan kedudukan
-Seterusnya tepat sama pada setiap soalan.
+Kancil masuk dan keluar dalam slotnya sendiri. Kad soalan tidak berubah tinggi, butang
+jawapan tidak bergerak, dan kedudukan Seterusnya tepat sama pada setiap soalan.
+
+**"Ditempah" bermaksud penjuru, bukan baris.** Slot kancil ialah kotak terapung di dalam
+blok teks soalan: teks membalut mengelilinginya untuk 88px pertama, kemudian mengalir
+semula selebar penuh. Penjuru kekal lapang, tetapi slot itu **tidak** mengambil satu baris
+88px sendiri dalam aliran menegak kad.
+
+Sebabnya diukur, bukan estetik. Sebagai baris penuh, kotak kosong itu menelan 104px daripada
+kad yang sudah mengecut dahulu (§5.2) — cukup untuk memaksa kad menatal pada 360×780, dan
+dalam ujian pengguna kedua-dua kanak-kanak tersekat pada skrol itu. Blok teks soalan membawa
+`min-height: 88px` supaya kotak terapung itu kekal terkandung walaupun soalan hanya satu
+baris.
+
+**Slot Seterusnya dikongsi.** Bagi soalan yang butang jawapannya bukan dalam timbunan —
+`count-tap`, di mana ketukan pada objek ialah jawapan — butang hantar duduk dalam slot yang
+sama. Satu tempat, satu saiz, kandungan berubah ikut keadaan. Butang yang anak capai
+sentiasa di tempat yang sama.
+
+**Jangan animasikan pertukaran slot itu.** Slot ini satu-satunya laluan anak ke hadapan.
+Peralihan keluar-kemudian-masuk menjadikan laluan itu bergantung pada bingkai animasi yang
+mungkin tidak pernah tiba — tab latar belakang, peranti terhad — dan anak tinggal tanpa
+butang langsung. Tukar serta-merta.
 
 Ini kelihatan membazir ruang pada skrin rehat. Ia memang begitu, dengan sengaja: alternatifnya
 ialah susun atur beralih tepat pada saat kanak-kanak menghulurkan jari, dan mereka menekan

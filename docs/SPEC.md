@@ -244,12 +244,26 @@ untuk muat; had ini menentukan kotak susun atur.
     "itemImage": "/img/fruit/rambutan.svg",
     "itemCount": 7,
     "layout": "scatter",
-    "answerInput": "number-pad",
+    "answerInput": "tap-count",
     "correctAnswer": 7
   }
 }
 ```
 `layout`: `"scatter"` (rawak, benih tetap supaya boleh diulang) atau `"grid"`.
+
+**`answerInput: "tap-count"` — ketukan itu sendiri ialah jawapan.** Kanak-kanak mengetuk
+setiap objek, kiraan dipaparkan bersebelahan objek yang dikira, dan butang hantar menghantar
+kiraan itu sebagaimana adanya. Tiada papan nombor.
+
+Papan nombor dibuang selepas ujian pengguna. Ia menjadikan membilang **dua langkah** — bilang,
+kemudian cari digit — dan kanak-kanak 7 tahun tidak dapat membezakan langkah mana yang gagal:
+salah bilang dan salah tekan kelihatan sama sahaja kepadanya. Satu tindakan, satu kemahiran
+diuji. Itu yang `count-tap` sepatutnya uji.
+
+Ia juga menghapuskan kekunci papan 59px. Sepuluh kekunci pada minimum 64px DESIGN §5.1
+memerlukan 352px melintang; baris itu hanya ada 328px pada skrin 360px. Papan 10 kekunci
+**tidak boleh** memenuhi lantai sasaran sentuh pada lebar itu — pelanggaran yang tidak
+disedari sehingga kerja susun atur ini.
 
 #### `drag-bucket` — Isih ke dalam kategori
 ```json
