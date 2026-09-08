@@ -374,8 +374,12 @@ Nilai spring dan tempoh tepat berada dalam SPEC.md §7. Bahagian ini menerangkan
 menyebabkannya.** Kandungan mesti dipasang dan kelihatan pada bingkai 0. Setiap animasi di
 bawah mesti boleh tidak berjalan langsung dan meninggalkan skrin yang masih betul — hanya
 kurang halus. Kalau satu kesan tidak boleh lulus ujian itu, ia bukan kesan; ia satu-satunya
-cara sesuatu muncul, dan ia dibuang atau ditulis semula. Peraturan penuh dan senarai corak
-terlarang ada dalam SPEC.md §7.1 peraturan keras 2.
+cara sesuatu muncul.
+
+Jawapannya hampir tidak pernah membuang kesan itu. Ia menukar tempat kesan itu **bermula**:
+mula pada keadaan akhir dan beranimasi keluar daripadanya, atau gerakkan satu sifat kecil
+yang tidak memudaratkan. Kedua-dua corak, dan senarai penuh apa yang dilarang, ada dalam
+SPEC.md §7.1 peraturan keras 2.
 
 ### Kumpulan A — Maklum balas sentuhan *(setiap ketukan, ~120 ms)*
 
@@ -393,7 +397,7 @@ terlarang ada dalam SPEC.md §7.1 peraturan keras 2.
 | B2 | **Cincin betul** | Gelang hijau berkembang keluar dari butang, `scale 0.8→1.6`, `opacity 0.6→0` | Menambah "letupan" tanpa zarah — murah pada telefon perlahan |
 | B3 | **Goncang salah** | Goncang mendatar ±9px, mereda dalam 6 pusingan | Isyarat "bukan itu" yang mesra — **tidak** merah, tidak menakutkan |
 | B4 | **Layu pilihan salah** | Pilihan yang dihapuskan pudar ke 0.35, skala 0.96 | Mengurangkan pilihan, mengurangkan beban kognitif pada percubaan 2 |
-| B5 | **Pancingan masuk** | Kad pancingan muncul di bawah soalan pada saiz penuh dan legap; kad tumbuh melalui reflow biasa | Memperkenalkan bantuan. **Tidak pernah pudar masuk** — pancingan ialah satu-satunya bantuan anak yang tersekat, dan bantuan yang menunggu bingkai ialah bantuan yang tiada |
+| B5 | **Pancingan luncur** | Kad pancingan meluncur turun ke tempatnya di bawah soalan, legap dan bersaiz penuh sepanjang masa; kad tumbuh melalui reflow biasa | Memperkenalkan bantuan tanpa menyusun semula skrin secara mendadak. **Tidak pernah pudar masuk** — pancingan ialah satu-satunya bantuan anak yang tersekat, dan bantuan yang menunggu bingkai ialah bantuan yang tiada |
 | B6 | **Dedah jawapan** | Selepas 3 percubaan, butang betul berdenyut perlahan 2× dengan cahaya `--mangga` | Menutup gelung — kanak-kanak tidak pernah dibiarkan tanpa jawapan |
 
 ### Kumpulan C — Gerak isyarat seret *(modul Sains & Membaca)*
@@ -411,13 +415,13 @@ terlarang ada dalam SPEC.md §7.1 peraturan keras 2.
 |---|---|---|---|
 | D1 | **Kemajuan tumbuh** | Bar `scaleX` ke nilai baharu, spring `settle` | "Anda telah bergerak ke hadapan" |
 | D2 | **Tukar kad** | Kad lama hilang serta-merta; kad baharu duduk di tempatnya dan mengendur daripada 98.5% ke saiz penuh, anak-anak berperingkat 60 ms | Memisahkan soalan. **Tiada animasi keluar**: kad keluar yang menahan kad masuk pernah menyebabkan anak melihat soalan lama sementara enjin sudah maju — bukan animasi hilang, tetapi kandungan salah |
-| D3 | **Kiraan naik** | Nombor mata beralih ke atas digit demi digit, bermula daripada nombor sebenar dan hanya digantikan sebaik animasi benar-benar berjalan | Menjadikan ganjaran terasa diperoleh, bukan diberikan — tanpa pernah menyebut jumlah yang salah |
+| D3 | **Kiraan naik** | Nombor mata beralih ke atas digit demi digit. Paparan bermula pada jumlah sebenar dan hanya digantikan oleh kiraan sebaik animasi benar-benar menghasilkan bingkai | Menjadikan ganjaran terasa diperoleh, bukan diberikan — tanpa pernah menyebut jumlah yang salah |
 
 ### Kumpulan E — Ganjaran *(0.5–1.2 s, hanya pada skrin ringkasan)*
 
 | # | Nama | Apa yang berlaku | Tugas |
 |---|---|---|---|
-| E1 | **Bintang mendarat** | Bintang mendarat satu demi satu daripada 85% ke saiz penuh dengan terlajak, berperingkat 180 ms, satu bunyi setiap satu | Momen puncak sesi. **Tidak bermula pada sifar dan tidak pernah lut sinar** — bintang ialah mesej skrin ini, dan bintang yang menunggu bingkai memberitahu anak dia tidak dapat apa-apa |
+| E1 | **Bintang jatuh** | Bintang jatuh masuk satu demi satu: kembang ke 1.25 dan tunduk 25° sebelum mendarat, berperingkat 180 ms, satu bunyi setiap satu | Momen puncak sesi. Ia bermula **pada** keadaan akhir dan beranimasi keluar daripadanya, bukan bermula pada sifar — bintang ialah mesej skrin ini, dan bintang yang menunggu bingkai memberitahu anak dia tidak dapat apa-apa |
 | E2 | **Confetti** | 24 kepingan SVG (8 pada peranti rendah), hayat 1 s, kemudian dinyahlekap | **Hanya pada ⭐⭐⭐.** Kelangkaan menjadikannya bermakna |
 | E3 | **Goncang peti** | Peti bergegar `rotate ±6°` selama 0.6 s, kemudian menunggu ketukan | Mencipta jangkaan; kanak-kanak yang membukanya |
 | E4 | **Pulau dibuka** | Nod peta berskala 0.85 → 1, riak berkembang keluar, kamera pan | Satu momen besar setiap topik yang diselesaikan |
