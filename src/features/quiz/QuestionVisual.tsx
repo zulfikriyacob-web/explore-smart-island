@@ -26,11 +26,18 @@ export function QuestionVisual({
   const items = Array.from({ length: itemCount }, (_, i) => i);
 
   return (
+    /*
+      72px tap targets with 16px gaps. DESIGN 5.1 sets 64px as the absolute
+      minimum and DESIGN 4 sets 16px as the minimum gap between two tappable
+      things; these objects used to sit at 64px with an 8px gap — half the gap
+      floor — and children mis-tapped. 72px costs nothing horizontally: at 280px
+      of card width, 64px and 72px both fit three per row.
+    */
     <div
       className={
         layout === 'grid'
-          ? 'grid grid-cols-4 gap-2'
-          : 'relative flex flex-wrap items-center justify-center gap-2'
+          ? 'grid grid-cols-3 justify-items-center gap-4'
+          : 'relative flex flex-wrap items-center justify-center gap-4'
       }
     >
       {items.map((i) => {
@@ -52,9 +59,9 @@ export function QuestionVisual({
                 ? { transform: `translateY(${(i % 3) * 6 - 6}px)` }
                 : undefined
             }
-            className="grid h-16 w-16 place-items-center rounded-sm"
+            className="grid h-[72px] w-[72px] place-items-center rounded-sm p-1"
           >
-            <img src={itemImage} alt="" className="h-14 w-14" draggable={false} />
+            <img src={itemImage} alt="" className="h-16 w-16" draggable={false} />
           </motion.button>
         );
       })}
