@@ -107,18 +107,29 @@ Pemisahan ini menyelesaikan dua ketegangan yang sebelum ini kelihatan seperti pe
 - Pisang kuning bukan lagi melanggar §12 peraturan 2 dengan menggunakan `--mangga`. Ia kuning
   ilustrasi, bukan token ganjaran.
 
-**Kirmizi rambutan `#C4123C` dipilih dengan sengaja terhadap `--bunga` `#FF6B6B`:**
+**Kirmizi rambutan `#AE1A45` disemak terhadap `--bunga` `#FF6B6B`:**
 
-| | `--bunga` (salah) | Rambutan |
-|---|---|---|
-| Hue | 0° | 346° |
-| Ketepuan | 100% | 83% |
-| Kecerahan | 71% | 42% |
+| | `--bunga` (salah) | Rambutan asas | Rambutan bayang |
+|---|---|---|---|
+| Hex | `#FF6B6B` | `#AE1A45` | `#8A1236` |
+| Hue | 0° | 343° | 342° |
+| Ketepuan | 100% | 74% | 77% |
+| Kecerahan | 71% | 39% | 31% |
+| Beza kecerahan | — | 32 mata | 40 mata |
 
-Beza kecerahan **29 mata** ialah yang menanggung pemisahan itu — salmon cerah berbanding
-kirmizi dalam tidak boleh dikelirukan. Beza hue 14° menyokongnya. Calon `#D62828` ditolak
-walaupun kelihatan sesuai: hue 0°, sama tepat dengan `--bunga`, iaitu perlanggaran yang kita
-cuba elak.
+Beza kecerahan **32 mata** ialah yang menanggung pemisahan itu — salmon cerah berbanding
+kirmizi dalam tidak boleh dikelirukan. Beza hue 17° menyokongnya.
+
+Nilai ini datang daripada rujukan yang dipilih oleh kanak-kanak, dan ia terpisah **lebih
+baik** daripada `#C4123C` yang kami pilih sendiri sebelumnya (hue 14°, kecerahan 29 mata).
+Calon `#D62828` pernah ditolak walaupun kelihatan sesuai: hue 0°, sama tepat dengan
+`--bunga`, iaitu perlanggaran yang kita cuba elak.
+
+**Bulu `#EF6A4B` ialah pengecualian yang perlu dinyatakan.** Pada hue 11° dan kecerahan 62%,
+ia hampir dengan `--bunga` — 11° hue dan 9 mata kecerahan. Ia diterima kerana bulu ialah
+**strok halus di atas badan kirmizi**, bukan isian; ia tidak pernah muncul sebagai satu
+bidang warna yang boleh dikelirukan dengan sempadan butang salah. Kalau warna ini pernah
+digunakan sebagai isian objek, ia mesti dipilih semula.
 
 Nota kekurangan penglihatan warna: di bawah protanopia dan deuteranopia kedua-dua merah
 beralih ke arah kelabu-kuning dan menjadi **lebih** serupa. Ini diterima kerana tiada satu
