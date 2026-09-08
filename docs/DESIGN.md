@@ -494,6 +494,35 @@ Jadi: jangan tambah warna kepada §2 untuk menyelamatkan lukisan sebelum bentukn
 seorang kanak-kanak. Dan jangan tandakan aset ilustrasi siap atas kekuatan semakan teknikal
 sahaja.
 
+### Kalau aset gagal, periksa STRUKTUR dahulu
+
+**Pengecaman datang daripada struktur — susunan bahagian — bukan daripada warna, ketepuan,
+atau perincian.**
+
+Bila kanak-kanak salah kenal sesuatu, atau kenal tetapi tidak suka, periksa susunan bahagian
+sebelum melaras apa-apa yang lain. Panjang, lengkungan, warna dan ketepuan ialah pelarasan;
+struktur ialah lukisan itu sendiri. Melaras pembolehubah pelarasan pada struktur yang salah
+memperbaikinya sedikit setiap kali dan tidak pernah menyelesaikannya.
+
+Rambutan ialah rekod kes. Lima pusingan, dan struktur yang salah bertahan melalui empat:
+
+| Pusingan | Yang diubah | Keputusan |
+|---|---|---|
+| 1 | Cincin pancaran lurus sekata, bulatan oren | Kanak-kanak: **"matahari"** |
+| 2 | Bulu melengkung, panjang tak sekata, badan lebih gelap, tangkai + daun | Dikenali — tetapi **struktur masih cincin tepi** |
+| 3 | Dua ton + sorotan putih | Dikenali, kata **"membosankan"** |
+| 4 | Ketepuan dinaikkan, kirmizi dipilih dengan teliti | Masih memilih rujukan |
+| 5 | **Coretan pendek tak sekata merentas kulit**, bukan cincin di tepi | Padan |
+
+Pusingan 2 hingga 4 melaras panjang, lengkungan, ton, dan warna. Kesemuanya bertambah baik
+sedikit. Tiada satu pun menyentuh perkara sebenar: **bulu rambutan bertaburan di seluruh
+kulit, bukan tersusun di tepi.** Duri tepi ialah struktur matahari; itu sebabnya pusingan 1
+gagal, dan sebabnya pusingan 4 masih terasa salah walaupun setiap pelarasan lain sudah betul.
+
+Ujian pantas sebelum melaras apa-apa: **hapuskan semua warna dan lihat siluet dan susunan
+bahagian sahaja.** Kalau ia masih boleh dikelirukan dengan objek lain pada peringkat itu,
+warna tidak akan menyelamatkannya.
+
 ### Keputusan tertunda: buang garis luar sepenuhnya?
 
 Seorang kanak-kanak menunjuk set ikon buah stok sebagai gaya yang dia suka. Dua perbezaan
