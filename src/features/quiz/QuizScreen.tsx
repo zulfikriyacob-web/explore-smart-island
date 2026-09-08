@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 
 import { AudioButton } from '../../components/ui/AudioButton.tsx';
 import { BlockButton } from '../../components/ui/BlockButton.tsx';
+import { Kancil, type KancilState } from '../../components/ui/Kancil.tsx';
 import { ProgressBar } from '../../components/ui/ProgressBar.tsx';
 import { hintItem, optionItem, questionCard } from '../../motion/variants.ts';
 import { AnswerControls } from './AnswerControls.tsx';
@@ -40,6 +41,27 @@ export function QuizScreen() {
 
   // Counting state belongs to one question only.
   useEffect(() => setCounted([]), [session.index]);
+
+  /*
+    The kancil appears during feedback and at no other time. DESIGN 6 is
+    explicit that it is never on screen while a child is thinking about the
+    question, so it is not rendered at all outside the feedback state — the
+    88x88 slot stays reserved and empty, which is what the slot is for.
+
+    Consequence worth knowing: the reducer only reaches `feedback` on a correct
+    answer or a third miss, so `sympathy` needs three wrong attempts. A
+    three-option mcq strikes out an option per miss and leaves only the right
+    one, so it can never produce a third miss — in practice sympathy shows on
+    count-tap questions.
+  */
+  const [kancil, setKancil] = useState<KancilState | null>(null);
+  useEffect(() => {
+    if (session.status !== 'feedback') {
+      setKancil(null);
+      return;
+    }
+    setKancil(session.lastAnswerCorrect === true ? 'happy' : 'sympathy');
+  }, [session.status, session.lastAnswerCorrect, session.index]);
 
   if (!question) return null;
 
@@ -146,7 +168,11 @@ export function QuizScreen() {
               0, the paragraph is still 88px. The rule that used to sit here did
               nothing, and its comment claimed otherwise.
             */}
-            <span aria-hidden data-slot="kancil" className="float-right ml-4 h-[88px] w-[88px]" />
+            <span aria-hidden data-slot="kancil" className="float-right ml-4 block h-[88px] w-[88px]">
+              {kancil !== null && (
+                <Kancil state={kancil} size={88} onDone={() => setKancil('idle')} />
+              )}
+            </span>
             {question.prompt[LANG]}
           </motion.p>
 
