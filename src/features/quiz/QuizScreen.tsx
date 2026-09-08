@@ -72,7 +72,19 @@ export function QuizScreen() {
             initial={firstRender.current ? false : 'hidden'}
             animate="visible"
             exit="exit"
-            className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto rounded-lg bg-white p-6 shadow-float"
+            /*
+              Content is centred vertically. The card is flex-1 and fills the
+              height left over, so left-aligned to the top it left 124px of dead
+              white below the objects on a 7-object question and more on a
+              5-object one.
+
+              `safe center` rather than plain `center`: if content ever does
+              overflow, safe alignment falls back to flex-start so the top stays
+              reachable, instead of being clipped above the scroll origin.
+              Supported from Chrome 93 and Safari 15.4, inside the SPEC 7.6
+              baseline.
+            */
+            className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto rounded-lg bg-white p-6 shadow-float [justify-content:safe_center]"
           >
             <AudioButton src={question.promptAudio[LANG]} />
 
