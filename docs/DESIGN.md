@@ -220,14 +220,16 @@ Skrin telefon dibahagi tiga. Segala yang kanak-kanak sentuh berulang kali berada
 
 ```
 ┌──────────────────────────┐
-│  BACA / TONTON           │  ← kad soalan: flex 1, mengecut dahulu
+│  kemajuan                │
+├──────────────────────────┤
+│  BACA / TONTON           │  ← kad soalan: setinggi kandungannya
 │  (jangan letak butang)   │
 ├──────────────────────────┤
-│  main audio · kemajuan   │  ← kawalan jarang, boleh dijangkau
+│                          │
+│  (latar — ruang lebihan) │  ← lebihan hidup DI SINI, bukan dalam kad
+│                          │
 ├──────────────────────────┤
-│                          │
 │   BUTANG JAWAPAN         │  ← berlabuh ke bawah; ~55% ialah sasaran
-│                          │
 └──────────────────────────┘
 ```
 
@@ -245,10 +247,26 @@ Susun atur sebenar:
   ```
   `max()` diperlukan sebab `env()` menjadi `0px` pada peranti tanpa takuk atau bar rumah —
   guna `env()` sendirian dan butang melekat pada tepi skrin di kebanyakan telefon Android.
-- **Kad soalan `flex: 1`.** Ia mengambil baki ruang dan **mengecut dahulu** apabila ruang
-  sempit. Imej dalam kad mengecut bersamanya; teks soalan menatal dalam kad kalau terpaksa.
-  Kanak-kanak boleh menatal untuk membaca; mereka tidak boleh menatal untuk mencari butang
-  yang tiada.
+- **Kad soalan setinggi kandungannya, berlabuh ke atas.** Bukan `flex: 1`. Ia mengambil
+  ketinggian semula jadinya dan tidak lebih; lebihan ruang hidup **di antara** kad dan
+  timbunan, sebagai latar.
+
+  Kad `flex: 1` menjadikan tinggi kad fungsi kepada **timbunan jawapan**, bukan kepada
+  soalan. Diukur pada 360×780: timbunan mcq 432px meninggalkan kad 284px untuk memegang
+  59px teks; timbunan count-tap 120px meninggalkan kad 596px. Kad putih besar yang kosong,
+  dan saiznya ditentukan oleh sesuatu yang tiada kaitan dengan kandungannya.
+
+  Memusatkan kandungan di dalam kad **tidak** membaikinya — ia membahagi lebihan itu antara
+  atas dan bawah. Putih yang sama, kini di dua tempat.
+
+  **Berlabuh ke atas, bukan dipusatkan.** Teks soalan mesti bermula pada Y yang sama pada
+  setiap soalan: anak membina memori otot untuk tempat membaca, sama seperti untuk tempat
+  butang (§7). Memusatkan kad dalam kawasan atas memulangkan pergerakan itu. Diukur: piksel
+  teks pertama pada Y 89 pada soalan mcq dua baris dan pada soalan count-tap empat baris.
+
+  `flex-shrink` kekal pada nilai lalainya, jadi kad yang terlalu tinggi untuk skrin tetap
+  mengalah, dan `overflow-y-auto` menangkap bakinya. Kanak-kanak boleh menatal untuk membaca;
+  mereka tidak boleh menatal untuk mencari butang yang tiada.
 
 > **Keperluan `index.html`:** tag viewport **mesti** ada `viewport-fit=cover`:
 > ```html
@@ -435,6 +453,23 @@ butang langsung. Tukar serta-merta.
 Ini kelihatan membazir ruang pada skrin rehat. Ia memang begitu, dengan sengaja: alternatifnya
 ialah susun atur beralih tepat pada saat kanak-kanak menghulurkan jari, dan mereka menekan
 apa yang baru sahaja berpindah ke situ. Ruang kosong lebih murah daripada salah tekan.
+
+**Kos sebenar slot kancil, diukur.** Slot itu terapung di dalam blok teks soalan, jadi pada
+soalan berteks pendek ia berharga kira-kira **57px** — dua kesan berasingan:
+
+| Kesan | Kos | Kenapa |
+|---|---|---|
+| Balutan paksa | ~28px | Slot menyempitkan tiga baris pertama daripada 280px ke 176px. `"Nombor apa selepas 29?"` muat **satu baris** pada lebar penuh; di sebelah slot ia menjadi dua |
+| Ruang mati | ~29px | Float 88px lebih tinggi daripada teks 59px, dan perenggan mesti mengandunginya |
+
+Perenggan itu item flex, dan item flex ialah konteks pemformatan blok — jadi ia sudah
+mengandungi float-nya sendiri. **Tiada `min-height` diperlukan.** Peraturan `min-height: 88px`
+yang pernah ada di situ tidak melakukan apa-apa; disahkan dengan memaksanya ke `0` sambil
+float kekal — perenggan tetap 88px.
+
+Kos ini diterima kerana slot menempah penjuru supaya tiada apa berganjak apabila maskot tiba.
+Tetapi ia kos yang dibayar **sekarang** untuk sesuatu yang belum dilukis, dan ia patut
+disemak semula kalau kancil Rive tertangguh melepasi Fasa 3.
 
 Ini peraturan susun atur, bukan animasi — jangan animasikan slot itu sendiri berkembang atau
 mengecut. Slot statik; hanya isinya yang bergerak.
