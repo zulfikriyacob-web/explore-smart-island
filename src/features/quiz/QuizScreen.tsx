@@ -73,34 +73,47 @@ export function QuizScreen() {
             animate="visible"
             exit="exit"
             /*
-              Content is centred vertically. The card is flex-1 and fills the
-              height left over, so left-aligned to the top it left 124px of dead
-              white below the objects on a 7-object question and more on a
-              5-object one.
+              The card is its content's height, not the height left over.
 
-              `safe center` rather than plain `center`: if content ever does
-              overflow, safe alignment falls back to flex-start so the top stays
-              reachable, instead of being clipped above the scroll origin.
-              Supported from Chrome 93 and Safari 15.4, inside the SPEC 7.6
-              baseline.
+              It used to be flex-1, so it took whatever the answer stack did not
+              want — 284px to hold 59px of text on an mcq, 596px on a count-tap.
+              The stack's height decided the card's, and the question had nothing
+              to do with it. Centring the content inside only split that excess
+              between top and bottom; the white was the same and now it was in
+              two places.
+
+              With flex-1 gone the card sizes to its content and the leftover
+              space lives between the card and the stack, as background rather
+              than as blank white card. flex-shrink stays at its default, so a
+              card too tall for the screen still gives way and overflow-y-auto
+              catches the remainder.
+
+              Anchored to the top, not centred: the prompt then starts at the
+              same Y on every question. A child builds muscle memory for where
+              to read, the same way they do for where the buttons are, and
+              centring hands back the movement we just removed.
             */
-            className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto rounded-lg bg-white p-6 shadow-float [justify-content:safe_center]"
+            className="flex min-h-0 flex-col gap-4 overflow-y-auto rounded-lg bg-white p-6 shadow-float"
           >
             <AudioButton src={question.promptAudio[LANG]} />
 
             <motion.p
               variants={reduce ? reducedItem : optionItem}
               lang={LANG}
-              className="m-0 min-h-[88px] text-left font-sans text-prompt font-medium"
+              className="m-0 text-left font-sans text-prompt font-medium"
             >
               {/*
-                Reserved kancil slot, 88x88, in the card's top-right corner.
-                It floats, so the prompt wraps around it for the first 88px and
-                then reflows to full width — the corner stays clear without the
-                slot costing the card a whole 88px row of its own. min-h-[88px]
-                on the paragraph keeps the float contained even when the prompt
-                is one line. Nothing moves when the mascot arrives.
-                (DESIGN 7, "slot yang ditempah")
+                Reserved kancil slot, 88x88, in the card's top-right corner. It
+                floats, so the prompt wraps around it for the first 88px and then
+                reflows to full width — the corner stays clear without the slot
+                costing the card a whole 88px row of its own. Nothing moves when
+                the mascot arrives. (DESIGN 7)
+
+                No min-height here. This paragraph is a flex item, and a flex item
+                is a block formatting context, so it already contains its own
+                float — measured: with the float present and min-height forced to
+                0, the paragraph is still 88px. The rule that used to sit here did
+                nothing, and its comment claimed otherwise.
               */}
               <span aria-hidden data-slot="kancil" className="float-right ml-4 h-[88px] w-[88px]" />
               {question.prompt[LANG]}
