@@ -14,7 +14,15 @@ import { readdir, readFile, stat } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { TopicPackSchema, collectAssetPaths } from '../src/content/schema.ts';
+import { TopicPackSchema, collectAssetRefs } from '../src/content/schema.ts';
+
+/**
+ * Placeholder art carries this marker. A picture that is a dashed box is not a
+ * rambutan, and a question that says "tap each rambutan" cannot be answered
+ * from one. That is not a warning — the question is broken — so it fails the
+ * build.
+ */
+const PLACEHOLDER_MARKER = 'PLACEHOLDER';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(HERE, '..');
@@ -74,20 +82,49 @@ async function validatePack(file) {
     errors.push(`filename does not match topicId: expected ${expected}`);
   }
 
-  for (const assetPath of collectAssetPaths(pack)) {
+  // Group by path so each file is read once, but keep the questions that
+  // depend on it so a failure can name what it breaks.
+  const refs = collectAssetRefs(pack);
+  const byPath = new Map();
+  for (const ref of refs) {
+    const entry = byPath.get(ref.path) ?? { kind: ref.kind, questionIds: new Set() };
+    entry.questionIds.add(ref.questionId);
+    byPath.set(ref.path, entry);
+  }
+
+  for (const [assetPath, { kind, questionIds }] of byPath) {
+    const dependents = [...questionIds].join(', ');
     const onDisk = resolveAsset(assetPath);
     let info;
     try {
       info = await stat(onDisk);
     } catch {
-      errors.push(`missing asset: ${assetPath}`);
+      errors.push(`missing asset: ${assetPath} (needed by ${dependents})`);
       continue;
     }
     if (!info.isFile()) {
       errors.push(`asset is not a file: ${assetPath}`);
-    } else if (info.size === 0) {
-      // Placeholders keep the wiring honest but are not shippable audio or art.
-      warnings.push(`placeholder asset (0 bytes): ${assetPath}`);
+      continue;
+    }
+    if (info.size === 0) {
+      if (kind === 'image') {
+        // An image a question depends on cannot degrade. Without it the
+        // question is unanswerable, so this fails rather than warns.
+        errors.push(`empty image: ${assetPath} (needed by ${dependents})`);
+      } else {
+        // Audio can degrade: the control hides itself until the file is real
+        // (PRD 8), and the question still reads. Warning, not error.
+        warnings.push(`placeholder asset (0 bytes): ${assetPath}`);
+      }
+      continue;
+    }
+    if (assetPath.endsWith('.svg')) {
+      const svg = await readFile(onDisk, 'utf8');
+      if (svg.includes(PLACEHOLDER_MARKER)) {
+        errors.push(
+          `placeholder image: ${assetPath} is still placeholder art, but ${dependents} needs a real picture`,
+        );
+      }
     }
   }
 

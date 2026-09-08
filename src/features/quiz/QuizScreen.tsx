@@ -173,7 +173,13 @@ export function QuizScreen() {
             */
             <BlockButton
               onPress={() => answer({ kind: 'count', value: counted.length })}
-              state={counted.length === 0 ? 'disabled' : 'rest'}
+              // Never disabled, not even at a count of zero. Disabling it made
+              // the only way to reveal the button the very thing the button is
+              // for, and at 35% opacity on the pale ground it was invisible:
+              // 1.04:1 against the background, where DESIGN 5.1 asks for 3:1.
+              // A stray press with nothing counted is just a wrong answer, and
+              // wrong answers already have feedback a child understands.
+              state={session.lastAnswerCorrect === false ? 'wrong' : 'rest'}
               ariaLabel={`Hantar jawapan, ${counted.length} dibilang`}
             >
               Sedia

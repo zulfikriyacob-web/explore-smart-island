@@ -265,24 +265,43 @@ export const TopicPackSchema = z
 export type TopicPack = z.infer<typeof TopicPackSchema>;
 export type Activity = z.infer<typeof ActivitySchema>;
 
+/** One asset reference, and the question that depends on it. */
+export interface AssetRef {
+  path: string;
+  questionId: string;
+  /** 'audio' can degrade — the control hides. 'image' cannot: the question needs it. */
+  kind: 'audio' | 'image';
+}
+
 /**
- * Collect every asset path a pack references, so the build-time validator can
- * check each one exists on disk. (SPEC 3.5)
+ * Every asset reference in a pack, tagged with the question that depends on it,
+ * so the build-time validator can name what breaks when one is missing or is
+ * still placeholder art. (SPEC 3.5)
  */
-export function collectAssetPaths(pack: TopicPack): string[] {
-  const paths: string[] = [];
+export function collectAssetRefs(pack: TopicPack): AssetRef[] {
+  const refs: AssetRef[] = [];
   for (const q of pack.questions) {
-    paths.push(q.promptAudio.ms, q.promptAudio.en);
+    refs.push(
+      { path: q.promptAudio.ms, questionId: q.id, kind: 'audio' },
+      { path: q.promptAudio.en, questionId: q.id, kind: 'audio' },
+    );
     switch (q.type) {
       case 'mcq':
         break;
       case 'mcq-image':
-        paths.push(...q.payload.options.map((o) => o.image));
+        for (const o of q.payload.options) {
+          refs.push({ path: o.image, questionId: q.id, kind: 'image' });
+        }
         break;
       case 'count-tap':
-        paths.push(q.payload.itemImage);
+        refs.push({ path: q.payload.itemImage, questionId: q.id, kind: 'image' });
         break;
     }
   }
-  return [...new Set(paths)];
+  return refs;
+}
+
+/** Unique asset paths a pack references. */
+export function collectAssetPaths(pack: TopicPack): string[] {
+  return [...new Set(collectAssetRefs(pack).map((r) => r.path))];
 }
