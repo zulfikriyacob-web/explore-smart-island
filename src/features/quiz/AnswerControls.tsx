@@ -48,7 +48,7 @@ function optionState(
 ): BlockState {
   const isCorrect = optionId === correctId;
   if (lastAnswerCorrect === true && isCorrect) return 'correct';
-  // B6 â€” after the third miss the right answer is shown, so the loop closes and
+  // B6 — after the third miss the right answer is shown, so the loop closes and
   // the child is never left without an answer.
   if (revealed && isCorrect) return 'revealed';
   if (disabledOptionIds.includes(optionId)) {

@@ -17,14 +17,22 @@ import {
   type SessionState,
 } from './session.ts';
 
-function freshSession(): SessionState {
+/**
+ * A fresh run of the activity.
+ *
+ * `isFirstClear` decides the gem bonus and nothing else. SPEC section 5.3 pays a
+ * replay less so that practice is never punished and farming is never rewarded,
+ * and the summary is only ever reached through here — so this is the one place
+ * that has to know which kind of run it is building.
+ */
+function freshSession(isFirstClear: boolean): SessionState {
   const started = [
     { type: 'LOADED' as const, questions: loadActivityQuestions() },
     // No intro screen: the brief opens straight into the activity. The gesture
     // gate SPEC section 8 wants for iOS audio belongs with real audio, which is
     // out of scope here.
     { type: 'START' as const, nowMs: now() },
-  ].reduce(sessionReducer, createSession(ACTIVITY_ID));
+  ].reduce(sessionReducer, createSession(ACTIVITY_ID, isFirstClear));
   return started;
 }
 
@@ -44,7 +52,10 @@ interface QuizStore {
 
 export const useQuizStore = create<QuizStore>((set, get) => {
   const saved = loadSession(ACTIVITY_ID);
-  const session = saved ?? freshSession();
+  // Opening the app is treated as a first clear. Nothing records past clears
+  // yet — that arrives with the progress store in Phase 2 — so "first" here
+  // means "not a replay within this run", which is as much as this build knows.
+  const session = saved ?? freshSession(true);
   // Persist immediately, not just on the first answer: the option order is
   // shuffled once when the session is built, and it has to survive a reload
   // taken before the child has answered anything.
@@ -66,7 +77,8 @@ export const useQuizStore = create<QuizStore>((set, get) => {
 
     restart: () => {
       clearSession();
-      const session = freshSession();
+      // A replay, so no first-clear bonus. (SPEC 5.3)
+      const session = freshSession(false);
       saveSession(session);
       set({ session, restored: false });
     },
