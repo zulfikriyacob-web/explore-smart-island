@@ -77,15 +77,15 @@
       "difficulty": 1,
       "learningStandard": "1.1.1",
       "prompt": {
-        "ms": "Ketuk setiap buah rambutan. Berapa banyak?",
-        "en": "Tap each rambutan. How many?"
+        "ms": "Ketuk setiap rambutan sambil mengira. Kemudian tekan Sedia.",
+        "en": "Tap every rambutan as you count. Then press Sedia."
       },
       "promptAudio": { "ms": "/audio/ms/q003.mp3", "en": "/audio/en/q003.mp3" },
       "payload": {
         "itemImage": "/img/fruit/rambutan.svg",
         "itemCount": 7,
         "layout": "scatter",
-        "answerInput": "number-pad",
+        "answerInput": "tap-count",
         "correctAnswer": 7
       }
     },
@@ -143,13 +143,16 @@
       "type": "count-tap",
       "difficulty": 1,
       "learningStandard": "1.1.1",
-      "prompt": { "ms": "Ketuk setiap biji pisang. Berapa banyak?", "en": "Tap each banana. How many?" },
+      "prompt": {
+        "ms": "Ketuk setiap pisang sambil mengira. Kemudian tekan Sedia.",
+        "en": "Tap every banana as you count. Then press Sedia."
+      },
       "promptAudio": { "ms": "/audio/ms/q006.mp3", "en": "/audio/en/q006.mp3" },
       "payload": {
         "itemImage": "/img/fruit/pisang.svg",
         "itemCount": 5,
         "layout": "grid",
-        "answerInput": "number-pad",
+        "answerInput": "tap-count",
         "correctAnswer": 5
       }
     },

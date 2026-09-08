@@ -26,8 +26,18 @@
     cursor: pointer;
   }
 
-  /* DESIGN 5.4: visible keyboard focus, for a parent on a desktop. */
+  /*
+    DESIGN 5.4: visible keyboard focus, for a parent on a desktop — and only
+    for a keyboard. Chrome on Android grants :focus-visible after a touch in
+    some cases, which put a purple ring around the Sedia button when a child
+    tapped it. The modality is tracked in src/inputModality.ts; index.html
+    ships data-input="keyboard" so the ring survives if that never runs.
+  */
   button:focus-visible {
+    outline: none;
+  }
+
+  [data-input='keyboard'] button:focus-visible {
     outline: 4px solid theme('colors.nila.DEFAULT');
     outline-offset: 2px;
   }

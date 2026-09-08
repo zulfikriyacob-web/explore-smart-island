@@ -75,6 +75,67 @@ Semua pasangan teks disahkan pada ≥ 4.5:1:
 > Teks putih di atas teal cerah gagal. Ini kesilapan biasa dalam app kanak-kanak. Butang
 > teal utama menggunakan **teks arang gelap**, bukan putih.
 
+### 2.5 Pemisahan palet — UI dan ilustrasi
+
+**Isian ilustrasi boleh melebihi §2. Permukaan UI, chrome, dan warna semantik tidak boleh.**
+
+Ini pindaan sebenar kepada palet, bukan pengecualian yang diberi kepada satu aset. Kita ada
+**dua palet**, dan §2.1–2.4 mentakrifkan yang pertama sahaja.
+
+Sebabnya: peraturan §1 bahawa skrin kuiz kekal tenang ialah peraturan tentang **UI** —
+permukaan, chrome, butang, latar. Rambutan yang anak disuruh bilang bukan chrome; ia
+**subjek tugasan**. Subjek terang dikelilingi UI tenang bukan melanggar ketenangan itu — ia
+yang menjadikannya berfungsi. Semua senyap, satu benda kuat, dan benda kuat itu ialah benda
+yang patut dipandang. Bukti kecil daripada ujian pengguna: anak kata **buah** membosankan.
+Bukan skrin.
+
+| | Palet UI (§2.1–2.4) | Palet ilustrasi |
+|---|---|---|
+| Terpakai pada | Permukaan, butang, sempadan, teks, bar, ikon UI | Isian dalam fail SVG ilustrasi |
+| Sumber warna | Token §2 sahaja | Bebas; dipilih untuk pengecaman objek |
+| Ketepuan | Sengaja lembut | Setepu yang perlu |
+| Membawa makna? | Ya — betul, salah, ganjaran, modul | Tidak. Warna buah bukan isyarat |
+
+**Garis luar kekal token UI.** Setiap ilustrasi digariskan `--arang` `#1F3A34` pada 4px
+(§8). Garis luar itu chrome; isian di dalamnya bukan. Itu sempadan yang tepat antara
+kedua-dua palet.
+
+Pemisahan ini menyelesaikan dua ketegangan yang sebelum ini kelihatan seperti percanggahan:
+
+- Rambutan boleh jadi kirmizi sebenar tanpa menambah merah kepada §2 dan tanpa meminjam
+  `--bunga`, yang bermaksud "salah".
+- Pisang kuning bukan lagi melanggar §12 peraturan 2 dengan menggunakan `--mangga`. Ia kuning
+  ilustrasi, bukan token ganjaran.
+
+**Kirmizi rambutan `#AE1A45` disemak terhadap `--bunga` `#FF6B6B`:**
+
+| | `--bunga` (salah) | Rambutan asas | Rambutan bayang |
+|---|---|---|---|
+| Hex | `#FF6B6B` | `#AE1A45` | `#8A1236` |
+| Hue | 0° | 343° | 342° |
+| Ketepuan | 100% | 74% | 77% |
+| Kecerahan | 71% | 39% | 31% |
+| Beza kecerahan | — | 32 mata | 40 mata |
+
+Beza kecerahan **32 mata** ialah yang menanggung pemisahan itu — salmon cerah berbanding
+kirmizi dalam tidak boleh dikelirukan. Beza hue 17° menyokongnya.
+
+Nilai ini datang daripada rujukan yang dipilih oleh kanak-kanak, dan ia terpisah **lebih
+baik** daripada `#C4123C` yang kami pilih sendiri sebelumnya (hue 14°, kecerahan 29 mata).
+Calon `#D62828` pernah ditolak walaupun kelihatan sesuai: hue 0°, sama tepat dengan
+`--bunga`, iaitu perlanggaran yang kita cuba elak.
+
+**Bulu `#EF6A4B` ialah pengecualian yang perlu dinyatakan.** Pada hue 11° dan kecerahan 62%,
+ia hampir dengan `--bunga` — 11° hue dan 9 mata kecerahan. Ia diterima kerana bulu ialah
+**strok halus di atas badan kirmizi**, bukan isian; ia tidak pernah muncul sebagai satu
+bidang warna yang boleh dikelirukan dengan sempadan butang salah. Kalau warna ini pernah
+digunakan sebagai isian objek, ia mesti dipilih semula.
+
+Nota kekurangan penglihatan warna: di bawah protanopia dan deuteranopia kedua-dua merah
+beralih ke arah kelabu-kuning dan menjadi **lebih** serupa. Ini diterima kerana tiada satu
+pun membawa makna melalui keserupaan itu — warna buah hiasan subjek, dan "salah" disampaikan
+oleh ikon, goncangan dan bunyi, bukan warna sahaja (SPEC §9).
+
 ---
 
 ## 3. Tipografi
@@ -344,12 +405,32 @@ Dua elemen datang dan pergi semasa sesi. Ruang untuk kedua-duanya ditempah sejak
 
 | Slot | Saiz | Tempat | Semasa rehat |
 |---|---|---|---|
-| **Kancil** | 88 × 88 | Penjuru kanan atas kad soalan | Kosong, ruang kekal ditempah |
-| **Seterusnya** | tinggi 88 | Dasar timbunan jawapan | Kosong, ruang kekal ditempah |
+| **Kancil** | 88 × 88 | Penjuru kanan atas kad soalan | Kosong, penjuru kekal lapang |
+| **Seterusnya** | tinggi 88 | Dasar timbunan jawapan | Kosong, atau butang hantar soalan itu |
 
-Kancil masuk dan keluar dalam slotnya sendiri. Butang Seterusnya muncul dalam slotnya
-sendiri. Kad soalan tidak berubah tinggi, butang jawapan tidak bergerak, dan kedudukan
-Seterusnya tepat sama pada setiap soalan.
+Kancil masuk dan keluar dalam slotnya sendiri. Kad soalan tidak berubah tinggi, butang
+jawapan tidak bergerak, dan kedudukan Seterusnya tepat sama pada setiap soalan.
+
+**"Ditempah" bermaksud penjuru, bukan baris.** Slot kancil ialah kotak terapung di dalam
+blok teks soalan: teks membalut mengelilinginya untuk 88px pertama, kemudian mengalir
+semula selebar penuh. Penjuru kekal lapang, tetapi slot itu **tidak** mengambil satu baris
+88px sendiri dalam aliran menegak kad.
+
+Sebabnya diukur, bukan estetik. Sebagai baris penuh, kotak kosong itu menelan 104px daripada
+kad yang sudah mengecut dahulu (§5.2) — cukup untuk memaksa kad menatal pada 360×780, dan
+dalam ujian pengguna kedua-dua kanak-kanak tersekat pada skrol itu. Blok teks soalan membawa
+`min-height: 88px` supaya kotak terapung itu kekal terkandung walaupun soalan hanya satu
+baris.
+
+**Slot Seterusnya dikongsi.** Bagi soalan yang butang jawapannya bukan dalam timbunan —
+`count-tap`, di mana ketukan pada objek ialah jawapan — butang hantar duduk dalam slot yang
+sama. Satu tempat, satu saiz, kandungan berubah ikut keadaan. Butang yang anak capai
+sentiasa di tempat yang sama.
+
+**Jangan animasikan pertukaran slot itu.** Slot ini satu-satunya laluan anak ke hadapan.
+Peralihan keluar-kemudian-masuk menjadikan laluan itu bergantung pada bingkai animasi yang
+mungkin tidak pernah tiba — tab latar belakang, peranti terhad — dan anak tinggal tanpa
+butang langsung. Tukar serta-merta.
 
 Ini kelihatan membazir ruang pada skrin rehat. Ia memang begitu, dengan sengaja: alternatifnya
 ialah susun atur beralih tepat pada saat kanak-kanak menghulurkan jari, dan mereka menekan
@@ -371,12 +452,107 @@ mengecut. Slot statik; hanya isinya yang bergerak.
 ## 8. Ilustrasi & ikon
 
 - **Vektor rata dengan garis luar tebal.** Lebar strok 4px pada 100px, hujung dan sambungan bulat.
-- Palet terhad kepada token dalam §2 tambah dua neutral. Tiada kecerunan (gradient) dalam ikon.
+  Garis luar sentiasa `--arang` `#1F3A34` — ia chrome, dan kekal token UI (§2.5).
+- **Isian ilustrasi boleh melebihi §2. Permukaan UI, chrome, dan warna semantik tidak boleh.**
+  Lihat §2.5. Pilih isian untuk pengecaman objek, setepu yang perlu. Tiada kecerunan
+  (gradient) — ketepuan datang daripada warna itu sendiri, bukan daripada peralihan.
+- **Dua ton setiap objek.** Warna asas, plus satu ton lebih gelap bagi warna itu sebagai
+  bahagian berbayang. Kedua-duanya **rata** — dua bentuk berasingan, bukan kecerunan. Ton gelap
+  ialah bentuk penuh yang digariskan; ton asas ialah bentuk sama dianjak sedikit ke kiri atas
+  tanpa garis luar, jadi yang tinggal di bawah kanan membaca sebagai bayang.
+- **Satu sorotan putih kecil setiap objek**, di bahagian bercahaya. Satu sahaja.
 - Satu bayang lembut sahaja setiap objek, tidak pernah bertindan.
+
+> Ton gelap itu bukan token §2 — ia versi digelapkan bagi warna asas objek berkenaan, dan
+> hidup dalam fail SVG itu sendiri. Ia tidak ditambah kepada palet, sebab ia bukan warna UI
+> dan tidak membawa makna. Objek rata satu warna kelihatan **membosankan** kepada
+> kanak-kanak, walaupun mereka mengenalinya — itu penemuan ujian pengguna, bukan pilihan
+> estetik.
 - Objek adalah **konkrit dan tempatan**: rambutan, pisang, bola sepak, teh tarik, kucing,
   bunga raya, payung, basikal. Bukan gambar rajah abstrak.
 - Setiap imej memerlukan `alt` dwibahasa (SPEC.md §3.4).
 - SVG dioptimumkan melalui SVGO; sasaran < 4 KB setiap ikon.
+
+### Aset ilustrasi disahkan oleh kanak-kanak, bukan oleh pengukuran
+
+Satu-satunya ujian yang penting untuk aset ilustrasi: **tunjukkan kepada kanak-kanak umur
+sasaran, tanpa petunjuk, dan tanya "ini apa?"** Kalau dia menamakannya, aset itu lulus. Kalau
+tidak, ia gagal — tidak kira betapa tepat bentuknya, betapa kemas palet dipatuhi, atau berapa
+banyak nombor yang boleh diukur padanya.
+
+Ini bukan peraturan teori. Lukisan rambutan pertama lulus setiap semakan teknikal — token §2
+sahaja, strok 4px, `validate:content` hijau — dan seorang kanak-kanak melihatnya sebagai
+**matahari**. Bulatan sepusat dengan pancaran lurus sekata. Yang membetulkannya ialah bentuk:
+bulu tak sekata dan melengkung, badan lebih gelap, tangkai dan daun. Ujian kedua dengan
+kanak-kanak sebenar: dia jawab "rambutan".
+
+Yang **tidak** membetulkannya, dan yang kita hampir habiskan masa mengejar, ialah warna.
+Rambutan sebenar kirmizi dan palet tiada merah sebenar; kami hampir menambah satu.
+Tidak perlu — bentuk yang menanggung pengecaman.
+
+Jadi: jangan tambah warna kepada §2 untuk menyelamatkan lukisan sebelum bentuknya diuji pada
+seorang kanak-kanak. Dan jangan tandakan aset ilustrasi siap atas kekuatan semakan teknikal
+sahaja.
+
+### Kalau aset gagal, periksa STRUKTUR dahulu
+
+**Pengecaman datang daripada struktur — susunan bahagian — bukan daripada warna, ketepuan,
+atau perincian.**
+
+Bila kanak-kanak salah kenal sesuatu, atau kenal tetapi tidak suka, periksa susunan bahagian
+sebelum melaras apa-apa yang lain. Panjang, lengkungan, warna dan ketepuan ialah pelarasan;
+struktur ialah lukisan itu sendiri. Melaras pembolehubah pelarasan pada struktur yang salah
+memperbaikinya sedikit setiap kali dan tidak pernah menyelesaikannya.
+
+Rambutan ialah rekod kes. Lima pusingan, dan struktur yang salah bertahan melalui empat:
+
+| Pusingan | Yang diubah | Keputusan |
+|---|---|---|
+| 1 | Cincin pancaran lurus sekata, bulatan oren | Kanak-kanak: **"matahari"** |
+| 2 | Bulu melengkung, panjang tak sekata, badan lebih gelap, tangkai + daun | Dikenali — tetapi **struktur masih cincin tepi** |
+| 3 | Dua ton + sorotan putih | Dikenali, kata **"membosankan"** |
+| 4 | Ketepuan dinaikkan, kirmizi dipilih dengan teliti | Masih memilih rujukan |
+| 5 | **Coretan pendek tak sekata merentas kulit**, bukan cincin di tepi | Padan |
+
+Pusingan 2 hingga 4 melaras panjang, lengkungan, ton, dan warna. Kesemuanya bertambah baik
+sedikit. Tiada satu pun menyentuh perkara sebenar: **bulu rambutan bertaburan di seluruh
+kulit, bukan tersusun di tepi.** Duri tepi ialah struktur matahari; itu sebabnya pusingan 1
+gagal, dan sebabnya pusingan 4 masih terasa salah walaupun setiap pelarasan lain sudah betul.
+
+Ujian pantas sebelum melaras apa-apa: **hapuskan semua warna dan lihat siluet dan susunan
+bahagian sahaja.** Kalau ia masih boleh dikelirukan dengan objek lain pada peringkat itu,
+warna tidak akan menyelamatkannya.
+
+### Keputusan tertunda: buang garis luar sepenuhnya?
+
+Seorang kanak-kanak menunjuk set ikon buah stok sebagai gaya yang dia suka. Dua perbezaan
+sebenar daripada kita: **ketepuan** dan **ketiadaan garis luar**. Ketepuan sudah diambil
+(§2.5). Garis luar belum, dengan sengaja — kita mengubah satu pembolehubah supaya ujian
+seterusnya bermakna. "Membosankan" memetakan kepada kroma rendah, bukan kepada kehadiran
+strok; membuang garis luar menjadikan sesuatu lebih lembut tepinya, bukan lebih menarik.
+
+**Titik keputusan: sebelum kandungan Fasa 3 ditulis, bukan selepas.** Perpustakaan ilustrasi
+hari ini **lima fail** — tiga bentuk, dua buah. Selepas Fasa 3 ia berpuluh. Kalau peraturan
+garis luar akan berubah, sekarang saat termurah ia akan jadi, dan kosnya berganda dengan
+setiap aset yang ditambah sebelum keputusan dibuat.
+
+Dua perkara teknikal yang keputusan itu mesti selesaikan:
+
+**SVG bentuk bergantung pada garis luar untuk wujud.** `square`, `triangle` dan `circle`
+diisi `#D6F5F1`, `#FFE9D9` dan `#E4E4FB` — pucat, di atas kad putih. Buang garis luar dan
+segi tiga itu hampir hilang. Membuang garis luar bermakna bentuk kena ditepukan juga, bukan
+sekadar dinyahgaris.
+
+**Ikon UI ialah ikon strok, jadi keseragaman yang dijanjikan separuh khayalan.** Ikon speaker
+dan tanda ✓ ✕ ialah garis, bukan bentuk berisi; "tiada garis luar" tidak terpakai kepada
+mereka langsung. Membuang garis luar merentas ilustrasi tetap meninggalkan ikon strok
+bersebelahan ilustrasi tanpa garis. Sistem ikon dan sistem ilustrasi memang sudah dua benda
+berbeza, dan keputusan ini tidak menyatukannya.
+
+Pengecualian separa — buang garis luar pada objek `count-tap` sahaja — sudah dipertimbangkan
+dan **ditolak**. Slot kancil duduk di penjuru kanan atas kad soalan dan objek count-tap
+duduk tepat di bawahnya, dalam jarak kira-kira 100px pada skrin yang sama. Pengecualian itu
+akan mendarat di satu-satunya tempat di mana percanggahannya dipamerkan.
 
 ---
 

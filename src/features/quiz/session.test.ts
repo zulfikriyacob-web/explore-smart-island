@@ -56,7 +56,7 @@ const countTap: Question = {
     itemImage: '/img/fruit/rambutan.svg',
     itemCount: 7,
     layout: 'scatter',
-    answerInput: 'number-pad',
+    answerInput: 'tap-count',
     correctAnswer: 7,
   },
 };

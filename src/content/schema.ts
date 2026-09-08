@@ -132,9 +132,23 @@ export const CountTapSchema = z
     type: z.literal('count-tap'),
     payload: z.object({
       itemImage: AssetPathSchema,
-      itemCount: z.number().int().min(1).max(20),
+      /**
+       * At most 9. The card fits three objects per row and three rows on a
+       * 360x780 screen: 72px tap targets with 16px gaps (DESIGN 5.1, DESIGN 4)
+       * need 88px each across 280px of card width, and the 301px left over
+       * after the prompt, audio button, tally and padding takes three rows.
+       * A tenth object does not fail gracefully — it pushes the card into a
+       * scrollbar, which is the bug two children got stuck on.
+       */
+      itemCount: z.number().int().min(1).max(9),
       layout: z.enum(['scatter', 'grid']),
-      answerInput: z.enum(['number-pad', 'choices']),
+      /**
+       * Tapping the objects is the answer; the tally is submitted as-is. The
+       * number pad this used to name is gone — user testing showed it made
+       * counting two steps, and a 7-year-old could not tell which step had
+       * failed. (SPEC 3.4)
+       */
+      answerInput: z.literal('tap-count'),
       correctAnswer: z.number().int().min(0),
     }),
   })
@@ -259,24 +273,43 @@ export const TopicPackSchema = z
 export type TopicPack = z.infer<typeof TopicPackSchema>;
 export type Activity = z.infer<typeof ActivitySchema>;
 
+/** One asset reference, and the question that depends on it. */
+export interface AssetRef {
+  path: string;
+  questionId: string;
+  /** 'audio' can degrade — the control hides. 'image' cannot: the question needs it. */
+  kind: 'audio' | 'image';
+}
+
 /**
- * Collect every asset path a pack references, so the build-time validator can
- * check each one exists on disk. (SPEC 3.5)
+ * Every asset reference in a pack, tagged with the question that depends on it,
+ * so the build-time validator can name what breaks when one is missing or is
+ * still placeholder art. (SPEC 3.5)
  */
-export function collectAssetPaths(pack: TopicPack): string[] {
-  const paths: string[] = [];
+export function collectAssetRefs(pack: TopicPack): AssetRef[] {
+  const refs: AssetRef[] = [];
   for (const q of pack.questions) {
-    paths.push(q.promptAudio.ms, q.promptAudio.en);
+    refs.push(
+      { path: q.promptAudio.ms, questionId: q.id, kind: 'audio' },
+      { path: q.promptAudio.en, questionId: q.id, kind: 'audio' },
+    );
     switch (q.type) {
       case 'mcq':
         break;
       case 'mcq-image':
-        paths.push(...q.payload.options.map((o) => o.image));
+        for (const o of q.payload.options) {
+          refs.push({ path: o.image, questionId: q.id, kind: 'image' });
+        }
         break;
       case 'count-tap':
-        paths.push(q.payload.itemImage);
+        refs.push({ path: q.payload.itemImage, questionId: q.id, kind: 'image' });
         break;
     }
   }
-  return [...new Set(paths)];
+  return refs;
+}
+
+/** Unique asset paths a pack references. */
+export function collectAssetPaths(pack: TopicPack): string[] {
+  return [...new Set(collectAssetRefs(pack).map((r) => r.path))];
 }

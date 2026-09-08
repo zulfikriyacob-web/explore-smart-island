@@ -364,3 +364,13 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
    SPEC.md §7.6 terpakai pada skrin itu sahaja, bukan pada setiap aktiviti.
    Risiko: runtime 3D besar, GPU pada telefon pertengahan, dan ia mesti tidak bercanggah
    dengan vektor rata DESIGN.md §8.
+6. **Kemas kini kandungan tidak sampai kepada sesi yang sudah disimpan.** Soalan dibekukan
+   dalam localStorage; `packVersion` wujud dalam skema tetapi belum digunakan. Akan menjadi
+   masalah pada kemas kini kandungan pertama selepas pelancaran, bukan sebelum.
+7. **Keperibadian pada objek boleh ketuk — hanya pada skrin ganjaran?** Muka pada buah
+   ditolak untuk skrin soalan: ia melanggar peraturan DESIGN.md §6 bahawa kancil ialah maskot
+   tunggal dan tidak pernah muncul semasa anak sedang berfikir, dan ia bersaing dengan nombor
+   pada objek yang sudah dibilang — isyarat watak menindih isyarat keadaan pada sasaran 72px
+   yang sama. Skrin ganjaran tiada kedua-dua masalah itu: kemeriahan memang dibelanjakan di
+   situ (DESIGN.md §1) dan kancil sudah ada. Direkod sebagai idea sahaja; tiada kerja
+   dirancang, dan ia perlu pindaan bertulis pada §10 dan DESIGN.md §6 sebelum dilaksana.

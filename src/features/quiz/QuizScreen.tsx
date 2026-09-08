@@ -72,23 +72,37 @@ export function QuizScreen() {
             initial={firstRender.current ? false : 'hidden'}
             animate="visible"
             exit="exit"
-            className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto rounded-lg bg-white p-6 shadow-float"
+            /*
+              Content is centred vertically. The card is flex-1 and fills the
+              height left over, so left-aligned to the top it left 124px of dead
+              white below the objects on a 7-object question and more on a
+              5-object one.
+
+              `safe center` rather than plain `center`: if content ever does
+              overflow, safe alignment falls back to flex-start so the top stays
+              reachable, instead of being clipped above the scroll origin.
+              Supported from Chrome 93 and Safari 15.4, inside the SPEC 7.6
+              baseline.
+            */
+            className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto rounded-lg bg-white p-6 shadow-float [justify-content:safe_center]"
           >
-            <div className="flex items-start justify-between gap-4">
-              <AudioButton />
-              {/*
-                Reserved kancil slot, 88x88, empty for now. It holds real layout
-                space so the mascot's arrival will not move anything.
-                (DESIGN 7, "slot yang ditempah")
-              */}
-              <div aria-hidden className="h-[88px] w-[88px] shrink-0" data-slot="kancil" />
-            </div>
+            <AudioButton src={question.promptAudio[LANG]} />
 
             <motion.p
               variants={reduce ? reducedItem : optionItem}
               lang={LANG}
-              className="m-0 text-left font-sans text-prompt font-medium"
+              className="m-0 min-h-[88px] text-left font-sans text-prompt font-medium"
             >
+              {/*
+                Reserved kancil slot, 88x88, in the card's top-right corner.
+                It floats, so the prompt wraps around it for the first 88px and
+                then reflows to full width — the corner stays clear without the
+                slot costing the card a whole 88px row of its own. min-h-[88px]
+                on the paragraph keeps the float contained even when the prompt
+                is one line. Nothing moves when the mascot arrives.
+                (DESIGN 7, "slot yang ditempah")
+              */}
+              <span aria-hidden data-slot="kancil" className="float-right ml-4 h-[88px] w-[88px]" />
               {question.prompt[LANG]}
             </motion.p>
 
@@ -96,7 +110,12 @@ export function QuizScreen() {
               question={question}
               counted={counted}
               lang={LANG}
-              onCount={(i) => setCounted((c) => (c.includes(i) ? c : [...c, i]))}
+              // Tapping toggles: a numbered object taps back off, and the ones
+              // after it renumber themselves because the number is just the
+              // position in this array.
+              onCount={(i) =>
+                setCounted((c) => (c.includes(i) ? c.filter((x) => x !== i) : [...c, i]))
+              }
             />
 
             {/* B5 — the hint grows in under the question. The card's `layout`
@@ -116,9 +135,10 @@ export function QuizScreen() {
               )}
             </AnimatePresence>
 
-            {session.revealed && question.explain && (
+            {session.revealed && (question.explain || question.type === 'count-tap') && (
               <p className="m-0 rounded-md bg-pasir px-4 py-3 font-sans text-body text-arang">
-                {question.explain[LANG]}
+                {question.explain?.[LANG] ??
+                  `Jawapannya ${question.type === 'count-tap' ? question.payload.correctAnswer : ''}.`}
               </p>
             )}
           </motion.div>
@@ -142,30 +162,46 @@ export function QuizScreen() {
           revealed={session.revealed}
           locked={locked}
           lang={LANG}
-          counted={counted.length}
           onAnswer={answer}
         />
 
         {/*
-          Reserved Next slot, 88px, empty at rest. Next always appears in exactly
-          the same place, so the muscle memory a child builds keeps working.
-          (DESIGN 5.2, DESIGN 7)
+          Reserved 88px slot. Seterusnya always appears here, and for count-tap
+          so does its submit button — same place, same size, so the muscle memory
+          a child builds keeps working. (DESIGN 5.2, DESIGN 7)
+        */}
+        {/*
+          No AnimatePresence here, and no entry animation. This slot is the
+          child's only route forward, and an exit-then-enter swap makes that
+          route wait for an animation frame that may never arrive — a
+          backgrounded tab, a throttled device. The swap is instant on purpose.
         */}
         <div className="min-h-answer" data-slot="seterusnya">
-          <AnimatePresence>
-            {locked && (
-              <motion.div
-                initial={reduce ? { opacity: 0 } : { opacity: 0, y: 8 }}
-                animate={reduce ? { opacity: 1 } : { opacity: 1, y: 0 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.2, ease: ease.out }}
-              >
-                <BlockButton onPress={next} ariaLabel="Soalan seterusnya">
-                  Seterusnya
-                </BlockButton>
-              </motion.div>
-            )}
-          </AnimatePresence>
+          {locked ? (
+            <BlockButton onPress={next} ariaLabel="Soalan seterusnya">
+              Seterusnya
+            </BlockButton>
+          ) : question.type === 'count-tap' ? (
+            /*
+              Tapping the objects is the answer. There is no number pad: user
+              testing showed the pad made counting two steps — count, then find
+              the digit — and a 7-year-old could not tell which step had failed.
+              One action, one skill tested.
+            */
+            <BlockButton
+              onPress={() => answer({ kind: 'count', value: counted.length })}
+              // Never disabled, not even at a count of zero. Disabling it made
+              // the only way to reveal the button the very thing the button is
+              // for, and at 35% opacity on the pale ground it was invisible:
+              // 1.04:1 against the background, where DESIGN 5.1 asks for 3:1.
+              // A stray press with nothing counted is just a wrong answer, and
+              // wrong answers already have feedback a child understands.
+              state={session.lastAnswerCorrect === false ? 'wrong' : 'rest'}
+              ariaLabel={`Hantar jawapan, ${counted.length} dibilang`}
+            >
+              Sedia
+            </BlockButton>
+          ) : null}
         </div>
       </section>
     </main>

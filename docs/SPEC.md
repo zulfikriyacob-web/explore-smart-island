@@ -244,12 +244,41 @@ untuk muat; had ini menentukan kotak susun atur.
     "itemImage": "/img/fruit/rambutan.svg",
     "itemCount": 7,
     "layout": "scatter",
-    "answerInput": "number-pad",
+    "answerInput": "tap-count",
     "correctAnswer": 7
   }
 }
 ```
 `layout`: `"scatter"` (rawak, benih tetap supaya boleh diulang) atau `"grid"`.
+
+**`answerInput: "tap-count"` — ketukan itu sendiri ialah jawapan.** Kanak-kanak mengetuk
+setiap objek, dan setiap ketukan meletakkan **nombor** pada objek itu: 1, 2, 3. Butang hantar
+menghantar kiraan itu sebagaimana adanya. Tiada papan nombor.
+
+Nombor itu bukan hiasan — ia perbuatan membilang. Objek yang terlepas ialah satu-satunya yang
+tiada nombor, jadi anak nampak silapnya tanpa perlu tahu jawapan dahulu. Mengetuk semula
+membuang nombor itu dan nombor selepasnya dikira semula, jadi silap ketuk boleh dipulihkan
+tanpa membazir percubaan.
+
+**Had `itemCount`: maksimum 9.**
+
+| Had | Nilai | Sebab |
+|---|---|---|
+| `itemCount` | maksimum **9** | 3 objek sebaris × 3 baris pada 360×780. Sasaran 72px dengan jurang 16px (DESIGN §5.1, §4) memerlukan 88px setiap satu merentas 280px lebar kad; 301px yang tinggal selepas soalan, butang audio, kiraan dan padding memuatkan tiga baris |
+
+Objek kesepuluh tidak gagal dengan elok — ia menolak kad ke dalam skrol, iaitu pepijat yang
+menyekat dua kanak-kanak dalam ujian pengguna. Had ini dikuatkuasakan dalam Zod dan
+`validate:content`, bukan garis panduan.
+
+Papan nombor dibuang selepas ujian pengguna. Ia menjadikan membilang **dua langkah** — bilang,
+kemudian cari digit — dan kanak-kanak 7 tahun tidak dapat membezakan langkah mana yang gagal:
+salah bilang dan salah tekan kelihatan sama sahaja kepadanya. Satu tindakan, satu kemahiran
+diuji. Itu yang `count-tap` sepatutnya uji.
+
+Ia juga menghapuskan kekunci papan 59px. Sepuluh kekunci pada minimum 64px DESIGN §5.1
+memerlukan 352px melintang; baris itu hanya ada 328px pada skrin 360px. Papan 10 kekunci
+**tidak boleh** memenuhi lantai sasaran sentuh pada lebar itu — pelanggaran yang tidak
+disedari sehingga kerja susun atur ini.
 
 #### `drag-bucket` — Isih ke dalam kategori
 ```json

@@ -1,9 +1,5 @@
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
-import { useState } from 'react';
-
 import { BlockButton, type BlockState } from '../../components/ui/BlockButton.tsx';
 import type { Question } from '../../content/schema.ts';
-import { ease, spring } from '../../motion/tokens.ts';
 import type { Response } from './session.ts';
 
 /**
@@ -23,7 +19,6 @@ interface AnswerControlsProps {
   revealed: boolean;
   locked: boolean;
   lang: 'ms' | 'en';
-  counted: number;
   onAnswer: (response: Response) => void;
 }
 
@@ -33,7 +28,10 @@ export function AnswerControls(props: AnswerControlsProps) {
     case 'mcq-image':
       return <OptionAnswers {...props} question={props.question} />;
     case 'count-tap':
-      return <CountAnswers {...props} question={props.question} />;
+      // count-tap has no controls of its own. Tapping the objects is the
+      // answer, and the submit button lives in the shared bottom slot next to
+      // where Seterusnya appears. See QuizScreen.
+      return null;
   }
 }
 
@@ -50,7 +48,7 @@ function optionState(
 ): BlockState {
   const isCorrect = optionId === correctId;
   if (lastAnswerCorrect === true && isCorrect) return 'correct';
-  // B6 — after the third miss the right answer is shown, so the loop closes and
+  // B6 â€” after the third miss the right answer is shown, so the loop closes and
   // the child is never left without an answer.
   if (revealed && isCorrect) return 'revealed';
   if (disabledOptionIds.includes(optionId)) {
@@ -122,93 +120,3 @@ function OptionAnswers({
   );
 }
 
-type CountQuestion = Extract<Question, { type: 'count-tap' }>;
-
-const PAD_KEYS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
-
-function CountAnswers({
-  question,
-  lastAnswerCorrect,
-  revealed,
-  locked,
-  counted,
-  onAnswer,
-}: AnswerControlsProps & { question: CountQuestion }) {
-  const reduce = useReducedMotion();
-  const [entry, setEntry] = useState('');
-
-  const push = (key: string) => {
-    if (locked) return;
-    setEntry((e) => (e.length >= 2 ? e : e + key));
-  };
-
-  const submit = () => {
-    if (locked || entry === '') return;
-    onAnswer({ kind: 'count', value: Number(entry) });
-    setEntry('');
-  };
-
-  return (
-    <div className="flex flex-col gap-3">
-      <div className="flex items-center justify-between gap-3">
-        <span className="font-sans text-label text-arang-soft">Dibilang: {counted}</span>
-        <div className="flex items-center gap-2">
-          <span
-            aria-live="polite"
-            aria-label="Jawapan anda"
-            className="grid min-h-tap min-w-[88px] place-items-center rounded-md border-4 border-garis bg-white font-display text-h2 tabular-nums"
-          >
-            {entry === '' ? '—' : entry}
-          </span>
-          <button
-            type="button"
-            aria-label="Padam satu digit"
-            onPointerDown={() => setEntry((e) => e.slice(0, -1))}
-            className="grid h-16 w-16 place-items-center rounded-md border-4 border-garis bg-white font-display text-h2"
-          >
-            ⌫
-          </button>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-5 gap-2">
-        {PAD_KEYS.map((k) => (
-          <motion.button
-            key={k}
-            type="button"
-            onPointerDown={() => push(k)}
-            whileTap={reduce ? undefined : { y: 3, scale: 0.97 }}
-            transition={spring.pop}
-            className="min-h-tap rounded-md border-4 border-laut bg-white font-display text-h2 font-semibold text-arang shadow-[0_4px_0_0_theme(colors.laut.dark)] tabular-nums"
-          >
-            {k}
-          </motion.button>
-        ))}
-      </div>
-
-      <BlockButton
-        onPress={submit}
-        state={
-          lastAnswerCorrect === true ? 'correct' : revealed ? 'revealed' : locked ? 'disabled' : 'rest'
-        }
-        ariaLabel="Hantar jawapan"
-      >
-        {revealed ? `Jawapan: ${question.payload.correctAnswer}` : 'Sedia'}
-      </BlockButton>
-
-      <AnimatePresence>
-        {lastAnswerCorrect === false && !revealed && !reduce && (
-          <motion.span
-            className="text-center font-sans text-label text-arang-soft"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2, ease: ease.out }}
-          >
-            Cuba bilang sekali lagi.
-          </motion.span>
-        )}
-      </AnimatePresence>
-    </div>
-  );
-}

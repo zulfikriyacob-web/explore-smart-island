@@ -107,7 +107,7 @@ describe('question rules', () => {
         itemImage: '/img/fruit/pisang.svg',
         itemCount: 5,
         layout: 'grid',
-        answerInput: 'number-pad',
+        answerInput: 'tap-count',
         correctAnswer: 4,
       },
     });
