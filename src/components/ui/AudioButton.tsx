@@ -20,7 +20,16 @@ import { ease } from '../../motion/tokens.ts';
  * no gesture unlock yet (SPEC 8) — both need the intro screen the store
  * currently skips, and that is a design decision before it is code.
  */
-export function AudioButton({ src, label = 'Main audio soalan' }: { src: string; label?: string }) {
+export function AudioButton({
+  src,
+  label = 'Main audio soalan',
+  className = '',
+}: {
+  src: string;
+  label?: string;
+  /** Lets the caller place the button — it floats inside the prompt (DESIGN 5.2). */
+  className?: string;
+}) {
   const reduce = useReducedMotion();
   const [playing, setPlaying] = useState(false);
   const [available, setAvailable] = useState(false);
@@ -63,7 +72,7 @@ export function AudioButton({ src, label = 'Main audio soalan' }: { src: string;
           ? { duration: 0.7, repeat: Infinity, ease: ease.out }
           : { duration: 0.12 }
       }
-      className="grid h-16 w-16 shrink-0 place-items-center rounded-full border-[3px] border-laut bg-white p-0 transition-colors active:bg-laut-light"
+      className={`grid h-16 w-16 shrink-0 place-items-center rounded-full border-[3px] border-laut bg-white p-0 transition-colors active:bg-laut-light ${className}`}
     >
       <svg
         width="28"

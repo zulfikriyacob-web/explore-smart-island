@@ -148,8 +148,6 @@ export function QuizScreen() {
           */
           className="flex min-h-0 origin-top flex-col gap-4 overflow-y-auto rounded-lg bg-white p-6 shadow-float"
         >
-          <AudioButton src={question.promptAudio[LANG]} />
-
           <motion.p
             variants={optionItem}
             lang={LANG}
@@ -173,6 +171,24 @@ export function QuizScreen() {
                 <Kancil state={kancil} size={88} onDone={() => setKancil('idle')} />
               )}
             </span>
+            {/*
+              The audio button floats in the prompt's left corner rather than
+              sitting on a row of its own above it. As a row it cost the card 80px
+              — 64 of button and a 16 gap — and that is what pushed the card past
+              the space the answer stack leaves on a phone: a hint arriving after
+              a wrong answer overflowed by 66px at 390x740, and the help a stuck
+              child needs was the thing below the fold.
+
+              Floated it costs 45px less. The kancil slot opposite it already
+              proved the pattern (DESIGN 7): the text wraps around it for the
+              first lines and then reflows full width. Two floats narrow those
+              first lines further, and that wrapping is already counted in the
+              45 — it was measured on this arrangement, not estimated from it.
+
+              It disappears entirely when a language has no recordings, and the
+              prompt reflows to full width, which is the same behaviour as before.
+            */}
+            <AudioButton src={question.promptAudio[LANG]} className="float-left mr-4" />
             {question.prompt[LANG]}
           </motion.p>
 
@@ -188,34 +204,51 @@ export function QuizScreen() {
             }
           />
 
-          {/*
-            B5 — the hint slides down into place under the question.
-
-            No AnimatePresence and no fade. It used to start at opacity 0, so
-            the one piece of help a stuck child gets was invisible whenever the
-            animation frame did not arrive — measured at opacity 0 with the full
-            text sitting in the DOM. Now only `y` moves, from -8 to 0: opaque and
-            readable on frame 0, and it still slides in when frames run. Its own
-            initial and animate are set rather than inherited from the card,
-            because the card has already settled by the time a hint appears.
-          */}
-          {showHint && (
-            <motion.p
-              variants={hintItem}
-              initial={reduce ? false : 'arriving'}
-              animate="settled"
-              className="m-0 rounded-md bg-laut-light px-4 py-3 font-sans text-body text-arang"
-            >
-              {question.hint?.[LANG]}
-            </motion.p>
-          )}
-
-          {revealText !== null && (
-            <p className="m-0 rounded-md bg-pasir px-4 py-3 font-sans text-body text-arang">
-              {revealText}
-            </p>
-          )}
         </motion.div>
+
+        {/*
+          The hint and the revealed answer live OUTSIDE the question card, as a
+          band between it and the answer stack. They are not part of the
+          question; they are help that arrives after a mistake.
+
+          Inside the card they grew it, and on a phone that pushed it past the
+          space the answer stack leaves: the card scrolled and the help landed
+          below the fold, which is the one thing that must never happen to the
+          one thing a stuck child gets. Out here the card keeps its resting
+          height and the band uses the background that was already empty.
+
+          It is not simply the same pixels in a new place. Measured at 390x740,
+          the hint is 78px inside the card and 51px out here — 27px back. A float
+          taller than its own paragraph overhangs into the block below it, and
+          the kancil (88) and audio (64) floats are both taller than a two-line
+          prompt, so inside the card they squeezed the hint into two lines. Full
+          width it is one. Anyone moving these back into the card pays that again.
+
+          `shrink-0`: the card gives way first. Below the threshold the child
+          sees a clipped question and a whole hint, rather than a whole question
+          and no hint — and a child who has already answered wrong has read the
+          question.
+
+          Never both at once: a question that can reach a third attempt must not
+          carry a hint alongside a revealed answer, and `validate:content`
+          enforces it rather than leaving it to pack authors to remember.
+        */}
+        {showHint && (
+          <motion.p
+            variants={hintItem}
+            initial={reduce ? false : 'arriving'}
+            animate="settled"
+            className="m-0 shrink-0 rounded-md bg-laut-light px-4 py-3 font-sans text-body text-arang"
+          >
+            {question.hint?.[LANG]}
+          </motion.p>
+        )}
+
+        {revealText !== null && (
+          <p className="m-0 shrink-0 rounded-md bg-pasir px-4 py-3 font-sans text-body text-arang">
+            {revealText}
+          </p>
+        )}
 
         {/*
           The feedback area's live region (SPEC 9). The hint and the revealed
@@ -260,9 +293,17 @@ export function QuizScreen() {
         />
 
         {/*
-          Reserved 88px slot. Seterusnya always appears here, and for count-tap
+          Reserved 72px slot. Seterusnya always appears here, and for count-tap
           so does its submit button — same place, same size, so the muscle memory
           a child builds keeps working. (DESIGN 5.2, DESIGN 7)
+
+          72 rather than 88: DESIGN 5.1 puts "seterusnya" among the secondary
+          actions at 72, and the answer floor of 88 is for the buttons a child
+          chooses between. The slot is reserved whether or not it holds anything,
+          so those 16px were being spent on empty space on every question — and
+          the slot has to stay one size, so its submit button moves to 72 with it
+          rather than the two drifting apart. Still well above the 64px absolute
+          floor.
         */}
         {/*
           No AnimatePresence here, and no entry animation. This slot is the
@@ -270,9 +311,9 @@ export function QuizScreen() {
           route wait for an animation frame that may never arrive — a
           backgrounded tab, a throttled device. The swap is instant on purpose.
         */}
-        <div className="min-h-answer" data-slot="seterusnya">
+        <div className="min-h-btn" data-slot="seterusnya">
           {locked ? (
-            <BlockButton onPress={next} ariaLabel="Soalan seterusnya">
+            <BlockButton onPress={next} minHeight={72} ariaLabel="Soalan seterusnya">
               Seterusnya
             </BlockButton>
           ) : question.type === 'count-tap' ? (
@@ -291,6 +332,7 @@ export function QuizScreen() {
               // A stray press with nothing counted is just a wrong answer, and
               // wrong answers already have feedback a child understands.
               state={session.lastAnswerCorrect === false ? 'wrong' : 'rest'}
+              minHeight={72}
               ariaLabel={`Hantar jawapan, ${counted.length} dibilang`}
             >
               Sedia
