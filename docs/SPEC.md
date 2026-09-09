@@ -345,6 +345,26 @@ export const TopicPackSchema = z.object({ /* … */ })
   });
 ```
 
+**Had pancingan lawan jawapan didedah** — dikuatkuasakan dalam `validate:content`:
+
+Pancingan dan jawapan didedah dilukis dalam **satu jalur** di bawah kad soalan (DESIGN §7).
+Dua blok dalam satu jalur melimpahkannya pada telefon, dan yang terpotong ialah bantuan untuk
+anak yang tersekat. Jadi satu soalan tidak boleh membawa pancingan **jika** ia boleh mencapai
+percubaan ketiga **dan** akan melukis dedahan pada percubaan itu.
+
+| Jenis | Boleh capai percubaan ketiga? | Melukis dedahan? | Kesan |
+|---|---|---|---|
+| `count-tap` | Sentiasa — butang hantar tidak pernah dilumpuhkan | Sentiasa — ia jatuh balik kepada `Jawapannya N.` walaupun tanpa `explain` | **Tidak boleh ada `hint` langsung** |
+| `mcq`, `mcq-image` dengan ≤ 3 pilihan | Tidak — setiap salah melumpuhkan pilihan yang digunakan, jadi pilihan terakhir semestinya betul | — | `hint` dan `explain` kedua-duanya dibenarkan |
+| `mcq-image` dengan ≥ 4 pilihan | Ya — tiga pilihan salah cukup untuk sampai ke sana | Ya, jika `explain` ditetapkan | **Tidak boleh ada kedua-dua** |
+
+`mcq` terhad kepada 3 pilihan oleh skema, jadi ia tidak akan mencapai percubaan ketiga.
+`mcq-image` **tiada had pilihan** — itu yang menjadikan barisan ketiga mungkin.
+
+> Peraturan ini dikira daripada soalan, bukan daripada jenisnya sahaja. Menambah had pilihan
+> kepada `mcq-image`, atau melumpuhkan butang hantar count-tap, akan mengubah apa yang
+> dibenarkan — kemas kini jadual ini bersama-sama.
+
 **Skrip masa bina** `npm run validate:content` menjalankan skema terhadap setiap fail
 dalam `content/packs/` dan **gagal dalam CI** jika ada aset hilang atau `correctOptionId`
 tidak sepadan dengan mana-mana pilihan. Ini menangkap ralat kandungan sebelum sampai ke
@@ -739,7 +759,7 @@ export const correctPulse = {
 | **Kad soalan masuk** | `scale` sahaja | `questionCard` | 0.22 s + 0.06 s berperingkat | **Tiada `AnimatePresence`, tiada animasi keluar.** Kad berkunci pada `question.id` dan ditukar serta-merta. `origin-top`, supaya skala tidak menggerakkan teks soalan |
 | **Jawapan betul** | `scale` denyut + cincin | `correctPulse` | 0.32 s | Gelang hijau berkembang keluar, `scale 0.8→1.6`, `opacity 0.6→0` |
 | **Jawapan salah** | `x` goncang | `shake` | 0.34 s | **Tiada kilat merah penuh skrin.** Sempadan sahaja |
-| **Pancingan meluncur masuk** | `y: -8 → 0` sahaja | `hintItem` | 0.22 s | Legap penuh sepanjang masa. Kad tumbuh melalui reflow CSS biasa. **Bukan prop `layout`**, bukan animasi `height` |
+| **Pancingan meluncur masuk** | `y: -8 → 0` sahaja | `hintItem` | 0.22 s | Legap penuh sepanjang masa. Dilukis dalam jalur **di luar** kad soalan, jadi kad tidak tumbuh langsung (DESIGN §7). **Bukan prop `layout`**, bukan animasi `height` |
 | **Pilihan dilumpuhkan** | `opacity → 0.35`, `scale → 0.96` | tween, `ease.out` | 0.2 s | Berperingkat 0.05 s jika berbilang |
 | **Bar kemajuan** | `scaleX` | `spring.settle` | ~0.4 s | `transformOrigin: left`. Jangan animasi `width` |
 | **Anugerah bintang** | `scale: [1, 1.25, 1]`, `rotate: [0, -25, 0]` | tween `ease.back` | 0.45 s setiap satu | Berperingkat 0.18 s antara bintang. **Bingkai kunci pertama sama dengan `initial`**, jadi beku ialah bintang terisi bersaiz penuh dan legap — keputusan sebenar — sementara yang menyaji dapat kembang dan tunduk. Bintang ialah mesej skrin itu; ia tidak pernah bermula pada sifar |
