@@ -3,6 +3,8 @@ import { useCallback, useRef, useState, type ReactNode } from 'react';
 
 import { correctPulse, shake } from '../../motion/variants.ts';
 import { ease, spring } from '../../motion/tokens.ts';
+// TEMPORARY — iOS audio diagnostics. Delete with the branch.
+import { duringGesture, record } from '../../lib/diagnostics.ts';
 
 export type BlockState = 'rest' | 'correct' | 'wrong' | 'disabled' | 'revealed' | 'start';
 
@@ -92,9 +94,19 @@ export function BlockButton({
         setRipples((r) => [...r, { id, x: event.clientX - box.left, y: event.clientY - box.top }]);
         window.setTimeout(() => setRipples((r) => r.filter((p) => p.id !== id)), 500);
       }
-      onPress();
+      // TEMPORARY diagnostics: mark the handler's own synchronous stack, so the
+      // player can record whether resume() really happened inside the gesture
+      // rather than in a continuation that merely reads as if it followed it.
+      // `duringGesture` only sets a counter — onPress runs exactly as before.
+      record('press', {
+        button: ariaLabel ?? 'unnamed',
+        isTrusted: event.isTrusted,
+        type: event.type,
+        pointerType: event.pointerType,
+      });
+      duringGesture(onPress);
     },
-    [isLocked, onPress, reduce],
+    [ariaLabel, isLocked, onPress, reduce],
   );
 
   // B1 / B3 — the feedback animation for this state, or nothing under reduced

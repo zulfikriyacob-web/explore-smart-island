@@ -27,9 +27,18 @@
 
 import { Howl, Howler } from 'howler';
 
+// TEMPORARY — diagnostics for the iOS no-sound bug. Record only: nothing below
+// changes when audio unlocks or plays. Delete with the branch.
+import { deviceState, howlerState, inGesture, record } from './diagnostics.ts';
+
 /** The slice of Howl this module uses. Narrow on purpose, so a fake is cheap. */
 export interface Sound {
-  play(): void;
+  /**
+   * Returns whatever the backend hands back — Howler gives a sound id number.
+   * TEMPORARY: it is surfaced only so the diagnostics can show what `play()`
+   * returned on the device. Nothing branches on it.
+   */
+  play(): unknown;
   stop(): void;
   /**
    * `end` fires at the end of the clip; `loaderror` and `playerror` fire when it
@@ -139,7 +148,19 @@ export function createPlayer(makeSound: SoundFactory, onUnlock?: () => void): Pl
     clip.once('end', finish);
     clip.once('loaderror', finish);
     clip.once('playerror', finish);
-    clip.play();
+
+    // TEMPORARY diagnostics.
+    record('play() called', {
+      src: src.replace('/audio/ms/', ''),
+      inGesture: inGesture(),
+      ...howlerState(),
+    });
+    try {
+      const id = clip.play();
+      record('play() returned', { id: id === undefined ? 'undefined' : String(id) });
+    } catch (err) {
+      record('play() THREW', { error: String(err) });
+    }
   }
 
   return {
@@ -150,6 +171,8 @@ export function createPlayer(makeSound: SoundFactory, onUnlock?: () => void): Pl
       sound(src);
     },
     unlock: () => {
+      // TEMPORARY diagnostics.
+      record('unlock()', { alreadyGestured: gestured, inGesture: inGesture() });
       if (gestured) return;
       gestured = true;
       onUnlock?.();
@@ -161,10 +184,13 @@ export function createPlayer(makeSound: SoundFactory, onUnlock?: () => void): Pl
 /** Wraps a Howl in the narrow shape above. */
 export function howlSound(src: string): Sound {
   const howl = new Howl({ src: [src], preload: true });
+  // TEMPORARY diagnostics: building the Howl is what creates Howler's
+  // AudioContext, so when it happens is itself a finding.
+  record('Howl built', { src: src.replace('/audio/ms/', ''), ...howlerState() });
+  howl.once('loaderror', (_id, err) => record('loaderror', { error: String(err) }));
+  howl.once('playerror', (_id, err) => record('playerror', { error: String(err) }));
   return {
-    play: () => {
-      howl.play();
-    },
+    play: () => howl.play(),
     stop: () => {
       howl.stop();
     },
@@ -186,7 +212,32 @@ export function howlSound(src: string): Sound {
  */
 function resumeContext(): void {
   const ctx = Howler.ctx as AudioContext | undefined;
-  if (ctx && ctx.state === 'suspended') void ctx.resume();
+
+  // TEMPORARY diagnostics. The suspicion this is here to confirm or kill:
+  // Howler builds its AudioContext lazily, when the first Howl is constructed.
+  // On a cold start no Howl exists until the first question renders, which is
+  // *after* the Mula press — so at the moment of the press there may be no ctx
+  // to resume at all, and this function would quietly do nothing. On a laptop
+  // that costs nothing, because the context is allowed to start on its own.
+  record('resumeContext()', {
+    inGesture: inGesture(),
+    willResume: ctx ? ctx.state === 'suspended' : false,
+    ...howlerState(),
+  });
+
+  if (ctx && ctx.state === 'suspended') {
+    try {
+      const p = ctx.resume();
+      // Recorded from the promise, so a rejection is visible rather than
+      // swallowed. This does not change what resume() does.
+      void Promise.resolve(p).then(
+        () => record('resume() resolved', { ctxState: ctx.state }),
+        (err: unknown) => record('resume() REJECTED', { error: String(err) }),
+      );
+    } catch (err) {
+      record('resume() THREW', { error: String(err) });
+    }
+  }
 }
 
 export const promptPlayer: Player = createPlayer(howlSound, resumeContext);

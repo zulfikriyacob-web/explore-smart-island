@@ -1,4 +1,6 @@
 import { BlockButton } from '../../components/ui/BlockButton.tsx';
+// TEMPORARY — iOS audio diagnostics. Delete with the branch.
+import { DiagnosticsPanel } from '../../components/ui/DiagnosticsPanel.tsx';
 import { Kancil } from '../../components/ui/Kancil.tsx';
 import { packTitle } from './activity.ts';
 import { useQuizStore } from './store.ts';
@@ -27,6 +29,9 @@ export function StartScreen() {
 
   return (
     <main className="mx-auto flex h-[100dvh] max-w-[430px] flex-col items-center px-4">
+      {/* TEMPORARY — iOS audio diagnostics. Delete with the branch. */}
+      <DiagnosticsPanel where="mula" />
+
       {/*
         Reserved name slot: 44px tall, top at Y 24, so its bottom edge is Y 68.
         Empty until child profiles arrive in Phase 2. Held open now so that
