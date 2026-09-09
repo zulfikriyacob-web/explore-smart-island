@@ -286,8 +286,8 @@ Susun atur sebenar:
   **Berlabuh ke atas, bukan dipusatkan.** Teks soalan mesti bermula pada Y yang sama pada
   setiap soalan: anak membina memori otot untuk tempat membaca, sama seperti untuk tempat
   butang (§7). Memusatkan kad dalam kawasan atas memulangkan pergerakan itu. Diukur pada
-  360×780 merentas kesepuluh-puluh soalan pek: piksel teks pertama pada **Y 168**, sebaran
-  0.3px antara soalan mcq dua baris dan soalan count-tap empat baris.
+  390×740 merentas kesepuluh-puluh soalan pek: piksel teks pertama pada **Y 89**, sebaran
+  0.65px antara soalan mcq dua baris dan soalan count-tap empat baris.
 
   **Yang dijaga ialah sebaran itu, bukan nombor mutlak.** 168 ialah hasil susunan kad hari
   ini — butang audio 64px, jurang 16px, kemudian teks. Tambah atau buang apa-apa di atas
@@ -296,12 +296,20 @@ Susun atur sebenar:
   itu regresi. Kalau nilai mutlak berubah sambil sebaran kekal ketat, itu susun atur baharu
   dan nombor di sini yang perlu dikemas kini.
 
-  > Nombor sebelum ini ialah **Y 89**, dan ia diambil ketika tiada satu pun fail audio wujud.
-  > `AudioButton` menyembunyikan diri selagi failnya 0 bait (PRD §8), jadi pengukuran itu
-  > dibuat pada kad tanpa butang — susun atur yang tidak pernah dilihat oleh mana-mana anak
-  > yang mempunyai audio. Selepas sepuluh rakaman BM masuk, butang dirender pada setiap
-  > soalan dan teks turun 78.8px: 64 + 16, didarab skala masuk kad 0.985. 89 tidak pernah
-  > salah; ia mengukur keadaan sementara dan tidak berkata begitu.
+  > Nombor ini sudah bergerak dua kali, dan kedua-duanya berbaloi dibaca bersama.
+  >
+  > **Y 89 → Y 168.** Nombor asal diambil ketika tiada satu pun fail audio wujud.
+  > `AudioButton` menyembunyikan diri selagi failnya 0 bait (PRD §8), jadi ia diukur pada kad
+  > tanpa butang — susun atur yang tidak pernah dilihat oleh anak yang mempunyai audio.
+  > Sepuluh rakaman BM masuk, butang dirender pada setiap soalan, dan teks turun 80px.
+  >
+  > **Y 168 → Y 89.** Baris 80px itu memecahkan telefon: pancingan yang tiba selepas jawapan
+  > salah menolak kad melepasi ruang yang ditinggalkan timbunan jawapan, dan bantuan untuk
+  > anak yang tersekat jatuh di bawah lipatan. Butang audio kini terapung dalam perenggan
+  > soalan dan bukan pada barisnya sendiri, jadi teks kembali ke tempat asalnya.
+  >
+  > Kedua-dua kali nombor itu betul apabila ditulis dan salah selepas satu perubahan yang
+  > munasabah. Sebab itu peraturannya ialah sebaran, bukan nilai mutlak.
 
   `flex-shrink` kekal pada nilai lalainya, jadi kad yang terlalu tinggi untuk skrin tetap
   mengalah, dan `overflow-y-auto` menangkap bakinya. Kanak-kanak boleh menatal untuk membaca;
@@ -474,7 +482,26 @@ Dua elemen datang dan pergi semasa sesi. Ruang untuk kedua-duanya ditempah sejak
 | Slot | Saiz | Tempat | Semasa rehat |
 |---|---|---|---|
 | **Kancil** | 88 × 88 | Penjuru kanan atas kad soalan | Kosong, penjuru kekal lapang |
-| **Seterusnya** | tinggi 88 | Dasar timbunan jawapan | Kosong, atau butang hantar soalan itu |
+| **Butang audio** | 64 × 64 | Penjuru kiri atas kad soalan | Kosong bila bahasa itu belum ada rakaman |
+| **Seterusnya** | tinggi 72 | Dasar timbunan jawapan | Kosong, atau butang hantar soalan itu |
+
+**Seterusnya ialah 72, bukan 88.** §5.1 meletakkan "seterusnya" antara tindakan sekunder pada
+72; lantai 88 itu untuk butang yang anak *pilih antaranya*. Slot ini ditempah sama ada ia
+memegang sesuatu atau tidak, jadi 16px itu dibelanjakan pada ruang kosong setiap soalan. Butang
+hantar count-tap berkongsi slot yang sama dan turun ke 72 bersamanya — slot mesti satu saiz,
+atau butang ke hadapan berpindah antara keadaan soalan dan maklum balas pada count-tap. Masih
+jauh di atas lantai mutlak 64px.
+
+**Butang audio terapung, bukan satu baris sendiri.** Sebagai baris ia kos kad 80px — 64 butang
+campur jurang 16 — dan itu yang menolak kad melepasi ruang yang ada pada telefon. Terapung ia
+kos 45px kurang. Kedua-dua float duduk dalam perenggan yang sama, audio di kiri dan kancil di
+kanan, dan teks membalut antara mereka sebelum mengalir semula selebar penuh.
+
+> Satu kesan sampingan yang diukur, dan ia mengejutkan: **float yang lebih tinggi daripada
+> perenggannya menjulur ke blok seterusnya.** Kancil 88px dan audio 64px kedua-duanya lebih
+> tinggi daripada teks soalan dua baris, jadi ia menyempitkan kad pancingan di bawahnya dan
+> pancingan membalut kepada dua baris. Pancingan yang sama, dilukis selebar penuh, ialah satu
+> baris — 78px berbanding 51px. Float itu bukan sahaja kos ruang di tempatnya sendiri.
 
 Kancil masuk dan keluar dalam slotnya sendiri. Kad soalan tidak berubah tinggi, butang
 jawapan tidak bergerak, dan kedudukan Seterusnya tepat sama pada setiap soalan.
