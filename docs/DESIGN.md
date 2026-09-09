@@ -151,7 +151,7 @@ Cadangan daripada designer, setiap nisbah dikira semula di sini terhadap `--laut
 | Peranan | Sekarang | | Cadangan | | Anjakan hue |
 |---|---|---|---|---|---|
 | Betul | `--daun` `#2FBF71` | 2.15:1 ✗ | `--daun-dark` `#157A43` | **4.87:1** ✓ | 0.2° |
-| Salah | `--bunga` `#FF6B6B` | 2.51:1 ✗ | `--bunga-dark` `#A8434A` | **5.32:1** ✓ | 4.2° |
+| Salah | `--bunga` `#FF6B6B` | 2.51:1 ✗ | `--bunga-dark` `#79151C` | **9.80:1** ✓ | 4.2° |
 | Dedah | `--mangga` `#FFB627` | 1.58:1 ✗ | `--mangga-dark` `#8F6100` | **4.89:1** ✓ | 1.0° |
 
 Anjakan hue kecil pada ketiga-tiganya, jadi setiap satu masih membaca sebagai versi gelap
@@ -163,10 +163,47 @@ warna yang sama dan bukan warna baharu. Hubungan token → makna kekal.
 > kesimpulannya kekal. Kesemua sembilan nisbah dalam bahagian D2 dan D3 pula padan tepat dengan
 > helaian designer.
 
-**`--bunga-dark` ditepukan turun, bukan digelapkan sahaja.** Ketepuan jatuh 100% → 43%.
-Menggelapkan secara lurus memberi `#C23131`, yang lulus pada 5.02:1 tetapi mendarat pada hue
-0.0° dengan ketepuan 60% — merah pekat, tepat apa yang §12 peraturan 5 larang. Jalan keluarnya
-bukan lebih gelap, tetapi kurang tepu.
+**`--bunga-dark` dipinda selepas ujian telefon: `#A8434A` → `#79151C`.**
+
+Nilai pertama lulus lantai pada 5.32:1 dan tetap terasa **lemah** di sebelah hijau pada
+telefon sebenar. Ukuran menerangkannya — ia satu-satunya daripada tiga sempadan yang lembut
+**dan** cerah:
+
+| Token | Hex | Ketepuan | Kecerahan |
+|---|---|---|---|
+| `--daun-dark` | `#157A43` | 71% | 28% |
+| `--laut-dark` | `#087A70` | 88% | 25% |
+| `--bunga-dark` **lama** | `#A8434A` | 43% | 46% |
+| `--bunga-dark` **baharu** | `#79151C` | 70% | 28% |
+
+`#79151C` sepadan dengan `--daun-dark` dalam **satu mata pada kedua-dua paksi**. Nisbahnya
+naik daripada 5.32:1 kepada **9.80:1**.
+
+Pertukaran asal masih dipegang: §12 peraturan 5 melarang merah yang menjerit, dan kepekatan
+`#79151C` datang daripada **kegelapan**, bukan kecerahan. Bandingkan dengan calon yang pernah
+ditolak — `#D62828` pada kecerahan 50% dan `#C23131` pada 48% — `#79151C` duduk pada 28%.
+Pada kecerahan itu tiada apa yang menjerit.
+
+> **Penemuan: ketepuan penuh *merugikan* kontras.** `#8F000A` pada ketepuan 100% dan kecerahan
+> yang sama memberi **8.74:1** — **lebih rendah** daripada 9.80:1 yang `#79151C` beri pada 70%.
+> Ketepuan 100% bukan hujung yang lebih baik.
+>
+> Mekanismenya pada saluran, dan ia bukan yang mungkin dijangka: untuk menaikkan ketepuan
+> sambil mengekalkan kecerahan, saluran **merah** mesti naik — 121 → 143 — sementara hijau dan
+> biru jatuh ke hampir sifar. Merah membawa pemberat luminans 0.2126, jadi kenaikan itu
+> menambah lebih banyak luminans daripada yang dijimatkan oleh kejatuhan hijau dan biru.
+> Warna menjadi lebih **cerah** dari segi meter walaupun ia kelihatan lebih tepu. Kehilangan
+> biru sendiri tidak menggelapkan apa-apa; biru menyumbang luminans, bukan mengurangkannya.
+
+> **Jurang meter-lawan-mata.** `--daun-dark` dan `--bunga-dark` kini kedua-duanya pada
+> kecerahan HSL 28%, tetapi luminans relatifnya **0.1448 lawan 0.0469** — merah kira-kira tiga
+> kali lebih gelap pada paksi yang diukur oleh formula kontras. Sebab itu nisbahnya 4.87:1
+> lawan 9.80:1 walaupun tenaga visualnya sepadan.
+>
+> Jangan cuba menyamakan nisbah kedua-duanya. Nisbah mengukur luminans; mata menilai ketepuan
+> dan kecerahan. Apabila kedua-dua ukuran itu bercanggah, yang menang ialah keseimbangan yang
+> dilihat pada telefon — asalkan kedua-duanya melepasi lantai, dan kedua-duanya melepasinya
+> dengan selesa.
 
 **`--mangga-dark` `#8F6100` hampir coklat pada strok 4px.** Ia diterima dengan sengaja.
 Alternatif yang lebih cerah `#A87400` lulus pada 3.68:1, tetapi margin itu nipis untuk warna
@@ -193,21 +230,21 @@ yang D2 sudah bawa masuk:
 | Ikon | Cadangan | |
 |---|---|---|
 | ✓ putih atas pil `--daun-dark` `#157A43` | **5.39:1** | ✓ |
-| ✕ putih atas pil `--bunga-dark` `#A8434A` | **5.89:1** | ✓ |
+| ✕ putih atas pil `--bunga-dark` `#79151C` | **10.84:1** | ✓ |
 
 Tiga sebab, mengikut susunan:
 
 1. **Tiada nilai baharu.** Kedua-dua hex sudah masuk melalui D2. Palet tidak bertambah.
 2. **Pil kini sepadan dengan sempadan butangnya.** Satu keluarga warna setiap keadaan, bukan
    pil satu warna dan sempadan warna lain pada butang yang sama.
-3. **5.39 dan 5.89 melepasi lantai teks 4.5:1**, bukan hanya lantai grafik 3:1. Kita tidak
+3. **Kedua-duanya melepasi lantai teks 4.5:1**, bukan hanya lantai grafik 3:1. Kita tidak
    memerlukan itu — lihat di bawah — tetapi ia percuma.
 
 **Strok `--arang` ditolak.** Ia berfungsi di atas pil semasa (✓ 5.14:1, ✕ 4.42:1) tetapi
 menjadikan dua pil berlainan corak tanpa sebab. Ia juga tidak boleh digabungkan dengan
 pembaikan di atas: `--arang` di atas `--daun-dark` ialah **2.27:1** dan di atas `--bunga-dark`
-**2.08:1** — kedua-duanya di bawah 3:1. Menggelapkan pil **dan** strok memecahkan ikon.
-Pilih satu; yang betul ialah pil.
+**1.13:1** — kedua-duanya jauh di bawah 3:1. Menggelapkan pil **dan** strok memecahkan ikon,
+dan pindaan `#79151C` menjadikannya lebih teruk lagi. Pilih satu; yang betul ialah pil.
 
 **Pil itu sendiri juga gagal, dan ia dibaiki oleh pertukaran yang sama.** Pil ialah objek
 grafik, dan jirannya ialah muka butang, bukan latar skrin:
@@ -215,7 +252,13 @@ grafik, dan jirannya ialah muka butang, bukan latar skrin:
 | Pil | Atas muka butang | Sekarang | Cadangan |
 |---|---|---|---|
 | ✓ | `--daun-light` `#DFF6E9` | 2.10:1 ✗ | **4.75:1** ✓ |
-| ✕ | putih | 2.78:1 ✗ | **5.89:1** ✓ |
+| ✕ | putih | 2.78:1 ✗ | **10.84:1** ✓ |
+
+**Dua pil kini tidak seimbang dari segi nisbah: ✕ pada 10.84:1 lawan ✓ pada 5.39:1.** Ini
+kesan langsung pindaan `--bunga-dark`, dan ia dibiarkan dengan sengaja. Memisahkan pil
+daripada sempadan — token keempat, satu warna untuk sempadan dan satu lagi untuk pil — ialah
+keputusan berasingan yang belum dibuat. Lihat nota meter-lawan-mata di D2: nisbah yang tidak
+sepadan tidak bermakna tenaga visual yang tidak sepadan.
 
 Menggelapkan strok sahaja tidak akan menyentuh baris ini. Pil akan kekal di bawah lantainya,
 dan bentuk yang membawa ikon itu masih lemah walaupun ikon di dalamnya sudah kuat.
@@ -254,7 +297,7 @@ ditulis:
 |---|---|---|---|---|
 | Rehat | `rgb(8,122,112)` | sama | — | — |
 | Betul | `rgb(21,122,67)` | sama | `rgb(21,122,67)` | putih |
-| Salah | `rgb(168,67,74)` | sama | `rgb(168,67,74)` | putih |
+| Salah | `rgb(121,21,28)` | sama | `rgb(121,21,28)` | putih |
 | Dilumpuhkan | `rgb(211,232,227)` | sama | — | — |
 
 **Satu pepijat ditemui semasa mengukur, dan dibaiki bersama.** `transition-colors
@@ -1041,7 +1084,7 @@ export default {
         arang:   { DEFAULT: '#1F3A34', soft: '#5C7A72' },
         garis:   '#D3E8E3',
         daun:    { DEFAULT: '#2FBF71', dark: '#157A43', light: '#DFF6E9' },
-        bunga:   { DEFAULT: '#FF6B6B', dark: '#A8434A', light: '#FFE3E3' },
+        bunga:   { DEFAULT: '#FF6B6B', dark: '#79151C', light: '#FFE3E3' },
         mangga:  { DEFAULT: '#FFB627', dark: '#8F6100' },
         pirus:   '#22D3EE',
         api:     '#FF7A00',

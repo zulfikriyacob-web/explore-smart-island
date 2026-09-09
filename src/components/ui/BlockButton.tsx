@@ -170,11 +170,16 @@ export function BlockButton({
                 D3: the pill is the dark variant and the stroke stays white.
                 White on the plain tokens measured 2.38:1 and 2.78:1, under the
                 3:1 floor an icon takes as a graphical object; on the dark pills
-                it is 5.39:1 and 5.89:1. The pill itself was failing too, at
+                it is 5.39:1 and 10.84:1. The pill itself was failing too, at
                 2.10:1 and 2.78:1 against the button face it sits on.
 
+                The two are far apart because --bunga-dark was re-cut to #79151C
+                after phone testing, to match --daun-dark's saturation and
+                lightness rather than its ratio. Splitting the pill onto a fourth
+                token is a separate decision, not taken. (DESIGN 2.4)
+
                 Do not darken the stroke as well. --arang on these dark pills is
-                2.27:1 and 2.08:1 — darkening both breaks the icon. (DESIGN 2.4)
+                2.27:1 and 1.13:1 — darkening both breaks the icon.
               */
               className={`grid h-9 w-9 place-items-center rounded-full ${
                 state === 'correct' ? 'bg-daun-dark' : 'bg-bunga-dark'

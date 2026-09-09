@@ -17,7 +17,7 @@ export default {
         arang: { DEFAULT: '#1F3A34', soft: '#5C7A72' },
         garis: '#D3E8E3',
         daun: { DEFAULT: '#2FBF71', dark: '#157A43', light: '#DFF6E9' },
-        bunga: { DEFAULT: '#FF6B6B', dark: '#A8434A', light: '#FFE3E3' },
+        bunga: { DEFAULT: '#FF6B6B', dark: '#79151C', light: '#FFE3E3' },
         mangga: { DEFAULT: '#FFB627', dark: '#8F6100' },
         pirus: '#22D3EE',
         api: '#FF7A00',
