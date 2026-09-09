@@ -2,18 +2,23 @@ import { motion, useReducedMotion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 
 import { isAudioAvailable } from '../../lib/audio.ts';
+import { promptPlayer } from '../../lib/player.ts';
 import { ease } from '../../motion/tokens.ts';
 
 /**
  * A3 — the speaker icon pulses while audio plays, so a child who cannot read
  * still sees that something is being said.
  *
- * The button renders nothing until the file behind `src` has real bytes. The
- * recordings in public/ are still zero-byte placeholders (PRD 8), and user
- * testing showed a 7-year-old pressing this first, before anything else: a
- * button that plays nothing teaches a child that buttons do nothing. When real
- * recordings land the button reappears on its own — no code change, because the
- * check is the file itself.
+ * The button renders nothing until the file behind `src` has real bytes, so a
+ * language whose recordings have not been made yet shows no control at all
+ * (PRD 8). User testing showed a 7-year-old pressing this first, before anything
+ * else: a button that plays nothing teaches a child that buttons do nothing.
+ * The check is the file itself, so a recording appearing is all it takes.
+ *
+ * Playback goes through `lib/player.ts`. Pressing plays the prompt; pressing
+ * again restarts it; leaving the question cuts it off. There is no autoplay and
+ * no gesture unlock yet (SPEC 8) — both need the intro screen the store
+ * currently skips, and that is a design decision before it is code.
  */
 export function AudioButton({ src, label = 'Main audio soalan' }: { src: string; label?: string }) {
   const reduce = useReducedMotion();
@@ -28,6 +33,9 @@ export function AudioButton({ src, label = 'Main audio soalan' }: { src: string;
     });
     return () => {
       live = false;
+      // Moving to the next question cuts this prompt off. Without this the
+      // previous question keeps talking over the new one.
+      if (promptPlayer.playing() === src) promptPlayer.stop();
     };
   }, [src]);
 
@@ -38,15 +46,23 @@ export function AudioButton({ src, label = 'Main audio soalan' }: { src: string;
       type="button"
       aria-label={label}
       onPointerDown={() => {
-        if (playing) return;
+        // Pressing during playback restarts the clip rather than being ignored.
+        // A button that does nothing when pressed is a button a child reads as
+        // broken, which is the same reason it hides itself when the file is a
+        // placeholder.
         setPlaying(true);
-        // Playback itself still has to be wired to Howler (SPEC 8); the pulse
-        // is driven by a timer until then.
-        window.setTimeout(() => setPlaying(false), 900);
+        promptPlayer.play(src, () => setPlaying(false));
       }}
       whileTap={reduce ? undefined : { scale: 0.94 }}
-      animate={playing && !reduce ? { scale: [1, 1.15, 1, 1.15, 1] } : { scale: 1 }}
-      transition={playing && !reduce ? { duration: 0.9, ease: ease.out } : { duration: 0.12 }}
+      // The pulse repeats for as long as audio is actually playing and stops on
+      // the player's settle callback — the real `end` event, or a load failure.
+      // It is no longer a fixed timer that guesses at the length of the clip.
+      animate={playing && !reduce ? { scale: [1, 1.12, 1] } : { scale: 1 }}
+      transition={
+        playing && !reduce
+          ? { duration: 0.7, repeat: Infinity, ease: ease.out }
+          : { duration: 0.12 }
+      }
       className="grid h-16 w-16 shrink-0 place-items-center rounded-full border-[3px] border-laut bg-white p-0 transition-colors active:bg-laut-light"
     >
       <svg
