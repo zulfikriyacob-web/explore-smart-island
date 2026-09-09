@@ -26,7 +26,10 @@ function correctResponse(question: Question): Response {
 
 /** Play the activity to its summary, every question right first time. */
 function playThrough(): SessionResult {
-  const { answer, next } = useQuizStore.getState();
+  const { start, answer, next } = useQuizStore.getState();
+  // The run now begins at `intro` and waits for the Mula tap (Brief 03), so the
+  // gesture has to be part of playing through.
+  start();
   // Bounded rather than `while (true)`: if a change ever stops a session
   // reaching its summary, this should fail with a message instead of hanging.
   for (let step = 0; step < 100; step++) {
@@ -42,6 +45,27 @@ function playThrough(): SessionResult {
 }
 
 describe('quiz store', () => {
+  /*
+    The gate. A fresh run has to stop at `intro` and stay there until something
+    taps, because that tap is the gesture iOS requires before any audio can play
+    (SPEC 8). The store used to send START itself, which spent the gesture before
+    the child ever made one — autoplay would then be refused for the whole run
+    and nothing would say so.
+
+    This runs first, before the play-through below restarts the store: the store
+    is a module singleton, so the fresh-load state can only be observed once.
+  */
+  it('waits at intro until the start tap, rather than sending START itself', () => {
+    const session = useQuizStore.getState().session;
+    expect(session.status).toBe('intro');
+    // Loaded and ready — it is waiting for a tap, not for content.
+    expect(session.questions.length).toBeGreaterThan(0);
+    expect(session.questionStartedMs).toBeNull();
+
+    useQuizStore.getState().start();
+    expect(useQuizStore.getState().session.status).toBe('question');
+  });
+
   it('pays a replay fewer gems than the first clear, for the same answers', () => {
     // One test rather than three: the store is a module singleton, so a test
     // that restarts it changes what any test after it would see.

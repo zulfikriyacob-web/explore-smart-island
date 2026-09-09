@@ -16,17 +16,27 @@ import { ease } from '../../motion/tokens.ts';
  * The check is the file itself, so a recording appearing is all it takes.
  *
  * Playback goes through `lib/player.ts`. Pressing plays the prompt; pressing
- * again restarts it; leaving the question cuts it off. There is no autoplay and
- * no gesture unlock yet (SPEC 8) — both need the intro screen the store
- * currently skips, and that is a design decision before it is code.
+ * again restarts it; leaving the question cuts it off.
+ *
+ * With `autoPlay`, the prompt reads itself when the question appears (SPEC 8) —
+ * the whole point of Phase 1 exit criterion 7, since a child who cannot read has
+ * no way to know a speaker button is there. Autoplay runs through this same
+ * component rather than from the screen above it, for two reasons: the player
+ * assumes a single caller, and the pulse that shows a child something is being
+ * said belongs to the same state either way. Pressing during autoplay restarts
+ * the clip instead of layering a second one, because `play` stops whatever was
+ * going first.
  */
 export function AudioButton({
   src,
   label = 'Main audio soalan',
+  autoPlay = false,
   className = '',
 }: {
   src: string;
   label?: string;
+  /** Play once when this prompt appears, if a gesture has unlocked audio. */
+  autoPlay?: boolean;
   /** Lets the caller place the button — it floats inside the prompt (DESIGN 5.2). */
   className?: string;
 }) {
@@ -38,7 +48,20 @@ export function AudioButton({
     let live = true;
     setAvailable(false);
     void isAudioAvailable(src).then((ok) => {
-      if (live) setAvailable(ok);
+      if (!live || !ok) return;
+      setAvailable(true);
+      // Autoplay waits for the availability probe, so a placeholder file is
+      // never "played" silently. It is fired once per src: this effect is keyed
+      // on src, and `live` closes it the moment the question changes.
+      //
+      // `unlocked()` is the iOS gate. Before the first gesture a play() would be
+      // refused by the browser and the child would be told nothing, so we simply
+      // do not try — the button is still there to press, and pressing it is
+      // itself the gesture.
+      if (autoPlay && promptPlayer.unlocked()) {
+        setPlaying(true);
+        promptPlayer.play(src, () => setPlaying(false));
+      }
     });
     return () => {
       live = false;
@@ -46,6 +69,9 @@ export function AudioButton({
       // previous question keeps talking over the new one.
       if (promptPlayer.playing() === src) promptPlayer.stop();
     };
+    // `autoPlay` is read at fire time and never changes for a mounted prompt;
+    // keying on src alone is what keeps this to one play per question.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [src]);
 
   if (!available) return null;
@@ -58,7 +84,9 @@ export function AudioButton({
         // Pressing during playback restarts the clip rather than being ignored.
         // A button that does nothing when pressed is a button a child reads as
         // broken, which is the same reason it hides itself when the file is a
-        // placeholder.
+        // placeholder. `play` halts whatever was going, so a press during
+        // autoplay replaces it — one clip is audible at a time, never two.
+        promptPlayer.unlock();
         setPlaying(true);
         promptPlayer.play(src, () => setPlaying(false));
       }}

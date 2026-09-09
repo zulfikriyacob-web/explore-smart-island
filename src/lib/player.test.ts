@@ -197,6 +197,50 @@ describe('createPlayer', () => {
     player.play('/audio/ms/q001.mp3');
     expect(() => last().fire('end')).not.toThrow();
   });
+
+  it('prefetch builds the clip without playing it, and play reuses it', () => {
+    // SPEC 7.6 wants one question ahead ready to go. "Ready" has to mean built
+    // and loading, not started — a prefetch that made a sound would be the next
+    // question talking over this one.
+    const { player, made, last } = harness();
+    player.prefetch('/audio/ms/q002.mp3');
+    expect(made).toHaveLength(1);
+    expect(last().calls.play).toBe(0);
+    expect(player.playing()).toBeNull();
+
+    player.play('/audio/ms/q002.mp3');
+    // Still one sound: the prefetched object is the one that plays, which is the
+    // whole point of prefetching it.
+    expect(made).toHaveLength(1);
+    expect(last().calls.play).toBe(1);
+  });
+
+  it('starts locked, and unlocks once', () => {
+    // The iOS gate (SPEC 8). Callers autoplay only when this is true, so it must
+    // not be true before a gesture has actually happened.
+    const onUnlock = vi.fn();
+    const player = createPlayer(() => fakeSound().sound, onUnlock);
+    expect(player.unlocked()).toBe(false);
+
+    player.unlock();
+    expect(player.unlocked()).toBe(true);
+    expect(onUnlock).toHaveBeenCalledTimes(1);
+
+    // Every later tap calls unlock too. Resuming an already-running context on
+    // each one is waste, so the side effect fires once and no more.
+    player.unlock();
+    player.unlock();
+    expect(onUnlock).toHaveBeenCalledTimes(1);
+  });
+
+  it('a locked player still plays when asked directly', () => {
+    // Pressing the speaker button *is* the gesture, so an explicit play is never
+    // blocked. Only autoplay consults `unlocked()`.
+    const { player, last } = harness();
+    player.play('/audio/ms/q001.mp3');
+    expect(last().calls.play).toBe(1);
+    expect(player.unlocked()).toBe(false);
+  });
 });
 
 describe('howlSound', () => {

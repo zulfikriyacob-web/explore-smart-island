@@ -5,6 +5,8 @@ import { AudioButton } from '../../components/ui/AudioButton.tsx';
 import { BlockButton } from '../../components/ui/BlockButton.tsx';
 import { Kancil, type KancilState } from '../../components/ui/Kancil.tsx';
 import { ProgressBar } from '../../components/ui/ProgressBar.tsx';
+import type { Question } from '../../content/schema.ts';
+import { promptPlayer } from '../../lib/player.ts';
 import { hintItem, optionItem, questionCard } from '../../motion/variants.ts';
 import { AnswerControls } from './AnswerControls.tsx';
 import { QuestionVisual } from './QuestionVisual.tsx';
@@ -18,6 +20,18 @@ import { useQuizStore } from './store.ts';
  * flipping this constant is all it takes.
  */
 const LANG = 'ms' as const;
+
+/** Every image a question will draw, for the one-ahead prefetch. */
+function imagesIn(q: Question): string[] {
+  switch (q.type) {
+    case 'mcq':
+      return [];
+    case 'mcq-image':
+      return q.payload.options.map((o) => o.image);
+    case 'count-tap':
+      return [q.payload.itemImage];
+  }
+}
 
 /**
  * Layout follows DESIGN section 5.2, not the handoff prototype.
@@ -41,6 +55,25 @@ export function QuizScreen() {
 
   // Counting state belongs to one question only.
   useEffect(() => setCounted([]), [session.index]);
+
+  /*
+    SPEC 7.6: prefetch exactly one question ahead while the current one is on
+    screen. Not all ten up front — that is what kills a slow connection, and the
+    child only ever needs the next one.
+
+    Audio goes through the player's own cache, so the Howl built here is the same
+    object the next AudioButton will play. Images are warmed by the browser cache
+    the ordinary way.
+  */
+  const nextQuestion = session.questions[session.index + 1];
+  useEffect(() => {
+    if (!nextQuestion) return;
+    promptPlayer.prefetch(nextQuestion.promptAudio[LANG]);
+    for (const url of imagesIn(nextQuestion)) {
+      const img = new Image();
+      img.src = url;
+    }
+  }, [nextQuestion]);
 
   /*
     The kancil appears during feedback and at no other time. DESIGN 6 is
@@ -188,7 +221,19 @@ export function QuizScreen() {
               It disappears entirely when a language has no recordings, and the
               prompt reflows to full width, which is the same behaviour as before.
             */}
-            <AudioButton src={question.promptAudio[LANG]} className="float-left mr-4" />
+            {/*
+              autoPlay: the prompt reads itself when the question appears
+              (SPEC 8). It is what Phase 1 exit criterion 7 turns on — a child
+              who cannot read is never going to discover a speaker button on
+              their own. It only fires once a gesture has unlocked audio, so the
+              first question after a restore stays silent and the button is there
+              to press.
+            */}
+            <AudioButton
+              src={question.promptAudio[LANG]}
+              autoPlay
+              className="float-left mr-4"
+            />
             {question.prompt[LANG]}
           </motion.p>
 

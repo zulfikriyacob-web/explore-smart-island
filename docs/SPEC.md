@@ -830,6 +830,16 @@ semua 10 di muka — ini mematikan sambungan yang perlahan.
 - **Kunci autoplay iOS:** semua audio dimulakan selepas gerak isyarat pengguna pertama
   (butang "Mula"). Pratayang Howler pada gerak isyarat itu.
 - Audio arahan bermain secara automatik apabila soalan muncul; butang ulang tayang sentiasa kelihatan.
+
+  **Sesi yang dipulihkan tidak melihat butang "Mula".** Ia kembali pada `question`, jadi
+  gerbang gerak isyarat menerima **ketukan pertama di mana-mana** sebagai ganti. Ketukan itu
+  membuka kunci tetapi **tidak** memainkan soalan yang sudah ada di skrin: selepas menyambung
+  semula, ketukan pertama selalunya jawapan, dan membacakan soalan selepas ia dijawab lebih
+  buruk daripada senyap. Soalan **seterusnya** bermain sendiri seperti biasa. (PRD §16.8)
+
+  Main automatik dan butang ulang berkongsi satu pemanggil pemain, jadi menekan butang semasa
+  audio automatik sedang berjalan **menggantikan** klip itu, bukan menindihnya — satu klip
+  boleh didengar pada satu masa, tidak pernah dua.
 - Bunyi UI: `tap`, `correct`, `wrong`, `star`, `unlock`. Jaga bunyi `wrong` sebagai
   nada lembut menurun — bukan buzzer.
 - Haptik melalui `navigator.vibrate`: 10 ms pada ketukan, 30 ms pada betul. Langkau pada iOS
