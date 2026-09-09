@@ -21,7 +21,7 @@
 | Audio | Howler.js | Kumpulan bunyi, bekerja mengelilingi kunci autoplay iOS |
 | Validasi | Zod | Skema kandungan disahkan semasa bina **dan** semasa jalan |
 | Hos frontend | Cloudflare Pages | CDN global, bina Vite terus, tier percuma benarkan guna komersial |
-| Aset (.riv, audio, SVG) | Dalam repo pada mulanya | Pindah ke Cloudflare R2 jika melebihi ~100 MB |
+| Aset (audio, SVG) | Dalam repo pada mulanya | Pindah ke Cloudflare R2 jika melebihi ~100 MB |
 
 > **React 18 dan Framer Motion 11 ialah versi yang disengajakan, bukan yang lalai.**
 > `npm install react framer-motion` tanpa julat menyelesaikan kepada **React 19 dan Framer
@@ -795,7 +795,10 @@ kurang gerakan, ketiadaan animasi masuk memang jawapan yang lebih baik daripada 
 
 **Baseline peranti & pelayar:** Chrome 100+ / Safari 15.4+, iaitu peranti keluaran 2022 ke atas.
 Ini menggantikan baseline lama (Android pertengahan-rendah / Chrome 87). Sebabnya: Framer Motion v11
-dan Rive memerlukan baseline moden. Peranti di bawah baseline ini tidak disokong secara rasmi.
+memerlukan baseline moden. Peranti di bawah baseline ini tidak disokong secara rasmi.
+
+(Rive pernah menjadi sebab kedua di sini. Ia ditinggalkan — §11.6 — dan baseline kekal
+kerana Framer Motion sahaja sudah menuntutnya.)
 
 Prapuat aset **satu soalan ke hadapan** semasa soalan semasa dipaparkan. Jangan prapuat
 semua 10 di muka — ini mematikan sambungan yang perlahan.
@@ -839,33 +842,130 @@ semua 10 di muka — ini mematikan sambungan yang perlahan.
 
 ---
 
-## 11. Kontrak Rive
+## 11. Kontrak komponen Kancil
 
-```
-Fail:  /public/rive/kancil.riv
-Artboard:      "Kancil"
-State Machine: "KancilSM"
+Maskot ialah komponen React — SVG berlapis yang digerakkan oleh Framer Motion, bukan
+runtime animasi berasingan. Pelaksanaan: `src/components/ui/Kancil.tsx`. Geometri diambil
+daripada `design/brief-01d/handoff/kancil-layered.svg`, viewBox `0 0 1254 1254`.
 
-Input (nama tepat, case-sensitive — jangan ubah):
-  isCorrect    Trigger   -- jawapan betul
-  isWrong      Trigger   -- jawapan salah
-  celebrate    Trigger   -- skrin ganjaran, 3 bintang
-  isThinking   Boolean   -- soalan dipapar, belum jawab
+```tsx
+<Kancil state="idle" | "thinking" | "happy" | "sympathy" />
 ```
 
-**`mood` dibuang.** Kontrak ini kini empat input, bukan lima.
+### 11.1 Prop
 
-`isThinking` sudah memandu peralihan MELAHU ⇄ FIKIR, jadi `mood` 0 dan 1 bertindih dengannya.
-`mood` 2 dan 3 pula tidak menggerakkan apa-apa dalam mesin keadaan Rive — menetapkannya
-tidak akan menyebabkan ralat, ia cuma tidak berbuat apa-apa. Itu kegagalan senyap: kod
-kelihatan memandu emosi mascot sedangkan skrin tidak berubah langsung, dan tiada sesiapa
-perasan sehingga seseorang membuka fail `.riv`.
+| Prop | Jenis | Lalai | Peranan |
+|---|---|---|---|
+| `state` | `KancilState` | — (wajib) | Poz atau reaksi yang dipapar sekarang |
+| `size` | `number` | `88` | Lebar dan tinggi dalam px. 88 ialah slot kad soalan (DESIGN §7); skrin ringkasan merender pada 200 |
+| `strokeWidth` | `number` | `20` | Lebar strok dalam unit viewBox 1254 |
+| `onDone` | `(finished: KancilState) => void` | — | Dipanggil apabila reaksi `happy` atau `sympathy` tamat |
+| `className` | `string` | — | Diteruskan kepada elemen `<svg>` |
 
-Gembira dan simpati datang daripada `isCorrect` dan `isWrong` yang sememangnya sudah dipicu
-pada saat yang sama.
+`KancilState = 'idle' | 'thinking' | 'happy' | 'sympathy'` dieksport bersama komponen.
 
-Fail .riv adalah aset produksi. Ia masuk repo dan disemak oleh validate:content
-sama seperti imej dan audio.
+**`strokeWidth` lalai 20, bukan 8.** Lapan ialah nilai dalam fail SVG sumber, iaitu 0.64%
+lebar viewBox — pada 88px kaki menipis menjadi benang dan haiwan itu kehilangan bentuknya.
+20 ialah 1.6%, kira-kira 1.4px pada 88px. Strok mulut dilukis pada 55% daripada nilai ini,
+nisbah yang sama seperti fail sumber.
 
-Jika designer minta input tambahan, kontrak ini kena dikemas kini dahulu
-sebelum kod ditulis. Jangan tambah input secara ad-hoc.
+### 11.2 Keadaan
+
+| Keadaan | Bila | Tempoh | Apa yang bergerak |
+|---|---|---|---|
+| `idle` | Rehat; skrin ganjaran selepas reaksi tamat | Gelung tak terhingga | Nafas 3.0 s, bob kepala lewat 6 bingkai daripada nafas, kedip setiap 4.2 s |
+| `thinking` | Soalan dipapar, belum dijawab | Gelung tak terhingga | Nafas separuh amplitud, kepala senget −8°, kedip setiap 6 s |
+| `happy` | Jawapan betul | 0.8 s (48 bingkai @60) | Badan lompat sekali, telinga naik, mata picing |
+| `sympathy` | Percubaan ketiga salah | 1.6 s (96 bingkai @60) | Kepala senget +12°, telinga ikut kepala, satu kedip |
+
+`happy` dan `sympathy` ialah **reaksi**: main sekali, kemudian `onDone`. Gelung nafas dan
+kedip terus bermain di bawahnya — lapisan yang tidak disebut oleh sesuatu keadaan tidak
+disentuh olehnya, sama seperti campuran aditif dalam spesifikasi handoff.
+
+**Tiada baris gilir.** Satu trigger baharu ialah pertukaran prop `state`, bukan tolakan ke
+dalam timbunan. Reaksi yang sedang bermain dipotong terus.
+
+**`thinking` tidak dipapar oleh mana-mana skrin hari ini.** DESIGN §6 melarang maskot
+muncul semasa kanak-kanak sedang berfikir tentang soalan, jadi kad soalan membiarkan slot
+88×88 kosong sehingga maklum balas tiba, dan skrin ringkasan tidak pernah berfikir. Keadaan
+itu kekal dalam kontrak kerana ia poz yang sah dan sudah dilaksana; di mana — dan sama ada —
+ia dipapar ialah keputusan skrin, bukan keputusan komponen.
+
+### 11.3 `onDone` dan siapa yang memiliki keadaan
+
+Komponen tidak pernah menukar `state`nya sendiri. Ia hanya memberitahu induk bila satu
+reaksi tamat; induk yang memutuskan apa seterusnya:
+
+```tsx
+const [kancil, setKancil] = useState<KancilState | null>(null);
+<Kancil state={kancil} size={88} onDone={() => setKancil('idle')} />
+```
+
+Pemasa itu `setTimeout`, bukan pendengar bingkai animasi. Ini disengajakan: `onDone` mesti
+tiba walaupun tiada satu pun bingkai dirender, atau induk yang menunggu untuk kembali ke
+`idle` tersekat selama-lamanya pada tab latar belakang (§7.1 peraturan keras 2, CLAUDE.md
+prinsip 5). Pemasa dibersihkan apabila `state` berubah atau komponen dinyahlekap, jadi
+reaksi yang dipotong tidak memanggil balik lewat.
+
+`onDone` tidak dipanggil untuk `idle` atau `thinking`. Kedua-duanya tiada penghujung.
+
+### 11.4 Gerakan dikurangkan
+
+Apabila `useReducedMotion()` benar, komponen beranimasi kepada varian bernama `still` —
+nama yang **tidak ditakrifkan oleh mana-mana lapisan**. Tiada lapisan menemui padanan,
+jadi tiada apa yang bergerak dan kancil dipapar pada poz MELAHU bingkai 0. Ini melaksanakan
+§7.5 bagi maskot: setiap gelung `repeat: Infinity` mati sepenuhnya.
+
+`onDone` tetap menyala, pada 150 ms dan bukan tempoh penuh reaksi. Pengguna yang meminta
+kurang gerakan tidak sepatutnya menyebabkan induk tersekat menunggu reaksi yang tidak
+pernah dimainkan.
+
+### 11.5 Bingkai 0
+
+`initial={false}`, dan setiap bingkai kunci pertama ialah poz neutral. Tiada keadaan
+bermula pada `opacity: 0` atau `scale: 0`. Beku pada bingkai pertama, kancil ialah kancil
+yang lengkap — bukan ruang kosong.
+
+Pangsi ditulis sebagai `transformOrigin` CSS statik dalam unit viewBox, **bukan** melalui
+`originX`/`originY` Framer. Sebabnya diukur: dengan `originX`/`originY`, Framer tidak
+menulis apa-apa atribut style sehingga ia benar-benar merender satu transform, jadi
+`transform-origin` terkira kekal `0px 0px` sehingga bingkai pertama tiba. Putaran kepala
+12° akan berpangsi pada penjuru viewBox kalau bingkai itu tidak pernah datang. Sebagai CSS
+statik, pangsi betul pada bingkai 0.
+
+Nilai pangsi dikira daripada `getBBox()` geometri 1254 ini, bukan disalin daripada fail
+spesifikasi handoff — nilai di sana anggaran, dan merujuk artboard 512 yang tidak pernah
+dilaksanakan.
+
+### 11.6 Kenapa bukan Rive
+
+Dua sebab:
+
+1. **Eksport `.riv` berbayar.** Kontrak lama memerlukan fail `.riv` daripada Rive Editor,
+   dan mengeksportnya memerlukan pelan berbayar.
+2. **Framer Motion sudah memandu setiap animasi lain dalam app** (§7). Satu runtime animasi
+   kurang untuk dimuatkan, dan maskot tertakluk kepada peraturan bingkai 0 yang sama seperti
+   selebihnya, bukan kepada mesin keadaan yang mematuhi peraturannya sendiri.
+
+Kontrak keadaan dikekalkan hampir sebagaimana adanya; hanya mekanismenya berubah, daripada
+input mesin keadaan kepada satu prop:
+
+| Input Rive lama | Sekarang |
+|---|---|
+| `isThinking` Boolean | `state="thinking"` / `state="idle"` |
+| `isCorrect` Trigger | `state="happy"` |
+| `isWrong` Trigger | `state="sympathy"` |
+| `celebrate` Trigger | **Dibuang** — lihat di bawah |
+
+`celebrate` ialah satu-satunya kehilangan sebenar. Ia pernah menjadi reaksi ⭐⭐⭐ yang
+berasingan pada skrin ringkasan; hari ini skrin itu merender `happy` pada `size={200}` bagi
+setiap keputusan. Confetti yang DESIGN §7 E2 khaskan untuk ⭐⭐⭐ belum dibina, jadi buat masa
+ini tiga bintang dan satu bintang mendapat maskot yang sama. Kalau reaksi raya dikehendaki
+semula, ia ditambah kepada `KancilState` di sini dahulu, kemudian dalam komponen — bukan
+sebaliknya.
+
+**Tiada aset `.riv` dalam repo, dan `validate:content` tidak menyemaknya.** Geometri yang
+maskot perlukan sudah tertanam dalam komponen itu sendiri.
+
+Jika designer minta keadaan tambahan, kontrak ini kena dikemas kini dahulu sebelum kod
+ditulis. Jangan tambah keadaan secara ad-hoc.
