@@ -26,15 +26,31 @@ import {
  * and the summary is only ever reached through here — so this is the one place
  * that has to know which kind of run it is building.
  */
+/**
+ * A loaded session waiting at `intro`.
+ *
+ * START is not sent here. It comes from the Mula tap, and that tap is the
+ * gesture iOS requires before any audio can begin (SPEC 8, Brief 03); sending it
+ * automatically would spend the gesture before the child made one and leave
+ * autoplay silently refused for the whole run.
+ */
 function freshSession(isFirstClear: boolean): SessionState {
-  // Stops at `intro`. START is no longer sent here: it is sent by the Mula tap
-  // on the start screen, and that tap is the gesture iOS requires before any
-  // audio can begin (SPEC 8, Brief 03). Sending it automatically would take the
-  // gesture away and leave autoplay silently refused.
   return sessionReducer(createSession(ACTIVITY_ID, isFirstClear), {
     type: 'LOADED',
     questions: loadActivityQuestions(),
   });
+}
+
+/**
+ * The same session, already started — for a replay.
+ *
+ * The start screen has exactly one job: collect the gesture that unlocks audio.
+ * By the time a child presses "Main lagi" that gesture has already happened, so
+ * the screen has no job left and would be one more tap between the child and
+ * playing. A child pressing "play again" wants to play.
+ */
+function replaySession(): SessionState {
+  return sessionReducer(freshSession(false), { type: 'START', nowMs: now() });
 }
 
 function now(): number {
@@ -90,8 +106,12 @@ export const useQuizStore = create<QuizStore>((set, get) => {
 
     restart: () => {
       clearSession();
+      // Straight into the first question, no start screen. Audio was unlocked
+      // long before "Main lagi" could be pressed, so that screen has no job left
+      // — it would only stand between the child and playing. (Brief 03)
+      //
       // A replay, so no first-clear bonus. (SPEC 5.3)
-      const session = freshSession(false);
+      const session = replaySession();
       saveSession(session);
       set({ session, restored: false });
     },

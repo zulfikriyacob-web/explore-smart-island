@@ -837,6 +837,14 @@ semua 10 di muka — ini mematikan sambungan yang perlahan.
   semula, ketukan pertama selalunya jawapan, dan membacakan soalan selepas ia dijawab lebih
   buruk daripada senyap. Soalan **seterusnya** bermain sendiri seperti biasa. (PRD §16.8)
 
+  **"Main lagi" juga tidak melihatnya.** Ulangan menghantar `START` serta-merta dan membuka
+  soalan pertama. Audio sudah dibuka kunci jauh sebelum butang itu boleh ditekan, jadi skrin
+  mula tiada tugas yang tinggal di situ — ia hanya akan menjadi satu ketukan tambahan antara
+  anak yang baru sahaja minta bermain dan permainan itu.
+
+  Skrin mula muncul pada **satu keadaan sahaja**: permulaan sejuk tanpa sesi tersimpan. Itu
+  satu-satunya masa gerak isyarat itu belum wujud.
+
   Main automatik dan butang ulang berkongsi satu pemanggil pemain, jadi menekan butang semasa
   audio automatik sedang berjalan **menggantikan** klip itu, bukan menindihnya — satu klip
   boleh didengar pada satu masa, tidak pernah dua.
