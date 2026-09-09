@@ -285,8 +285,23 @@ Susun atur sebenar:
 
   **Berlabuh ke atas, bukan dipusatkan.** Teks soalan mesti bermula pada Y yang sama pada
   setiap soalan: anak membina memori otot untuk tempat membaca, sama seperti untuk tempat
-  butang (§7). Memusatkan kad dalam kawasan atas memulangkan pergerakan itu. Diukur: piksel
-  teks pertama pada Y 89 pada soalan mcq dua baris dan pada soalan count-tap empat baris.
+  butang (§7). Memusatkan kad dalam kawasan atas memulangkan pergerakan itu. Diukur pada
+  360×780 merentas kesepuluh-puluh soalan pek: piksel teks pertama pada **Y 168**, sebaran
+  0.3px antara soalan mcq dua baris dan soalan count-tap empat baris.
+
+  **Yang dijaga ialah sebaran itu, bukan nombor mutlak.** 168 ialah hasil susunan kad hari
+  ini — butang audio 64px, jurang 16px, kemudian teks. Tambah atau buang apa-apa di atas
+  teks soalan dan nombor itu bergerak secara sah; memori otot tidak peduli di mana teks
+  bermula, cuma bahawa ia bermula di tempat sama setiap kali. Kalau sebaran itu membesar,
+  itu regresi. Kalau nilai mutlak berubah sambil sebaran kekal ketat, itu susun atur baharu
+  dan nombor di sini yang perlu dikemas kini.
+
+  > Nombor sebelum ini ialah **Y 89**, dan ia diambil ketika tiada satu pun fail audio wujud.
+  > `AudioButton` menyembunyikan diri selagi failnya 0 bait (PRD §8), jadi pengukuran itu
+  > dibuat pada kad tanpa butang — susun atur yang tidak pernah dilihat oleh mana-mana anak
+  > yang mempunyai audio. Selepas sepuluh rakaman BM masuk, butang dirender pada setiap
+  > soalan dan teks turun 78.8px: 64 + 16, didarab skala masuk kad 0.985. 89 tidak pernah
+  > salah; ia mengukur keadaan sementara dan tidak berkata begitu.
 
   `flex-shrink` kekal pada nilai lalainya, jadi kad yang terlalu tinggi untuk skrin tetap
   mengalah, dan `overflow-y-auto` menangkap bakinya. Kanak-kanak boleh menatal untuk membaca;
