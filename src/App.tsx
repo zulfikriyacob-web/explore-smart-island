@@ -13,21 +13,25 @@ import { useQuizStore } from './features/quiz/store.ts';
 export function App() {
   const session = useQuizStore((s) => s.session);
 
+  const atIntro = session.status === 'intro';
+
   /*
     A restored session comes back at `question`, not `intro` (Brief 03), so it
     never passes the Mula button — and without that gesture iOS would refuse
     every clip for the rest of the run, including the replay button the child
-    presses on purpose.
+    presses on purpose. So for that path, the first touch anywhere counts.
 
-    So the first touch anywhere counts. It is capture-phase and `once`, so it
-    runs before the button underneath it and then removes itself; it does not
-    play anything, it only records that a gesture happened. The prompt already
-    on screen stays silent, which is the decision: after a restore the first tap
-    is usually an answer, and reading the question aloud once it is answered is
-    worse than saying nothing.
+    **Not while the start screen is up.** This listener is capture-phase on
+    `window`, so it ran a few milliseconds before the Mula button's own handler
+    and took the gesture with it — measured on the iPhone: `unlock()` at 2641ms
+    with `alreadyGestured:false`, then the press at 2646ms with
+    `alreadyGestured:true`. The button's handler was then the one call stack iOS
+    would have honoured, and it was the one that did nothing. The button needs
+    its own gesture, so this stays out of its way and arms only once the start
+    screen is gone.
   */
   useEffect(() => {
-    if (promptPlayer.unlocked()) return;
+    if (atIntro) return;
     const unlock = () => promptPlayer.unlock();
     const opts = { once: true, capture: true } as const;
     window.addEventListener('pointerdown', unlock, opts);
@@ -36,7 +40,7 @@ export function App() {
       window.removeEventListener('pointerdown', unlock, opts);
       window.removeEventListener('keydown', unlock, opts);
     };
-  }, []);
+  }, [atIntro]);
 
   if (session.status === 'intro') return <StartScreen />;
   if (session.status === 'summary' && session.result) {

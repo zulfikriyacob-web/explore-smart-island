@@ -215,7 +215,7 @@ describe('createPlayer', () => {
     expect(last().calls.play).toBe(1);
   });
 
-  it('starts locked, and unlocks once', () => {
+  it('starts locked, and every unlock does the context work', () => {
     // The iOS gate (SPEC 8). Callers autoplay only when this is true, so it must
     // not be true before a gesture has actually happened.
     const onUnlock = vi.fn();
@@ -226,11 +226,36 @@ describe('createPlayer', () => {
     expect(player.unlocked()).toBe(true);
     expect(onUnlock).toHaveBeenCalledTimes(1);
 
-    // Every later tap calls unlock too. Resuming an already-running context on
-    // each one is waste, so the side effect fires once and no more.
+    // Every later gesture does it again, and that is the point.
+    //
+    // This assertion used to read `toHaveBeenCalledTimes(1)` after three calls,
+    // on the reasoning that resuming a running context is waste. It was, and it
+    // was also the iPhone bug: on the start screen App's window listener called
+    // unlock() a few milliseconds before the button's own handler, so the flag
+    // was already set and the context work was skipped in the one call stack
+    // iOS would have honoured. Cheap and skippable are not the same thing —
+    // resuming a running context is a no-op, and being in the right stack is
+    // not.
     player.unlock();
     player.unlock();
-    expect(onUnlock).toHaveBeenCalledTimes(1);
+    expect(onUnlock).toHaveBeenCalledTimes(3);
+  });
+
+  it('arms without caching, so an unloaded weapon cannot be played later', () => {
+    // The arming Howl exists to give Howler a context before the first gesture,
+    // and Howler's own unlock may call unload() on it (sample rate 48000 on an
+    // iPhone). An unloaded Howl still answers play() with a sound id and makes
+    // no sound, so if arming shared the play cache that dead object would be the
+    // one a child hears nothing from.
+    const { player, made } = harness();
+    player.arm('/audio/ms/q001.mp3');
+    expect(made).toHaveLength(1);
+
+    player.play('/audio/ms/q001.mp3');
+    // A second, separate sound: the armed one was never cached.
+    expect(made).toHaveLength(2);
+    expect(made[0]!.calls.play).toBe(0);
+    expect(made[1]!.calls.play).toBe(1);
   });
 
   it('a locked player still plays when asked directly', () => {

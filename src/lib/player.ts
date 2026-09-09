@@ -73,7 +73,37 @@ export interface Player {
    */
   prefetch(src: string): void;
   /**
-   * Record that a real user gesture has happened. Callers check `unlocked()`
+   * Arm the audio backend before the first gesture, and throw the result away.
+   *
+   * This is the fix for the iPhone silence. Howler builds its AudioContext
+   * lazily — only `Howler.volume`, `Howler.mute`, `Howler.unload` and the `Howl`
+   * constructor create it — and it registers its own unlock listeners from one
+   * place only, inside `Howl.init`:
+   *
+   *     if (Howler.ctx && Howler.autoUnlock) Howler._unlockAudio();
+   *
+   * `_unlockAudio` returns immediately when there is no context, then registers
+   * capture-phase touchstart/touchend/click/keydown handlers that play a scratch
+   * buffer and call `ctx.resume()` inside the gesture. That is the path Howler
+   * has tested on real iOS hardware, and it works — measured on the device, the
+   * second tap unlocks. It missed the first tap only because nothing had built a
+   * Howl yet, so those listeners registered 32ms after the press had gone.
+   *
+   * Building one Howl before the child can press hands Howler a context and lets
+   * it arm itself in time.
+   *
+   * **A weapon, not a cache.** `_unlockAudio` calls `Howler.unload()` when the
+   * sample rate is not 44100 — 48000 on a modern iPhone — which unloads Howls
+   * and rebuilds the context. A Howl that survives that is dead in a way that
+   * does not announce itself: `play()` on an unloaded Howl pushes to its queue,
+   * returns a sound id, and never loads again. So this one is deliberately not
+   * kept, and nothing is allowed to prefetch through it. The bytes are not
+   * wasted — the browser's HTTP cache still has them for the real play.
+   */
+  arm(src: string): void;
+  /**
+   * Record that a real user gesture has happened, and make the audio context
+   * ready inside that gesture's own call stack. Callers check `unlocked()`
    * before autoplaying; pressing a button to play is always allowed, gesture or
    * not, because the press *is* the gesture.
    */
@@ -87,6 +117,7 @@ export function createPlayer(makeSound: SoundFactory, onUnlock?: () => void): Pl
   let currentSrc: string | null = null;
   let settle: (() => void) | null = null;
   let gestured = false;
+  let armed = false;
 
   /** One sound per src, built on first use and kept. */
   function sound(src: string): Sound {
@@ -170,11 +201,26 @@ export function createPlayer(makeSound: SoundFactory, onUnlock?: () => void): Pl
     prefetch: (src) => {
       sound(src);
     },
+    arm: (src) => {
+      // Once only. Howler's `_unlockAudio` sets `autoUnlock` false the first
+      // time it runs, so a second Howl cannot register those listeners again —
+      // it would only cost another request. (React's development double-effect
+      // makes this reachable immediately, not just in theory.)
+      if (armed) return;
+      armed = true;
+      // Not cached, on purpose — see the interface. The return value is dropped.
+      makeSound(src);
+    },
     unlock: () => {
       // TEMPORARY diagnostics.
       record('unlock()', { alreadyGestured: gestured, inGesture: inGesture() });
-      if (gestured) return;
       gestured = true;
+      // Always, not just the first time. This used to return early once the flag
+      // was set, and on the start screen the window listener in App set it a few
+      // milliseconds before the button's own handler ran — so the context work
+      // was skipped in the one call stack where iOS would have honoured it. The
+      // flag is bookkeeping; the context work has to happen wherever a gesture
+      // is, and resuming an already-running context costs nothing.
       onUnlock?.();
     },
     unlocked: () => gestured,
@@ -210,15 +256,34 @@ export function howlSound(src: string): Sound {
  * the gesture's own call stack, which is why `unlock()` is called straight from
  * the press handler rather than from an effect afterwards.
  */
+/**
+ * Make sure there is an AudioContext, and resume it — both inside whatever call
+ * stack this runs in, which is a press handler.
+ *
+ * Creating it first matters. Measured on the iPhone: at the moment Mula was
+ * pressed there was no context at all, so the resume had nothing to act on, and
+ * the context that appeared 32ms later was born suspended outside any gesture.
+ *
+ * `Howler.volume()` is the cheapest public call that runs Howler's own
+ * `setupAudioContext()` without building a Howl: it creates the context before
+ * it looks at its argument, and passing the current volume back in changes
+ * nothing. We touch `Howler.ctx` rather than making our own context, because
+ * Howler plays through that one — resuming any other object would be resuming
+ * something that makes no sound.
+ */
 function resumeContext(): void {
+  if (!Howler.ctx) {
+    try {
+      Howler.volume(Howler.volume());
+      record('ctx created in handler', howlerState());
+    } catch (err) {
+      record('ctx create THREW', { error: String(err) });
+    }
+  }
+
   const ctx = Howler.ctx as AudioContext | undefined;
 
-  // TEMPORARY diagnostics. The suspicion this is here to confirm or kill:
-  // Howler builds its AudioContext lazily, when the first Howl is constructed.
-  // On a cold start no Howl exists until the first question renders, which is
-  // *after* the Mula press — so at the moment of the press there may be no ctx
-  // to resume at all, and this function would quietly do nothing. On a laptop
-  // that costs nothing, because the context is allowed to start on its own.
+  // TEMPORARY diagnostics.
   record('resumeContext()', {
     inGesture: inGesture(),
     willResume: ctx ? ctx.state === 'suspended' : false,
