@@ -124,6 +124,21 @@ work, and it burns through usage limits fast.
 - **No `gh` CLI, no `GITHUB_TOKEN`, no connected Chrome.** Pull requests cannot be
   opened from here. Push the branch and hand over the `.../pull/new/<branch>` URL
   with a title and a body.
+- **Do not read `$LASTEXITCODE` after a truncating pipeline.** `npm run x |
+  Select-Object -First 3` closes the pipe early, the upstream process is killed,
+  and the exit code comes back `-1` on a command that succeeded. This produced two
+  wrong conclusions in one session — a passing script reported as failing, and a
+  missing-asset case reported as an error when it was designed to be a warning.
+  Capture first, then filter: `$out = npm run x; $code = $LASTEXITCODE`.
+- **A label containing a bare drive letter can trip the path guard.** A line as
+  innocent as `"=== A: something ==="` next to a `Remove-Item` was refused with
+  "Remove-Item on system path 'A:' is blocked". Rename the label, not the command.
+- **`-AsByteStream` is PowerShell 7.** This is 5.1. For bytes use
+  `[System.IO.File]::ReadAllBytes(path)`.
+- **`Set-Content -Encoding utf8` writes a BOM on 5.1**, and a commit message file
+  written that way puts an invisible U+FEFF at the front of the subject line.
+  Write message files with a tool that does not add one, or
+  `[System.IO.File]::WriteAllText(path, text, (New-Object System.Text.UTF8Encoding($false)))`.
 
 ### Verifying visual work
 
@@ -146,3 +161,15 @@ work, and it burns through usage limits fast.
 - A saved session in localStorage freezes the questions, so **content edits do not
   appear until the session is cleared**. Clear site data before testing new prompt
   text. See PRD section 16.
+- **Tailwind only compiles the classes it finds in the source.** A class that
+  exists in `tailwind.config.js` but is used nowhere is not in the stylesheet, so
+  adding it to an element at runtime to measure its effect measures nothing. Doing
+  that with `min-h-btn` collapsed the slot to zero and produced an 88px saving
+  where the real number was 16. Change the source and reload, or measure with an
+  inline style.
+- **The pane is not the device.** `navigator.vendor` is `"Google Inc."` and the UA
+  is a Pixel 8 on Android Chrome, so anything a library gates on Apple never runs
+  here — Howler branches on `vendor.indexOf('Apple')` inside the function `stop()`
+  calls. The pane also lets audio play with no trusted gesture, so the iOS unlock
+  path is never exercised either. Both are reasons an audio or Safari claim from
+  this pane is about the pane.
