@@ -346,7 +346,7 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
 |---|---|---|
 | Kandungan KSSR salah dipeta | Ibu bapa hilang kepercayaan | Semakan guru berbayar sebelum pelancaran; kod SP kelihatan dalam papan pemuka |
 | Produksi audio pantas melebihi bajet | Modul Membaca tersekat | Rakam Tahun 1 dahulu; tulis skrip semua di awal; guna satu pelakon suara setiap bahasa |
-| Animasi tersekat pada peranti di bawah baseline | Kanak-kanak berputus asa | Baseline disokong: Chrome 100+ / Safari 15.4+ (peranti 2022 ke atas), diperlukan oleh Framer Motion v11 dan Rive; hanya animasi `transform`/`opacity` (SPEC §7.6) |
+| Animasi tersekat pada peranti di bawah baseline | Kanak-kanak berputus asa | Baseline disokong: Chrome 100+ / Safari 15.4+ (peranti 2022 ke atas), diperlukan oleh Framer Motion v11; hanya animasi `transform`/`opacity` (SPEC §7.6) |
 | Sesi terlalu panjang untuk umur 7 tahun | Kadar berhenti tinggi | 10 soalan maksimum; sasaran 4–6 minit setiap aktiviti; uji dengan kanak-kanak sebenar |
 | Kekeliruan dwibahasa dalam Membaca | Pembelajaran fonik rosak | Kunci bahasa kandungan setiap trek (§12) |
 
@@ -389,3 +389,17 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
 
    Langkah 1–3 audio siap (Howler, `lib/player.ts`, butang). Langkah 4–7 — gerbang gerak
    isyarat, skrin mula, main automatik, prapuat satu soalan ke hadapan — menunggu keputusan ini.
+9. **Tiga bintang dan satu bintang mendapat maskot yang sama.** Kontrak Rive lama membawa satu
+   trigger `celebrate` yang berasingan untuk ⭐⭐⭐ pada skrin ganjaran. Ia tidak dibawa masuk ke
+   dalam komponen React; `KancilState` hari ini ialah empat keadaan, dan skrin ringkasan
+   merender `happy` untuk setiap keputusan (SPEC §11.6).
+
+   Confetti yang DESIGN.md §7 E2 khaskan untuk ⭐⭐⭐ juga belum dibina, jadi buat masa ini
+   **tiada apa pada skrin ganjaran yang membezakan satu bintang daripada tiga**, selain kiraan
+   bintang itu sendiri. Kelangkaan ialah keseluruhan hujah E2 (DESIGN.md §1: kemeriahan
+   dibelanjakan pada momen ganjaran), jadi soalannya bukan "reaksi mana yang hilang" tetapi
+   sama ada perbezaan itu berbaloi dibina langsung — dan kalau ya, sama ada confetti sahaja
+   sudah cukup membawanya tanpa keadaan maskot kelima.
+
+   Direkod sebagai soalan, bukan kerja dirancang. Kalau reaksi raya dikehendaki, ia ditambah
+   kepada `KancilState` dalam SPEC.md §11 dahulu, kemudian dalam komponen.

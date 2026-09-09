@@ -548,9 +548,19 @@ mengandungi float-nya sendiri. **Tiada `min-height` diperlukan.** Peraturan `min
 yang pernah ada di situ tidak melakukan apa-apa; disahkan dengan memaksanya ke `0` sambil
 float kekal — perenggan tetap 88px.
 
-Kos ini diterima kerana slot menempah penjuru supaya tiada apa berganjak apabila maskot tiba.
-Tetapi ia kos yang dibayar **sekarang** untuk sesuatu yang belum dilukis, dan ia patut
-disemak semula kalau kancil Rive tertangguh melepasi Fasa 3.
+Kos ini diterima kerana penjuru mesti **sudah** lapang sebelum maskot tiba. Kancil muncul
+semasa maklum balas dan tidak pernah semasa anak sedang berfikir (§6), jadi slot itu kosong
+sepanjang bahagian soalan yang anak habiskan paling banyak masa padanya — dan itu memang
+harganya. Menempah penjuru itu lewat bermakna teks soalan beralih tepat pada saat maklum
+balas muncul, iaitu saat anak sedang memandangnya.
+
+Syarat semakan lama — "kalau kancil Rive tertangguh melepasi Fasa 3" — sudah tidak
+berkaitan. Kancil dibina, sebagai komponen React, dan ia merender dalam slot ini hari ini
+(SPEC §11). Yang menggantikan syarat itu ialah pengukuran, bukan jadual: 57px bergantung
+pada susunan kad hari ini — lebar kad 280px, teks soalan dua baris, float 88px di
+sebelahnya. Ukur semula apabila salah satu daripadanya berubah, iaitu kalau slot berpindah
+keluar daripada blok teks soalan, kalau teks soalan menjadi lebih panjang secara umum, atau
+kalau satu jenis soalan baharu menuntut ketinggian kad yang sudah tiada lagi.
 
 Ini peraturan susun atur, bukan animasi — jangan animasikan slot itu sendiri berkembang atau
 mengecut. Slot statik; hanya isinya yang bergerak.
