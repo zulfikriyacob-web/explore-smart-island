@@ -180,21 +180,55 @@ kurang jelas; sempadan bermakna yang gagal kontras menjadikan satu **jawapan** k
 #### D3 — ikon ✓/✕, saluran sandaran itu sendiri
 
 Ikon maklum balas ialah strok putih di atas pil `--daun` atau `--bunga` (§5.4). Diukur
-terhadap pilnya sendiri:
+terhadap pilnya sendiri, kedua-duanya gagal hari ini:
 
-| Ikon | Sekarang | | Cadangan | |
-|---|---|---|---|---|
-| ✓ atas pil `--daun` `#2FBF71` | putih | 2.38:1 ✗ | `--arang` `#1F3A34` | **5.14:1** ✓ |
-| ✕ atas pil `--bunga` `#FF6B6B` | putih | 2.78:1 ✗ | `--arang` `#1F3A34` | **4.42:1** ✓ |
+| Ikon | Sekarang | |
+|---|---|---|
+| ✓ putih atas pil `--daun` `#2FBF71` | 2.38:1 | ✗ |
+| ✕ putih atas pil `--bunga` `#FF6B6B` | 2.78:1 | ✗ |
+
+**Pembaikan: gelapkan pil, bukan strok.** Strok kekal putih; pil mengambil nilai `-dark`
+yang D2 sudah bawa masuk:
+
+| Ikon | Cadangan | |
+|---|---|---|
+| ✓ putih atas pil `--daun-dark` `#157A43` | **5.39:1** | ✓ |
+| ✕ putih atas pil `--bunga-dark` `#A8434A` | **5.89:1** | ✓ |
+
+Tiga sebab, mengikut susunan:
+
+1. **Tiada nilai baharu.** Kedua-dua hex sudah masuk melalui D2. Palet tidak bertambah.
+2. **Pil kini sepadan dengan sempadan butangnya.** Satu keluarga warna setiap keadaan, bukan
+   pil satu warna dan sempadan warna lain pada butang yang sama.
+3. **5.39 dan 5.89 melepasi lantai teks 4.5:1**, bukan hanya lantai grafik 3:1. Kita tidak
+   memerlukan itu — lihat di bawah — tetapi ia percuma.
+
+**Strok `--arang` ditolak.** Ia berfungsi di atas pil semasa (✓ 5.14:1, ✕ 4.42:1) tetapi
+menjadikan dua pil berlainan corak tanpa sebab. Ia juga tidak boleh digabungkan dengan
+pembaikan di atas: `--arang` di atas `--daun-dark` ialah **2.27:1** dan di atas `--bunga-dark`
+**2.08:1** — kedua-duanya di bawah 3:1. Menggelapkan pil **dan** strok memecahkan ikon.
+Pilih satu; yang betul ialah pil.
+
+**Pil itu sendiri juga gagal, dan ia dibaiki oleh pertukaran yang sama.** Pil ialah objek
+grafik, dan jirannya ialah muka butang, bukan latar skrin:
+
+| Pil | Atas muka butang | Sekarang | Cadangan |
+|---|---|---|---|
+| ✓ | `--daun-light` `#DFF6E9` | 2.10:1 ✗ | **4.75:1** ✓ |
+| ✕ | putih | 2.78:1 ✗ | **5.89:1** ✓ |
+
+Menggelapkan strok sahaja tidak akan menyentuh baris ini. Pil akan kekal di bawah lantainya,
+dan bentuk yang membawa ikon itu masih lemah walaupun ikon di dalamnya sudah kuat.
 
 **Lantai yang terpakai kepada ikon ialah 3:1, bukan 4.5:1.** 4.5:1 ialah lantai teks. Tanda ✓
 dan ✕ bukan teks — ia objek grafik yang diperlukan untuk memahami kandungan, dan lantai untuk
 itu ialah 3:1 terhadap warna bersebelahannya (WCAG 2.1 SC 1.4.11, lantai yang sama yang §10
-sudah gunakan untuk sempadan butang).
+gunakan untuk sempadan butang).
 
-Jadi **4.42:1 lulus**, dengan margin 47% di atas lantainya. D3 tidak memerlukan nilai lain
-untuk ✕. Nombor itu direkod di sini kerana ia kelihatan seperti kegagalan pada pandangan
-pertama terhadap 4.5:1, dan orang seterusnya akan bertanya perkara yang sama.
+Ini penting bagi satu nombor yang kelihatan seperti kegagalan: **strok `--arang` atas
+`--bunga` pada 4.42:1 sebenarnya lulus**, dengan margin 47% di atas lantai 3:1. Ia ditolak
+kerana corak, bukan kerana kontras. Direkod supaya orang seterusnya tidak membuang masa
+mengejar nilai ✕ yang "lebih selamat" — tiada yang diperlukan.
 
 **Ini yang paling penting daripada ketiga-tiganya.** §10 dan SPEC §9 melarang warna sebagai
 saluran tunggal, dan ikon ialah saluran yang mereka harapkan apabila warna gagal. Dua saluran
@@ -902,7 +936,14 @@ Sebelum mana-mana skrin dianggap siap:
 
 - [ ] Setiap sasaran boleh ketuk ≥ 64px, dengan jurang ≥ 16px antaranya
 - [ ] Semua teks lulus kontras 4.5:1; sempadan butang lulus 3:1
-- [ ] Betul/salah disampaikan melalui **ikon + gerakan + bunyi**, tidak pernah warna sahaja
+- [ ] **Ikon dan bentuk yang membawa makna lulus 3:1** terhadap warna bersebelahannya — ikon
+      ✓/✕ terhadap pilnya, dan pil itu terhadap muka butang. 3:1, bukan 4.5:1, kerana ikon
+      ialah objek grafik dan bukan teks (WCAG 2.1 SC 1.4.11); lantai teks tidak terpakai.
+      Yang terpakai ialah lantai yang sama seperti sempadan butang, dan atas sebab yang sama —
+      bentuk yang perlu dikenali, bukan huruf yang perlu dibaca. Audit dan nombornya: §2.4 D3
+- [ ] Betul/salah disampaikan melalui **ikon + gerakan + bunyi**, tidak pernah warna sahaja.
+      Ikon ialah saluran yang mesti berfungsi sendirian: gerakan mungkin tidak menghasilkan
+      satu bingkai pun (SPEC §7.1) dan bunyi mungkin dimatikan
 - [ ] Setiap imej mempunyai `alt` dalam kedua-dua BM dan EN
 - [ ] `prefers-reduced-motion` mematikan setiap gelung tak terhingga dan semua zarah
 - [ ] Setiap arahan mempunyai audio; kanak-kanak yang tidak boleh membaca boleh menyiapkan skrin
