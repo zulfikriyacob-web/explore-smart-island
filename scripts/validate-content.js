@@ -15,6 +15,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { TopicPackSchema, collectAssetRefs } from '../src/content/schema.ts';
+import { MAX_ATTEMPTS } from '../src/lib/scoring.ts';
 
 /**
  * Placeholder art carries this marker. A picture that is a dashed box is not a
@@ -33,6 +34,51 @@ const PUBLIC_DIR = path.join(ROOT, 'public');
 function resolveAsset(assetPath) {
   const relative = assetPath.replace(/^\/+/, '');
   return path.join(PUBLIC_DIR, ...relative.split('/'));
+}
+
+/**
+ * Can a child reach the third attempt on this question — the one that reveals
+ * the answer?
+ *
+ * Every wrong answer strikes out the option it used, so an option question runs
+ * out of wrong options before it runs out of attempts unless it carries more
+ * than MAX_ATTEMPTS of them. count-tap has nothing to strike out: its submit
+ * button is never disabled, so it always can.
+ */
+function canReachReveal(question) {
+  if (question.type === 'count-tap') return true;
+  return question.payload.options.length - 1 >= MAX_ATTEMPTS;
+}
+
+/**
+ * Does the screen draw a revealed answer for this question? count-tap falls back
+ * to "Jawapannya N." with no `explain` written, so it always does.
+ */
+function showsReveal(question) {
+  return question.type === 'count-tap' || question.explain !== undefined;
+}
+
+/**
+ * The hint and the revealed answer share one band under the question card
+ * (DESIGN §7). Two of them at once overflows it, and the overflow lands on the
+ * help a stuck child needs. A question may carry a hint only when the reveal
+ * cannot appear beside it.
+ */
+function checkHintRevealClash(pack) {
+  const errors = [];
+  for (const [i, q] of pack.questions.entries()) {
+    if (q.hint === undefined) continue;
+    if (!canReachReveal(q) || !showsReveal(q)) continue;
+    const why =
+      q.type === 'count-tap'
+        ? `count-tap has no options to strike out, so a third miss is always reachable, and it reveals the answer even without an "explain"`
+        : `${q.payload.options.length} options leaves ${q.payload.options.length - 1} wrong ones, enough to reach attempt ${MAX_ATTEMPTS}, and "explain" is set`;
+    errors.push(
+      `questions.${i} ("${q.id}"): carries a hint and can show a revealed answer at the same time — ${why}. ` +
+        `Both are drawn in the band under the question card and would overflow it. Remove the hint, or remove what makes the reveal reachable.`,
+    );
+  }
+  return errors;
 }
 
 function formatIssue(issue) {
@@ -75,6 +121,8 @@ async function validatePack(file) {
   }
 
   const pack = parsed.data;
+
+  errors.push(...checkHintRevealClash(pack));
 
   // A pack's filename must match its topicId, or caches and routes disagree.
   const expected = `${pack.topicId}.json`;

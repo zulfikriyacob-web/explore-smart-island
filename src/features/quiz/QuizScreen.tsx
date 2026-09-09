@@ -204,34 +204,51 @@ export function QuizScreen() {
             }
           />
 
-          {/*
-            B5 — the hint slides down into place under the question.
-
-            No AnimatePresence and no fade. It used to start at opacity 0, so
-            the one piece of help a stuck child gets was invisible whenever the
-            animation frame did not arrive — measured at opacity 0 with the full
-            text sitting in the DOM. Now only `y` moves, from -8 to 0: opaque and
-            readable on frame 0, and it still slides in when frames run. Its own
-            initial and animate are set rather than inherited from the card,
-            because the card has already settled by the time a hint appears.
-          */}
-          {showHint && (
-            <motion.p
-              variants={hintItem}
-              initial={reduce ? false : 'arriving'}
-              animate="settled"
-              className="m-0 rounded-md bg-laut-light px-4 py-3 font-sans text-body text-arang"
-            >
-              {question.hint?.[LANG]}
-            </motion.p>
-          )}
-
-          {revealText !== null && (
-            <p className="m-0 rounded-md bg-pasir px-4 py-3 font-sans text-body text-arang">
-              {revealText}
-            </p>
-          )}
         </motion.div>
+
+        {/*
+          The hint and the revealed answer live OUTSIDE the question card, as a
+          band between it and the answer stack. They are not part of the
+          question; they are help that arrives after a mistake.
+
+          Inside the card they grew it, and on a phone that pushed it past the
+          space the answer stack leaves: the card scrolled and the help landed
+          below the fold, which is the one thing that must never happen to the
+          one thing a stuck child gets. Out here the card keeps its resting
+          height and the band uses the background that was already empty.
+
+          It is not simply the same pixels in a new place. Measured at 390x740,
+          the hint is 78px inside the card and 51px out here — 27px back. A float
+          taller than its own paragraph overhangs into the block below it, and
+          the kancil (88) and audio (64) floats are both taller than a two-line
+          prompt, so inside the card they squeezed the hint into two lines. Full
+          width it is one. Anyone moving these back into the card pays that again.
+
+          `shrink-0`: the card gives way first. Below the threshold the child
+          sees a clipped question and a whole hint, rather than a whole question
+          and no hint — and a child who has already answered wrong has read the
+          question.
+
+          Never both at once: a question that can reach a third attempt must not
+          carry a hint alongside a revealed answer, and `validate:content`
+          enforces it rather than leaving it to pack authors to remember.
+        */}
+        {showHint && (
+          <motion.p
+            variants={hintItem}
+            initial={reduce ? false : 'arriving'}
+            animate="settled"
+            className="m-0 shrink-0 rounded-md bg-laut-light px-4 py-3 font-sans text-body text-arang"
+          >
+            {question.hint?.[LANG]}
+          </motion.p>
+        )}
+
+        {revealText !== null && (
+          <p className="m-0 shrink-0 rounded-md bg-pasir px-4 py-3 font-sans text-body text-arang">
+            {revealText}
+          </p>
+        )}
 
         {/*
           The feedback area's live region (SPEC 9). The hint and the revealed

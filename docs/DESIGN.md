@@ -435,7 +435,7 @@ SPEC.md §7.1 peraturan keras 2.
 | B2 | **Cincin betul** | Gelang hijau berkembang keluar dari butang, `scale 0.8→1.6`, `opacity 0.6→0` | Menambah "letupan" tanpa zarah — murah pada telefon perlahan |
 | B3 | **Goncang salah** | Goncang mendatar ±9px, mereda dalam 6 pusingan | Isyarat "bukan itu" yang mesra — **tidak** merah, tidak menakutkan |
 | B4 | **Layu pilihan salah** | Pilihan yang dihapuskan pudar ke 0.35, skala 0.96 | Mengurangkan pilihan, mengurangkan beban kognitif pada percubaan 2 |
-| B5 | **Pancingan luncur** | Kad pancingan meluncur turun ke tempatnya di bawah soalan, legap dan bersaiz penuh sepanjang masa; kad tumbuh melalui reflow biasa | Memperkenalkan bantuan tanpa menyusun semula skrin secara mendadak. **Tidak pernah pudar masuk** — pancingan ialah satu-satunya bantuan anak yang tersekat, dan bantuan yang menunggu bingkai ialah bantuan yang tiada |
+| B5 | **Pancingan luncur** | Kad pancingan meluncur turun ke tempatnya dalam jalur **di bawah kad soalan**, legap dan bersaiz penuh sepanjang masa | Memperkenalkan bantuan tanpa menyusun semula skrin secara mendadak. **Tidak pernah pudar masuk** — pancingan ialah satu-satunya bantuan anak yang tersekat, dan bantuan yang menunggu bingkai ialah bantuan yang tiada |
 | B6 | **Dedah jawapan** | Selepas 3 percubaan, butang betul berdenyut perlahan 2× dengan cahaya `--mangga` | Menutup gelung — kanak-kanak tidak pernah dibiarkan tanpa jawapan |
 
 ### Kumpulan C — Gerak isyarat seret *(modul Sains & Membaca)*
@@ -550,6 +550,53 @@ disemak semula kalau kancil Rive tertangguh melepasi Fasa 3.
 
 Ini peraturan susun atur, bukan animasi — jangan animasikan slot itu sendiri berkembang atau
 mengecut. Slot statik; hanya isinya yang bergerak.
+
+### Jalur bantuan — pancingan dan jawapan didedah hidup DI LUAR kad
+
+Pancingan dan teks dedah jawapan bukan sebahagian soalan. Ia bantuan yang tiba selepas
+kesilapan, dan ia dilukis dalam jalurnya sendiri **antara kad soalan dan timbunan jawapan**,
+bukan di dalam kad.
+
+Sebabnya bermula sebagai pepijat. Di dalam kad, pancingan menumbuhkan kad; pada telefon itu
+menolaknya melepasi ruang yang ditinggalkan timbunan jawapan, kad menatal, dan bantuan itu
+jatuh di bawah lipatan. Diukur pada 390×740: kad mahu 310px, dapat 244, pancingan terpotong
+33.7px. Anak berumur tujuh tahun tidak tahu untuk menatal — kami sudah lihat itu berlaku, dan
+benda yang tersembunyi ialah satu-satunya bantuan yang dia dapat.
+
+**Ia bukan piksel yang sama di tempat baharu.** Ini bahagian yang paling mudah dihilangkan:
+
+| | Tinggi pancingan |
+|---|---|
+| Di dalam kad | 78px |
+| Dalam jalur | **51px** |
+
+27px dipulangkan, dan sebabnya CSS asas: **float yang lebih tinggi daripada perenggannya
+menjulur ke blok di bawahnya.** Slot kancil (88px) dan butang audio (64px) kedua-duanya lebih
+tinggi daripada teks soalan dua baris, jadi di dalam kad ia menyempitkan pancingan dan
+memaksanya membalut kepada dua baris. Selebar penuh ia satu baris. Float itu membelanjakan
+ruang pada blok yang bukan miliknya.
+
+Sesiapa yang memindahkan jalur ini kembali ke dalam kad akan membayar semula kedua-duanya —
+pertumbuhan kad **dan** 27px itu — tanpa tahu yang kedua wujud.
+
+**Jalur tidak mengecut; kad yang mengalah.** `shrink-0` pada jalur. Di bawah ambang, anak
+melihat soalan terpotong dan pancingan penuh, bukan soalan penuh dan pancingan tersembunyi.
+Arah itu disengajakan: anak yang menjawab salah sudah membaca soalan itu.
+
+**Tidak pernah kedua-dua serentak.** Satu soalan yang boleh mencapai percubaan ketiga tidak
+boleh membawa pancingan bersama jawapan didedah — dua blok dalam satu jalur melimpahkannya
+semula. `validate:content` menguatkuasakannya dan bukan menyerahkannya kepada ingatan penulis
+pek: count-tap sentiasa boleh mencapai percubaan ketiga dan sentiasa mendedah, jadi ia tidak
+boleh berpancingan langsung; soalan berpilihan hanya boleh mencapainya dengan sekurang-kurangnya
+empat pilihan, kerana setiap jawapan salah melumpuhkan pilihan yang digunakannya.
+
+Diukur selepas perubahan, 30 keadaan setiap satu — rehat, satu salah, salah-kemudian-betul,
+tiga salah — merentas kesepuluh-puluh soalan pek:
+
+| Viewport | Jalur terpotong | Limpahan kad |
+|---|---|---|
+| 390 × 740 | 0 | 1px, pada satu keadaan (count-tap tiga salah; sebelum ini 62px) |
+| 360 × 780 | 0 | 0 |
 
 ### Apa yang **tidak** kita animasikan
 
