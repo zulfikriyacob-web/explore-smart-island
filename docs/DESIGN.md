@@ -241,14 +241,65 @@ Jadi urutannya bukan sekadar keutamaan; ia kebergantungan. D2 memperbaiki sempad
 membawa makna, tetapi hujah bahawa maklum balas masih selamat sementara menunggu bergantung
 pada ikon berfungsi. D3 membetulkan andaian itu.
 
-#### Belum ada dalam audit ini
+#### Status — D1, D2 dan D3 dilaksana
 
-Sempadan `--garis` bagi keadaan dilumpuhkan. Ia dilukis pada `opacity: 0.35` (§5.4), jadi
-nisbah sebenarnya bukan nisbah tokennya — ia perlu diukur terkomposit, bukan dikira daripada
-hex.
+Ketiga-tiganya kini dalam kod. `daun.dark`, `bunga.dark` dan `mangga.dark` ditambah kepada
+§11; `BlockButton` mengambil varian `-dark` untuk sempadan setiap keadaan, tepi bawah mengikut
+sempadan, dan pil ikon mengambil `--daun-dark` / `--bunga-dark` dengan strok kekal putih.
 
-Nilai `-dark` yang dicadangkan D2 belum ada dalam §11. Menambahnya kepada `tailwind.config.js`
-ialah sebahagian daripada kerja itu, bukan langkah berasingan.
+Diukur pada halaman yang berjalan, 360×780 dan 390×740, nilai terkira dan bukan nilai yang
+ditulis:
+
+| Keadaan | Sempadan | Tepi bawah | Pil ikon | Strok |
+|---|---|---|---|---|
+| Rehat | `rgb(8,122,112)` | sama | — | — |
+| Betul | `rgb(21,122,67)` | sama | `rgb(21,122,67)` | putih |
+| Salah | `rgb(168,67,74)` | sama | `rgb(168,67,74)` | putih |
+| Dilumpuhkan | `rgb(211,232,227)` | sama | — | — |
+
+**Satu pepijat ditemui semasa mengukur, dan dibaiki bersama.** `transition-colors
+duration-150` pada butang menjadikan warna sempadan menunggu bingkai animasi. Diukur dengan
+kelas `border-bunga-dark` sudah dipasang dan nilai terkira **masih `rgb(8,122,112)` — teal
+yang ia mula daripadanya — dua saat selepas jawapan salah**, dalam penyaji yang tidak
+menghasilkan bingkai. `box-shadow` bukan sifat yang ditransisikan, jadi tepi bawah melompat ke
+warna baharu sementara sempadan tertinggal: garis teal mengelilingi tepi merah gelap.
+
+Warna sempadan **ialah** keadaan itu, bukan hiasan di atasnya. Transisi dibuang; pertukaran
+kini serta-merta, dan denyut serta goncangan masih membawa gerakannya. Ini pepijat yang sudah
+ada sebelum D2 — cuma sebelum ini kedua-dua warna cerah, jadi ketidakpadanan itu kurang
+kelihatan.
+
+#### Diukur sekarang: sempadan `--garis` dilumpuhkan
+
+Audit menandakannya belum diliputi kerana ia dilukis pada `opacity: 0.35` dan nisbahnya
+bukan nisbah tokennya. Dikomposit pada 0.35 di atas latar `--laut-cetek`:
+
+| | Warna terkomposit | Nisbah | |
+|---|---|---|---|
+| Sempadan `--garis` lawan latar | `#DFF2EE` | **1.05:1** | ✗ |
+| Sempadan lawan muka butangnya sendiri | `#DFF2EE` lawan `#EFFAF8` | **1.09:1** | ✗ |
+
+Sebagai rujukan, `--garis` pada legap penuh terhadap latar pun hanya **1.16:1** — opacity
+bukan puncanya, warna itu sendiri hampir dengan latar.
+
+**Direkod, tidak dibaiki.** Dua sebab ia mungkin betul sebagaimana adanya: WCAG 2.1 SC 1.4.11
+mengecualikan komponen antara muka yang **tidak aktif** daripada lantai 3:1, dan pilihan yang
+dilumpuhkan memang sengaja dilemahkan (B4, §7) supaya beban kognitif turun pada percubaan
+kedua. Yang belum diputuskan ialah sama ada "dilemahkan" sepatutnya bermakna "hampir tidak
+kelihatan". Itu keputusan reka bentuk, bukan pembetulan kontras.
+
+#### Masih belum diliputi
+
+**Sempadan `AudioButton`.** Ia butang, dan sempadan 3px-nya masih `--laut` — nisbah 2.32:1
+yang sama seperti sempadan jawapan sebelum D1. Ia berada di luar tiga kerja yang audit ini
+tetapkan, jadi ia tidak disentuh; ia kekal satu-satunya sempadan butang dalam app yang di
+bawah lantai.
+
+**Keadaan `revealed` tidak boleh dicapai dengan kandungan hari ini.** `--mangga-dark`
+disahkan terkompil (`.border-mangga-dark` → `rgb(143 97 0)`), tetapi tiada soalan dalam pek
+yang boleh memaparkannya: `mcq` terhad kepada tiga pilihan jadi ia tidak pernah sampai ke
+percubaan ketiga, dan `count-tap` tidak mempunyai butang pilihan untuk ditanda. Nilainya
+betul; skrinnya belum wujud.
 
 ### 2.5 Pemisahan palet — UI dan ilustrasi
 
@@ -517,10 +568,9 @@ untuk bertemu tepi itu. Ia jelas boleh ditekan tanpa perlu membaca apa-apa.
   className="
     relative w-full min-h-[88px] px-6
     rounded-[20px] bg-white
-    border-4 border-laut
+    border-4 border-laut-dark
     shadow-[0_4px_0_0_theme(colors.laut.dark)]
     font-display font-semibold text-[24px] text-arang
-    active:shadow-none
     focus-visible:outline focus-visible:outline-4 focus-visible:outline-offset-2
   "
   whileTap={{ y: 4, scale: 0.98 }}
@@ -528,16 +578,38 @@ untuk bertemu tepi itu. Ia jelas boleh ditekan tanpa perlu membaca apa-apa.
 />
 ```
 
+**Sempadan dan tepi bawah kini warna yang sama.** Sebelum D1 sempadan ialah `--laut` dan
+tepi `--laut-dark`; sempadan itu diukur pada 2.29:1 terhadap latar dan gagal lantai 3:1
+(§2.4). Kedua-duanya kini `--laut-dark`.
+
+Blok masih membaca sebagai blok, dan yang menanggungnya ialah **ketebalan, bukan warna**.
+Diukur pada butang rehat: 4px sempadan pada tiga sisi, dan pada dasar 4px sempadan bersambung
+terus dengan tepi 4px — satu jalur 8px. Asimetri 8-lawan-4 itulah isyarat "boleh ditekan",
+dan ia bertahan sama ada kedua-dua jalur itu sewarna atau tidak. Menekan menolak butang turun
+4px ke atas tepinya, jadi jalur dasar kembali kepada 4px seperti sisi lain — perubahan yang
+sama seperti sebelum ini.
+
+> `active:shadow-none` yang pernah ada dalam petikan ini tidak pernah wujud dalam komponen,
+> dan sekarang ia akan menjadi salah: menghilangkan tepi **dan** menurunkan butang menggerakkan
+> dasarnya dua kali. `whileTap` sudah menanggungnya sendiri.
+
 ### 5.4 Keadaan butang
 
 | Keadaan | Perubahan visual | Gerakan |
 |---|---|---|
-| Rehat | Muka putih, sempadan 4px modul, tepi bawah 4px | — |
+| Rehat | Muka putih, sempadan 4px `--laut-dark`, tepi bawah 4px sama | — |
 | Ditekan | `translateY(4px)`, tepi bawah hilang | `whileTap`, `spring.pop` |
-| Betul | Muka → `--daun` cetek, sempadan → `--daun`, ikon ✓ masuk | `correctPulse` 0.32 s |
-| Salah | Sempadan → `--bunga`, ikon ✕ masuk | `shake` 0.34 s |
+| Betul | Muka → `--daun-light`, sempadan → `--daun-dark`, ikon ✓ masuk | `correctPulse` 0.32 s |
+| Salah | Sempadan → `--bunga-dark`, ikon ✕ masuk | `shake` 0.34 s |
+| Dedah jawapan | Sempadan → `--mangga-dark` | denyut B6 |
 | Dilumpuhkan (selepas salah) | `opacity: 0.35`, sempadan → `--garis` | pudar 0.2 s |
 | Fokus (papan kekunci) | Garis luar 4px `--nila`, ofset 2px | — |
+
+Sempadan ialah varian `-dark` bagi tokennya, bukan token itu sendiri. Token biasa gagal
+lantai 3:1 terhadap latar; varian gelap lulus. Nombor penuh dalam §2.4.
+
+Pil ikon ✓/✕ mengikut sempadan: `--daun-dark` dan `--bunga-dark`, dengan **strok kekal
+putih**. Jangan gelapkan strok juga — §2.4 D3.
 
 **Betul dan salah tidak pernah warna sahaja.** Setiap satu mendapat ikon, gerakan tersendiri,
 dan bunyi tersendiri. Seorang kanak-kanak buta warna mesti masih tahu apa yang berlaku.
@@ -968,9 +1040,9 @@ export default {
         pasir:   '#FFF3DC',
         arang:   { DEFAULT: '#1F3A34', soft: '#5C7A72' },
         garis:   '#D3E8E3',
-        daun:    { DEFAULT: '#2FBF71', light: '#DFF6E9' },
-        bunga:   { DEFAULT: '#FF6B6B', light: '#FFE3E3' },
-        mangga:  '#FFB627',
+        daun:    { DEFAULT: '#2FBF71', dark: '#157A43', light: '#DFF6E9' },
+        bunga:   { DEFAULT: '#FF6B6B', dark: '#A8434A', light: '#FFE3E3' },
+        mangga:  { DEFAULT: '#FFB627', dark: '#8F6100' },
         pirus:   '#22D3EE',
         api:     '#FF7A00',
       },
@@ -987,6 +1059,9 @@ export default {
         body:    ['18px', { lineHeight: '1.5'  }],
         label:   ['15px', { lineHeight: '1.35' }],
       },
+      // `mangga` was a bare string and is now an object. `bg-mangga` and
+      // `fill-mangga` still resolve, through DEFAULT — but `theme(colors.mangga)`
+      // in an arbitrary value does not, and has to name `.DEFAULT` or `.dark`.
       borderRadius: { sm: '12px', md: '20px', lg: '28px', xl: '36px' },
       minHeight:    { tap: '64px', btn: '72px', answer: '88px' },
       boxShadow: {

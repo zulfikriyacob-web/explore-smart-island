@@ -22,12 +22,27 @@ interface BlockButtonProps {
   className?: string;
 }
 
+/*
+  Borders are the dark variant of their token, not the token itself. Measured
+  against the pale ground the plain tokens sit between 1.58:1 and 2.51:1, under
+  the 3:1 floor DESIGN 10 sets for a button border; the dark variants clear it.
+  The full audit and every number is DESIGN 2.4. (D1 for rest, D2 for feedback.)
+
+  --nila is untouched: it passes at 4.85:1 already, so Science keeps its colour.
+
+  The bottom edge moves with the border rather than staying behind. Feedback
+  states already drew both in one colour, and D1 brings rest into line with them
+  — one colour per state, an 8px band at the bottom and 4px elsewhere. The block
+  reads as a block through that asymmetry, not through two tones.
+*/
 const FACE: Record<BlockState, string> = {
-  rest: 'bg-white border-laut shadow-[0_4px_0_0_theme(colors.laut.dark)]',
-  correct: 'bg-daun-light border-daun shadow-[0_4px_0_0_theme(colors.daun.DEFAULT)]',
-  wrong: 'bg-white border-bunga shadow-[0_4px_0_0_theme(colors.bunga.DEFAULT)]',
+  rest: 'bg-white border-laut-dark shadow-[0_4px_0_0_theme(colors.laut.dark)]',
+  correct: 'bg-daun-light border-daun-dark shadow-[0_4px_0_0_theme(colors.daun.dark)]',
+  wrong: 'bg-white border-bunga-dark shadow-[0_4px_0_0_theme(colors.bunga.dark)]',
+  // Untouched: the audit records this one as not covered. It is drawn at
+  // opacity 0.35, so its real ratio is composited and not its token's. (2.4)
   disabled: 'bg-white border-garis shadow-[0_4px_0_0_theme(colors.garis)]',
-  revealed: 'bg-white border-mangga shadow-[0_4px_0_0_theme(colors.mangga)]',
+  revealed: 'bg-white border-mangga-dark shadow-[0_4px_0_0_theme(colors.mangga.dark)]',
 };
 
 /**
@@ -100,7 +115,21 @@ export function BlockButton({
       transition={feedback?.transition ?? { duration: 0.2, ease: ease.out }}
       whileTap={isLocked || reduce ? undefined : { y: 4, scale: 0.98 }}
       style={{ minHeight }}
-      className={`relative w-full overflow-hidden rounded-md border-4 px-6 font-display text-h2 font-semibold text-arang tabular-nums transition-colors duration-150 ${FACE[state]} ${className}`}
+      /*
+        No colour transition. `transition-colors duration-150` used to sit here,
+        and it made the border colour wait for an animation frame: measured with
+        the class `border-bunga-dark` applied and the computed border still
+        rgb(8, 122, 112) — the teal it started from — two seconds after a wrong
+        answer, in a renderer that fires no frames. box-shadow is not a
+        transitioned property, so the bottom edge snapped to the new colour while
+        the border stayed behind: a teal outline around a dark red edge.
+
+        The border colour is the state, not a flourish over it. SPEC 7.1 hard
+        rule 2 and DESIGN 5.4 both put right/wrong in the colour, and a colour
+        that only arrives on a frame is the frame-0 bug this codebase keeps
+        finding. The swap is instant; the pulse and shake still carry the motion.
+      */
+      className={`relative w-full overflow-hidden rounded-md border-4 px-6 font-display text-h2 font-semibold text-arang tabular-nums ${FACE[state]} ${className}`}
     >
       {/* B2 — correct ring, expanding outward. Cheaper than particles. */}
       <AnimatePresence>
@@ -137,8 +166,18 @@ export function BlockButton({
         <AnimatePresence>
           {(state === 'correct' || state === 'wrong') && (
             <motion.span
+              /*
+                D3: the pill is the dark variant and the stroke stays white.
+                White on the plain tokens measured 2.38:1 and 2.78:1, under the
+                3:1 floor an icon takes as a graphical object; on the dark pills
+                it is 5.39:1 and 5.89:1. The pill itself was failing too, at
+                2.10:1 and 2.78:1 against the button face it sits on.
+
+                Do not darken the stroke as well. --arang on these dark pills is
+                2.27:1 and 2.08:1 — darkening both breaks the icon. (DESIGN 2.4)
+              */
               className={`grid h-9 w-9 place-items-center rounded-full ${
-                state === 'correct' ? 'bg-daun' : 'bg-bunga'
+                state === 'correct' ? 'bg-daun-dark' : 'bg-bunga-dark'
               }`}
               // Opacity starts at 1 and only scale animates. SPEC section 9
               // forbids conveying right/wrong by colour alone, so the icon has
