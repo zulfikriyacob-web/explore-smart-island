@@ -38,10 +38,15 @@ export type SoundFactory = (src: string) => Sound;
 export interface Player {
   /**
    * Play `src` from the start, stopping anything already playing. `onSettled`
-   * runs when the clip ends, fails, or is cut off by another play — exactly
-   * once, so a caller can clear a "playing" flag without the UI sticking on.
+   * runs at most once, when the clip ends, fails, or is stopped outright.
+   *
+   * It does **not** run when another `play` takes over. The callback is how a
+   * caller turns its "playing" indicator off, and a play that replaces another
+   * has audio going — from the top, but going. Settling there would clear an
+   * indicator that a caller had just set.
    */
   play(src: string, onSettled?: () => void): void;
+  /** Stop playback and settle, as when a screen goes away. */
   stop(): void;
   /** Which clip is playing, or null. */
   playing(): string | null;
@@ -52,24 +57,45 @@ export function createPlayer(makeSound: SoundFactory): Player {
   let currentSrc: string | null = null;
   let settle: (() => void) | null = null;
 
-  /** Run the pending callback once, whatever ended the clip. */
-  function finish(): void {
+  /** Forget the current clip, handing back the callback that was waiting on it. */
+  function release(): (() => void) | null {
     const pending = settle;
     settle = null;
     currentSrc = null;
-    pending?.();
+    return pending;
   }
 
-  function stop(): void {
-    if (currentSrc === null) return;
+  /** Run the pending callback once, whatever ended the clip. */
+  function finish(): void {
+    release()?.();
+  }
+
+  /**
+   * Silence whatever is playing and drop its handlers, returning the callback
+   * that was waiting on it so the caller can decide whether it has settled.
+   */
+  function halt(): (() => void) | null {
+    if (currentSrc === null) return null;
     const sound = cache.get(currentSrc);
     sound?.off();
     sound?.stop();
-    finish();
+    return release();
+  }
+
+  function stop(): void {
+    halt()?.();
   }
 
   function play(src: string, onSettled?: () => void): void {
-    stop();
+    // Silenced, but not settled: the new clip takes the old one's place, so the
+    // caller's "playing" indicator should stay on rather than blink off and
+    // straight back. Only an end, a failure, or an explicit stop settles.
+    //
+    // One caller at a time is the assumption that makes this safe — there is a
+    // single AudioButton on screen, and it stops its clip explicitly when the
+    // question changes. Two callers sharing this player would leave the older
+    // one's indicator stuck on.
+    halt();
 
     let sound = cache.get(src);
     if (!sound) {
