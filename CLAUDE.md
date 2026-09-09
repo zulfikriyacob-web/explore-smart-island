@@ -70,6 +70,29 @@
    animation frames, so it is a free test for all of this. Drive the screen in
    it and measure; anything that depends on a frame fails loudly.
 
+   **Verify the output, not the library's model of it.** A library's own
+   bookkeeping is not evidence about the thing it controls. Howler reported
+   `playing() === true` and a `seek()` that advanced while its AudioContext was
+   suspended and nothing was audible; a rect is not a pixel, and `playing()` is
+   not a sound. Both numbers were honest — they describe what the library had
+   decided, which is a different question from what the device did.
+
+   This is a distinct failure from geometry-versus-pixels, and it fails the same
+   way: the number agrees with you. Ask what layer you are reading. Prefer the
+   one closest to the person — the decoded duration the browser reports over the
+   library's, `getComputedStyle` over a prop you passed in, the audio context's
+   state over the player's flag. When the closest layer is not reachable from
+   here — a real speaker, a real screen reader, iOS Safari — say so, and say
+   which layer you actually checked.
+
+   A second trap sits next to it. `await import('/src/lib/player.ts')` from the
+   pane gave a **second module instance**: my instrumentation logged nothing and
+   the singleton I inspected reported `null` while the app's own instance was
+   playing. Measuring through a module you imported yourself can measure a
+   different object than the one running. Reach for something the page can only
+   have one of — here, `window.Howler._howls` — or drive the real UI and read
+   the result.
+
 ## Working notes
 
 Things that cost a session real time to discover. Not principles — facts.

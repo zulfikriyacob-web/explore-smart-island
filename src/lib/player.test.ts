@@ -132,14 +132,37 @@ describe('createPlayer', () => {
     expect(player.playing()).toBe('/audio/ms/q002.mp3');
   });
 
-  it('settles the interrupted clip exactly once, and not again when it later ends', () => {
+  it('never settles a clip that a new play took over, before or after', () => {
+    // The settle callback exists so a caller can turn its "playing" indicator
+    // off. A play that immediately replaces another must not turn it off: the
+    // audio is still going, just from the top.
     const { player, made } = harness();
     const first = vi.fn();
     player.play('/audio/ms/q001.mp3', first);
     player.play('/audio/ms/q002.mp3');
-    expect(first).toHaveBeenCalledTimes(1);
+    expect(first).not.toHaveBeenCalled();
     made[0]!.fire('end'); // handlers were dropped by off(); nothing more happens
-    expect(first).toHaveBeenCalledTimes(1);
+    expect(first).not.toHaveBeenCalled();
+  });
+
+  it('keeps a caller flag set when the same clip is restarted mid-playback', () => {
+    // This is the sequence AudioButton runs: set "playing", then ask the player
+    // to play. play() stops what was going first, and if that stop settled the
+    // press before it, the settle is the same component's "stop pulsing" — it
+    // would clear the flag the press had just set, and the pulse would stop
+    // over audio that had only just restarted.
+    const { player } = harness();
+    let pulsing = false;
+    const press = () => {
+      pulsing = true;
+      player.play('/audio/ms/q001.mp3', () => {
+        pulsing = false;
+      });
+    };
+    press();
+    expect(pulsing).toBe(true);
+    press();
+    expect(pulsing).toBe(true);
   });
 
   it('does not settle the clip that is now playing when an older one is stopped', () => {
