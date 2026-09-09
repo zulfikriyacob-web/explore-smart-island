@@ -10,7 +10,7 @@ Rujukan: SPEC.md §11 (kontrak keadaan), DESIGN.md §6–7.
 > tentang artboard, lapisan Rive dan blend masih berguna sebagai niat gerakan;
 > mekanismenya sahaja yang berubah.
 >
-> SPEC.md §11 masih menerangkan kontrak Rive dan belum dikemas kini.
+> SPEC.md §11 kini menerangkan kontrak komponen React, bukan kontrak Rive.
 
 **Anjakan px dalam §3 ditulis untuk artboard 512.** Komponen mendarabkannya dengan
 1254/512 = 2.449 supaya gerakan kekal pada saiz berkadar yang sama; putaran dan skala

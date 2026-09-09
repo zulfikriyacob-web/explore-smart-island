@@ -12,8 +12,10 @@ dalam `docs/` yang menang.
   `mood`. `mood` dibuang dalam PR #2. Kontrak sebenar ialah empat input, lihat
   `docs/SPEC.md` §11. Abaikan baris mood dalam fail itu.
 - Rive sendiri kemudiannya ditinggalkan. Maskot dilaksana sebagai SVG + Framer
-  Motion dalam `src/components/ui/Kancil.tsx`. `docs/SPEC.md` §11 masih
-  menerangkan kontrak Rive dan belum dikemas kini.
+  Motion dalam `src/components/ui/Kancil.tsx`. `docs/SPEC.md` §11 kini
+  menerangkan kontrak komponen React itu, bukan kontrak Rive — jadi setiap
+  bahagian fail handoff yang bercakap tentang artboard, input state machine dan
+  lapisan Rive ialah niat gerakan, bukan mekanisme.
 
 Fail handoff sengaja tidak disunting supaya ia kekal sebagai rekod jujur apa yang
 designer hantar.
