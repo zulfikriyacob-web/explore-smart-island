@@ -127,33 +127,94 @@ tambahan yang sempadan itu sendiri tidak berikan. Yang gagal ialah sempadan.
 > bukan pasangan yang teks butang benar-benar duduk padanya. Kedua-duanya jauh melepasi 4.5:1,
 > jadi tiada keputusan berubah.
 
-### Keputusan sempadan butang: dua kerja, bukan satu
+### Keputusan kontras: tiga kerja, bukan satu
 
-**D1 — sempadan keadaan rehat.** Satu pertukaran token: `--laut` → `--laut-dark`, `--jingga` →
-`--jingga-dark`. Nombornya sudah ada di atas dan kedua-duanya melepasi 3:1. Yang perlu disemak
-sebelum ia dilakukan: §5.3 melukis sempadan dalam warna modul dan tepi bawah dalam varian
-gelapnya, jadi menggelapkan sempadan menjadikan kedua-duanya warna yang sama dan blok mainan
-itu mungkin kehilangan bentuk dua-tonnya. Itu satu semakan visual, bukan satu lagi pengukuran.
+Susunan keutamaan: **D3, kemudian D2, kemudian D1.** Sebabnya di bawah setiap satu.
 
-**D2 — sempadan keadaan maklum balas.** Tiada cadangan lagi. `--daun`, `--bunga` dan `--mangga`
-tiada varian gelap dalam §11, jadi tiada pertukaran token yang setara — nilai baharu perlu
-dipilih, dan ketiga-tiganya mesti kekal boleh dibezakan antara satu sama lain selepas
-digelapkan.
+#### D1 — sempadan keadaan rehat
 
-**D2 lebih penting daripada D1.** Sempadan rehat ialah chrome: ia menunjukkan di mana butang
-berada, dan butang itu sudah ditemui melalui saiz, teks dan tepi bawahnya. Sempadan maklum
-balas **membawa makna** — ia memberitahu anak sama ada dia betul atau salah. Sempadan neutral
-yang gagal kontras menjadikan satu bentuk kurang jelas; sempadan bermakna yang gagal kontras
-menjadikan satu **jawapan** kurang jelas.
+Satu pertukaran token: `--laut` → `--laut-dark`, `--jingga` → `--jingga-dark`. Nombornya sudah
+ada di atas dan kedua-duanya melepasi 3:1. `--nila` tidak berubah; ia tidak pernah gagal.
 
-Ini tidak bermakna maklum balas hilang hari ini. §10 dan SPEC §9 melarang warna sebagai
-saluran tunggal, dan ikon ✓/✕, goncangan, denyut dan bunyi semuanya membawa mesej yang sama.
-Yang gagal ialah salah satu saluran, pada saluran yang sepatutnya paling mudah dilihat dari
-jauh atau di bawah cahaya matahari (§10).
+Yang perlu disemak sebelum ia dilakukan: §5.3 melukis sempadan dalam warna modul dan tepi
+bawah dalam varian gelapnya, jadi menggelapkan sempadan menjadikan kedua-duanya warna yang
+sama dan blok mainan itu mungkin kehilangan bentuk dua-tonnya. Itu satu semakan visual, bukan
+satu lagi pengukuran.
 
-**Belum ada dalam audit ini:** sempadan `--garis` bagi keadaan dilumpuhkan. Ia dilukis pada
-`opacity: 0.35` (§5.4), jadi nisbah sebenarnya bukan nisbah tokennya — ia perlu diukur
-terkomposit, bukan dikira daripada hex.
+**Paling rendah keutamaan.** Sempadan rehat ialah chrome: ia menunjukkan di mana butang
+berada, dan butang itu sudah ditemui melalui saiz, teks dan tepi bawahnya.
+
+#### D2 — sempadan keadaan maklum balas
+
+Cadangan daripada designer, setiap nisbah dikira semula di sini terhadap `--laut-cetek`:
+
+| Peranan | Sekarang | | Cadangan | | Anjakan hue |
+|---|---|---|---|---|---|
+| Betul | `--daun` `#2FBF71` | 2.15:1 ✗ | `--daun-dark` `#157A43` | **4.87:1** ✓ | 0.2° |
+| Salah | `--bunga` `#FF6B6B` | 2.51:1 ✗ | `--bunga-dark` `#A8434A` | **5.32:1** ✓ | 4.2° |
+| Dedah | `--mangga` `#FFB627` | 1.58:1 ✗ | `--mangga-dark` `#8F6100` | **4.89:1** ✓ | 1.0° |
+
+Anjakan hue kecil pada ketiga-tiganya, jadi setiap satu masih membaca sebagai versi gelap
+warna yang sama dan bukan warna baharu. Hubungan token → makna kekal.
+
+> Anjakan hue dikira sebagai lengkok terpendek pada bulatan hue. Bagi `--bunga` itu penting:
+> 0.0° → 355.8° ialah 4.2°, bukan 355.8°. Nilai `daun` di sini **0.2°**, bukan 2.3° seperti
+> dalam helaian designer — bezanya memihak kepada cadangan itu, bukan menentangnya, jadi
+> kesimpulannya kekal. Kesemua sembilan nisbah dalam bahagian D2 dan D3 pula padan tepat dengan
+> helaian designer.
+
+**`--bunga-dark` ditepukan turun, bukan digelapkan sahaja.** Ketepuan jatuh 100% → 43%.
+Menggelapkan secara lurus memberi `#C23131`, yang lulus pada 5.02:1 tetapi mendarat pada hue
+0.0° dengan ketepuan 60% — merah pekat, tepat apa yang §12 peraturan 5 larang. Jalan keluarnya
+bukan lebih gelap, tetapi kurang tepu.
+
+**`--mangga-dark` `#8F6100` hampir coklat pada strok 4px.** Ia diterima dengan sengaja.
+Alternatif yang lebih cerah `#A87400` lulus pada 3.68:1, tetapi margin itu nipis untuk warna
+yang bermula sebagai yang paling teruk dalam audit. Sempadan ialah chrome; muka butang kekal
+`--mangga` emas, dan muka itu yang membawa "ganjaran" (§2.3).
+
+**Lebih penting daripada D1.** Sempadan maklum balas **membawa makna** — ia memberitahu anak
+sama ada dia betul atau salah. Sempadan neutral yang gagal kontras menjadikan satu bentuk
+kurang jelas; sempadan bermakna yang gagal kontras menjadikan satu **jawapan** kurang jelas.
+
+#### D3 — ikon ✓/✕, saluran sandaran itu sendiri
+
+Ikon maklum balas ialah strok putih di atas pil `--daun` atau `--bunga` (§5.4). Diukur
+terhadap pilnya sendiri:
+
+| Ikon | Sekarang | | Cadangan | |
+|---|---|---|---|---|
+| ✓ atas pil `--daun` `#2FBF71` | putih | 2.38:1 ✗ | `--arang` `#1F3A34` | **5.14:1** ✓ |
+| ✕ atas pil `--bunga` `#FF6B6B` | putih | 2.78:1 ✗ | `--arang` `#1F3A34` | **4.42:1** ✓ |
+
+**Lantai yang terpakai kepada ikon ialah 3:1, bukan 4.5:1.** 4.5:1 ialah lantai teks. Tanda ✓
+dan ✕ bukan teks — ia objek grafik yang diperlukan untuk memahami kandungan, dan lantai untuk
+itu ialah 3:1 terhadap warna bersebelahannya (WCAG 2.1 SC 1.4.11, lantai yang sama yang §10
+sudah gunakan untuk sempadan butang).
+
+Jadi **4.42:1 lulus**, dengan margin 47% di atas lantainya. D3 tidak memerlukan nilai lain
+untuk ✕. Nombor itu direkod di sini kerana ia kelihatan seperti kegagalan pada pandangan
+pertama terhadap 4.5:1, dan orang seterusnya akan bertanya perkara yang sama.
+
+**Ini yang paling penting daripada ketiga-tiganya.** §10 dan SPEC §9 melarang warna sebagai
+saluran tunggal, dan ikon ialah saluran yang mereka harapkan apabila warna gagal. Dua saluran
+lain tidak boleh menggantikannya: gerakan mungkin tidak menghasilkan satu bingkai pun
+(SPEC §7.1 peraturan keras 2), dan bunyi mungkin dimatikan atau tidak didengari. Ikon ialah
+satu-satunya saluran visual yang sepatutnya sentiasa ada — dan pada 2.38:1 dan 2.78:1 ia
+sendiri di bawah lantainya.
+
+Jadi urutannya bukan sekadar keutamaan; ia kebergantungan. D2 memperbaiki sempadan yang
+membawa makna, tetapi hujah bahawa maklum balas masih selamat sementara menunggu bergantung
+pada ikon berfungsi. D3 membetulkan andaian itu.
+
+#### Belum ada dalam audit ini
+
+Sempadan `--garis` bagi keadaan dilumpuhkan. Ia dilukis pada `opacity: 0.35` (§5.4), jadi
+nisbah sebenarnya bukan nisbah tokennya — ia perlu diukur terkomposit, bukan dikira daripada
+hex.
+
+Nilai `-dark` yang dicadangkan D2 belum ada dalam §11. Menambahnya kepada `tailwind.config.js`
+ialah sebahagian daripada kerja itu, bukan langkah berasingan.
 
 ### 2.5 Pemisahan palet — UI dan ilustrasi
 
