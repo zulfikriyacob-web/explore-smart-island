@@ -75,14 +75,85 @@ Semua pasangan teks disahkan pada ≥ 4.5:1:
 > Teks putih di atas teal cerah gagal. Ini kesilapan biasa dalam app kanak-kanak. Butang
 > teal utama menggunakan **teks arang gelap**, bukan putih.
 
-**Jurang yang diketahui dan belum diputuskan: sempadan butang.** Sempadan `--laut` `#0FB5A6`
-di atas latar `--laut-cetek` `#E6F7F4` diukur pada **2.32:1**, di bawah lantai 3:1 untuk
-sempadan butang (§10). Ini pada setiap butang jawapan sejak Brief 02, diwarisi daripada
-prototaip handoff.
+**Jurang yang diketahui dan belum diputuskan: sempadan butang.** Bahagian ini pernah
+merekodkan satu nombor — sempadan `--laut` pada 2.32:1. Audit penuh menunjukkan ia bukan satu
+kes terpencil.
 
-Butang itu sendiri terbaca — teksnya 11.08:1 dan tepi bawah pepejal `--laut` gelap `#087A70`
-memberi kelihatan tambahan. Yang gagal ialah sempadan sahaja. Belum dibaiki kerana ia
-menyentuh warna modul dan setiap butang serentak; keputusan itu belum dibuat.
+Semua nisbah di bawah diukur terhadap **latar skrin di sebelah luar sempadan**, `--laut-cetek`
+`#E6F7F4`, terhadap lantai 3:1 untuk sempadan butang (§10). Muka butang sendiri putih pada
+setiap keadaan kecuali betul (`--daun-light`), jadi sempadan mempunyai jiran kedua di sebelah
+dalam yang tidak termasuk dalam helaian ini:
+
+**Keadaan rehat** — sempadan warna modul (§5.4)
+
+| Token | Hex | Nisbah | |
+|---|---|---|---|
+| `--laut` | `#0FB5A6` | 2.32:1 | ✗ |
+| `--jingga` | `#FF8A3D` | 2.12:1 | ✗ |
+| `--nila` | `#5B5BD6` | 4.85:1 | ✓ |
+
+**Keadaan maklum balas** — sempadan yang membawa makna (§5.4)
+
+| Token | Hex | Nisbah | |
+|---|---|---|---|
+| `--daun` (betul) | `#2FBF71` | 2.15:1 | ✗ |
+| `--bunga` (salah) | `#FF6B6B` | 2.51:1 | ✗ |
+| `--mangga` (dedah) | `#FFB627` | 1.58:1 | ✗ |
+
+**Varian gelap** — bahan yang sudah ada untuk keadaan rehat
+
+| Token | Hex | Nisbah | |
+|---|---|---|---|
+| `--laut-dark` | `#087A70` | 4.71:1 | ✓ |
+| `--jingga-dark` | `#C25A16` | 3.98:1 | ✓ |
+| `--nila-dark` | `#3B3B9E` | 8.23:1 | ✓ |
+
+Enam daripada sembilan gagal. Nila ialah satu-satunya warna modul yang tidak pernah gagal —
+`--nila` sendiri sudah lulus pada 4.85:1, jadi Sains tidak menunggu apa-apa.
+
+> Nisbah dikira dengan formula kontras WCAG 2.x (luminans relatif sRGB, `(L1+0.05)/(L2+0.05)`)
+> dan bertepatan dengan 2.32:1 yang bahagian ini sudah merekod. Helaian designer memberi nilai
+> 0.01–0.15 lebih rendah pada kesemua sembilan; arahnya konsisten tetapi tiada satu formula
+> alternatif yang menghasilkan semuanya, jadi ia baki pembundaran. **Tiada satu pun keputusan
+> lulus/gagal berubah** antara kedua-dua set nombor, termasuk pada dua kes paling hampir
+> (`--jingga-dark` 3.95 lawan 3.98, `--nila` 4.80 lawan 4.85).
+
+Butang itu sendiri masih terbaca. Teksnya `--arang` pada muka putih butang (§5.3) ialah
+**12.26:1**, dan tepi bawah pepejal 4px dalam varian gelap warna modul memberi kelihatan
+tambahan yang sempadan itu sendiri tidak berikan. Yang gagal ialah sempadan.
+
+> Angka 11.08:1 yang bahagian ini pernah berikan untuk teks butang ialah `--arang` di atas
+> `--laut-cetek` — latar skrin, bukan muka butang. Pasangan itu betul pada 11.08:1; ia cuma
+> bukan pasangan yang teks butang benar-benar duduk padanya. Kedua-duanya jauh melepasi 4.5:1,
+> jadi tiada keputusan berubah.
+
+### Keputusan sempadan butang: dua kerja, bukan satu
+
+**D1 — sempadan keadaan rehat.** Satu pertukaran token: `--laut` → `--laut-dark`, `--jingga` →
+`--jingga-dark`. Nombornya sudah ada di atas dan kedua-duanya melepasi 3:1. Yang perlu disemak
+sebelum ia dilakukan: §5.3 melukis sempadan dalam warna modul dan tepi bawah dalam varian
+gelapnya, jadi menggelapkan sempadan menjadikan kedua-duanya warna yang sama dan blok mainan
+itu mungkin kehilangan bentuk dua-tonnya. Itu satu semakan visual, bukan satu lagi pengukuran.
+
+**D2 — sempadan keadaan maklum balas.** Tiada cadangan lagi. `--daun`, `--bunga` dan `--mangga`
+tiada varian gelap dalam §11, jadi tiada pertukaran token yang setara — nilai baharu perlu
+dipilih, dan ketiga-tiganya mesti kekal boleh dibezakan antara satu sama lain selepas
+digelapkan.
+
+**D2 lebih penting daripada D1.** Sempadan rehat ialah chrome: ia menunjukkan di mana butang
+berada, dan butang itu sudah ditemui melalui saiz, teks dan tepi bawahnya. Sempadan maklum
+balas **membawa makna** — ia memberitahu anak sama ada dia betul atau salah. Sempadan neutral
+yang gagal kontras menjadikan satu bentuk kurang jelas; sempadan bermakna yang gagal kontras
+menjadikan satu **jawapan** kurang jelas.
+
+Ini tidak bermakna maklum balas hilang hari ini. §10 dan SPEC §9 melarang warna sebagai
+saluran tunggal, dan ikon ✓/✕, goncangan, denyut dan bunyi semuanya membawa mesej yang sama.
+Yang gagal ialah salah satu saluran, pada saluran yang sepatutnya paling mudah dilihat dari
+jauh atau di bawah cahaya matahari (§10).
+
+**Belum ada dalam audit ini:** sempadan `--garis` bagi keadaan dilumpuhkan. Ia dilukis pada
+`opacity: 0.35` (§5.4), jadi nisbah sebenarnya bukan nisbah tokennya — ia perlu diukur
+terkomposit, bukan dikira daripada hex.
 
 ### 2.5 Pemisahan palet — UI dan ilustrasi
 
