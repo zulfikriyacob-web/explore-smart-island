@@ -147,9 +147,13 @@ oleh ikon, goncangan dan bunyi, bukan warna sahaja (SPEC §9).
 
 ### 2.6 Bulu kaki jauh
 
-| Peranan | Token | Hex |
-|---|---|---|
-| Anggota jauh kancil | `--bulu-jauh` | `#9E6842` |
+| Peranan | Nilai |
+|---|---|
+| Anggota jauh kancil | `#9E6842` |
+
+Ia **bukan** token Tailwind dan tidak ada dalam §11. Ia hidup sebagai nilai dalam
+`src/components/ui/Kancil.tsx` bersama isian maskot yang lain, kerana tiada apa selain kancil
+menggunakannya. Direkod di sini kerana ia membawa peranan, bukan kerana ia sebahagian palet UI.
 
 Satu nilai, dan satu-satunya isian maskot yang direkod di sini. Selebihnya bulu kancil
 mengikut §2.5 — isian ilustrasi, bebas, tidak membawa makna.
