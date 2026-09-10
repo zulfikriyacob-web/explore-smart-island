@@ -3,8 +3,6 @@ import { useEffect, useState } from 'react';
 
 import { AudioButton } from '../../components/ui/AudioButton.tsx';
 import { BlockButton } from '../../components/ui/BlockButton.tsx';
-// TEMPORARY — iOS audio diagnostics. Delete with the branch.
-import { DiagnosticsPanel } from '../../components/ui/DiagnosticsPanel.tsx';
 import { Kancil, type KancilState } from '../../components/ui/Kancil.tsx';
 import { ProgressBar } from '../../components/ui/ProgressBar.tsx';
 import type { Question } from '../../content/schema.ts';
@@ -119,8 +117,6 @@ export function QuizScreen() {
 
   return (
     <main className="mx-auto flex h-[100dvh] max-w-[430px] flex-col">
-      {/* TEMPORARY — iOS audio diagnostics. Delete with the branch. */}
-      <DiagnosticsPanel where="kuiz" />
 
       {/* Read / watch. No answer buttons up here. (DESIGN 5.2) */}
       <section className="flex min-h-0 flex-1 flex-col gap-5 px-4 pt-6">

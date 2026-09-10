@@ -27,18 +27,10 @@
 
 import { Howl, Howler } from 'howler';
 
-// TEMPORARY — diagnostics for the iOS no-sound bug. Record only: nothing below
-// changes when audio unlocks or plays. Delete with the branch.
-import { howlerState, inGesture, record, watchEveryResume } from './diagnostics.ts';
 
 /** The slice of Howl this module uses. Narrow on purpose, so a fake is cheap. */
 export interface Sound {
-  /**
-   * Returns whatever the backend hands back — Howler gives a sound id number.
-   * TEMPORARY: it is surfaced only so the diagnostics can show what `play()`
-   * returned on the device. Nothing branches on it.
-   */
-  play(): unknown;
+  play(): void;
   stop(): void;
   /**
    * `end` fires at the end of the clip; `loaderror` and `playerror` fire when it
@@ -211,18 +203,7 @@ export function createPlayer(makeSound: SoundFactory, readiness?: Readiness): Pl
     clip.once('loaderror', finish);
     clip.once('playerror', finish);
 
-    // TEMPORARY diagnostics.
-    record('play() called', {
-      src: src.replace('/audio/ms/', ''),
-      inGesture: inGesture(),
-      ...howlerState(),
-    });
-    try {
-      const id = clip.play();
-      record('play() returned', { id: id === undefined ? 'undefined' : String(id) });
-    } catch (err) {
-      record('play() THREW', { error: String(err) });
-    }
+    clip.play();
   }
 
   return {
@@ -243,8 +224,6 @@ export function createPlayer(makeSound: SoundFactory, readiness?: Readiness): Pl
       makeSound(src);
     },
     unlock: () => {
-      // TEMPORARY diagnostics.
-      record('unlock()', { alreadyGestured: gestured, inGesture: inGesture() });
       gestured = true;
     },
     unlocked: () => gestured,
@@ -273,14 +252,12 @@ export function createPlayer(makeSound: SoundFactory, readiness?: Readiness): Pl
 
 /** Wraps a Howl in the narrow shape above. */
 export function howlSound(src: string): Sound {
+  // Building a Howl is what creates Howler's AudioContext — see `arm()`.
   const howl = new Howl({ src: [src], preload: true });
-  // TEMPORARY diagnostics: building the Howl is what creates Howler's
-  // AudioContext, so when it happens is itself a finding.
-  record('Howl built', { src: src.replace('/audio/ms/', ''), ...howlerState() });
-  howl.once('loaderror', (_id, err) => record('loaderror', { error: String(err) }));
-  howl.once('playerror', (_id, err) => record('playerror', { error: String(err) }));
   return {
-    play: () => howl.play(),
+    play: () => {
+      howl.play();
+    },
     stop: () => {
       howl.stop();
     },
@@ -332,10 +309,6 @@ export function howlSound(src: string): Sound {
   The battery saving is not worth silence.
 */
 Howler.autoSuspend = false;
-
-// TEMPORARY — see every ctx.resume() in the page, whoever makes it. Ours are
-// gone, so anything this catches is Howler's own unlock path.
-watchEveryResume();
 
 /**
  * Audibility, read from the context rather than from a flag of ours.

@@ -4,8 +4,6 @@ import { useEffect, useRef, useState } from 'react';
 import { isAudioAvailable } from '../../lib/audio.ts';
 import { promptPlayer } from '../../lib/player.ts';
 import { ease } from '../../motion/tokens.ts';
-// TEMPORARY — iOS audio diagnostics. Delete with the branch.
-import { duringGesture, inGesture, record } from '../../lib/diagnostics.ts';
 
 /**
  * A3 — the speaker icon pulses while audio plays, so a child who cannot read
@@ -90,23 +88,13 @@ export function AudioButton({
         Nothing outside Howl can cancel that park. So the wait lives here, where
         it can be called off.
       */
-      // TEMPORARY diagnostics.
-      record('autoplay decision', {
-        src: src.replace('/audio/ms/', ''),
-        autoPlay: wanted.current,
-        audible: promptPlayer.audible(),
-        inGesture: inGesture(),
-      });
       if (!wanted.current) return;
 
       cancelWait.current = promptPlayer.whenAudible(() => {
         cancelWait.current = null;
         // Checked again on the way in: the wait may have been queued while the
         // question was fresh and fired after the child had gone.
-        if (!live || !wanted.current) {
-          record('autoplay skipped, child moved on', { src: src.replace('/audio/ms/', '') });
-          return;
-        }
+        if (!live || !wanted.current) return;
         setPlaying(true);
         promptPlayer.play(src, () => setPlaying(false));
       });
@@ -130,19 +118,19 @@ export function AudioButton({
     <motion.button
       type="button"
       aria-label={label}
-      onPointerDown={(event) => {
-        // TEMPORARY diagnostics — see BlockButton.
-        record('press', { button: 'audio', isTrusted: event.isTrusted, type: event.type });
-        duringGesture(() => {
-          // Pressing during playback restarts the clip rather than being
-          // ignored. A button that does nothing when pressed is a button a child
-          // reads as broken, which is the same reason it hides itself when the
-          // file is a placeholder. `play` halts whatever was going, so a press
-          // during autoplay replaces it — one clip is audible at a time.
-          promptPlayer.unlock();
-          setPlaying(true);
-          promptPlayer.play(src, () => setPlaying(false));
-        });
+      onPointerDown={() => {
+        // Pressing during playback restarts the clip rather than being ignored.
+        // A button that does nothing when pressed is a button a child reads as
+        // broken, which is the same reason it hides itself when the file is a
+        // placeholder. `play` halts whatever was going, so a press during
+        // autoplay replaces it — one clip is audible at a time.
+        //
+        // This one plays whatever the context is doing: the press is itself the
+        // gesture, and a button that waited would be the broken button again.
+        // Only autoplay waits.
+        promptPlayer.unlock();
+        setPlaying(true);
+        promptPlayer.play(src, () => setPlaying(false));
       }}
       whileTap={reduce ? undefined : { scale: 0.94 }}
       // The pulse repeats for as long as audio is actually playing and stops on

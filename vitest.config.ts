@@ -12,11 +12,6 @@ export default defineConfig({
       // mastery modules. The session reducer is held to the same bar because a
       // bug there silently corrupts every score it feeds.
       include: ['src/lib/**/*.ts', 'src/features/quiz/session.ts'],
-      // TEMPORARY — the iOS audio diagnostics are throwaway instrumentation for
-      // one bug hunt, not logic anyone depends on. Holding them to the scoring
-      // bar would mean writing tests for a file due to be deleted. Delete this
-      // line with the branch.
-      exclude: ['src/lib/diagnostics.ts'],
       thresholds: {
         lines: 90,
         statements: 90,
