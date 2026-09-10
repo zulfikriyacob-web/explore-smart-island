@@ -31,9 +31,27 @@ const t0 = Date.now();
 const MAX = 60;
 
 export function record(label: string, data?: Record<string, unknown>): void {
-  entries.push({ t: Date.now() - t0, label, ...(data ? { data } : {}) });
+  // Every entry carries the live audio state, not just the panel header.
+  // `_audioUnlocked` in particular: it is set from `source.onended` on Howler's
+  // scratch buffer, so it can only be true once a buffer has actually played.
+  // It is downstream of real output rather than a flag we declared, which makes
+  // it the most honest number on the screen.
+  const live = liveAudio();
+  entries.push({ t: Date.now() - t0, label, data: { ...(data ?? {}), ...live } });
   if (entries.length > MAX) entries.shift();
   for (const l of listeners) l();
+}
+
+/** The three numbers worth stamping on every line. Cheap, no allocation games. */
+function liveAudio(): Record<string, unknown> {
+  const H = (globalThis as unknown as { Howler?: Record<string, unknown> }).Howler;
+  if (!H) return {};
+  const ctx = H.ctx as AudioContext | undefined;
+  return {
+    _ctx: ctx?.state ?? 'none',
+    _howler: (H.state as string | undefined) ?? 'none',
+    _unlocked: H._audioUnlocked ?? null,
+  };
 }
 
 export function subscribe(listener: () => void): () => void {
@@ -105,111 +123,67 @@ export function howlerState(): Record<string, unknown> {
   };
 }
 
-/** The slice of the Howler global this instrumentation reads. */
-interface HowlerProbe {
-  ctx?: AudioContext | null;
-  state?: string;
-  usingWebAudio?: boolean;
-  autoSuspend?: boolean;
-  _suspendTimer?: unknown;
-  _autoResume?: () => unknown;
-}
-
 /**
- * TEMPORARY — watch what `Howler._autoResume()` actually does. Observes and
- * delegates; changes nothing. Delete with the branch.
+ * TEMPORARY — see every `ctx.resume()` in the page, whoever makes it. Patches
+ * `AudioContext.prototype.resume` once, observes, and delegates. Delete with the
+ * branch.
  *
- * The iPhone reported `_autoResume()` called inside the gesture, and both
- * `ctx.state` and `Howler.state` still 'suspended' 2.4 seconds later. Three
- * different things could produce that, and each needs its own measurement:
+ * The previous version wrapped `ctx.resume` only for the duration of our own
+ * call, which could never see Howler's. That mattered: our own bare resume is
+ * gone now, so if the sound comes back we would have no way to tell whether
+ * Howler's unlock path fixed it or something else did. A measurement that cannot
+ * distinguish the two answers is not a measurement.
  *
- * 1. **Which branch runs.** Predicted here from the same tests howler 2.2.4
- *    uses at line 511, so a wrong prediction is itself a finding.
- * 2. **Whether `ctx.resume()` is called at all.** `ctx.resume` is wrapped for
- *    the duration of the call, so the answer comes from the context rather than
- *    from reading the library and hoping.
- * 3. **Whether the promise ever settles.** This is the one that matters:
- *    `_autoResume` sets `state = 'running'` and emits `'resume'` only inside
- *    `.then()`, so a promise that never settles leaves both stuck and every
- *    play parked in silence.
- *
- * The previous instrumentation read `ctx.state` straight after the synchronous
- * call, which can only ever show the old value. It proved nothing either way.
+ * Each call records where it came from, and whether the promise settles. That
+ * last one is the finding from the device: a resume issued 1.3s into the page
+ * hung for 2.2 seconds and only resolved when the *next* gesture arrived. It was
+ * never rejected. It simply did not settle — and since `_autoResume` sets
+ * `Howler.state = 'running'` and emits `'resume'` inside `.then()`, everything
+ * downstream waited with it, including a parked prompt that then spoke after the
+ * child had answered.
  */
-export function watchAutoResume(H: HowlerProbe, ctx: AudioContext): void {
-  const timer = H._suspendTimer;
-  const usingWebAudio = H.usingWebAudio;
+export function watchEveryResume(): void {
+  if (typeof AudioContext === 'undefined') return;
+  const proto = AudioContext.prototype as AudioContext & { __watched?: boolean };
+  if (proto.__watched) return;
+  proto.__watched = true;
 
-  /*
-    howler 2.2.4, _autoResume, line 511 onward:
+  const original = proto.resume;
+  let seq = 0;
 
-      if (!ctx || typeof ctx.resume === 'undefined' || !usingWebAudio)  -> return
-      if (state === 'running' && ctx.state !== 'interrupted' && _suspendTimer)
-                                                                       -> clear timer, NO resume
-      else if (state === 'suspended' || (state === 'running' && ctx.state === 'interrupted'))
-                                                                       -> resume
-      else if (state === 'suspending')                                 -> defer
-      else                                                             -> nothing at all
-  */
-  const branch =
-    typeof ctx.resume === 'undefined' || !usingWebAudio
-      ? 'early-return (no web audio)'
-      : H.state === 'running' && ctx.state !== 'interrupted' && timer
-        ? 'clear-timer — NO RESUME'
-        : H.state === 'suspended' || (H.state === 'running' && ctx.state === 'interrupted')
-          ? 'resume'
-          : H.state === 'suspending'
-            ? 'defer until suspend finishes — NO RESUME NOW'
-            : 'NO BRANCH MATCHES — NO RESUME';
+  proto.resume = function patched(this: AudioContext) {
+    const n = ++seq;
+    // Two frames past this one: enough to name the caller, short enough to read
+    // on a phone. Howler's frames appear as _unlockAudio / _autoResume; ours
+    // would appear as player.ts, and there should no longer be any.
+    const from = (new Error().stack ?? '')
+      .split('\n')
+      .slice(2, 4)
+      .map((l) => l.trim().replace(/^at\s+/, '').slice(0, 60))
+      .join(' <- ');
 
-  record('_autoResume before', {
-    howlerState: H.state ?? null,
-    ctxState: ctx.state,
-    // The suspicion worth killing: with autoSuspend off, `_autoSuspend` returns
-    // at line 464 and never sets a timer, so this should be absent. Absent is
-    // fine — the only branch that wants a timer is the branch that does not
-    // resume, so turning autoSuspend off cannot disable the resume path.
-    suspendTimer: timer === undefined ? 'undefined' : timer === null ? 'null' : 'set',
-    autoSuspend: H.autoSuspend ?? null,
-    usingWebAudio: usingWebAudio ?? null,
-    branchPredicted: branch,
-  });
+    record(`resume() #${n} called`, { inGesture: inGesture(), from });
 
-  let resumeCalls = 0;
-  const original = ctx.resume;
-  ctx.resume = function patched(this: AudioContext) {
-    resumeCalls++;
+    const started = Date.now();
     const p = original.call(this);
-    record('ctx.resume() called inside _autoResume', { call: resumeCalls });
     void Promise.resolve(p).then(
-      () => record('ctx.resume() RESOLVED', { ctxState: ctx.state, howlerState: H.state ?? null }),
-      (err: unknown) => record('ctx.resume() REJECTED', { error: String(err) }),
+      () => record(`resume() #${n} RESOLVED`, { afterMs: Date.now() - started }),
+      (err: unknown) => record(`resume() #${n} REJECTED`, { error: String(err) }),
     );
+
+    // A resume that has not settled by now is the symptom, so say so rather than
+    // leaving its absence to be inferred from a gap in the log.
+    window.setTimeout(() => {
+      if (this.state !== 'running') record(`resume() #${n} +250ms STILL NOT RUNNING`);
+    }, 250);
+    window.setTimeout(() => {
+      if (this.state !== 'running') record(`resume() #${n} +2s STILL HANGING`);
+    }, 2000);
+
     return p;
   } as AudioContext['resume'];
 
-  try {
-    H._autoResume?.();
-  } finally {
-    // Back to the prototype's method, not a copy of it.
-    delete (ctx as unknown as { resume?: unknown }).resume;
-  }
-
-  record('_autoResume after', {
-    resumeCalls,
-    // Synchronous read: still the old value if a resume is in flight. Recorded
-    // so the later samples have something to compare against.
-    ctxState: ctx.state,
-    howlerState: H.state ?? null,
-  });
-
-  // Did anything land? Two samples: a resume that settles late still settles,
-  // and one that never settles is the diagnosis.
-  window.setTimeout(
-    () => record('+250ms', { ctxState: ctx.state, howlerState: H.state ?? null }),
-    250,
-  );
-  window.setTimeout(() => record('+2s', { ctxState: ctx.state, howlerState: H.state ?? null }), 2000);
+  record('resume() watcher installed');
 }
 
 /** Device facts that decide which branch of Howler runs. */

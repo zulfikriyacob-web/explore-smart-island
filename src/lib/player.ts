@@ -29,7 +29,7 @@ import { Howl, Howler } from 'howler';
 
 // TEMPORARY — diagnostics for the iOS no-sound bug. Record only: nothing below
 // changes when audio unlocks or plays. Delete with the branch.
-import { howlerState, inGesture, record, watchAutoResume } from './diagnostics.ts';
+import { howlerState, inGesture, record, watchEveryResume } from './diagnostics.ts';
 
 /** The slice of Howl this module uses. Narrow on purpose, so a fake is cheap. */
 export interface Sound {
@@ -249,120 +249,30 @@ export function howlSound(src: string): Sound {
   };
 }
 
-/**
- * Does a context in this state need resuming?
- *
- * The rule is "anything that is not running", not "suspended". That is the whole
- * of the fourth iPhone bug: our test was `ctx.state === 'suspended'`, and Safari
- * reported **`'interrupted'`** — a state that is not in the Web Audio spec at
- * all. It failed the test, `resume()` was never called, and `play()` went on to
- * park itself forever on a context that was never going to run.
- *
- * `resume()` on a running context is a documented no-op, so the safe direction
- * is to resume unless we can see that it is already running. That covers
- * `suspended`, `interrupted`, `closed`, and whatever Safari invents next —
- * which is the point, because the narrow test is what broke.
- */
-export function needsResume(state: string | null | undefined): boolean {
-  return state !== 'running';
-}
+/*
+  There is no resume of our own here any more, on purpose.
 
-/** The slice of the Howler global this module drives. */
-interface HowlerLike {
-  ctx?: AudioContext | null;
-  state?: string;
-  volume(vol?: number): unknown;
-  _autoResume?: () => unknown;
-}
+  It existed because Howler's unlock listeners were never armed — nothing built
+  a Howl before the first tap, so `_unlockAudio` had no context and registered
+  nothing. Arming on the start screen fixed that, and the hand-rolled resume
+  outlived its reason.
 
-/**
- * Make sure there is an AudioContext, and get it running — both inside whatever
- * call stack this runs in, which is a press handler.
- *
- * Creating it first matters. Measured on the iPhone: at the moment Mula was
- * pressed there was no context at all, so the resume had nothing to act on, and
- * the context that appeared 32ms later was born suspended outside any gesture.
- *
- * `Howler.volume()` is the cheapest public call that runs Howler's own
- * `setupAudioContext()` without building a Howl: it creates the context before
- * it looks at its argument, and passing the current volume back in changes
- * nothing. We touch `Howler.ctx` rather than making our own context, because
- * Howler plays through that one — resuming any other object would be resuming
- * something that makes no sound.
- *
- * **Why `_autoResume()` and not `ctx.resume()`.** `Howl.play()` gates on
- * `Howler.state`, Howler's own bookkeeping, not on `ctx.state`:
- *
- *     // howler.js 2.2.4, line 886
- *     if (Howler.state === 'running' && Howler.ctx.state !== 'interrupted') {
- *       playWebAudio();
- *     } else {
- *       self._playLock = true;
- *       self.once('resume', playWebAudio);   // parked
- *     }
- *
- * Resuming the raw context leaves `Howler.state` saying 'suspended', so play
- * still takes that second branch and parks. `_autoResume()` (line 511) is the
- * only thing that resumes, sets `state = 'running'`, and emits `'resume'` to
- * every Howl — which is what releases the parked plays.
- *
- * It is an internal method, and that is a real cost, accepted for one reason:
- * every alternative is worse. Writing `Howler.state` ourselves also touches
- * internals **and** emits nothing, so the parked plays stay parked.
- */
-export function resumeAudioContext(H: HowlerLike): void {
-  if (!H.ctx) {
-    try {
-      H.volume(H.volume() as number);
-      record('ctx created in handler', howlerState());
-    } catch (err) {
-      record('ctx create THREW', { error: String(err) });
-    }
-  }
+  Worse than redundant, it is the prime suspect for the hang. Measured on the
+  iPhone: a bare `ctx.resume()` issued 1.3s into the page did not resolve for
+  2.2 seconds, until the next gesture woke it. Howler never issues a bare
+  resume — `_unlockAudio` plays a silent scratch buffer first and resumes after
+  it (lines 371-386), and that ordering is not decoration.
 
-  const ctx = H.ctx;
+  So this round removes ours and lets Howler's own path run. If the silence is
+  gone, the tested path was always enough. If it is not, the next step is to
+  copy the ordering rather than to keep guessing at it.
 
-  // TEMPORARY diagnostics.
-  record('resumeAudioContext()', {
-    inGesture: inGesture(),
-    willResume: needsResume(ctx?.state),
-    howlerState: H.state ?? null,
-    ...howlerState(),
-  });
-
-  if (!ctx || !needsResume(ctx.state)) return;
-
-  /*
-    Fail loudly if this ever goes missing.
-
-    Falling back to `ctx.resume()` would look like it worked — the context would
-    resume, `Howler.state` would still read 'suspended', and every play would
-    park in silence. That is exactly this bug, returning with no warning. A
-    Howler upgrade that removes `_autoResume` has to break in the open, on the
-    first run, in front of whoever did the upgrade.
-  */
-  if (typeof H._autoResume !== 'function') {
-    record('_autoResume MISSING', { howler: 'upgrade broke the resume path' });
-    throw new TypeError(
-      'Howler._autoResume is gone. It is the only call that resumes the context, ' +
-        'sets Howler.state to running, and emits "resume" to release parked plays. ' +
-        'Do not fall back to ctx.resume(): that resumes the context while leaving ' +
-        'Howler.state suspended, so every play parks silently — the iOS bug this ' +
-        'replaced. Port the equivalent of howler 2.2.4 line 511 instead.',
-    );
-  }
-
-  try {
-    // TEMPORARY: watch what _autoResume actually does, rather than assuming.
-    // The previous instrumentation read ctx.state straight after the call, which
-    // can only ever show the old value — resume() is asynchronous. It proved
-    // nothing either way.
-    watchAutoResume(H, ctx);
-  } catch (err) {
-    record('_autoResume() THREW', { error: String(err) });
-  }
-}
-
+  Deleted with it: `needsResume` and its tests, which guarded a check that no
+  longer exists. **If any resume of ours comes back, that guard comes back with
+  it** — the bug it caught was a state test narrower than reality
+  (`=== 'suspended'` against Safari's `'interrupted'`), and nothing about that
+  mistake has stopped being easy to make.
+*/
 
 /*
   Howler suspends its own context after 30 seconds with nothing playing
@@ -379,6 +289,11 @@ export function resumeAudioContext(H: HowlerLike): void {
 */
 Howler.autoSuspend = false;
 
-export const promptPlayer: Player = createPlayer(howlSound, () =>
-  resumeAudioContext(Howler as unknown as HowlerLike),
-);
+// TEMPORARY — see every ctx.resume() in the page, whoever makes it. Ours are
+// gone, so anything this catches is Howler's own unlock path.
+watchEveryResume();
+
+// No `onUnlock` any more: `unlock()` records the gesture and nothing else.
+// Getting the context running is Howler's job, through the listeners `arm()`
+// lets it register.
+export const promptPlayer: Player = createPlayer(howlSound);

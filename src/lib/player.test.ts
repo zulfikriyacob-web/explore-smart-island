@@ -1,16 +1,10 @@
 import { describe, expect, it, vi } from 'vitest';
 
-import {
-  createPlayer,
-  howlSound,
-  needsResume,
-  resumeAudioContext,
-  type Sound,
-} from './player.ts';
+import { createPlayer, howlSound, type Sound } from './player.ts';
 
 /**
  * Howler needs a window and an AudioContext; the test environment is `node`.
- * The state machine under test never touches it — only `howlSound` does, and
+ * The state machine under test never touches it �?" only `howlSound` does, and
  * this stands in for it there. `vi.hoisted` because `vi.mock` is lifted above
  * the imports, and the factory closes over this array.
  */
@@ -25,7 +19,7 @@ const { howlInstances } = vi.hoisted(() => ({ howlInstances: [] as FakeHowl[] })
 
 vi.mock('howler', () => ({
   /*
-    The module now touches the Howler global at import time — it turns
+    The module now touches the Howler global at import time �?" it turns
     `autoSuspend` off, because Howler suspending its own context after 30 seconds
     of silence is what put an iPhone into 'interrupted' while a child was still
     reading the start screen. The mock has to carry it, or importing the module
@@ -162,7 +156,7 @@ describe('createPlayer', () => {
   it('keeps a caller flag set when the same clip is restarted mid-playback', () => {
     // This is the sequence AudioButton runs: set "playing", then ask the player
     // to play. play() stops what was going first, and if that stop settled the
-    // press before it, the settle is the same component's "stop pulsing" — it
+    // press before it, the settle is the same component's "stop pulsing" �?" it
     // would clear the flag the press had just set, and the pulse would stop
     // over audio that had only just restarted.
     const { player } = harness();
@@ -214,7 +208,7 @@ describe('createPlayer', () => {
 
   it('prefetch builds the clip without playing it, and play reuses it', () => {
     // SPEC 7.6 wants one question ahead ready to go. "Ready" has to mean built
-    // and loading, not started — a prefetch that made a sound would be the next
+    // and loading, not started �?" a prefetch that made a sound would be the next
     // question talking over this one.
     const { player, made, last } = harness();
     player.prefetch('/audio/ms/q002.mp3');
@@ -229,30 +223,24 @@ describe('createPlayer', () => {
     expect(last().calls.play).toBe(1);
   });
 
-  it('starts locked, and every unlock does the context work', () => {
+  it('starts locked and records the gesture, and nothing more', () => {
     // The iOS gate (SPEC 8). Callers autoplay only when this is true, so it must
     // not be true before a gesture has actually happened.
-    const onUnlock = vi.fn();
-    const player = createPlayer(() => fakeSound().sound, onUnlock);
+    //
+    // Recording the gesture is now all `unlock` does. Getting the context
+    // running belongs to Howler's own unlock listeners, which `arm()` lets it
+    // register before the first tap �?" our hand-rolled resume was removed because
+    // a bare resume() issued early in the page's life hung on iOS until the next
+    // gesture, and Howler never issues a bare one.
+    const player = createPlayer(() => fakeSound().sound);
     expect(player.unlocked()).toBe(false);
 
     player.unlock();
     expect(player.unlocked()).toBe(true);
-    expect(onUnlock).toHaveBeenCalledTimes(1);
 
-    // Every later gesture does it again, and that is the point.
-    //
-    // This assertion used to read `toHaveBeenCalledTimes(1)` after three calls,
-    // on the reasoning that resuming a running context is waste. It was, and it
-    // was also the iPhone bug: on the start screen App's window listener called
-    // unlock() a few milliseconds before the button's own handler, so the flag
-    // was already set and the context work was skipped in the one call stack
-    // iOS would have honoured. Cheap and skippable are not the same thing —
-    // resuming a running context is a no-op, and being in the right stack is
-    // not.
+    // Idempotent, and still true after further gestures.
     player.unlock();
-    player.unlock();
-    expect(onUnlock).toHaveBeenCalledTimes(3);
+    expect(player.unlocked()).toBe(true);
   });
 
   it('arms without caching, so an unloaded weapon cannot be played later', () => {
@@ -282,81 +270,6 @@ describe('createPlayer', () => {
   });
 });
 
-describe('needsResume', () => {
-  /*
-    The fourth iPhone bug, pinned so it cannot come back.
-
-    The old test was `ctx.state === 'suspended'`. Safari reported
-    **'interrupted'** — a state that is not in the Web Audio spec — which failed
-    that check, so resume() was never called and every play parked in silence on
-    a context that would never run.
-
-    Each case below is written so that the old narrow check would get it wrong.
-    'interrupted' is the one that actually bit; the others are the same mistake
-    waiting in a different state name.
-  */
-  it('resumes anything that is not running', () => {
-    expect(needsResume('interrupted')).toBe(true); // the one that bit
-    expect(needsResume('suspended')).toBe(true);
-    expect(needsResume('closed')).toBe(true);
-    expect(needsResume('suspending')).toBe(true);
-    // A state Safari has not invented yet. The rule has to hold for it too,
-    // which is exactly why the test is "not running" and not a list.
-    expect(needsResume('something-new')).toBe(true);
-  });
-
-  it('leaves a running context alone', () => {
-    expect(needsResume('running')).toBe(false);
-  });
-
-  it('treats a missing state as needing a resume', () => {
-    // No context yet, or a backend that does not report one. Resuming is a
-    // no-op at worst; not resuming is silence.
-    expect(needsResume(undefined)).toBe(true);
-    expect(needsResume(null)).toBe(true);
-  });
-});
-
-describe('resumeAudioContext', () => {
-  /** A stand-in for the Howler global, so this runs without a browser. */
-  function fakeHowler(over: Record<string, unknown> = {}) {
-    return {
-      ctx: { state: 'interrupted' } as unknown as AudioContext,
-      state: 'suspended',
-      volume: vi.fn(() => 1),
-      _autoResume: vi.fn(),
-      ...over,
-    };
-  }
-
-  it('resumes an interrupted context through _autoResume', () => {
-    const H = fakeHowler();
-    resumeAudioContext(H);
-    expect(H._autoResume).toHaveBeenCalledTimes(1);
-  });
-
-  it('leaves a running context alone', () => {
-    const H = fakeHowler({ ctx: { state: 'running' } as unknown as AudioContext, state: 'running' });
-    resumeAudioContext(H);
-    expect(H._autoResume).not.toHaveBeenCalled();
-  });
-
-  it('creates the context first when there is none', () => {
-    const H = fakeHowler({ ctx: null });
-    resumeAudioContext(H);
-    // Howler.volume() is what runs setupAudioContext without building a Howl.
-    expect(H.volume).toHaveBeenCalled();
-  });
-
-  it('throws loudly rather than falling back when _autoResume is gone', () => {
-    // A Howler upgrade that drops this must break in the open. A quiet
-    // ctx.resume() fallback would resume the context, leave Howler.state
-    // suspended, and park every play in silence — this bug, returning with no
-    // warning.
-    const H = fakeHowler({ _autoResume: undefined });
-    expect(() => resumeAudioContext(H)).toThrow(/_autoResume/);
-  });
-});
 
 describe('howlSound', () => {
   it('maps the narrow interface onto one Howl per source', () => {
