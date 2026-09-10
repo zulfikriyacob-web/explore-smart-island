@@ -102,17 +102,48 @@ export interface Player {
    */
   arm(src: string): void;
   /**
-   * Record that a real user gesture has happened, and make the audio context
-   * ready inside that gesture's own call stack. Callers check `unlocked()`
-   * before autoplaying; pressing a button to play is always allowed, gesture or
-   * not, because the press *is* the gesture.
+   * Record that a real user gesture has happened. Pressing a button to play is
+   * always allowed, gesture or not, because the press *is* the gesture.
    */
   unlock(): void;
   /** Has a gesture happened yet? */
   unlocked(): boolean;
+  /**
+   * Can audio actually be heard right now?
+   *
+   * Not "have we had a gesture" — that flag says what we did, and this says what
+   * the device is doing. They come apart: on iOS a `resume()` can hang for
+   * seconds after the gesture that triggered it, and a running context can drop
+   * back to 'interrupted' later for reasons that have nothing to do with us — a
+   * call, the lock screen, another app taking the audio session. Measured on the
+   * device: 'interrupted' reappeared 28 seconds into a session with autoSuspend
+   * already off.
+   */
+  audible(): boolean;
+  /**
+   * Call `cb` once audio is audible — now, if it already is. Returns a cancel
+   * function, and cancelling is the point.
+   *
+   * `Howl.play()` on a suspended context parks the playback (`self.once('resume',
+   * playWebAudio)`) and hands back a sound id, and **nothing outside can take it
+   * back**. So a prompt asked to play while the context was down speaks whenever
+   * the context happens to return, which can be after the child has answered and
+   * gone. Waiting on our side of that line keeps the decision cancellable.
+   */
+  whenAudible(cb: () => void): () => void;
 }
 
-export function createPlayer(makeSound: SoundFactory, onUnlock?: () => void): Player {
+/**
+ * How the player learns whether audio can be heard. Injected so `createPlayer`
+ * stays free of Howler and testable without a browser.
+ */
+export interface Readiness {
+  audible(): boolean;
+  /** Subscribe to changes. Returns an unsubscribe. */
+  onChange(listener: () => void): () => void;
+}
+
+export function createPlayer(makeSound: SoundFactory, readiness?: Readiness): Player {
   const cache = new Map<string, Sound>();
   let currentSrc: string | null = null;
   let settle: (() => void) | null = null;
@@ -215,15 +246,28 @@ export function createPlayer(makeSound: SoundFactory, onUnlock?: () => void): Pl
       // TEMPORARY diagnostics.
       record('unlock()', { alreadyGestured: gestured, inGesture: inGesture() });
       gestured = true;
-      // Always, not just the first time. This used to return early once the flag
-      // was set, and on the start screen the window listener in App set it a few
-      // milliseconds before the button's own handler ran — so the context work
-      // was skipped in the one call stack where iOS would have honoured it. The
-      // flag is bookkeeping; the context work has to happen wherever a gesture
-      // is, and resuming an already-running context costs nothing.
-      onUnlock?.();
     },
     unlocked: () => gestured,
+
+    audible: () => readiness?.audible() ?? true,
+
+    whenAudible: (cb) => {
+      if (!readiness || readiness.audible()) {
+        cb();
+        return () => {};
+      }
+      let done = false;
+      const stop = readiness.onChange(() => {
+        if (done || !readiness.audible()) return;
+        done = true;
+        stop();
+        cb();
+      });
+      return () => {
+        done = true;
+        stop();
+      };
+    },
   };
 }
 
@@ -293,7 +337,39 @@ Howler.autoSuspend = false;
 // gone, so anything this catches is Howler's own unlock path.
 watchEveryResume();
 
+/**
+ * Audibility, read from the context rather than from a flag of ours.
+ *
+ * The test is `ctx.state === 'running'`. That is the condition that decides
+ * whether a `play()` makes a sound, it has a `statechange` event to wait on, and
+ * it goes false again when Safari interrupts the session — which the gesture
+ * flag never does.
+ *
+ * `Howler._audioUnlocked` is the more honest *evidence* that audio has worked at
+ * least once, being set from `source.onended` on a scratch buffer that really
+ * played. It is not used as the gate here for one reason: nothing fires when it
+ * flips, so a wait hung on it can be stranded, and on the device it turned true
+ * a moment *after* the context started running. Gating on it would have made the
+ * first prompt less likely to play, not more. It is still reported.
+ */
+export function howlerReadiness(): Readiness {
+  const ctxOf = () => (Howler as unknown as { ctx?: AudioContext | null }).ctx ?? null;
+  return {
+    audible: () => ctxOf()?.state === 'running',
+    onChange: (listener) => {
+      // The context may not exist yet on a cold start. `arm()` builds one before
+      // the first gesture, so by the time anything waits there is one to watch;
+      // if there is not, the wait simply never fires, which is the safe way to
+      // be wrong — silence rather than a prompt at the wrong moment.
+      const ctx = ctxOf();
+      if (!ctx) return () => {};
+      ctx.addEventListener('statechange', listener);
+      return () => ctx.removeEventListener('statechange', listener);
+    },
+  };
+}
+
 // No `onUnlock` any more: `unlock()` records the gesture and nothing else.
 // Getting the context running is Howler's job, through the listeners `arm()`
 // lets it register.
-export const promptPlayer: Player = createPlayer(howlSound);
+export const promptPlayer: Player = createPlayer(howlSound, howlerReadiness());

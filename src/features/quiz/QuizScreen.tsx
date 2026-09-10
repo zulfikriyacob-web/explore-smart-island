@@ -230,13 +230,22 @@ export function QuizScreen() {
               autoPlay: the prompt reads itself when the question appears
               (SPEC 8). It is what Phase 1 exit criterion 7 turns on — a child
               who cannot read is never going to discover a speaker button on
-              their own. It only fires once a gesture has unlocked audio, so the
-              first question after a restore stays silent and the button is there
-              to press.
+              their own.
+
+              Withdrawn the moment the child engages. Audio can take seconds to
+              become audible on iOS — a resume that hangs until the next gesture
+              — and without this the prompt reads itself to a child who has
+              already answered. `attempts > 0` covers answering this question;
+              the status check covers feedback and the summary. The button stays
+              pressable throughout either way.
+
+              This is also what keeps a restored session silent: it comes back
+              mid-activity with the context suspended, and the first tap is
+              usually the answer that withdraws this.
             */}
             <AudioButton
               src={question.promptAudio[LANG]}
-              autoPlay
+              autoPlay={session.status === 'question' && session.attempts === 0}
               className="float-left mr-4"
             />
             {question.prompt[LANG]}
