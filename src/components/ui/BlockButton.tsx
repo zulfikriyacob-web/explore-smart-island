@@ -4,7 +4,7 @@ import { useCallback, useRef, useState, type ReactNode } from 'react';
 import { correctPulse, shake } from '../../motion/variants.ts';
 import { ease, spring } from '../../motion/tokens.ts';
 
-export type BlockState = 'rest' | 'correct' | 'wrong' | 'disabled' | 'revealed';
+export type BlockState = 'rest' | 'correct' | 'wrong' | 'disabled' | 'revealed' | 'start';
 
 interface Ripple {
   id: number;
@@ -16,8 +16,12 @@ interface BlockButtonProps {
   children: ReactNode;
   onPress: () => void;
   state?: BlockState;
-  /** DESIGN 5.1: 88 for a primary answer, 72 for a secondary action. */
-  minHeight?: 88 | 72;
+  /**
+   * DESIGN 5.1: 88 for a primary answer, 72 for a secondary action, 96 for the
+   * start button — the only target on its screen, so the floor that exists to
+   * stop a child hitting the neighbouring button does not apply to it.
+   */
+  minHeight?: 96 | 88 | 72;
   ariaLabel?: string;
   className?: string;
 }
@@ -43,6 +47,13 @@ const FACE: Record<BlockState, string> = {
   // opacity 0.35, so its real ratio is composited and not its token's. (2.4)
   disabled: 'bg-white border-garis shadow-[0_4px_0_0_theme(colors.garis)]',
   revealed: 'bg-white border-mangga-dark shadow-[0_4px_0_0_theme(colors.mangga.dark)]',
+  /*
+    Start screen only. The one button on that screen, so it is allowed the
+    filled module face the answer buttons never take — nothing else competes
+    with it. Text stays --arang: white on --laut is 2.57:1 and fails, which is
+    the mistake DESIGN 2.4 calls out by name, while --arang on --laut is 4.78:1.
+  */
+  start: 'bg-laut border-laut-dark shadow-[0_4px_0_0_theme(colors.laut.dark)]',
 };
 
 /**

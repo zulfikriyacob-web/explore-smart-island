@@ -374,21 +374,31 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
    yang sama. Skrin ganjaran tiada kedua-dua masalah itu: kemeriahan memang dibelanjakan di
    situ (DESIGN.md §1) dan kancil sudah ada. Direkod sebagai idea sahaja; tiada kerja
    dirancang, dan ia perlu pindaan bertulis pada §10 dan DESIGN.md §6 sebelum dilaksana.
-8. **Skrin mula — diperlukan untuk audio, tetapi belum direka.** Audio arahan berbunyi apabila
-   anak menekan butang speaker, dan itu berfungsi hari ini. Yang belum ialah audio **bermain
-   sendiri** apabila soalan muncul, yang SPEC.md §8 minta dan yang kriteria keluar Fasa 1
-   bergantung padanya: anak yang belum lancar membaca tidak akan tahu untuk menekan apa-apa.
-   iOS tidak membenarkan audio bermula tanpa gerak isyarat pengguna, jadi main automatik
-   memerlukan satu ketukan lebih awal dalam sesi — iaitu skrin mula.
+8. ~~**Skrin mula — diperlukan untuk audio, tetapi belum direka.**~~ **DISELESAIKAN (Brief 03).**
+   Skrin mula wujud, dan langkah 4–7 siap: gerbang gerak isyarat, skrin itu sendiri, main
+   automatik, dan prapuat satu soalan ke hadapan. Butang Mula menghantar `START` dan membuka
+   kunci audio dalam gerak isyarat yang sama.
 
-   Skrin itu **sengaja dibuang** daripada `store.ts`, yang menghantar `START` serta-merta
-   supaya app terus membuka aktiviti. Reducer masih menyokong keadaan `intro`; hanya skrinnya
-   yang tiada. Memulangkannya ialah keputusan reka bentuk sebelum ia kerja kod: apa yang anak
-   lihat, berapa lama, dan apa yang berlaku pada sesi yang dipulihkan separuh jalan — sesi itu
-   kembali pada `question`, bukan `intro`, jadi tiada ketukan pertama untuk membuka kunci audio.
+   Keputusan yang dibuat bersamanya, kerana ia menentukan apa yang skrin itu boleh janjikan:
+   **sesi yang dipulihkan tidak melalui skrin ini langsung.** Ia kembali pada `question`, dan
+   ketukan pertama di mana-mana yang membuka kunci audio. Akibatnya soalan pertama selepas
+   menyambung semula **tidak** dibacakan sendiri — ketukan itu selalunya jawapan, dan
+   membacakan soalan selepas ia dijawab lebih buruk daripada senyap. Sebab itu skrin mula tidak
+   membawa ikon speaker atau tetapan audio: apa-apa janji bunyi di situ akan tidak benar untuk
+   separuh laluan masuk.
 
-   Langkah 1–3 audio siap (Howler, `lib/player.ts`, butang). Langkah 4–7 — gerbang gerak
-   isyarat, skrin mula, main automatik, prapuat satu soalan ke hadapan — menunggu keputusan ini.
+   Soalan asal dikekalkan di bawah sebagai rekod sebab ia wujud.
+
+   > Audio arahan berbunyi apabila anak menekan butang speaker, dan itu berfungsi hari ini.
+   > Yang belum ialah audio **bermain sendiri** apabila soalan muncul, yang SPEC.md §8 minta
+   > dan yang kriteria keluar Fasa 1 bergantung padanya: anak yang belum lancar membaca tidak
+   > akan tahu untuk menekan apa-apa. iOS tidak membenarkan audio bermula tanpa gerak isyarat
+   > pengguna, jadi main automatik memerlukan satu ketukan lebih awal dalam sesi — iaitu skrin
+   > mula.
+   >
+   > Skrin itu **sengaja dibuang** daripada `store.ts`, yang menghantar `START` serta-merta
+   > supaya app terus membuka aktiviti. Reducer masih menyokong keadaan `intro`; hanya skrinnya
+   > yang tiada.
 9. **Tiga bintang dan satu bintang mendapat maskot yang sama.** Kontrak Rive lama membawa satu
    trigger `celebrate` yang berasingan untuk ⭐⭐⭐ pada skrin ganjaran. Ia tidak dibawa masuk ke
    dalam komponen React; `KancilState` hari ini ialah empat keadaan, dan skrin ringkasan

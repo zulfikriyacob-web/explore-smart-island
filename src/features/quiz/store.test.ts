@@ -26,7 +26,11 @@ function correctResponse(question: Question): Response {
 
 /** Play the activity to its summary, every question right first time. */
 function playThrough(): SessionResult {
-  const { answer, next } = useQuizStore.getState();
+  const { start, answer, next } = useQuizStore.getState();
+  // A cold start waits at `intro` for the Mula tap (Brief 03). A replay does
+  // not, so this is a no-op on the second run through — the reducer ignores
+  // START unless the status is `intro`.
+  start();
   // Bounded rather than `while (true)`: if a change ever stops a session
   // reaching its summary, this should fail with a message instead of hanging.
   for (let step = 0; step < 100; step++) {
@@ -42,6 +46,27 @@ function playThrough(): SessionResult {
 }
 
 describe('quiz store', () => {
+  /*
+    The gate. A fresh run has to stop at `intro` and stay there until something
+    taps, because that tap is the gesture iOS requires before any audio can play
+    (SPEC 8). The store used to send START itself, which spent the gesture before
+    the child ever made one — autoplay would then be refused for the whole run
+    and nothing would say so.
+
+    This runs first, before the play-through below restarts the store: the store
+    is a module singleton, so the fresh-load state can only be observed once.
+  */
+  it('waits at intro until the start tap, rather than sending START itself', () => {
+    const session = useQuizStore.getState().session;
+    expect(session.status).toBe('intro');
+    // Loaded and ready — it is waiting for a tap, not for content.
+    expect(session.questions.length).toBeGreaterThan(0);
+    expect(session.questionStartedMs).toBeNull();
+
+    useQuizStore.getState().start();
+    expect(useQuizStore.getState().session.status).toBe('question');
+  });
+
   it('pays a replay fewer gems than the first clear, for the same answers', () => {
     // One test rather than three: the store is a module singleton, so a test
     // that restarts it changes what any test after it would see.
@@ -61,5 +86,25 @@ describe('quiz store', () => {
     // test that trips on the flag first would report the cause while leaving
     // the effect unproven.
     expect(useQuizStore.getState().session.isFirstClear).toBe(false);
+  });
+
+  /*
+    "Main lagi" goes straight into the first question.
+
+    The start screen exists to collect the gesture that unlocks audio. By the
+    time a child can press "Main lagi" that gesture has happened, so the screen
+    has no job left — showing it again would be one more tap between a child who
+    has just asked to play and playing. A cold start with nothing saved is the
+    only thing it is for.
+  */
+  it('restarts straight into the first question, not back at the start screen', () => {
+    useQuizStore.getState().restart();
+
+    const session = useQuizStore.getState().session;
+    expect(session.status).toBe('question');
+    expect(session.index).toBe(0);
+    expect(session.answers).toHaveLength(0);
+    // Started for real, not merely loaded: the first question's clock is running.
+    expect(session.questionStartedMs).not.toBeNull();
   });
 });
