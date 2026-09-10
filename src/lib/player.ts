@@ -29,7 +29,7 @@ import { Howl, Howler } from 'howler';
 
 // TEMPORARY — diagnostics for the iOS no-sound bug. Record only: nothing below
 // changes when audio unlocks or plays. Delete with the branch.
-import { deviceState, howlerState, inGesture, record } from './diagnostics.ts';
+import { howlerState, inGesture, record, watchAutoResume } from './diagnostics.ts';
 
 /** The slice of Howl this module uses. Narrow on purpose, so a fake is cheap. */
 export interface Sound {
@@ -353,14 +353,16 @@ export function resumeAudioContext(H: HowlerLike): void {
   }
 
   try {
-    H._autoResume();
-    // Read back from the context itself rather than trusting the call: a library
-    // reporting success is not the device making sound (CLAUDE.md).
-    record('_autoResume() called', { ctxState: ctx.state, howlerState: H.state ?? null });
+    // TEMPORARY: watch what _autoResume actually does, rather than assuming.
+    // The previous instrumentation read ctx.state straight after the call, which
+    // can only ever show the old value — resume() is asynchronous. It proved
+    // nothing either way.
+    watchAutoResume(H, ctx);
   } catch (err) {
     record('_autoResume() THREW', { error: String(err) });
   }
 }
+
 
 /*
   Howler suspends its own context after 30 seconds with nothing playing
