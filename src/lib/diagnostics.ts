@@ -89,10 +89,18 @@ export function howlerState(): Record<string, unknown> {
     // Mula press tries to resume it.
     ctx: ctx ? 'present' : 'MISSING',
     ctxState: ctx?.state ?? null,
+    // Howler's own bookkeeping, which is a different number from ctx.state and
+    // is the one `Howl.play()` actually gates on (line 886). The two disagreeing
+    // is the whole story of the fourth bug: ctx 'interrupted' while Howler still
+    // said 'suspended', so play parked and never woke.
+    howlerState: H.state ?? null,
     audioUnlocked: H._audioUnlocked ?? null,
     usingWebAudio: H.usingWebAudio ?? null,
     noAudio: H.noAudio ?? null,
     autoUnlock: H.autoUnlock ?? null,
+    // Off deliberately: Howler suspends its own context after 30s of silence,
+    // and a start screen plus thinking time hits that constantly.
+    autoSuspend: H.autoSuspend ?? null,
     howls: Array.isArray(H._howls) ? H._howls.length : null,
   };
 }

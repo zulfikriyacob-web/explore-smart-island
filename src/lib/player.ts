@@ -250,15 +250,34 @@ export function howlSound(src: string): Sound {
 }
 
 /**
- * Resume the shared AudioContext. Howler creates it suspended when the page has
- * had no gesture, and a suspended context plays nothing while still reporting
- * that it is playing — the trap CLAUDE.md records. Resuming has to happen inside
- * the gesture's own call stack, which is why `unlock()` is called straight from
- * the press handler rather than from an effect afterwards.
+ * Does a context in this state need resuming?
+ *
+ * The rule is "anything that is not running", not "suspended". That is the whole
+ * of the fourth iPhone bug: our test was `ctx.state === 'suspended'`, and Safari
+ * reported **`'interrupted'`** — a state that is not in the Web Audio spec at
+ * all. It failed the test, `resume()` was never called, and `play()` went on to
+ * park itself forever on a context that was never going to run.
+ *
+ * `resume()` on a running context is a documented no-op, so the safe direction
+ * is to resume unless we can see that it is already running. That covers
+ * `suspended`, `interrupted`, `closed`, and whatever Safari invents next —
+ * which is the point, because the narrow test is what broke.
  */
+export function needsResume(state: string | null | undefined): boolean {
+  return state !== 'running';
+}
+
+/** The slice of the Howler global this module drives. */
+interface HowlerLike {
+  ctx?: AudioContext | null;
+  state?: string;
+  volume(vol?: number): unknown;
+  _autoResume?: () => unknown;
+}
+
 /**
- * Make sure there is an AudioContext, and resume it — both inside whatever call
- * stack this runs in, which is a press handler.
+ * Make sure there is an AudioContext, and get it running — both inside whatever
+ * call stack this runs in, which is a press handler.
  *
  * Creating it first matters. Measured on the iPhone: at the moment Mula was
  * pressed there was no context at all, so the resume had nothing to act on, and
@@ -270,39 +289,94 @@ export function howlSound(src: string): Sound {
  * nothing. We touch `Howler.ctx` rather than making our own context, because
  * Howler plays through that one — resuming any other object would be resuming
  * something that makes no sound.
+ *
+ * **Why `_autoResume()` and not `ctx.resume()`.** `Howl.play()` gates on
+ * `Howler.state`, Howler's own bookkeeping, not on `ctx.state`:
+ *
+ *     // howler.js 2.2.4, line 886
+ *     if (Howler.state === 'running' && Howler.ctx.state !== 'interrupted') {
+ *       playWebAudio();
+ *     } else {
+ *       self._playLock = true;
+ *       self.once('resume', playWebAudio);   // parked
+ *     }
+ *
+ * Resuming the raw context leaves `Howler.state` saying 'suspended', so play
+ * still takes that second branch and parks. `_autoResume()` (line 511) is the
+ * only thing that resumes, sets `state = 'running'`, and emits `'resume'` to
+ * every Howl — which is what releases the parked plays.
+ *
+ * It is an internal method, and that is a real cost, accepted for one reason:
+ * every alternative is worse. Writing `Howler.state` ourselves also touches
+ * internals **and** emits nothing, so the parked plays stay parked.
  */
-function resumeContext(): void {
-  if (!Howler.ctx) {
+export function resumeAudioContext(H: HowlerLike): void {
+  if (!H.ctx) {
     try {
-      Howler.volume(Howler.volume());
+      H.volume(H.volume() as number);
       record('ctx created in handler', howlerState());
     } catch (err) {
       record('ctx create THREW', { error: String(err) });
     }
   }
 
-  const ctx = Howler.ctx as AudioContext | undefined;
+  const ctx = H.ctx;
 
   // TEMPORARY diagnostics.
-  record('resumeContext()', {
+  record('resumeAudioContext()', {
     inGesture: inGesture(),
-    willResume: ctx ? ctx.state === 'suspended' : false,
+    willResume: needsResume(ctx?.state),
+    howlerState: H.state ?? null,
     ...howlerState(),
   });
 
-  if (ctx && ctx.state === 'suspended') {
-    try {
-      const p = ctx.resume();
-      // Recorded from the promise, so a rejection is visible rather than
-      // swallowed. This does not change what resume() does.
-      void Promise.resolve(p).then(
-        () => record('resume() resolved', { ctxState: ctx.state }),
-        (err: unknown) => record('resume() REJECTED', { error: String(err) }),
-      );
-    } catch (err) {
-      record('resume() THREW', { error: String(err) });
-    }
+  if (!ctx || !needsResume(ctx.state)) return;
+
+  /*
+    Fail loudly if this ever goes missing.
+
+    Falling back to `ctx.resume()` would look like it worked — the context would
+    resume, `Howler.state` would still read 'suspended', and every play would
+    park in silence. That is exactly this bug, returning with no warning. A
+    Howler upgrade that removes `_autoResume` has to break in the open, on the
+    first run, in front of whoever did the upgrade.
+  */
+  if (typeof H._autoResume !== 'function') {
+    record('_autoResume MISSING', { howler: 'upgrade broke the resume path' });
+    throw new TypeError(
+      'Howler._autoResume is gone. It is the only call that resumes the context, ' +
+        'sets Howler.state to running, and emits "resume" to release parked plays. ' +
+        'Do not fall back to ctx.resume(): that resumes the context while leaving ' +
+        'Howler.state suspended, so every play parks silently — the iOS bug this ' +
+        'replaced. Port the equivalent of howler 2.2.4 line 511 instead.',
+    );
+  }
+
+  try {
+    H._autoResume();
+    // Read back from the context itself rather than trusting the call: a library
+    // reporting success is not the device making sound (CLAUDE.md).
+    record('_autoResume() called', { ctxState: ctx.state, howlerState: H.state ?? null });
+  } catch (err) {
+    record('_autoResume() THREW', { error: String(err) });
   }
 }
 
-export const promptPlayer: Player = createPlayer(howlSound, resumeContext);
+/*
+  Howler suspends its own context after 30 seconds with nothing playing
+  (`_autoSuspend`, line 461, on by default at line 52), and on iOS that shows up
+  as `ctx.state === 'interrupted'`.
+
+  This app has a start screen a child can stare at and questions a child is meant
+  to think about, so that 30-second window is not an edge case — it is the normal
+  shape of a session. Measured on the iPhone: the context was already
+  'interrupted' 54 seconds in, before a single clip had played. We suspended our
+  own audio by waiting.
+
+  The battery saving is not worth silence.
+*/
+Howler.autoSuspend = false;
+
+export const promptPlayer: Player = createPlayer(howlSound, () =>
+  resumeAudioContext(Howler as unknown as HowlerLike),
+);

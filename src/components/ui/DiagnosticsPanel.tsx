@@ -78,16 +78,23 @@ export function DiagnosticsPanel({ where }: { where: string }) {
         {copied && <span>{copied}</span>}
       </div>
 
+      {/*
+        ctxState and howlerState on one line, side by side, because the two
+        disagreeing is the fault: Howl.play() gates on Howler.state, not on
+        ctx.state. Both must read `running` after the Mula tap.
+      */}
       <div>
-        ctx: {String(live.ctx)} · ctxState: {String(live.ctxState)}
+        <strong>
+          ctxState: {String(live.ctxState)} · Howler.state: {String(live.howlerState)}
+        </strong>
       </div>
       <div>
-        _audioUnlocked: {String(live.audioUnlocked)} · webAudio: {String(live.usingWebAudio)} ·
-        noAudio: {String(live.noAudio)}
+        ctx: {String(live.ctx)} · _audioUnlocked: {String(live.audioUnlocked)} · webAudio:{' '}
+        {String(live.usingWebAudio)} · noAudio: {String(live.noAudio)}
       </div>
       <div>
-        autoUnlock: {String(live.autoUnlock)} · howls: {String(live.howls)} · appleVendor:{' '}
-        {String(deviceState().isAppleVendor)}
+        autoUnlock: {String(live.autoUnlock)} · autoSuspend: {String(live.autoSuspend)} · howls:{' '}
+        {String(live.howls)} · appleVendor: {String(deviceState().isAppleVendor)}
       </div>
 
       <hr className="my-1 border-garis" />

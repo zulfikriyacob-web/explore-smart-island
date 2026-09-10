@@ -1,6 +1,12 @@
 import { describe, expect, it, vi } from 'vitest';
 
-import { createPlayer, howlSound, type Sound } from './player.ts';
+import {
+  createPlayer,
+  howlSound,
+  needsResume,
+  resumeAudioContext,
+  type Sound,
+} from './player.ts';
 
 /**
  * Howler needs a window and an AudioContext; the test environment is `node`.
@@ -18,6 +24,14 @@ interface FakeHowl {
 const { howlInstances } = vi.hoisted(() => ({ howlInstances: [] as FakeHowl[] }));
 
 vi.mock('howler', () => ({
+  /*
+    The module now touches the Howler global at import time — it turns
+    `autoSuspend` off, because Howler suspending its own context after 30 seconds
+    of silence is what put an iPhone into 'interrupted' while a child was still
+    reading the start screen. The mock has to carry it, or importing the module
+    under test fails before a single test runs.
+  */
+  Howler: { autoSuspend: true, ctx: null, state: 'suspended', volume: () => 1 },
   Howl: class {
     src: string[];
     play = vi.fn();
@@ -265,6 +279,82 @@ describe('createPlayer', () => {
     player.play('/audio/ms/q001.mp3');
     expect(last().calls.play).toBe(1);
     expect(player.unlocked()).toBe(false);
+  });
+});
+
+describe('needsResume', () => {
+  /*
+    The fourth iPhone bug, pinned so it cannot come back.
+
+    The old test was `ctx.state === 'suspended'`. Safari reported
+    **'interrupted'** — a state that is not in the Web Audio spec — which failed
+    that check, so resume() was never called and every play parked in silence on
+    a context that would never run.
+
+    Each case below is written so that the old narrow check would get it wrong.
+    'interrupted' is the one that actually bit; the others are the same mistake
+    waiting in a different state name.
+  */
+  it('resumes anything that is not running', () => {
+    expect(needsResume('interrupted')).toBe(true); // the one that bit
+    expect(needsResume('suspended')).toBe(true);
+    expect(needsResume('closed')).toBe(true);
+    expect(needsResume('suspending')).toBe(true);
+    // A state Safari has not invented yet. The rule has to hold for it too,
+    // which is exactly why the test is "not running" and not a list.
+    expect(needsResume('something-new')).toBe(true);
+  });
+
+  it('leaves a running context alone', () => {
+    expect(needsResume('running')).toBe(false);
+  });
+
+  it('treats a missing state as needing a resume', () => {
+    // No context yet, or a backend that does not report one. Resuming is a
+    // no-op at worst; not resuming is silence.
+    expect(needsResume(undefined)).toBe(true);
+    expect(needsResume(null)).toBe(true);
+  });
+});
+
+describe('resumeAudioContext', () => {
+  /** A stand-in for the Howler global, so this runs without a browser. */
+  function fakeHowler(over: Record<string, unknown> = {}) {
+    return {
+      ctx: { state: 'interrupted' } as unknown as AudioContext,
+      state: 'suspended',
+      volume: vi.fn(() => 1),
+      _autoResume: vi.fn(),
+      ...over,
+    };
+  }
+
+  it('resumes an interrupted context through _autoResume', () => {
+    const H = fakeHowler();
+    resumeAudioContext(H);
+    expect(H._autoResume).toHaveBeenCalledTimes(1);
+  });
+
+  it('leaves a running context alone', () => {
+    const H = fakeHowler({ ctx: { state: 'running' } as unknown as AudioContext, state: 'running' });
+    resumeAudioContext(H);
+    expect(H._autoResume).not.toHaveBeenCalled();
+  });
+
+  it('creates the context first when there is none', () => {
+    const H = fakeHowler({ ctx: null });
+    resumeAudioContext(H);
+    // Howler.volume() is what runs setupAudioContext without building a Howl.
+    expect(H.volume).toHaveBeenCalled();
+  });
+
+  it('throws loudly rather than falling back when _autoResume is gone', () => {
+    // A Howler upgrade that drops this must break in the open. A quiet
+    // ctx.resume() fallback would resume the context, leave Howler.state
+    // suspended, and park every play in silence — this bug, returning with no
+    // warning.
+    const H = fakeHowler({ _autoResume: undefined });
+    expect(() => resumeAudioContext(H)).toThrow(/_autoResume/);
   });
 });
 
