@@ -848,6 +848,64 @@ semua 10 di muka — ini mematikan sambungan yang perlahan.
   Main automatik dan butang ulang berkongsi satu pemanggil pemain, jadi menekan butang semasa
   audio automatik sedang berjalan **menggantikan** klip itu, bukan menindihnya — satu klip
   boleh didengar pada satu masa, tidak pernah dua.
+### Buka kunci audio iOS — lima peraturan, semuanya diperoleh dengan susah payah
+
+Bunyi tidak keluar langsung pada iPhone selama empat pusingan, dengan empat punca berlainan.
+Ini yang tinggal selepas semuanya. **Jangan pinda tanpa mengukur pada iPhone sebenar** — mesin
+pembangunan dan Browser pane kedua-duanya melaporkan `navigator.vendor` bukan-Apple dan
+membenarkan audio bermula tanpa gerak isyarat dipercayai, jadi laluan ini tidak pernah
+dijalankan di sana. Semua nombor di bawah datang daripada peranti.
+
+**1. Jangan keluarkan `resume()` sendiri.** Howler yang mengendalikannya, dan laluannya —
+buffer senyap `start(0)` **dahulu**, kemudian `ctx.resume()` — yang berfungsi pada iOS.
+`resume()` telanjang kita bukan sahaja berlebihan; ia **menghalang** laluan yang teruji.
+Selepas ia dibuang, setiap resume dalam log datang daripada `unlock@howler` dan bunyi keluar
+pada ketukan pertama.
+
+**2. Senjatakan Howler dengan satu Howl sebelum gerak isyarat pertama.** `_unlockAudio()`
+mendaftar pendengarnya hanya dari dalam `Howl.init`, dan hanya kalau context sudah wujud.
+Permulaan sejuk tidak membina Howl sehingga skrin soalan dipasang — 32 ms **selepas** ketukan
+Mula — jadi pendengar itu didaftar lewat dan ketukan pertama senyap.
+
+Howl senjata itu **bukan cache**: `_unlockAudio` memanggil `Howler.unload()` apabila
+`sampleRate !== 44100` (48000 pada iPhone), dan Howl yang di-`unload` masih menjawab `play()`
+dengan id bunyi sambil tidak berbunyi. Jangan prapuat melaluinya.
+
+**3. `Howler.autoSuspend = false`.** Ia menggantung context sendiri selepas 30 saat tanpa
+bunyi, dan pada iOS itu muncul sebagai `ctx.state === 'interrupted'`. App dengan skrin mula
+dan masa berfikir kena tingkap itu sebagai perkara biasa — diukur `interrupted` pada 54 saat,
+sebelum satu klip pun dimainkan. **Kita menggantung audio kita sendiri semasa menunggu.**
+
+**4. `resume()` pada iOS boleh tergantung berbilang saat, dan selesai hanya pada gerak isyarat
+kemudian.** Ia tidak ditolak dan tidak gagal — ia tidak selesai. Diukur, `afterMs` merentas
+ketukan berturutan: **2577 → 1422 → 318 → 42**. Setiap gerak isyarat membawa Safari lebih
+dekat. **Jangan jangka ia selesai tepat pada masa**, dan jangan andaikan gerak isyarat
+bermakna audio sedia.
+
+**5. `Howl.play()` pada context tergantung memarkir main balik dan memulangkan id bunyi.**
+Ia **tidak boleh dibatalkan**:
+
+```js
+// howler.js 2.2.4, baris 886
+if (Howler.state === 'running' && Howler.ctx.state !== 'interrupted') {
+  playWebAudio();
+} else {
+  self._playLock = true;
+  self.once('resume', playWebAudio);   // diparkir, selama-lamanya kalau perlu
+}
+```
+
+Main terparkir dilepaskan bila-bila context kembali — yang mungkin selepas anak sudah
+menjawab dan pergi. Sebab itu autoplay **menunggu** di pihak kita dan tidak pernah memanggil
+`play()` pada context yang tidak berjalan: gerbangnya `ctx.state === 'running'`, menunggu pada
+`statechange`, dan ditarik balik sebaik anak melibatkan diri.
+
+> **Gerbang mana.** `Howler._audioUnlocked` ialah bukti paling jujur bahawa audio benar-benar
+> berbunyi — ia ditetapkan daripada `source.onended` pada buffer senyap. Ia **bukan** gerbang
+> kerana tiada apa menyala apabila ia bertukar, jadi menunggu padanya boleh terkandas, dan
+> pada peranti ia menjadi `true` sesaat **selepas** context mula berjalan. `ctx.state` ada
+> peristiwa, menentukan kebolehdengaran sekarang, dan menjadi `false` semula pada gangguan.
+
 - Bunyi UI: `tap`, `correct`, `wrong`, `star`, `unlock`. Jaga bunyi `wrong` sebagai
   nada lembut menurun — bukan buzzer.
 - Haptik melalui `navigator.vibrate`: 10 ms pada ketukan, 30 ms pada betul. Langkau pada iOS

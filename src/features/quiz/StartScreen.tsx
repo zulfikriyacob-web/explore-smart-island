@@ -1,3 +1,6 @@
+import { useEffect } from 'react';
+
+import { promptPlayer } from '../../lib/player.ts';
 import { BlockButton } from '../../components/ui/BlockButton.tsx';
 import { Kancil } from '../../components/ui/Kancil.tsx';
 import { packTitle } from './activity.ts';
@@ -24,9 +27,33 @@ import { useQuizStore } from './store.ts';
  */
 export function StartScreen() {
   const start = useQuizStore((s) => s.start);
+  const firstPrompt = useQuizStore((s) => s.session.questions[0]?.promptAudio.ms);
+
+  /*
+    Arm Howler before the child can press.
+
+    Howler unlocks iOS audio properly — a scratch buffer and `ctx.resume()` in
+    capture phase, on the real gesture — but it only registers those listeners
+    from inside `Howl.init`, and only when a context already exists. On a cold
+    start nothing had built a Howl yet, so on the iPhone those listeners
+    registered 32ms after the Mula press had already gone: measured, the first
+    tap was silent and the second one worked.
+
+    Building one Howl here hands Howler a context while the screen is still
+    sitting there waiting, so it arms in time for the first tap.
+
+    Thrown away deliberately, and never prefetched through: `_unlockAudio` calls
+    `Howler.unload()` when the sample rate is not 44100, and an unloaded Howl
+    still answers `play()` with a sound id while making no sound at all. The
+    bytes survive in the HTTP cache, which is the part worth keeping.
+  */
+  useEffect(() => {
+    if (firstPrompt) promptPlayer.arm(firstPrompt);
+  }, [firstPrompt]);
 
   return (
     <main className="mx-auto flex h-[100dvh] max-w-[430px] flex-col items-center px-4">
+
       {/*
         Reserved name slot: 44px tall, top at Y 24, so its bottom edge is Y 68.
         Empty until child profiles arrive in Phase 2. Held open now so that

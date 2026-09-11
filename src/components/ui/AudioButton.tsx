@@ -1,5 +1,5 @@
 import { motion, useReducedMotion } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { isAudioAvailable } from '../../lib/audio.ts';
 import { promptPlayer } from '../../lib/player.ts';
@@ -35,7 +35,14 @@ export function AudioButton({
 }: {
   src: string;
   label?: string;
-  /** Play once when this prompt appears, if a gesture has unlocked audio. */
+  /**
+   * Should this prompt still read itself?
+   *
+   * Read continuously, not once: the caller drops it to `false` the moment the
+   * child engages with the question, and that cancels a wait that has not fired
+   * yet. Autoplay is a courtesy for a child who has not started; once they have,
+   * it is an interruption.
+   */
   autoPlay?: boolean;
   /** Lets the caller place the button — it floats inside the prompt (DESIGN 5.2). */
   className?: string;
@@ -44,6 +51,21 @@ export function AudioButton({
   const [playing, setPlaying] = useState(false);
   const [available, setAvailable] = useState(false);
 
+  // Read inside the async continuation and inside the wait, so both see the
+  // current answer rather than the one from mount.
+  const wanted = useRef(autoPlay);
+  wanted.current = autoPlay;
+  const cancelWait = useRef<(() => void) | null>(null);
+
+  // The caller withdrew it — the child answered, or moved on. Drop the pending
+  // wait rather than letting it fire whenever the context comes back.
+  useEffect(() => {
+    if (!autoPlay) {
+      cancelWait.current?.();
+      cancelWait.current = null;
+    }
+  }, [autoPlay]);
+
   useEffect(() => {
     let live = true;
     setAvailable(false);
@@ -51,26 +73,42 @@ export function AudioButton({
       if (!live || !ok) return;
       setAvailable(true);
       // Autoplay waits for the availability probe, so a placeholder file is
-      // never "played" silently. It is fired once per src: this effect is keyed
-      // on src, and `live` closes it the moment the question changes.
+      // never "played" silently.
       //
-      // `unlocked()` is the iOS gate. Before the first gesture a play() would be
-      // refused by the browser and the child would be told nothing, so we simply
-      // do not try — the button is still there to press, and pressing it is
-      // itself the gesture.
-      if (autoPlay && promptPlayer.unlocked()) {
+      /*
+        Do not call play() on a context that is not running.
+
+        `Howl.play()` parks the playback and returns a sound id, and the park is
+        released whenever the context next resumes — which on iOS can be seconds
+        later, on a gesture that has nothing to do with this question. Measured:
+        a resume issued at 1.3s settled at 3.5s, on the tap that answered the
+        question, and the prompt then read itself aloud to a child who had
+        already answered.
+
+        Nothing outside Howl can cancel that park. So the wait lives here, where
+        it can be called off.
+      */
+      if (!wanted.current) return;
+
+      cancelWait.current = promptPlayer.whenAudible(() => {
+        cancelWait.current = null;
+        // Checked again on the way in: the wait may have been queued while the
+        // question was fresh and fired after the child had gone.
+        if (!live || !wanted.current) return;
         setPlaying(true);
         promptPlayer.play(src, () => setPlaying(false));
-      }
+      });
     });
     return () => {
       live = false;
+      cancelWait.current?.();
+      cancelWait.current = null;
       // Moving to the next question cuts this prompt off. Without this the
       // previous question keeps talking over the new one.
       if (promptPlayer.playing() === src) promptPlayer.stop();
     };
-    // `autoPlay` is read at fire time and never changes for a mounted prompt;
-    // keying on src alone is what keeps this to one play per question.
+    // Keyed on src alone: one autoplay attempt per question. `autoPlay` is read
+    // through a ref so a change cancels rather than restarts.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [src]);
 
@@ -85,7 +123,11 @@ export function AudioButton({
         // A button that does nothing when pressed is a button a child reads as
         // broken, which is the same reason it hides itself when the file is a
         // placeholder. `play` halts whatever was going, so a press during
-        // autoplay replaces it — one clip is audible at a time, never two.
+        // autoplay replaces it — one clip is audible at a time.
+        //
+        // This one plays whatever the context is doing: the press is itself the
+        // gesture, and a button that waited would be the broken button again.
+        // Only autoplay waits.
         promptPlayer.unlock();
         setPlaying(true);
         promptPlayer.play(src, () => setPlaying(false));

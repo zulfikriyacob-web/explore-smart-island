@@ -1,10 +1,12 @@
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { createPlayer, howlSound, type Sound } from './player.ts';
+import { Howler } from 'howler';
+
+import { createPlayer, howlerReadiness, howlSound, type Sound } from './player.ts';
 
 /**
  * Howler needs a window and an AudioContext; the test environment is `node`.
- * The state machine under test never touches it — only `howlSound` does, and
+ * The state machine under test never touches it �?" only `howlSound` does, and
  * this stands in for it there. `vi.hoisted` because `vi.mock` is lifted above
  * the imports, and the factory closes over this array.
  */
@@ -18,6 +20,14 @@ interface FakeHowl {
 const { howlInstances } = vi.hoisted(() => ({ howlInstances: [] as FakeHowl[] }));
 
 vi.mock('howler', () => ({
+  /*
+    The module now touches the Howler global at import time �?" it turns
+    `autoSuspend` off, because Howler suspending its own context after 30 seconds
+    of silence is what put an iPhone into 'interrupted' while a child was still
+    reading the start screen. The mock has to carry it, or importing the module
+    under test fails before a single test runs.
+  */
+  Howler: { autoSuspend: true, ctx: null, state: 'suspended', volume: () => 1 },
   Howl: class {
     src: string[];
     play = vi.fn();
@@ -148,7 +158,7 @@ describe('createPlayer', () => {
   it('keeps a caller flag set when the same clip is restarted mid-playback', () => {
     // This is the sequence AudioButton runs: set "playing", then ask the player
     // to play. play() stops what was going first, and if that stop settled the
-    // press before it, the settle is the same component's "stop pulsing" — it
+    // press before it, the settle is the same component's "stop pulsing" �?" it
     // would clear the flag the press had just set, and the pulse would stop
     // over audio that had only just restarted.
     const { player } = harness();
@@ -200,7 +210,7 @@ describe('createPlayer', () => {
 
   it('prefetch builds the clip without playing it, and play reuses it', () => {
     // SPEC 7.6 wants one question ahead ready to go. "Ready" has to mean built
-    // and loading, not started — a prefetch that made a sound would be the next
+    // and loading, not started �?" a prefetch that made a sound would be the next
     // question talking over this one.
     const { player, made, last } = harness();
     player.prefetch('/audio/ms/q002.mp3');
@@ -215,22 +225,114 @@ describe('createPlayer', () => {
     expect(last().calls.play).toBe(1);
   });
 
-  it('starts locked, and unlocks once', () => {
+  /** A readiness source that can be flipped by hand. */
+  function fakeReadiness() {
+    let on = false;
+    const listeners = new Set<() => void>();
+    return {
+      readiness: {
+        audible: () => on,
+        onChange: (l: () => void) => {
+          listeners.add(l);
+          return () => void listeners.delete(l);
+        },
+      },
+      become: (v: boolean) => {
+        on = v;
+        for (const l of [...listeners]) l();
+      },
+      listenerCount: () => listeners.size,
+    };
+  }
+
+  it('runs the callback at once when audio is already audible', () => {
+    const r = fakeReadiness();
+    r.become(true);
+    const player = createPlayer(() => fakeSound().sound, r.readiness);
+    const cb = vi.fn();
+    player.whenAudible(cb);
+    expect(cb).toHaveBeenCalledTimes(1);
+  });
+
+  it('waits, then runs once, when audio becomes audible later', () => {
+    // The iOS case: a resume issued in the gesture that does not settle for
+    // seconds. The prompt must not be handed to Howl.play() in the meantime,
+    // because a parked play cannot be taken back.
+    const r = fakeReadiness();
+    const player = createPlayer(() => fakeSound().sound, r.readiness);
+    const cb = vi.fn();
+    player.whenAudible(cb);
+    expect(cb).not.toHaveBeenCalled();
+
+    r.become(true);
+    expect(cb).toHaveBeenCalledTimes(1);
+
+    // A later interruption and recovery must not replay it.
+    r.become(false);
+    r.become(true);
+    expect(cb).toHaveBeenCalledTimes(1);
+  });
+
+  it('cancels a pending wait, and never fires it', () => {
+    // The whole point of waiting on our side: the child answered and moved on,
+    // so the prompt must stay silent even when the context comes back.
+    const r = fakeReadiness();
+    const player = createPlayer(() => fakeSound().sound, r.readiness);
+    const cb = vi.fn();
+    const cancel = player.whenAudible(cb);
+
+    cancel();
+    r.become(true);
+
+    expect(cb).not.toHaveBeenCalled();
+    expect(r.listenerCount()).toBe(0);
+  });
+
+  it('reports audibility from the readiness source, not from the gesture flag', () => {
+    // They come apart: a gesture can have happened while the context is
+    // interrupted, and that is precisely when a play would be parked.
+    const r = fakeReadiness();
+    const player = createPlayer(() => fakeSound().sound, r.readiness);
+    player.unlock();
+    expect(player.unlocked()).toBe(true);
+    expect(player.audible()).toBe(false);
+  });
+
+  it('starts locked and records the gesture, and nothing more', () => {
     // The iOS gate (SPEC 8). Callers autoplay only when this is true, so it must
     // not be true before a gesture has actually happened.
-    const onUnlock = vi.fn();
-    const player = createPlayer(() => fakeSound().sound, onUnlock);
+    //
+    // Recording the gesture is now all `unlock` does. Getting the context
+    // running belongs to Howler's own unlock listeners, which `arm()` lets it
+    // register before the first tap �?" our hand-rolled resume was removed because
+    // a bare resume() issued early in the page's life hung on iOS until the next
+    // gesture, and Howler never issues a bare one.
+    const player = createPlayer(() => fakeSound().sound);
     expect(player.unlocked()).toBe(false);
 
     player.unlock();
     expect(player.unlocked()).toBe(true);
-    expect(onUnlock).toHaveBeenCalledTimes(1);
 
-    // Every later tap calls unlock too. Resuming an already-running context on
-    // each one is waste, so the side effect fires once and no more.
+    // Idempotent, and still true after further gestures.
     player.unlock();
-    player.unlock();
-    expect(onUnlock).toHaveBeenCalledTimes(1);
+    expect(player.unlocked()).toBe(true);
+  });
+
+  it('arms without caching, so an unloaded weapon cannot be played later', () => {
+    // The arming Howl exists to give Howler a context before the first gesture,
+    // and Howler's own unlock may call unload() on it (sample rate 48000 on an
+    // iPhone). An unloaded Howl still answers play() with a sound id and makes
+    // no sound, so if arming shared the play cache that dead object would be the
+    // one a child hears nothing from.
+    const { player, made } = harness();
+    player.arm('/audio/ms/q001.mp3');
+    expect(made).toHaveLength(1);
+
+    player.play('/audio/ms/q001.mp3');
+    // A second, separate sound: the armed one was never cached.
+    expect(made).toHaveLength(2);
+    expect(made[0]!.calls.play).toBe(0);
+    expect(made[1]!.calls.play).toBe(1);
   });
 
   it('a locked player still plays when asked directly', () => {
@@ -240,6 +342,56 @@ describe('createPlayer', () => {
     player.play('/audio/ms/q001.mp3');
     expect(last().calls.play).toBe(1);
     expect(player.unlocked()).toBe(false);
+  });
+});
+
+
+describe('howlerReadiness', () => {
+  /** The Howler global the module under test reads, swappable per case. */
+  function withCtx(ctx: unknown) {
+    (Howler as unknown as { ctx: unknown }).ctx = ctx;
+  }
+
+  afterEach(() => withCtx(null));
+
+  it('is audible only while the context is running', () => {
+    // The test is the context's own state, not a flag of ours: it is what
+    // decides whether a play makes a sound, and it goes false again when Safari
+    // interrupts the session.
+    const r = howlerReadiness();
+
+    withCtx({ state: 'running' });
+    expect(r.audible()).toBe(true);
+
+    for (const state of ['suspended', 'interrupted', 'closed', 'suspending']) {
+      withCtx({ state });
+      expect(r.audible()).toBe(false);
+    }
+  });
+
+  it('is not audible when there is no context at all', () => {
+    withCtx(null);
+    expect(howlerReadiness().audible()).toBe(false);
+  });
+
+  it('subscribes to statechange and unsubscribes cleanly', () => {
+    const add = vi.fn();
+    const remove = vi.fn();
+    withCtx({ state: 'suspended', addEventListener: add, removeEventListener: remove });
+
+    const listener = () => {};
+    const stop = howlerReadiness().onChange(listener);
+    expect(add).toHaveBeenCalledWith('statechange', listener);
+
+    stop();
+    expect(remove).toHaveBeenCalledWith('statechange', listener);
+  });
+
+  it('subscribing with no context is a no-op that can still be cancelled', () => {
+    // A cold start before arm() has built anything. Never firing is the safe way
+    // to be wrong here — silence rather than a prompt at the wrong moment.
+    withCtx(null);
+    expect(() => howlerReadiness().onChange(() => {})()).not.toThrow();
   });
 });
 
