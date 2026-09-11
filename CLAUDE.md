@@ -139,6 +139,25 @@ work, and it burns through usage limits fast.
   written that way puts an invisible U+FEFF at the front of the subject line.
   Write message files with a tool that does not add one, or
   `[System.IO.File]::WriteAllText(path, text, (New-Object System.Text.UTF8Encoding($false)))`.
+- **Do not rewrite source files through PowerShell string operations.**
+  `Get-Content` on 5.1 reads a BOM-less UTF-8 file as ANSI, so an em-dash comes
+  back as `â€"`; write that string back and the file is now genuinely broken. It
+  happened twice in one session, to `player.ts` and `player.test.ts`. Use the Edit
+  tool for source edits. To repair a file already damaged, re-encode Latin-1 to
+  UTF-8 rather than hand-fixing characters.
+- **That misread also lies about undamaged files.** `Get-Content` showed `â€"`
+  and `â†’` in three files that were correct UTF-8 on disk, which nearly bought a
+  "repair" of files that needed none. Check with
+  `[System.Text.Encoding]::UTF8.GetString([System.IO.File]::ReadAllBytes(path))`
+  before believing an encoding problem exists.
+- **No image encoder on this machine.** No ImageMagick, no `sharp`, no `cwebp`.
+  JPEG encoding is available through GDI+: `Add-Type -AssemblyName System.Drawing`,
+  then `Save()` with an `EncoderParameter` for quality. PSNR between two images
+  needs the same route plus `LockBits`; there is no tool that reports it.
+- **The dev server's Network URL changes.** The DHCP lease moves, so an address
+  that worked yesterday may belong to another device today. Re-read the IP before
+  handing a URL to a phone, and start the server with `--host` or the phone gets
+  nothing.
 
 ### Verifying visual work
 
@@ -149,7 +168,27 @@ work, and it burns through usage limits fast.
   `scale` stays at its starting size.
 - **Measure with `getBoundingClientRect` and `getComputedStyle`, not
   screenshots.** Screenshots from the pane time out, come back tiled, or return a
-  cropped view.
+  cropped view. A timeout is often transient — the same screenshot succeeds on a
+  retry, and `scale: 0.6` is more reliable than full size. `computer` with
+  `action: "zoom"` ignores its `region` and gives back the whole viewport, so it
+  cannot be used to inspect a detail.
+- **`javascript_tool` gives up at 45 seconds.** A loop that drives the UI through
+  several questions exceeds it. Split the drive into bursts, or fire the call
+  without awaiting the result and read the state back afterwards.
+- **`img.decode()` never settles in the pane**, because decoding waits on a frame
+  that never comes. To get at an image's pixels use `fetch` then
+  `createImageBitmap`, draw to an `OffscreenCanvas`, and read `getImageData`.
+  That is also how to check text contrast against a photographic background: sample
+  the actual pixels under the text's rect, not the token the background was
+  supposed to be. A background image makes the token a guess.
+- **A colour test has to be specific enough to fail.** "Any green pixel" passed a
+  kancil standing waist-deep in bushes, because bushes are green too. The test
+  that worked was low blue — meadow grass is, foliage shadow is not.
+- **The pane reports `env(safe-area-inset-bottom)` as `0`.** With
+  `viewport-fit=cover` an iPhone's home indicator reports 34px, so anything laid
+  out against that inset is measured here at its most generous. Substitute 34px
+  in the computation to see what the phone will do; two real layout defects hid in
+  that difference.
 - This is not only an obstacle. It is a free adversarial test for principle 5:
   anything that has to be legible without an animation frame fails loudly here.
   Three real bugs were found this way — a first card that rendered blank, a
@@ -167,9 +206,37 @@ work, and it burns through usage limits fast.
   that with `min-h-btn` collapsed the slot to zero and produced an 88px saving
   where the real number was 16. Change the source and reload, or measure with an
   inline style.
+- **Restart the dev server after editing `tailwind.config.js`.** A server started
+  before the edit keeps serving the old theme, and a new colour class falls back to
+  Tailwind's default palette — `border-bunga-dark` measured as grey
+  `rgb(229, 231, 235)` and every contrast number taken that way was wrong. Check
+  a new token's computed value before trusting anything measured against it.
 - **The pane is not the device.** `navigator.vendor` is `"Google Inc."` and the UA
   is a Pixel 8 on Android Chrome, so anything a library gates on Apple never runs
   here — Howler branches on `vendor.indexOf('Apple')` inside the function `stop()`
   calls. The pane also lets audio play with no trusted gesture, so the iOS unlock
   path is never exercised either. Both are reasons an audio or Safari claim from
-  this pane is about the pane.
+  this pane is about the pane. One thing the pane does share with an iPhone: its
+  AudioContext `sampleRate` is 48000, so Howler's `Howler.unload()` branch for a
+  rate other than 44100 is live in both.
+
+### Controls that unmount themselves
+
+**A control that removes itself from the DOM inside its own event handler cancels
+the rest of that gesture for every listener above it.** Events dispatched on a
+detached node do not propagate, so a `document`-level listener never sees them.
+
+Concretely, and measured: the start screen's Mula button handled `pointerdown`,
+dispatched `START`, React 18 flushed that discrete update in a microtask, and the
+button was `isConnected: false` before the browser dispatched `touchstart`.
+Howler registers its audio unlock on `document` in capture phase for
+`touchstart`, `touchend`, `click` and `keydown` and for no pointer event
+(`node_modules/howler/dist/howler.js:409-412`), so the first gesture of the
+session never reached it, the AudioContext was never unlocked, and iOS was
+silent. `click` was not dispatched at all — a click needs a target still in the
+tree.
+
+This is DOM semantics, not an iOS quirk; iOS is only where it costs something,
+because iOS is what demands a trusted gesture. The laptop looked perfect through
+three sessions of this bug. Before letting a button both act and unmount, ask
+what else was waiting for the rest of that gesture. See docs/HANDOFF.md.
