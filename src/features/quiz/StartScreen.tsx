@@ -2,6 +2,11 @@ import { useEffect } from 'react';
 
 import { promptPlayer } from '../../lib/player.ts';
 import { BlockButton } from '../../components/ui/BlockButton.tsx';
+import {
+  ISLAND_BACKGROUND,
+  KANCIL_BOTTOM,
+  SKY_BAND,
+} from '../../components/ui/islandBackground.ts';
 import { Kancil } from '../../components/ui/Kancil.tsx';
 import { packTitle } from './activity.ts';
 import { useQuizStore } from './store.ts';
@@ -52,27 +57,45 @@ export function StartScreen() {
   }, [firstPrompt]);
 
   return (
-    <main className="mx-auto flex h-[100dvh] max-w-[430px] flex-col items-center px-4">
+    <main
+      className="relative mx-auto flex h-[100dvh] max-w-[430px] flex-col items-center px-4"
+      style={ISLAND_BACKGROUND}
+    >
+      {/*
+        The sky band: every piece of text on this screen sits between y 150 and
+        y 230, because that is the only place near the top where --arang clears
+        its contrast floor against this picture. Above it the canopy comes in.
+
+        Name slot 44px (150-194), title 36px (194-230) — the band exactly.
+
+        The name slot is empty until child profiles arrive in Phase 2, and held
+        open now so that filling it later moves nothing — the same reasoning as
+        the reserved slots in DESIGN 7.
+      */}
+      <div className="w-full shrink-0" style={{ paddingTop: SKY_BAND.top }}>
+        <div aria-hidden data-slot="nama" className="h-[44px] w-full" />
+        <h1 className="m-0 text-center font-display text-h1 font-bold text-arang">
+          {packTitle.ms}
+        </h1>
+      </div>
 
       {/*
-        Reserved name slot: 44px tall, top at Y 24, so its bottom edge is Y 68.
-        Empty until child profiles arrive in Phase 2. Held open now so that
-        filling it later does not move the kancil, the title or the button —
-        the same reasoning as the reserved slots in DESIGN 7.
+        Standing on the grass. Held from the bottom, like the background, so it
+        moves with the grass on a taller screen instead of floating off it.
       */}
-      <div aria-hidden data-slot="nama" className="mt-6 h-[44px] w-full shrink-0" />
-
-      <Kancil state="idle" size={200} />
-
-      <h1 className="mt-4 text-center font-display text-h1 font-bold text-arang">
-        {packTitle.ms}
-      </h1>
+      <div
+        className="absolute left-1/2 -translate-x-1/2"
+        style={{ bottom: KANCIL_BOTTOM }}
+        data-slot="kancil-rumput"
+      >
+        <Kancil state="idle" size={210} />
+      </div>
 
       {/* The button is anchored to the bottom; the slack lives here, as background. */}
       <div className="min-h-0 flex-1" />
 
       <div
-        className="w-full shrink-0"
+        className="relative w-full shrink-0"
         style={{ paddingBottom: 'max(16px, env(safe-area-inset-bottom))' }}
       >
         <BlockButton

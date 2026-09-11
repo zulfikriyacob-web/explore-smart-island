@@ -344,6 +344,47 @@ yang boleh memaparkannya: `mcq` terhad kepada tiga pilihan jadi ia tidak pernah 
 percubaan ketiga, dan `count-tap` tidak mempunyai butang pilihan untuk ditanda. Nilainya
 betul; skrinnya belum wujud.
 
+#### Atas latar hutan — dua pilihan yang DITOLAK, supaya tiada siapa mencubanya semula
+
+Skrin mula dan skrin bintang kini duduk atas latar raster (§8, *Latar skrin penuh*). Dua
+warna yang kelihatan munasabah telah diukur terhadap piksel latar sebenar dan ditolak.
+
+**Garis luar bintang `--mangga-dark` — ditolak.** Ia pilihan asal dalam brif, dengan dakwaan
+"sehingga 4.88". Dakwaan itu betul untuk tompok awan paling cerah. Merentas jalur bintang
+(y 150–230) ia ialah:
+
+| Viewport | min | p5 | median | maks |
+|---|---|---|---|---|
+| 390 × 740 | **2.96** | 3.02 | 3.15 | 4.73 |
+| 360 × 780 | **2.94** | 3.01 | 3.11 | 4.75 |
+
+Minimum di bawah lantai 3:1 untuk objek grafik (§10). Dan latar ini raster, bukan token: langit
+berubah merentas lebar, viewport dan crop yang belum diukur, jadi margin 0.04 di bawah pada satu
+sampel akan jadi lebih teruk pada yang lain. "Tepat di lantai" ialah cara menulis "di bawahnya".
+
+Yang dipilih ialah **`--arang`**: min **6.70** (390 × 740) dan **6.64** (360 × 780), 0% bawah
+3:1. Ia bukan pengecualian — §8 sudah menggariskan setiap ilustrasi dengan `--arang`, jadi
+`--mangga-dark` yang akan jadi pengecualian. Isian kekal `--mangga`: itu warna ganjaran dan itu
+yang anak nampak. Garis luar ialah chrome, pembezaan yang §2.5 sudah tetapkan.
+
+Tanpa garis langsung, isian `--mangga` atas langit ini ialah **1.00–1.53** — bintang itu tiada.
+
+**Sempadan kad keputusan — `--laut-dark`, `--arang-soft` dan `--garis` ditolak.** Kad putih
+atas hutan tidak terpisah dengan sendirinya. Diukur dalam cincin 6px latar di sekeliling kad,
+390 × 740:
+
+| Sempadan | median tepi luar | bawah 3:1 | tepi dalam lawan putih |
+|---|---|---|---|
+| tiada (muka putih sahaja) | 1.97 | **75%** | — |
+| `--garis` | 1.55 | 91% | 1.28 |
+| `--arang-soft` | 2.42 | 83% | 4.69 |
+| `--laut-dark` | 2.66 | 56% | 5.21 |
+| **`--arang`** 2px | **6.23** | **8.7%** | **12.26** |
+
+Di mana `--arang` rendah, pokok gelap bertemu garis gelap — dan di situ muka putih lawan
+`--arang` pada 12.26 ialah tepi yang kelihatan. 2px, bukan 4px seperti butang: kad itu bukan
+sesuatu untuk ditekan dan tidak patut kelihatan seperti satu.
+
 ### 2.5 Pemisahan palet — UI dan ilustrasi
 
 **Isian ilustrasi boleh melebihi §2. Permukaan UI, chrome, dan warna semantik tidak boleh.**
@@ -671,8 +712,14 @@ Dianimasi melalui `scaleX` dengan `transformOrigin: left` — **jangan animasi `
 Kaunter "3 / 10" di sebelahnya dalam `label`.
 
 ### Bekas bintang
-Tiga bekas bintang kelabu (`--garis`), diisi dengan `--mangga` semasa dianugerahkan.
-Muncul pada skrin ringkasan dan pada setiap kad aktiviti di senarai topik.
+Tiga bekas bintang bergaris `--arang` 4px, diisi dengan `--mangga` semasa dianugerahkan. Bintang
+kosong mengekalkan garis yang sama dan tiada isian, jadi yang diisi dan yang kosong berbeza pada
+apa yang ada **di dalamnya**. Muncul pada skrin ringkasan dan pada setiap kad aktiviti di senarai
+topik.
+
+Garis luarnya pernah `--garis` kelabu, dilukis untuk latar app yang pucat. Atas latar hutan (§8)
+ia hilang, dan isian `--mangga` sendirian pada langit itu diukur sekitar **1:1** — bintang emas
+atas langit pucat tidak kelihatan. Garis `--arang` yang membentuknya. Nombor dalam §2.4.
 
 ### Mascot
 Satu haiwan — cadangan: **anak kancil** (rusa kecil Malaysia, muncul dalam cerita rakyat
@@ -1025,6 +1072,67 @@ pemerhatian.
 Nota berkaitan: SVG bentuk (`square`, `triangle`, `circle`) ialah isian pucat yang bergantung
 pada garis luar untuk kelihatan pada kad putih. Menepukannya dan membuang garis luarnya ialah
 **satu** keputusan, bukan dua.
+
+### Latar skrin penuh — kategori sendiri, bukan pengecualian
+
+Semua di atas dalam §8 menerangkan **objek** — ikon, watak, buah, bentuk. Strok 4px, hujung
+bulat, palet terhad, satu bayang. Peraturan untuk benda yang duduk **atas** sesuatu.
+
+Latar bukan objek. Ia permukaan, dan peraturan yang mengawalnya berbeza sepenuhnya: di mana teks
+boleh duduk, ke mana ia dijangkar, berapa besar failnya. Sama seperti §2.5 memisahkan palet
+ilustrasi daripada palet UI — yang juga terasa seperti pengecualian sehingga ia dinamakan.
+
+**Peraturan, setiap satu diukur pada latar pertama (`public/img/latar/rimba.jpg`):**
+
+1. **Raster dibenarkan untuk latar skrin penuh. Objek kekal vektor rata bergaris.** Kancil,
+   bintang, butang dan ikon yang duduk atas latar mengikut peraturan objek di atas; hanya latar
+   itu sendiri boleh berlorek dan bercerun.
+
+2. **Teks dan bintang hanya dalam pita yang diukur terhadap piksel SEBENAR, bukan token.**
+   Kaedahnya: lukis imej yang dihantar dengan `background-size` dan `background-position` yang
+   sama seperti CSS, sampel setiap piksel di bawah kotak elemen, ambil **minimum**, bandingkan
+   dengan lantai (4.5:1 teks, 3:1 objek grafik — §10). Median memberitahu rupa biasa; minimum
+   memberitahu sama ada sesuatu hilang. Keputusan diambil daripada minimum.
+
+3. **Jangkar ke bawah, bukan pusat.** `background-size: cover; background-position: bottom
+   center`. Crop berubah antara viewport; yang mesti kekal ialah tanah di bawah kaki watak.
+
+4. **Belanjawan saiz fail terhadap SPEC §7.6.** Latar dikira dalam aset aktiviti bersama audio.
+
+5. **Apa-apa yang tidak muat dalam pita pindah ke permukaan sendiri.** Kad dengan muka legap
+   dan sempadan yang diukur terhadap latar di bawahnya — bukan teks terapung.
+
+#### Kes rekod: `rimba.jpg`, sama seperti rambutan dalam peraturan struktur
+
+**Saiz.** Sumber PNG 2,065,614 B — dengan sepuluh rakaman BM (513,667 B) aktiviti menjadi
+2,582,623 B, melebihi 2 MB. Imej tiada lutsinar, jadi ia dihantar sebagai JPEG kualiti 86:
+**273,962 B**, PSNR 34.85 dB lawan sumber. Aktiviti menjadi 790,971 B, dengan ruang untuk
+rakaman EN yang akan datang. Kualiti 86 dipilih daripada lima pengekodan (70–90) mengikut saiz
+lawan PSNR; pulangan mendatar selepasnya.
+
+**Crop.** Pada telefon potret `cover` menskala mengikut ketinggian, jadi crop jatuh di sisi:
+13.2px setiap sisi pada 390 × 740, 39.5px pada 360 × 780.
+
+**Pita langit: y 150–230.** `--arang` terhadap piksel sebenar merentas lebar tajuk:
+
+| Jalur | 390 × 740 | 360 × 780 |
+|---|---|---|
+| y 150–230 | min **6.70**, maks 10.74 | min **6.62**, maks 10.68 |
+| y 50–100 | min **1.01** | min **1.01** |
+
+Di atas y 150 kanopi masuk dan teks hilang. Satu perincian: kotak kandungan Baloo 2 menjulur
+6px melepasi kotak baris 36px, jadi kotak tajuk mencapai y 236 — piksel di situ 6.90 ke atas.
+
+**Tanah.** Padang terbuka bermula pada **y 450** (390 × 740) — di atasnya piksel biru-hijau
+(pokok, B 145–200), di bawahnya kuning-hijau (cth. `rgb(229,235,74)`). Pengelas warna "apa
+sahaja yang hijau" meluluskan kuku yang sebenarnya berdiri atas semak; ujiannya mesti biru
+rendah, bukan hijau tinggi.
+
+**Apa yang pita dan tanah paksa pada skrin bintang.** Susunan yang pertama dicuba — bintang,
+kancil, kad, dua butang — tidak muat: kad mengisi semua 114px rumput di atas butang, kancil
+tertolak ke semak (kuku pada y 415), dan butang kedua terkeluar 65px dari skrin. Susunan yang
+muat ialah bintang dalam pita, kad terus di bawahnya, kancil 150px atas padang, kemudian butang.
+Tanah yang menentukan susunan, bukan citarasa.
 
 ---
 
