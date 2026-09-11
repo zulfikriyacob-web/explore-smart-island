@@ -38,5 +38,15 @@ export const SKY_BAND = { top: 150, bottom: 230 } as const;
  * 420 ends at 630, which is 110 from the bottom. It is held from the bottom, the
  * same way the background is, so that on a taller screen it moves with the grass
  * rather than staying put while the grass slides away beneath it.
+ *
+ * **It carries the same safe-area term the button does.** The Mula button sits
+ * on `max(16px, env(safe-area-inset-bottom))`, and on an iPhone with a home bar
+ * that inset is 34px, so the button rises 18px. A kancil held at a flat 110px
+ * did not rise with it: simulated at 390×740 with the inset at 34, the button
+ * top came up to y 610 and covered the kancil's shadow by 8.4px, with the hooves
+ * 5px above it. The pane never showed it — it reports the inset as 0.
+ *
+ * Written as 94 + the button's own bottom padding, so the gap between them is the
+ * same on every device: 110 where the inset is 0, 128 where it is 34.
  */
-export const KANCIL_FROM_BOTTOM = 110;
+export const KANCIL_BOTTOM = 'calc(94px + max(16px, env(safe-area-inset-bottom)))';

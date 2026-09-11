@@ -4,7 +4,7 @@ import { promptPlayer } from '../../lib/player.ts';
 import { BlockButton } from '../../components/ui/BlockButton.tsx';
 import {
   ISLAND_BACKGROUND,
-  KANCIL_FROM_BOTTOM,
+  KANCIL_BOTTOM,
   SKY_BAND,
 } from '../../components/ui/islandBackground.ts';
 import { Kancil } from '../../components/ui/Kancil.tsx';
@@ -85,7 +85,7 @@ export function StartScreen() {
       */}
       <div
         className="absolute left-1/2 -translate-x-1/2"
-        style={{ bottom: KANCIL_FROM_BOTTOM }}
+        style={{ bottom: KANCIL_BOTTOM }}
         data-slot="kancil-rumput"
       >
         <Kancil state="idle" size={210} />

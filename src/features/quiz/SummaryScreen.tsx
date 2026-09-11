@@ -212,9 +212,28 @@ export function SummaryScreen({ result }: { result: SessionResult }) {
         <Kancil state={kancil} size={KANCIL_PX} onDone={() => setKancil('idle')} />
       </div>
 
+      {/*
+        The gap above the buttons gives way to the safe area, and only there.
+
+        On an iPhone with a home bar the bottom inset is 34px, not 16, and this
+        screen has no slack to absorb the extra 18: simulated at 390×740 it
+        overflowed by 12px and the second button reached 11.7px into the
+        home-indicator zone — the thing the safe-area padding exists to stop
+        (DESIGN 5.2). The pane never showed it; it reports the inset as 0.
+
+        `32px - max(16px, inset)` is 16px where the inset is 0 — the gap every
+        measurement above was taken with — and falls to 0 where the inset is 34.
+        A 4px floor was tried first and still left 1px of overflow, with the
+        button 1.3px inside the home-indicator zone. The kancil's own shadow sits
+        about 9px above its box, so the visible gap to the button stays near 8px
+        even at 0.
+      */}
       <div
-        className="flex w-full shrink-0 flex-col gap-4 pt-4"
-        style={{ paddingBottom: 'max(16px, env(safe-area-inset-bottom))' }}
+        className="flex w-full shrink-0 flex-col gap-4"
+        style={{
+          paddingTop: 'max(0px, calc(32px - max(16px, env(safe-area-inset-bottom))))',
+          paddingBottom: 'max(16px, env(safe-area-inset-bottom))',
+        }}
       >
         <BlockButton onPress={restart} minHeight={72} ariaLabel="Main aktiviti ini lagi">
           Main lagi
