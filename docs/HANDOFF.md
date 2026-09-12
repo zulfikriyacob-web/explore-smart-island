@@ -173,18 +173,28 @@ diagnostics are *not* — they came out in `ec89a64` before the merge.
 | Branch | State |
 | --- | --- |
 | `main` | `903a20c`. Everything above. This is the base for option 1. |
-| `diag/autoplay-gate` | **Diagnostic. Do not merge.** One commit over the old `feat/island-background` tip, so it is now behind `main`'s merge commits. It re-adds `lib/diagnostics.ts` and the on-screen panel so an iPhone run can be read, and it is how the root cause above was found. Keep it until option 1 is verified on the phone, then delete it — and rebase it onto `main` before using it again. |
+| ~~`diag/autoplay-gate`~~ | **Deleted**, local and remote, once option 1 was confirmed on the phone. It re-added `lib/diagnostics.ts` and the on-screen panel, and it is how the root cause above was found. Its commit was `c5453a0`. |
 | `feat/start-screen`, `fix/ios-audio-unlock`, `feat/island-background` | Merged; their remotes are already pruned and the local names are stale. Safe to delete locally. |
 
-Everything on `main` was verified on a real iPhone except the one thing this
-document exists for: **a cold press of Mula on iOS is still silent.** The build
-is correct in every part that was tested; the untested part was whether the
-gesture reaches Howler at all, and it does not.
+~~Everything on `main` was verified on a real iPhone except the one thing this
+document exists for: **a cold press of Mula on iOS is still silent.**~~
 
-The five iOS audio rules are in **SPEC §8 on `main`**. They are not repeated
-here; read them before touching audio. The rule this session adds — a control
-must not unmount itself inside the gesture that has to reach Howler — belongs in
-that list when option 1 lands.
+**Closed on the device.** A cold press of Mula on a real iPhone now produces
+sound on the **first** press. Option 1 landed in PR #33 and was confirmed on
+hardware afterwards, with the second batch of recordings on the same run. Four
+rounds of iOS silence, four real causes, and this was the fifth and last of
+them: the gesture never reached Howler because the button removed itself from
+the DOM inside its own handler.
+
+`diag/autoplay-gate` was deleted, local and remote, once the cause was proved
+and written down. If iOS audio ever needs reading again, the panel is
+reconstructible from `lib/diagnostics.ts` in this repo's history — it is not
+waiting on a branch.
+
+The iOS audio rules are in **SPEC §8 on `main`**. They are not repeated here;
+read them before touching audio. The rule this session added — a control must not
+unmount itself inside the gesture that has to reach Howler — landed there as
+rule 6 with option 1.
 
 `docs/pr/` holds the three PR bodies as merged, with the numbers measured on the
 phone. They were in a session temp directory, which is the only reason they are
@@ -195,22 +205,22 @@ ten — the two start-screen commits were written up separately in
 
 ---
 
-## 5. Next session
+## 5. How it ended
 
-Option 1 is written; what is left is the phone. The Browser pane has a running
-context and no trusted-gesture requirement, so it cannot fail this bug and cannot
-prove the fix either — it proved the button stays connected through the gesture,
-which is the part that is actually ours, and no more than that.
+The phone answered with the first of the three outcomes this section used to
+list: **sound on the first press.** The fix worked, and the iOS audio thread that
+ran through three sessions is closed.
 
-What a cold press of Mula on the iPhone will say:
+What the Browser pane could and could not do is worth keeping, because it was
+right both times. It has a running context and no trusted-gesture requirement, so
+it could not fail this bug and could not prove the fix. What it *could* prove was
+that the button stays connected through the gesture — 0 of 3 events reaching
+`document` before the change, 3 of 3 after. That is the part that was ours, and
+it turned out to be the whole of it.
 
-- **Sound on the first press.** The fix worked.
-- **Sound, but late.** The unlock is correct and the hanging `resume()` in
-  section 3 is what is left. Not a new bug.
-- **Still silent.** The gesture now reaches Howler, so the next thing to read is
-  whether Howler acted on it — rebase `diag/autoplay-gate` onto `main` and run it
-  on the phone rather than guessing.
+The hanging `resume()` in section 3 stays unexplained and stays written down. It
+did not surface on the confirming run, which is not the same as being gone.
 
-Checked on the way in, and still true: a restored session never passes through
-the start screen, and "Main lagi" goes straight into the first question (SPEC §8,
+Still true, and checked again: a restored session never passes through the start
+screen, and "Main lagi" goes straight into the first question (SPEC §8,
 `store.test.ts`).
