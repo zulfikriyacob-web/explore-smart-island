@@ -185,10 +185,27 @@ export const ActivitySchema = z.object({
   questionIds: z.array(z.string().min(1)).min(1),
 });
 
+/**
+ * A DSKP code: "1.2" for a content standard, "1.2.2" for a learning standard.
+ *
+ * Shape only. Whether the code exists in the real document is checked by
+ * `validate:content` against the catalogue in `src/content/kssr/`, because that
+ * needs the filesystem and this file must not.
+ */
+const DskpCodeSchema = z.string().regex(/^\d+(\.\d+){1,2}$/, {
+  message: 'DSKP code must look like "1.2" or "1.2.2"',
+});
+
 export const KssrSchema = z.object({
   document: z.string().min(1),
-  contentStandard: z.string().min(1),
-  learningStandards: z.array(z.string().min(1)).min(1),
+  /**
+   * Plural, because a topic pack spans a DSKP *topic* and a topic holds several
+   * content standards. This was `contentStandard`, singular, holding "1.1" — and
+   * the pack it described draws on 1.2, 1.5, 1.6 and 7.2. One field could only
+   * be right by being vague.
+   */
+  contentStandards: z.array(DskpCodeSchema).min(1),
+  learningStandards: z.array(DskpCodeSchema).min(1),
   /** Starts false; only a teacher review flips it. (SPEC 3.2, PRD 15) */
   verified: z.boolean(),
 });
@@ -254,6 +271,24 @@ export const TopicPackSchema = z
           code: 'custom',
           path: ['questions', i, 'id'],
           message: `question "${q.id}" is not referenced by any activity`,
+        });
+      }
+    }
+
+    /*
+      The two declared lists have to agree with each other. A learning standard
+      belongs to the content standard it is numbered under — 1.2.2 under 1.2 —
+      so a pack that declares SP 7.2.1 while naming only SK 1.x is describing
+      content it has not admitted to carrying. That is exactly the shape of the
+      shapes-in-a-numbers-pack problem, and it is decidable from the codes alone.
+    */
+    for (const [i, sp] of pack.kssr.learningStandards.entries()) {
+      const sk = sp.slice(0, sp.lastIndexOf('.'));
+      if (!pack.kssr.contentStandards.includes(sk)) {
+        ctx.addIssue({
+          code: 'custom',
+          path: ['kssr', 'learningStandards', i],
+          message: `learning standard "${sp}" sits under content standard "${sk}", which the pack does not declare (declared: ${pack.kssr.contentStandards.join(', ')})`,
         });
       }
     }

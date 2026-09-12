@@ -28,6 +28,7 @@ const PLACEHOLDER_MARKER = 'PLACEHOLDER';
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(HERE, '..');
 const PACKS_DIR = path.join(ROOT, 'src', 'content', 'packs');
+const KSSR_DIR = path.join(ROOT, 'src', 'content', 'kssr');
 const PUBLIC_DIR = path.join(ROOT, 'public');
 
 /** Turn "/audio/ms/q001.mp3" into an absolute path under public/. */
@@ -81,6 +82,89 @@ function checkHintRevealClash(pack) {
   return errors;
 }
 
+/**
+ * The DSKP codes that actually exist, read from `src/content/kssr/<subject>-y<year>.json`.
+ *
+ * This exists because a pack once claimed content standard 1.1 and learning
+ * standards 1.1.1, 1.1.2 and 1.1.3, and two of those three are not in the
+ * document: SK 1.1 has exactly one SP. Nothing caught it. Zod can check the
+ * shape of a code but not its existence, and a code with the right shape and no
+ * referent is the failure that reaches a parent's report as a curriculum claim.
+ *
+ * Returns null when no catalogue has been transcribed for that subject and year
+ * — we only hold the Year 1 mathematics DSKP. A pack with no catalogue is
+ * warned about, not failed: the absence is our gap, not the pack's error.
+ */
+async function loadCatalogue(subject, year) {
+  const file = path.join(KSSR_DIR, `${subject}-y${year}.json`);
+  let raw;
+  try {
+    raw = JSON.parse(await readFile(file, 'utf8'));
+  } catch (err) {
+    if (err.code === 'ENOENT') return null;
+    throw new Error(`catalogue ${path.relative(ROOT, file)} is unreadable: ${err.message}`);
+  }
+
+  // code -> the topic it belongs to, for both kinds of code. The topic is what
+  // makes a cross-topic pack visible: 1.2.2 and 7.2.1 are both real and are not
+  // from the same part of the syllabus.
+  const topicOf = new Map();
+  for (const area of raw.areas ?? []) {
+    for (const topic of area.topics ?? []) {
+      const where = `${topic.topic} ${topic.title}`;
+      for (const sk of topic.contentStandards ?? []) {
+        topicOf.set(sk.code, where);
+        for (const sp of sk.learningStandards ?? []) topicOf.set(sp.code, where);
+      }
+    }
+  }
+  return { document: raw.document, topicOf };
+}
+
+/**
+ * Every DSKP code a pack cites must exist in the catalogue, and the pack should
+ * not straddle two topics without saying so.
+ */
+function checkKssrCodes(pack, catalogue) {
+  const errors = [];
+  const warnings = [];
+
+  const cite = (code, where) => {
+    if (catalogue.topicOf.has(code)) return true;
+    errors.push(
+      `${where} cites DSKP code "${code}", which does not exist in ${pack.subject} year ${pack.year}`,
+    );
+    return false;
+  };
+
+  for (const [i, sk] of pack.kssr.contentStandards.entries()) {
+    cite(sk, `kssr.contentStandards.${i}`);
+  }
+  for (const [i, sp] of pack.kssr.learningStandards.entries()) {
+    cite(sp, `kssr.learningStandards.${i}`);
+  }
+  for (const [i, q] of pack.questions.entries()) {
+    if (q.learningStandard) cite(q.learningStandard, `questions.${i} ("${q.id}")`);
+  }
+
+  // One pack, one topic. A pack that reaches across topics is not wrong on its
+  // face — but its title names one of them, and the child's island is coloured
+  // by one of them, so it is worth saying out loud.
+  const topics = new Set();
+  for (const sp of pack.kssr.learningStandards) {
+    const topic = catalogue.topicOf.get(sp);
+    if (topic) topics.add(topic);
+  }
+  if (topics.size > 1) {
+    warnings.push(
+      `spans ${topics.size} DSKP topics: ${[...topics].join(' | ')}. ` +
+        `The pack is titled for one of them — either move the outliers to their own pack, or retitle this one.`,
+    );
+  }
+
+  return { errors, warnings };
+}
+
 function formatIssue(issue) {
   const where = issue.path.length > 0 ? issue.path.join('.') : '(root)';
   return `${where}: ${issue.message}`;
@@ -123,6 +207,18 @@ async function validatePack(file) {
   const pack = parsed.data;
 
   errors.push(...checkHintRevealClash(pack));
+
+  const catalogue = await loadCatalogue(pack.subject, pack.year);
+  if (catalogue === null) {
+    warnings.push(
+      `no DSKP catalogue for ${pack.subject} year ${pack.year} in src/content/kssr/ — ` +
+        `every code in this pack is unchecked. Transcribe the DSKP before trusting them.`,
+    );
+  } else {
+    const codes = checkKssrCodes(pack, catalogue);
+    errors.push(...codes.errors);
+    warnings.push(...codes.warnings);
+  }
 
   // A pack's filename must match its topicId, or caches and routes disagree.
   const expected = `${pack.topicId}.json`;

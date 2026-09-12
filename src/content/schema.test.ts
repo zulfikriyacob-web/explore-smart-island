@@ -256,4 +256,27 @@ describe('pack rules', () => {
     expect(result.success).toBe(false);
     expect(issueMessages(result)).toContain('does not declare');
   });
+
+  /*
+    The two declared lists have to agree. This is the shape of the bug that put
+    shape questions in a numbers pack: the learning standard was from 7.2 while
+    every content standard named was 1.x, and nothing looked at the numbers.
+  */
+  it('rejects a learning standard whose content standard is not declared', async () => {
+    const pack = await mathPack();
+    const kssr = structuredClone(pack.kssr) as { contentStandards: string[] };
+    kssr.contentStandards = kssr.contentStandards.filter((sk) => sk !== '7.2');
+    const result = TopicPackSchema.safeParse({ ...pack, kssr });
+    expect(result.success).toBe(false);
+    expect(issueMessages(result)).toContain('sits under content standard "7.2"');
+  });
+
+  it('rejects a DSKP code that is not shaped like one', async () => {
+    const pack = await mathPack();
+    const kssr = structuredClone(pack.kssr) as { contentStandards: string[] };
+    kssr.contentStandards = ['satu koma dua'];
+    const result = TopicPackSchema.safeParse({ ...pack, kssr });
+    expect(result.success).toBe(false);
+    expect(issueMessages(result)).toContain('DSKP code must look like');
+  });
 });

@@ -6,9 +6,9 @@
   "islandId": "pulau-nombor",
   "title": { "ms": "Nombor Hingga 100", "en": "Numbers to 100" },
   "kssr": {
-    "document": "DSKP Matematik Tahun 1 (Semakan 2017)",
-    "contentStandard": "1.1",
-    "learningStandards": ["1.1.1", "1.1.2", "1.1.3"],
+    "document": "DSKP KSSR (Semakan) Matematik Tahun 1, Bahagian Pembangunan Kurikulum KPM, cetakan pertama Mei 2015",
+    "contentStandards": ["1.2", "1.5", "1.6", "7.2"],
+    "learningStandards": ["1.2.1", "1.2.2", "1.5.1", "1.6.1", "7.2.1"],
     "verified": false
   },
   "activities": [
@@ -35,7 +35,7 @@
       "id": "q001",
       "type": "mcq",
       "difficulty": 1,
-      "learningStandard": "1.1.2",
+      "learningStandard": "1.2.2",
       "prompt": { "ms": "Nombor manakah yang lebih besar?", "en": "Which number is bigger?" },
       "promptAudio": { "ms": "/audio/ms/q001.mp3", "en": "/audio/en/q001.mp3" },
       "hint": { "ms": "Lihat nombor di hadapan dahulu.", "en": "Look at the first digit." },
@@ -57,7 +57,7 @@
       "id": "q002",
       "type": "mcq",
       "difficulty": 1,
-      "learningStandard": "1.1.1",
+      "learningStandard": "1.2.2",
       "prompt": { "ms": "Nombor apa selepas 29?", "en": "Which number comes after 29?" },
       "promptAudio": { "ms": "/audio/ms/q002.mp3", "en": "/audio/en/q002.mp3" },
       "hint": { "ms": "Bilang: dua puluh sembilan, kemudian?", "en": "Count on: twenty-nine, then?" },
@@ -75,7 +75,7 @@
       "id": "q003",
       "type": "count-tap",
       "difficulty": 1,
-      "learningStandard": "1.1.1",
+      "learningStandard": "1.2.1",
       "prompt": {
         "ms": "Ketuk setiap rambutan sambil mengira. Kemudian tekan Sedia.",
         "en": "Tap every rambutan as you count. Then press Sedia."
@@ -93,7 +93,7 @@
       "id": "q004",
       "type": "mcq",
       "difficulty": 2,
-      "learningStandard": "1.1.3",
+      "learningStandard": "1.6.1",
       "prompt": {
         "ms": "Dalam nombor 63, digit mana di tempat puluh?",
         "en": "In the number 63, which digit is in the tens place?"
@@ -114,6 +114,7 @@
       "id": "q005",
       "type": "mcq-image",
       "difficulty": 1,
+      "learningStandard": "7.2.1",
       "prompt": { "ms": "Yang mana bentuk segi tiga?", "en": "Which one is a triangle?" },
       "promptAudio": { "ms": "/audio/ms/q005.mp3", "en": "/audio/en/q005.mp3" },
       "payload": {
@@ -142,7 +143,7 @@
       "id": "q006",
       "type": "count-tap",
       "difficulty": 1,
-      "learningStandard": "1.1.1",
+      "learningStandard": "1.2.1",
       "prompt": {
         "ms": "Ketuk setiap pisang sambil mengira. Kemudian tekan Sedia.",
         "en": "Tap every banana as you count. Then press Sedia."
@@ -160,7 +161,7 @@
       "id": "q007",
       "type": "mcq",
       "difficulty": 2,
-      "learningStandard": "1.1.2",
+      "learningStandard": "1.2.2",
       "prompt": {
         "ms": "Susunan mana yang menaik?",
         "en": "Which row is in ascending order?"
@@ -181,7 +182,7 @@
       "id": "q008",
       "type": "mcq",
       "difficulty": 3,
-      "learningStandard": "1.1.3",
+      "learningStandard": "1.5.1",
       "prompt": { "ms": "10 lebih daripada 45 ialah?", "en": "10 more than 45 is?" },
       "promptAudio": { "ms": "/audio/ms/q008.mp3", "en": "/audio/en/q008.mp3" },
       "hint": { "ms": "Tambah satu pada tempat puluh.", "en": "Add one to the tens place." },
@@ -200,6 +201,7 @@
       "id": "q009",
       "type": "mcq-image",
       "difficulty": 1,
+      "learningStandard": "7.2.1",
       "prompt": { "ms": "Yang mana bulatan?", "en": "Which one is a circle?" },
       "promptAudio": { "ms": "/audio/ms/q009.mp3", "en": "/audio/en/q009.mp3" },
       "payload": {
@@ -223,7 +225,7 @@
       "id": "q010",
       "type": "mcq",
       "difficulty": 2,
-      "learningStandard": "1.1.2",
+      "learningStandard": "1.2.2",
       "prompt": { "ms": "Nombor manakah paling kecil?", "en": "Which number is the smallest?" },
       "promptAudio": { "ms": "/audio/ms/q010.mp3", "en": "/audio/en/q010.mp3" },
       "hint": { "ms": "Banding tempat puluh dahulu.", "en": "Compare the tens place first." },

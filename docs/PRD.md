@@ -70,8 +70,32 @@ Mahu tugaskan topik kepada satu kelas. Direkod di sini supaya model data tidak m
 
 ## 5. Skop
 
+### Skop aktif — **Matematik Tahun 1**
+
+Satu modul, satu tahun, dihabiskan sebelum yang berikutnya bermula. Senarai v1.0 di bawah
+kekal sebagai destinasi; ini yang sedang dibina.
+
+Urutannya: **Matematik Tahun 1 → Membaca Tahun 1 → Sains Tahun 1 → Tahun 2 → Tahun 3.**
+
+Kenapa satu-satu, dan kenapa Matematik dahulu:
+
+- **Matematik Tahun 1 sahaja ialah lapan tajuk, 32 Standard Kandungan dan 56 Standard
+  Pembelajaran** (§7; dikira daripada `src/content/kssr/math-y1.json`). Tiga modul serentak
+  bermakna tiga kali kerja itu dengan tiada satu pun siap — dan modul separuh siap tidak
+  boleh diuji pada seorang kanak-kanak, kerana ia kehabisan kandungan sebelum kanak-kanak itu
+  kehabisan minat.
+- **Matematik paling murah dihabiskan.** Soalannya perlu audio arahan, dan itu sahaja.
+  Membaca menuntut fail **dirakam manusia** untuk setiap perkataan sasaran — bukan TTS,
+  kerana TTS kerap salah pada `ng`, `sy` dan vokal pendek Inggeris (§8). Itu kos produksi
+  yang tidak boleh dipendekkan dengan menulis kod, dan ia tidak sepatutnya menjadi perkara
+  yang menghalang modul pertama daripada siap.
+- Menghabiskan satu modul dahulu juga memberi satu perkara yang tiga modul separuh siap tidak
+  beri: bukti bahawa satu tahun penuh KSSR boleh dipetakan, dipersoalkan dan disahkan seorang
+  guru dari hujung ke hujung — sekali, sebelum kesilapan yang sama diulang tiga kali.
+
 ### Dalam skop (MVP, v1.0)
-- 3 modul: **Matematik**, **Membaca**, **Sains** — Tahun 1, 2, 3
+- 3 modul: **Matematik**, **Membaca**, **Sains** — Tahun 1, 2, 3, dibina mengikut urutan
+  di atas dan bukan serentak
 - Dwibahasa BM ⇄ EN (teks + audio arahan)
 - Sistem bintang, permata, dan siri harian
 - Akaun ibu bapa + sehingga 4 profil anak
@@ -118,26 +142,61 @@ Cukup untuk menghalang kanak-kanak 8 tahun, tidak menyusahkan orang dewasa.
 Dipetakan kepada DSKP Matematik KSSR Tahap 1. Setiap aktiviti membawa kod Standard
 Pembelajaran supaya laporan ibu bapa boleh merujuk kurikulum sebenar.
 
-> ⚠️ **Nota pengesahan:** pemetaan topik di bawah adalah rangka kerja berdasarkan struktur
-> DSKP KSSR (Semakan 2017). Kod SP sebenar (cth. `1.1.1`) **mesti disahkan terhadap fail
-> DSKP rasmi KPM** sebelum kandungan dimuktamadkan. Jangan hantar ke produksi tanpa semakan
-> seorang guru berpengalaman.
+### Tahun 1 — daripada DSKP, bukan daripada ingatan
 
-### Tahun 1
-| Bidang | Topik aktiviti | Contoh kemahiran |
+**Sumber:** DSKP KSSR (Semakan) Matematik Tahun 1, Bahagian Pembangunan Kurikulum KPM,
+cetakan pertama Mei 2015, ISBN 978-967-420-104-3. Dihantar oleh seorang guru dan dibaca
+terus. Senarai penuh SK dan SP disalin ke `src/content/kssr/math-y1.json`, dan
+`validate:content` menyemak setiap kod pek terhadapnya.
+
+DSKP Tahun 1 mempunyai **lapan tajuk** merentas **tiga bidang**. Bukan enam.
+
+| Bidang | Tajuk | Standard Kandungan |
 |---|---|---|
-| Nombor & Operasi | Nombor bulat hingga 100 | Membilang, nilai tempat, tertib menaik/menurun |
-| Nombor & Operasi | Tambah & tolak dalam lingkungan 100 | Fakta asas, ayat matematik |
-| Sukatan & Geometri | Wang hingga RM10 | Kenal syiling & not, jumlah harga |
-| Sukatan & Geometri | Masa & waktu | Hari, bulan, waktu tepat pada jam |
-| Sukatan & Geometri | Bentuk 2D & 3D | Kenal pasti, ciri sisi/bucu |
-| Perkaitan & Algebra | Pola mudah | Sambung pola bentuk & nombor |
+| Nombor dan Operasi | **1.0 Nombor Bulat Hingga 100** | 1.1 kuantiti secara intuitif · 1.2 nilai nombor · 1.3 menulis nombor · 1.4 kombinasi nombor · 1.5 rangkaian nombor · 1.6 nilai tempat · 1.7 menganggar · 1.8 membundarkan · 1.9 pola nombor · 1.10 penyelesaian masalah |
+| Nombor dan Operasi | **2.0 Operasi Asas** | 2.1 konsep tambah dan tolak · 2.2 tambah dalam lingkungan 100 · 2.3 tolak dalam lingkungan 100 · 2.4 penyelesaian masalah · 2.5 tambah berulang · 2.6 tolak berturut-turut |
+| Nombor dan Operasi | **3.0 Pecahan** | 3.1 konsep perdua dan perempat pecahan wajar · 3.2 penyelesaian masalah |
+| Nombor dan Operasi | **4.0 Wang** | 4.1 wang kertas dan duit syiling · 4.2 sumber kewangan dan simpanan · 4.3 penyelesaian masalah |
+| Sukatan dan Geometri | **5.0 Masa dan Waktu** | 5.1 hari dan bulan · 5.2 muka jam · 5.3 penyelesaian masalah |
+| Sukatan dan Geometri | **6.0 Ukuran dan Sukatan** | 6.1 unit relatif untuk mengukur panjang, jisim dan isi padu cecair · 6.2 penyelesaian masalah |
+| Sukatan dan Geometri | **7.0 Ruang** | 7.1 bentuk tiga dimensi · 7.2 bentuk dua dimensi · 7.3 penyelesaian masalah |
+| Statistik dan Kebarangkalian | **8.0 Pengurusan Data** | 8.1 mengumpul, mengelas dan menyusun data · 8.2 piktograf · 8.3 penyelesaian masalah |
 
-### Tahun 2
+**Empat perkara yang senarai lama silap**, direkod supaya tiada siapa memulihkannya:
+
+- **Pecahan (3.0) ialah Tahun 1**, bukan Tahun 3. Skopnya sempit — satu perdua, satu
+  perempat, dua perempat, tiga perempat — tetapi ia ada.
+- **Pengurusan Data (8.0) ialah Tahun 1**, bukan Tahun 3. Piktograf, satu gambar satu nilai.
+- **Ukuran dan Sukatan (6.0) ialah Tahun 1**, bukan Tahun 2. Unit **bukan piawai** sahaja;
+  sentimeter dan kilogram datang kemudian.
+- **"Perkaitan dan Algebra" tiada dalam Tahun 1.** Jadual 8 DSKP meletakkan Koordinat serta
+  Nisbah dan Kadaran dalam bidang itu, dan kedua-duanya bukan sekolah rendah peringkat ini.
+  Pola bukan satu bidang — ia hidup di dalam tajuk: **1.9** untuk pola nombor, **7.1.3** dan
+  **7.2.3** untuk pola bentuk.
+
+Satu lagi yang senarai lama silap dan bukan hal tahun: **Wang (4.0) ialah Nombor dan
+Operasi**, bukan Sukatan dan Geometri.
+
+> ⚠️ **Status pengesahan.** Bahagian ini kini sepadan dengan dokumen, tetapi
+> `kssr.verified` kekal `false` di dalam pek. Membaca DSKP dengan betul dan seorang guru
+> mengesahkan bahawa satu soalan benar-benar mengajar kod yang didakwanya ialah dua perkara
+> berbeza. Hanya semakan guru menaikkan bendera itu (PRD §15).
+
+### Tahun 2 — **BELUM DISAHKAN**
+
+Kami tiada DSKP Tahun 2. Senarai di bawah ialah senarai asal, tidak disemak, dan Tahun 1
+baru sahaja menunjukkan bahawa tekaan yang munasabah meletakkan tiga topik pada tahun yang
+salah. **Jangan tulis kandungan daripadanya.**
+
 Nombor hingga 1,000 · Tambah & tolak dengan mengumpul semula · **Darab & bahagi (2, 3, 4, 5, 10)** ·
 Wang hingga RM100 · Masa (setengah jam, suku jam) · Ukuran panjang & jisim · Perwakilan data mudah
 
-### Tahun 3
+### Tahun 3 — **BELUM DISAHKAN**
+
+Sama: tiada DSKP, tidak disemak. Perhatikan bahawa Pecahan dan Piktograf muncul di sini
+kerana senarai lama meletakkannya di sini — dan kedua-duanya sudah bermula dalam Tahun 1.
+Apa yang sebenarnya milik Tahun 3 hanya boleh diketahui daripada DSKP Tahun 3.
+
 Nombor hingga 10,000 · Semua operasi asas · **Pecahan wajar mudah** · Perpuluhan asas ·
 Wang, masa, ukuran lanjutan · Piktograf & carta palang
 
@@ -324,17 +383,31 @@ Tiada e-mel, tiada nombor telefon, tiada foto anak dikumpul.
 
 ## 14. Fasa pembangunan
 
+**Satu modul pada satu masa, dalam urutan §5:** Matematik Tahun 1 → Membaca Tahun 1 → Sains
+Tahun 1 → Tahun 2 → Tahun 3. Fasa di bawah mengikut urutan itu; ia pernah ditulis sebagai
+tiga modul serentak, dan §5 menerangkan kenapa itu bermakna tiga kali kerja tanpa satu pun
+siap.
+
 **Fasa 1 — Rangka (2–3 minggu)**
 Peta pulau, satu topik Matematik, enjin kuiz, 3 jenis soalan, bintang, storan tempatan.
 *Kriteria keluar:* satu kanak-kanak sebenar boleh menyiapkan satu aktiviti tanpa bantuan.
 
-**Fasa 2 — Kandungan & akaun (4–6 minggu)**
-Ketiga-tiga modul, Tahun 1 penuh. Auth, profil, sync awan, papan pemuka ibu bapa asas.
+**Fasa 2 — Matematik Tahun 1 penuh & akaun (4–6 minggu)**
+Lapan tajuk DSKP, 32 SK (§7). Auth, profil, sync awan, papan pemuka ibu bapa asas.
+*Kriteria keluar:* seorang guru menyemak pemetaan KSSR satu modul penuh dan `kssr.verified`
+menjadi `true` — buat pertama kali, pada modul yang paling murah untuk membetulkannya.
 
-**Fasa 3 — Kedalaman (4–6 minggu)**
-Kandungan Tahun 2 & 3. Avatar + kedai. Siri. Laporan mingguan. Muat naik audio.
+**Fasa 3 — Habiskan Tahun 1 (4–6 minggu)**
+Membaca Tahun 1, kemudian Sains Tahun 1. Membaca membawa kos rakaman fonik manusia (§8);
+rancang rakaman itu sebelum fasa ini bermula, bukan di dalamnya. Avatar + kedai. Siri.
+Laporan mingguan. Muat naik audio.
 
-**Fasa 4 — Penggilapan**
+**Fasa 4 — Tahun 2, kemudian Tahun 3**
+Kandungan sahaja, mengikut urutan tahun. Setiap tahun memerlukan DSKP rasminya di tangan
+dahulu — kami tiada Tahun 2 dan Tahun 3 hari ini, dan §7 menandakan kedua-duanya BELUM
+DISAHKAN atas sebab itu.
+
+**Fasa 5 — Penggilapan**
 PWA luar talian, prestasi pada telefon murah, semakan kebolehcapaian, ujian pengguna
 bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
 
@@ -413,3 +486,36 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
 
    Direkod sebagai soalan, bukan kerja dirancang. Kalau reaksi raya dikehendaki, ia ditambah
    kepada `KancilState` dalam SPEC.md §11 dahulu, kemudian dalam komponen.
+10. **q005 dan q009 ialah soalan bentuk dalam pek nombor.** Kedua-duanya
+    `7.2.1 Menamakan bentuk segiempat sama, segiempat tepat, segitiga dan bulatan` — bidang
+    lain (Sukatan dan Geometri) dan tajuk lain (7.0 Ruang) daripada segala-galanya dalam pek
+    bertajuk *Nombor Hingga 100*. `validate:content` kini memberi amaran mengenainya:
+    `spans 2 DSKP topics`.
+
+    **Keputusan: keluarkan ke pek 7.0 Ruang sendiri. Jangan namakan semula pek ini.**
+    Identiti pek bukan tajuknya sahaja — `topicId: math-y1-nombor-100`, `islandId:
+    pulau-nombor`, dan satu warna satu pulau (DESIGN §2.2). Menamakan semula untuk memuatkan
+    dua soalan melarutkan model pulau itu. 7.0 Ruang pula tajuk Tahun 1 penuh dengan sembilan
+    SP merentas bentuk 3D dan 2D; ia layak dapat pek sendiri.
+
+    **Belum dilaksana kerana ia kerja kandungan dengan kebergantungan audio, bukan suntingan
+    pemetaan.** Kosnya, supaya keputusan itu berharga apabila tiba masanya:
+
+    | Perkara | Kos |
+    |---|---|
+    | Aktiviti tinggal 8 soalan kalau dibuang sahaja | Isi semula perlu **dua soalan nombor baharu** |
+    | Setiap soalan wajib ada audio arahan (SPEC §3.3) | **Dua rakaman BM baharu** untuk soalan pengganti |
+    | `q005`/`q009` sudah ada rakaman BM | Dipindahkan bersama soalan ke pek baharu, bukan dibuang |
+    | Pek 7.0 Ruang | Fail pek sendiri, aktiviti sendiri, kemasukan pulau sendiri |
+
+    Rakaman ialah bahagian yang tidak boleh dipendekkan dengan menulis kod — lihat §5.
+11. **`explain` q008 bercakap bahasa tambah untuk standard membilang.** Soalan itu kini
+    dipetakan kepada `1.5.1 Membilang nombor`, atas kekuatan catatan DSKP *"membilang …
+    sepuluh-sepuluh … secara tertib menaik"* dan pengalih perhatiannya (46 ialah tambah satu,
+    35 ialah tolak sepuluh). Tetapi `explain`-nya berbunyi `45 + 10 = 55`, iaitu ayat
+    matematik tambah — yang tergolong dalam 2.2.2, bukan 1.5.1.
+
+    Kod itu betul; perkataannya yang tidak sepadan. Membetulkannya bermakna menulis semula
+    `explain` (dan mungkin `hint`) kepada bahasa membilang, cth. *"bilang sepuluh-sepuluh:
+    45, 55"*. Suntingan teks sahaja — `promptAudio` tidak menyebut `explain`, jadi tiada
+    rakaman terjejas. Ditinggalkan supaya pek tidak berubah makna dalam PR pemetaan.
