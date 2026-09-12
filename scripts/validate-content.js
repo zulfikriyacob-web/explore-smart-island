@@ -248,6 +248,57 @@ function subSkillCoverage(pack, skills) {
 }
 
 /**
+ * How many genuinely different ways each sub-skill is asked about.
+ *
+ * Counting distinct questions is not enough: the teacher's correction is that
+ * two questions can read completely differently and still ask for the same
+ * direction of thinking. "Apakah nilai digit 6 dalam 63?" and "Dalam 63, digit
+ * 6 bernilai berapa?" are both `direct`; only "digit manakah yang bernilai 60?"
+ * is `reverse`. (docs/kssr/guru-struktur-variasi-soalan.md.)
+ *
+ * Reported, not enforced. Which axis has to differ before two answers count as
+ * separate evidence is an open decision — SPEC §5.7 still counts distinct
+ * question ids — so this prints the shape of the problem rather than failing on
+ * it. The untagged line is the one that would make the report a lie.
+ */
+function promptFormDiversity(pack) {
+  const lines = [];
+  const tagged = pack.questions.filter((q) => q.subSkill);
+  const untagged = tagged.filter((q) => !q.promptForm);
+  if (untagged.length > 0) {
+    lines.push(
+      `${untagged.length} question(s) carry a subSkill but no promptForm, so question-shape ` +
+        `diversity cannot be counted for them: ${untagged.map((q) => q.id).join(', ')}`,
+    );
+  }
+
+  const bySkill = new Map();
+  for (const q of tagged) {
+    if (!q.promptForm) continue;
+    if (!bySkill.has(q.subSkill)) bySkill.set(q.subSkill, { forms: new Set(), ids: [] });
+    const e = bySkill.get(q.subSkill);
+    e.forms.add(q.promptForm);
+    e.ids.push(q.id);
+  }
+
+  const single = [...bySkill.entries()].filter(([, e]) => e.forms.size < 2);
+  for (const [skill, e] of single) {
+    const shape = e.ids.length > 1 ? `${e.ids.length} questions` : '1 question';
+    lines.push(
+      `${skill}: ${shape} (${e.ids.join(', ')}) but only 1 promptForm (${[...e.forms][0]}) — ` +
+        `asked one way only`,
+    );
+  }
+  if (bySkill.size > 0 && single.length === bySkill.size) {
+    lines.push(
+      `every sub-skill this pack touches is asked in exactly one promptForm. ` +
+        `Distinct question ids overstate how varied the evidence is.`,
+    );
+  }
+  return lines;
+}
+
+/**
  * Every DSKP code a pack cites must exist in the catalogue, and the pack should
  * not straddle two topics without saying so.
  */
@@ -356,6 +407,7 @@ async function validatePack(file) {
       errors.push(...checkSkillsFile(skills, catalogue));
       errors.push(...checkPackSubSkills(pack, skills));
       warnings.push(...subSkillCoverage(pack, skills));
+      warnings.push(...promptFormDiversity(pack));
     }
   }
 

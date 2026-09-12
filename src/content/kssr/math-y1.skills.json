@@ -8,6 +8,24 @@
     "author": "Guru penyemak (semakan pemetaan KSSR)",
     "note": "Setiap sub-kemahiran di bawah datang daripada jawapan bertulis guru itu. Id yang guru sendiri cadangkan digunakan verbatim; yang lain dinamakan mengikut corak yang sama. Contoh soalan tidak disalin ke sini — ia hidup dalam dokumen sumber, tidak disunting."
   },
+  "promptFormExemptions": {
+    "teacherReviewed": false,
+    "note": "CADANGAN KAMI, BUKAN KEPUTUSAN GURU. Ambang penguasaan menuntut dua promptForm berlainan (SPEC 5.7). Sub-kemahiran di sini hanya menyokong satu, jadi ambang itu akan menjadikannya kekal mustahil dicapai — mod kegagalan sama yang menjatuhkan peraturan tiga-bentuk. Yang dikecualikan kekal pada tiga questionId berbeza. Padam entri yang guru tolak; tambah yang dia namakan.",
+    "rule": "Yang mengecilkan senarai ini: apabila 'reverse' bagi satu sub-kemahiran ialah sub-kemahiran sebelah dalam senarai yang sama, reverse bukan tidak wujud — buktinya cuma milik yang sebelah. Contoh: reverse bagi 'before' ialah 'after'; reverse bagi 'count_objects' ialah 'number_to_quantity'. Sub-kemahiran begitu masih ada 'direct' dan 'contextual', jadi ia TIDAK dikecualikan.",
+    "exempt": {
+      "1.5.1/count_1_up": "reverse ialah count_1_down, sub-kemahiran sebelah. contextual menjadikannya masalah berayat yang anak mesti baca sebelum dia boleh membilang — itu mengukur bacaan, bukan membilang.",
+      "1.5.1/count_1_down": "sama; reverse ialah count_1_up.",
+      "1.5.1/count_2_up": "sama; reverse ialah count_2_down.",
+      "1.5.1/count_2_down": "sama; reverse ialah count_2_up.",
+      "1.5.1/count_4_up": "sama; reverse ialah count_4_down.",
+      "1.5.1/count_4_down": "sama; reverse ialah count_4_up.",
+      "1.5.1/count_5_up": "sama; reverse ialah count_5_down.",
+      "1.5.1/count_5_down": "sama; reverse ialah count_5_up.",
+      "1.5.1/count_10_up": "sama; reverse ialah count_10_down.",
+      "1.5.1/count_10_down": "sama; reverse ialah count_10_up."
+    },
+    "notExempt": "Setiap sub-kemahiran lain menyokong sekurang-kurangnya dua bentuk, jadi tiada satu pun dikecualikan. Ini arah yang lebih selamat untuk tersilap: bukan dikecualikan bermakna ambang lebih tinggi, dan ambang lebih tinggi tersilap dengan mendakwa terlalu sedikit, bukan terlalu banyak."
+  },
   "sourceKinds": {
     "dskp-detail": "DSKP menyenaraikannya sendiri sebagai sub-titik rumi di bawah SP itu. Senarai tertutup.",
     "dskp-sentence": "Ayat SP itu sendiri menamakannya, tetapi DSKP tidak menomborkannya. Bacaan kami tentang ayat itu, bukan senarai dokumen.",

@@ -730,16 +730,41 @@ nombor dihafal. Bukti dikira mengikut `questionId` berbeza.
 > bentuk. Hari ini enjin hanya boleh menuntut tiga `questionId` berbeza, jadi ambang ini
 > lebih longgar daripada yang guru minta.
 >
-> **Keputusan dibuat, belum dibina: tuntut 2 bentuk, laporkan yang kurang daripada 3.**
-> Menuntut tiga menjadikan *Dikuasai* mustahil dicapai sehingga 36 sub-kemahiran × 3 bentuk =
-> **108 soalan dan 108 rakaman BM** wujud, dan label yang tiada siapa pernah capai tidak
-> memberitahu ibu bapa apa-apa. Dua sudah mematahkan hafalan bentuk; yang ketiga dilaporkan
-> sebagai jurang kandungan, tidak dikuatkuasakan.
->
-> Ia belum dibina kerana perbendaharaan `frame` belum disemak guru — `direct`, `inverted`,
-> `select`, `story`, `visual` ialah calon, dan enum yang dikunci sebelum disemak mengunci
-> kandungan bersamanya. Itu permukaan yang sama seperti senarai sub-kemahiran, jadi ia pergi
-> melalui saluran yang sama: borang `kssr:review`. Reka bentuk penuh dalam PRD §16 item 12.
+**Dan ditanya dalam dua cara berbeza: `promptForm` mesti berbeza.**
+
+Tiga id boleh menjadi satu soalan ditanya tiga kali dengan nombor ditukar. Paksi yang dikira
+ialah `promptForm` — `direct`, `reverse`, `contextual` — dan hanya itu:
+
+| Paksi | Dikira? | Sebab |
+|---|---|---|
+| `promptForm` | **Ya** | Arah pemikiran berubah. Anak yang boleh `direct` tetapi tidak `reverse` belum faham sepenuhnya |
+| `responseMode` | Tidak | Di mana ia benar-benar menguji perkara lain, **senarai sub-kemahiran sudah memisahkannya** — mengetuk untuk membilang lawan memilih nombor ialah dua sub-kemahiran. Mengiranya lagi mengira satu pembezaan dua kali pada dua tingkat. Di mana ia tidak, bezanya pada mekanik menjawab: kotak input untuk anak Tahun 1 mengukur menaip sebanyak matematik |
+| `representation` | Tidak | Ia mengubah **kesukaran**, bukan arah pemikiran, dan kesukaran sudah ada medannya (`difficulty`, §5.5). Dua medan mengukur benda sama bermakna satu akan menyimpang |
+| `wordingVariant` | Tidak | Itu sebab ia diasingkan |
+
+> **Tambahan kepada ambang soalan, bukan ganti.** Dua bar mengukur risiko berbeza: tiga soalan
+> ialah yang menjadikan peneka tidak mungkin (3.7%), dua bentuk ialah yang menjadikan ayat
+> terhafal tidak mungkin. Menukar yang pertama dengan yang kedua membawa kadar peneka kembali
+> ke **11%** — satu anak daripada sembilan — dan itu bukan tugas syarat bentuk.
+
+**Pengecualian: sub-kemahiran yang hanya menyokong satu bentuk.** Disenaraikan dengan sebabnya
+dalam `<subject>-y<year>.skills.json`, dan **ditanda belum disemak guru**. Yang dikecualikan
+kekal pada tiga `questionId` berbeza sahaja. Alasannya sama seperti yang menjatuhkan peraturan
+tiga-bentuk: **bar yang tiada siapa boleh lepasi tidak memberitahu ibu bapa apa-apa.**
+
+Yang mengecilkan senarai itu kepada sepuluh entri ialah satu peraturan: apabila `reverse` bagi
+satu sub-kemahiran ialah sub-kemahiran **sebelah** dalam senarai yang sama, `reverse` bukan
+tidak wujud — buktinya cuma milik yang sebelah. `reverse` bagi *before* ialah *after*; bagi
+*count_objects* ialah *number_to_quantity*. Sub-kemahiran begitu masih ada `direct` dan
+`contextual`, jadi ia tidak dikecualikan. Yang tinggal ialah sepuluh sub-kemahiran membilang
+1.5.1, di mana `contextual` menjadikannya masalah berayat yang anak mesti **baca** sebelum dia
+boleh membilang.
+
+> **Perbendaharaan lima nama sudah mati.** `direct`, `inverted`, `select`, `story`, `visual`
+> ditolak guru kerana ia mencampurkan tiga perkara berbeza. Tiga paksi menggantikannya
+> (docs/kssr/guru-struktur-variasi-soalan.md), dan pembetulannya pada `reverse` menjatuhkan
+> contohnya sendiri: *"Apakah nilai digit 6 dalam 63?"* dan *"Dalam 63, digit 6 bernilai
+> berapa?"* kedua-duanya `direct`.
 
 **Percubaan pertama sahaja.** Ketepatan sudah mengukur kualiti percubaan pertama (§5.2), dan
 percubaan kedua berlaku selepas satu pilihan salah dilumpuhkan — pada mcq tiga pilihan, tekaan

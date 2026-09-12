@@ -607,17 +607,40 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     (*"Pilih nilai yang betul…"*), `story` (situasi harian), `visual` (soalan dibawa oleh
     gambar).
 
-    **Berapa `frame` dituntut — DIPUTUSKAN: tuntut 2, laporkan yang kurang daripada 3.**
-    Menuntut tiga bermakna setiap satu daripada 36 sub-kemahiran memerlukan tiga soalan
-    berbentuk berlainan — **108 soalan, 108 rakaman BM** sebelum satu pun kemahiran boleh
-    mencapai Dikuasai, dan **label yang tiada siapa pernah capai tidak memberitahu ibu bapa
-    apa-apa**. Dua sudah mematahkan hafalan bentuk; yang ketiga dilaporkan sebagai jurang
-    kandungan, tidak dikuatkuasakan.
+    ~~**Berapa `frame` dituntut — tuntut 2, laporkan yang kurang daripada 3.**~~
 
-    **Masih belum dibina, dan sengaja.** Perbendaharaan mesti disemak guru dahulu: enum yang
-    dikunci mengunci kandungan bersamanya, dan ia permukaan yang sama seperti senarai
-    sub-kemahiran. Soalan itu kini dalam borang `kssr:review`. Bina selepas jawapannya masuk,
-    bukan sebelum.
+    **Perbendaharaan lima nama ditolak guru, dan medan `frame` tunggal tidak pernah wujud.**
+    Ia mencampurkan tiga perkara: cara soalan dibentuk, cara maklumat dipersembahkan, cara
+    murid menjawab. Satu soalan boleh serentak ketiga-tiganya.
+
+    Yang dibina sebagai gantinya — nilai verbatim daripada guru:
+
+    | Paksi | Nilai |
+    |---|---|
+    | `promptForm` | `direct` · `reverse` · `contextual` |
+    | `representation` | `symbolic` · `visual` · `mixed` |
+    | `responseMode` | `select` · `input` · `tap` · `match` · `order` |
+    | `wordingVariant` | `A` · `B` · `C` — variasi bahasa, **bukan** perbezaan pedagogi |
+
+    Pembetulan guru pada `reverse` menjatuhkan contohnya sendiri: *"Apakah nilai digit 6 dalam
+    63?"* dan *"Dalam 63, digit 6 bernilai berapa?"* kedua-duanya **`direct`** — ayat berubah,
+    arah pemikiran sama. Yang benar-benar `reverse` ialah *"Dalam nombor 63, digit manakah
+    yang bernilai 60?"*. Maksudnya tiga "bentuk" yang kami sangka ada, sebenarnya satu.
+
+    **Ambang DIPUTUSKAN: `promptForm` yang dikira.** Dua bentuk berlainan, **di samping**
+    tiga `questionId` berbeza dan dua sesi — bukan menggantikannya. Dua bar itu mengukur risiko
+    berbeza, dan menukar satu dengan satu lagi membawa kadar tersalah label seorang peneka
+    kembali daripada 3.7% ke 11%.
+
+    `responseMode` ditolak sebagai paksi bukti kerana **senarai sub-kemahiran sudah
+    memisahkannya** di mana ia penting — mengetuk untuk membilang lawan memilih nombor ialah
+    dua sub-kemahiran, bukan dua bentuk. `representation` ditolak kerana ia mengubah kesukaran,
+    yang sudah ada medannya sendiri. Jadual penuh dalam SPEC §5.7.
+
+    **Pengecualian, dan ia belum disemak guru.** Sub-kemahiran yang hanya menyokong satu
+    bentuk kekal pada tiga id sahaja — bar yang tiada siapa boleh lepasi tidak memberitahu ibu
+    bapa apa-apa. Senarainya sepuluh entri, kesemuanya membilang 1.5.1, dalam
+    `math-y1.skills.json` dengan sebab setiap satu dan `teacherReviewed: false`.
 13. ~~**Adakah `masteredOnce` patut mengubah apa yang ibu bapa lihat?**~~
     **DISELESAIKAN — kedua-duanya diterima, tiada label keempat.**
 

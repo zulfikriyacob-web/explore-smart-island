@@ -67,6 +67,52 @@ const questionBaseShape = {
       message: 'subSkill must look like "1.2.2/after"',
     })
     .optional(),
+
+  /*
+    Three axes, not one list. (docs/kssr/guru-struktur-variasi-soalan.md)
+
+    This replaced a single flat vocabulary — direct, inverted, select, story,
+    visual — which the teacher rejected because it mixed three unrelated things:
+    how a question is built, how information is presented, and what the child
+    does to answer. One question is all three at once: contextual + visual +
+    select. A flat list cannot say that, and cannot be analysed afterwards.
+
+    The values are the teacher's, verbatim. The field names are camelCase to
+    match every other field in this object; the vocabulary is what had to be
+    theirs, not the casing.
+  */
+
+  /**
+   * How the question is built — the direction of thinking it asks for.
+   *
+   * `direct` goes from the given to the asked. `reverse` turns that around:
+   * "Apakah nilai digit 6 dalam 63?" is direct, and so is "Dalam 63, digit 6
+   * bernilai berapa?" — the sentence moved, the thinking did not. The real
+   * reverse is "Dalam nombor 63, digit manakah yang bernilai 60?", where the
+   * child is handed the value and has to find the digit.
+   *
+   * That correction matters more than it looks: it means two questions can read
+   * completely differently and still be the same evidence.
+   */
+  promptForm: z.enum(['direct', 'reverse', 'contextual']).optional(),
+
+  /** How the information reaches the child: numbers, a picture, or both. */
+  representation: z.enum(['symbolic', 'visual', 'mixed']).optional(),
+
+  /** What the child does to answer. */
+  responseMode: z.enum(['select', 'input', 'tap', 'match', 'order']).optional(),
+
+  /**
+   * Language variation that is **not** a pedagogical difference.
+   *
+   * Its whole purpose is to let the app vary the sentence without treating each
+   * sentence as a different kind of question. A, B, C — it never counts as
+   * evidence of anything.
+   */
+  wordingVariant: z
+    .string()
+    .regex(/^[A-Z]$/, { message: 'wordingVariant must be a single capital letter' })
+    .optional(),
   prompt: LocalizedTextSchema,
   /** Mandatory: a 7-year-old cannot read the prompt. (SPEC 3.3) */
   promptAudio: LocalizedAudioSchema,
