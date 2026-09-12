@@ -21,6 +21,23 @@ import { useQuizStore } from './store.ts';
  */
 const LANG = 'ms' as const;
 
+/**
+ * What the feedback area says out loud when an answer is checked.
+ *
+ * Bilingual like every other user-visible string (SPEC 3.1), and the only two
+ * strings in this screen that are not read from the pack — they belong to the
+ * app, not to a question.
+ *
+ * The wording is a decision, not a placeholder. "Belum betul" rather than
+ * "Salah": DESIGN 9 makes the wrong-answer sound a soft falling tone and
+ * explicitly not a buzzer, and this sentence is what a child using a screen
+ * reader hears *instead of* that tone.
+ */
+const VERDICT = {
+  correct: { ms: 'Betul!', en: 'Correct!' },
+  wrong: { ms: 'Belum betul. Cuba lagi.', en: 'Not yet. Try again.' },
+} as const;
+
 /** Every image a question will draw, for the one-ahead prefetch. */
 function imagesIn(q: Question): string[] {
   switch (q.type) {
@@ -109,9 +126,33 @@ export function QuizScreen() {
         `Jawapannya ${question.type === 'count-tap' ? question.payload.correctAnswer : ''}.`)
       : null;
 
+  /*
+    The verdict, in words, because a screen reader receives none of the three
+    channels SPEC 9 relies on: the icon sits in an `aria-hidden` slot, the
+    motion is visual, and the sound is a marimba tone with no text equivalent.
+
+    Measured before this existed: a wrong answer announced only the hint, and a
+    correct answer announced nothing at all — so "wrong" was inferable by
+    accident, from help arriving, and "right" was silent. (PRD 16 item 14.)
+
+    The tone is fixed. "Belum betul. Cuba lagi." — not "Salah!". We do not
+    punish on screen and we do not get to punish in audio either; a child using
+    a screen reader hears this sentence in place of a soft falling tone
+    (DESIGN 9), and it has to carry the same kindness.
+
+    `lastAnswerCorrect` is null between questions and set by every ANSWER, so
+    this says something exactly when there is something to say.
+  */
+  const verdict =
+    session.lastAnswerCorrect === null
+      ? null
+      : session.lastAnswerCorrect
+        ? VERDICT.correct[LANG]
+        : VERDICT.wrong[LANG];
+
   // Everything the feedback area has to say right now, in the order it appears
   // on screen. Empty between questions, which announces nothing.
-  const spokenFeedback = [showHint ? question.hint?.[LANG] : null, revealText]
+  const spokenFeedback = [verdict, showHint ? question.hint?.[LANG] : null, revealText]
     .filter(Boolean)
     .join(' ');
 

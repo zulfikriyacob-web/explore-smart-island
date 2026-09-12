@@ -14,7 +14,16 @@ interface Ripple {
 
 interface BlockButtonProps {
   children: ReactNode;
+  /** Pointer activation, on `pointerdown`. Press latency is why it is there. */
   onPress: () => void;
+  /**
+   * Keyboard or assistive-technology activation. Defaults to `onPress`.
+   *
+   * It exists as a separate hook for one caller: the start screen, whose
+   * pointer path has to hold itself mounted for the rest of the gesture and
+   * whose keyboard path must not. See `StartScreen` for why.
+   */
+  onActivate?: () => void;
   state?: BlockState;
   /**
    * DESIGN 5.1: 88 for a primary answer, 72 for a secondary action, 96 for the
@@ -71,6 +80,7 @@ const FACE: Record<BlockState, string> = {
 export function BlockButton({
   children,
   onPress,
+  onActivate,
   state = 'rest',
   minHeight = 88,
   ariaLabel,
@@ -97,6 +107,30 @@ export function BlockButton({
     [isLocked, onPress, reduce],
   );
 
+  /*
+    The keyboard path, and the only path a screen reader has.
+
+    `onPointerDown` cannot serve it: a keyboard never produces one. Without
+    this the button was focusable, drew its 3px focus ring (DESIGN 10), and did
+    nothing at all when pressed — measured, Enter did not start the activity.
+    A button that can be focused but not pressed is worse than no focus ring,
+    because the ring promises something that is not there.
+
+    `detail === 0` is what separates the two paths. A click produced by Enter or
+    Space on a focused button, or by an assistive technology activating it,
+    carries no click count; one produced by a mouse or a finger carries at least
+    one, and `onPointerDown` has already handled that case. Without the guard a
+    single tap would fire both paths.
+  */
+  const handleActivate = useCallback(
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      if (isLocked) return;
+      if (event.detail !== 0) return;
+      (onActivate ?? onPress)();
+    },
+    [isLocked, onActivate, onPress],
+  );
+
   // B1 / B3 — the feedback animation for this state, or nothing under reduced
   // motion, where colour and icon carry the message instead. (SPEC 7.5)
   const feedback =
@@ -114,8 +148,23 @@ export function BlockButton({
     <motion.button
       type="button"
       aria-label={ariaLabel}
-      disabled={isLocked}
+      /*
+        `aria-disabled`, not `disabled`.
+
+        A native `disabled` button leaves the tab order, and it leaves it while
+        focus is still on it — measured, a correct answer moved focus from the
+        button the child had just pressed to `BODY`, so a keyboard user had to
+        navigate from the top of the document to reach "Seterusnya".
+
+        `handlePress` and `handleActivate` both return early when `isLocked`, so
+        the action is already blocked without the native attribute. This keeps
+        the button where the child left it and announces its state, which fixes
+        the focus loss without moving focus anywhere — moving it to "Seterusnya"
+        would take control away from someone who did not ask for it.
+      */
+      aria-disabled={isLocked || undefined}
       onPointerDown={handlePress}
+      onClick={handleActivate}
       // B4 — a struck-out option wilts rather than vanishing, so the list does
       // not reflow underneath a child's finger.
       animate={{

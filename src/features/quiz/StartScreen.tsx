@@ -118,6 +118,26 @@ export function StartScreen({ holdForGesture }: StartScreenProps) {
             holdForGesture();
             start();
           }}
+          /*
+            The keyboard path deliberately does NOT hold the gesture, and that
+            is not an oversight — the two paths have opposite event orders.
+
+              pointer:  pointerdown (we act, node detaches)  ->  touchstart (too late)
+              keyboard: keydown (Howler unlocks)             ->  click (we act)
+
+            Howler registers its unlock on `document`, capture phase, for
+            touchstart/touchend/click **and keydown**. On the pointer path our
+            handler runs before the event Howler needs, which is why the screen
+            has to stay mounted (App.tsx). On the keyboard path `keydown` has
+            already reached `document` before this click exists, so there is
+            nothing left to hold.
+
+            Holding anyway would be worse than pointless. The release listener
+            is attached by an effect that runs after render, so it would not
+            exist during this very click — and the start screen would sit there
+            until the 1000ms backstop fired.
+          */
+          onActivate={start}
           state="start"
           minHeight={96}
           ariaLabel="Mula aktiviti"

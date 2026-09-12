@@ -1306,6 +1306,74 @@ kedua-duanya tidak sepadan, fail itu bukan apa yang anda sangka — berhenti, ja
 - Fokus papan kekunci kelihatan (cincin 3 px), untuk ibu bapa pada desktop.
 - `aria-live="polite"` pada kawasan maklum balas.
 
+### Ikon + gerakan + bunyi memberi pembaca skrin sifar
+
+Tiga saluran di atas ialah tiga saluran **visual dan audio**. Diukur pada halaman berjalan:
+ikon ✓/✕ duduk dalam slot `aria-hidden`, gerakan tidak wujud bagi pembaca skrin, dan bunyi
+ialah nada marimba tanpa padanan teks. Jawapan salah mengumumkan **pancingan sahaja**; jawapan
+betul mengumumkan **tiada apa-apa**. "Salah" boleh disimpulkan secara tidak sengaja daripada
+bantuan yang tiba; "betul" senyap sepenuhnya.
+
+Jadi kawasan `aria-live` membawa **verdict**, bukan hanya bantuan:
+
+| | BM | EN |
+|---|---|---|
+| Betul | `Betul!` | `Correct!` |
+| Salah | `Belum betul. Cuba lagi.` | `Not yet. Try again.` |
+
+**Nadanya terikat.** Bukan "Salah!". DESIGN §9 menjadikan bunyi jawapan salah satu nada lembut
+menurun dan **bukan** buzzer; ayat ini ialah apa yang anak dengar **menggantikan** nada itu, dan
+ia mesti membawa kelembutan yang sama. Kita tidak menghukum pada skrin dan tidak mendapat hak
+menghukum dalam audio.
+
+> **Jangan guna `aria-label` sebagai saluran pengumuman.** Menukar label butang apabila jawapan
+> disemak nampak berfungsi dalam ujian dan **senyap pada peranti sebenar**: banyak pembaca skrin
+> tidak membacakan semula label yang berubah semasa fokus sudah berada padanya.
+>
+> Itu kelas kegagalan yang repo ini sudah bayar mahal — geometri betul sambil piksel kosong
+> (CLAUDE.md prinsip 5), `playing() === true` atas context tergantung. Ujian bersetuju dengan
+> kita; peranti tidak. Pengumuman ialah kerja kawasan `aria-live`; label ialah tempat keadaan
+> **dibaca semula** oleh seseorang yang menyemak senarai, bukan tempat ia diumumkan.
+
+### `aria-disabled`, bukan `disabled`, pada butang jawapan
+
+Butang `disabled` asli keluar daripada susunan tab — dan ia keluar **semasa fokus masih
+padanya**. Diukur: jawapan betul memindahkan fokus daripada butang yang anak baru tekan ke
+`BODY`, jadi pengguna papan kekunci terpaksa menavigasi semula dari atas dokumen untuk mencapai
+"Seterusnya".
+
+Pengendali tekan sudah pulang awal apabila butang terkunci, jadi tindakan disekat tanpa atribut
+asli itu. `aria-disabled` mengekalkan butang di tempat anak meninggalkannya dan tetap
+mengumumkan keadaannya.
+
+**Membaiki kehilangan fokus tanpa memindahkan fokus.** Memindahkannya ke "Seterusnya" akan
+merampas kawalan daripada seseorang yang tidak memintanya.
+
+### Papan kekunci: `click` dengan `detail === 0`
+
+Butang blok mengendali `pointerdown` untuk kependaman tekanan, dan papan kekunci tidak pernah
+menghasilkan satu. Tanpa laluan kedua, butang boleh difokus, melukis cincin 3px, dan **tidak
+melakukan apa-apa** — janji yang tidak wujud, dan itu lebih teruk daripada tiada cincin.
+
+`detail === 0` memisahkan kedua-dua laluan: click daripada Enter, Space, atau teknologi bantuan
+tidak membawa kiraan click; click daripada tetikus atau jari membawa sekurang-kurangnya satu dan
+sudah dikendalikan oleh `pointerdown`. Tanpa penjaga itu satu ketukan akan mencetuskan
+kedua-duanya.
+
+**Laluan papan kekunci tidak menggunakan pegangan gerak isyarat §8 peraturan 6, dan itu bukan
+terlupa.** Susunan peristiwanya bertentangan:
+
+```
+pointer:  pointerdown (kita bertindak, nod tanggal)  ->  touchstart (terlewat)
+papan kekunci: keydown (Howler buka kunci)           ->  click (kita bertindak)
+```
+
+Howler mendengar `keydown` antara empat peristiwa pembuka kuncinya, jadi pada laluan papan
+kekunci pembukaan kunci sudah berlaku sebelum click itu wujud. Memegang skrin di situ bukan
+sahaja tidak berguna — pendengar pelepas dipasang oleh satu effect yang berjalan **selepas**
+render, jadi ia tidak wujud semasa click itu, dan skrin mula akan berlengah sehingga pemasa
+1000 ms.
+
 ---
 
 ## 10. Kriteria penerimaan (Fasa 1)
