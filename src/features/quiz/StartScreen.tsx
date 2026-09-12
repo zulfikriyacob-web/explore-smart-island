@@ -11,6 +11,16 @@ import { Kancil } from '../../components/ui/Kancil.tsx';
 import { packTitle } from './activity.ts';
 import { useQuizStore } from './store.ts';
 
+interface StartScreenProps {
+  /**
+   * Hold this screen mounted for the remainder of the gesture. Called at
+   * `pointerdown`, and **before** START: if START went first and the two updates
+   * were not batched into one render, the screen would unmount between them and
+   * the gesture would be lost exactly as before. App.tsx has the full account.
+   */
+  holdForGesture: () => void;
+}
+
 /**
  * The start screen (Brief 03, PRD 16 question 8).
  *
@@ -29,8 +39,13 @@ import { useQuizStore } from './store.ts';
  * element, and nothing on the screen begins at opacity or scale 0 — so a
  * renderer that never fires a frame still shows a complete, legible screen with
  * a working button. (CLAUDE.md principle 5, SPEC 7.1 hard rule 2.)
+ *
+ * This screen does not decide when it goes away. It presses, and App keeps it
+ * mounted until the gesture is over — a button that removes itself inside its
+ * own handler takes the rest of that gesture with it, and the rest of that
+ * gesture is what unlocks audio on iOS. (SPEC 8 rule 6.)
  */
-export function StartScreen() {
+export function StartScreen({ holdForGesture }: StartScreenProps) {
   const start = useQuizStore((s) => s.start);
   const firstPrompt = useQuizStore((s) => s.session.questions[0]?.promptAudio.ms);
 
@@ -99,7 +114,10 @@ export function StartScreen() {
         style={{ paddingBottom: 'max(16px, env(safe-area-inset-bottom))' }}
       >
         <BlockButton
-          onPress={start}
+          onPress={() => {
+            holdForGesture();
+            start();
+          }}
           state="start"
           minHeight={96}
           ariaLabel="Mula aktiviti"

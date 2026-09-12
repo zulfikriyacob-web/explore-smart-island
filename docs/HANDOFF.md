@@ -65,11 +65,29 @@ handler cancels the remainder of that gesture for every listener above it.** Any
 button that both handles a press and removes itself has this defect. It is not
 specific to audio — it is specific to self-removal.
 
-### The fix that was chosen and not implemented
+### The fix that was chosen, and what it looks like now it is written
 
 **Option 1: do not detach the button during the gesture.** Keep the start screen
 mounted for the rest of the gesture, so `touchstart`/`touchend`/`click` land on a
-connected node and reach Howler normally. Implementation is a new session's job.
+connected node and reach Howler normally.
+
+Implemented on `fix/start-button-unmount`. `START` still goes out on
+`pointerdown`; `App` holds the start screen mounted from that press until the
+`click` that ends the tap, with a 1000ms timer as the backstop for a finger that
+slides off the button and never produces a click. The rule is written into
+SPEC §8 as rule 6.
+
+Measured in the Browser pane, the same build with and without the change, by
+registering capture-phase listeners on `document` exactly where Howler registers
+its own:
+
+| | button `isConnected` after React's flush | of touchstart/touchend/click reaching `document` |
+| --- | --- | --- |
+| before | `false` | 0 of 3 |
+| after | `true` | 3 of 3, each with a connected target |
+
+That is the part of this that is ours and can be proved from here. The phone is
+still the only place the audio itself can be confirmed.
 
 Options that were considered and are worse:
 
@@ -179,9 +197,20 @@ ten — the two start-screen commits were written up separately in
 
 ## 5. Next session
 
-Implement option 1. The behaviour that must not regress: a restored session never
-passes through the start screen, and "Main lagi" plays rather than asking again
-(SPEC §8). The phone is the only place the fix can be confirmed — the Browser
-pane has a running context and no trusted-gesture requirement, so it cannot fail
-this bug and cannot prove the fix either. It can prove the button stays connected
-through the gesture, which is the part that is actually ours.
+Option 1 is written; what is left is the phone. The Browser pane has a running
+context and no trusted-gesture requirement, so it cannot fail this bug and cannot
+prove the fix either — it proved the button stays connected through the gesture,
+which is the part that is actually ours, and no more than that.
+
+What a cold press of Mula on the iPhone will say:
+
+- **Sound on the first press.** The fix worked.
+- **Sound, but late.** The unlock is correct and the hanging `resume()` in
+  section 3 is what is left. Not a new bug.
+- **Still silent.** The gesture now reaches Howler, so the next thing to read is
+  whether Howler acted on it — rebase `diag/autoplay-gate` onto `main` and run it
+  on the phone rather than guessing.
+
+Checked on the way in, and still true: a restored session never passes through
+the start screen, and "Main lagi" goes straight into the first question (SPEC §8,
+`store.test.ts`).
