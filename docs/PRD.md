@@ -662,7 +662,50 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     **Susunan "Fokus minggu ini"** (§11): kemahiran yang tergelincir mendahului yang belum
     pernah dimulakan. `standardCoverage()` memulangkan `slippedIds` untuk kedua-duanya.
     Perincian dalam SPEC §5.7.
-14. **Betul/salah tidak sampai kepada pembaca skrin langsung.** Diagnosis, belum dibaiki.
+16. ~~**Jawapan salah kedua pada soalan yang sama tidak diumumkan.**~~ **DISELESAIKAN.**
+    Percubaan kedua kini berkata **"Belum betul. Cuba sekali lagi."** Diukur: mutasi kawasan
+    `aria-live` naik daripada 1 kepada 2, dan teksnya berbeza.
+
+    *"Sekali lagi"* bukan hiasan untuk memaksa rentetan berbeza. Ia membawa maklumat yang sama
+    seperti yang dibaca anak yang melihat daripada pilihan yang layu: **satu percubaan tinggal
+    sebelum jawapan didedah.** Pengguna yang mendengar sebelum ini tidak mendapat apa-apa
+    daripada itu.
+
+    Satu varian ketiga diperlukan dan ia **mengurangkan**, bukan menambah. Pada percubaan yang
+    mendedahkan jawapan, ayat menjadi **"Belum betul."** sahaja — mengundang anak "cuba sekali
+    lagi" selepas jawapan ditunjukkan adalah tidak benar. Diukur pada count-tap selepas tiga
+    percubaan: `"Belum betul. Jawapannya 7."`
+
+    Tiga ayat, satu setiap keadaan, dan tiada satu pun menjanjikan sesuatu yang tidak wujud.
+
+    Diagnosis asal dikekalkan di bawah kerana ia yang menerangkan kenapa rentetan serupa
+    bermakna senyap.
+
+    Kawasan `aria-live` mengumumkan apabila teksnya **berubah**. Pada percubaan salah pertama ia
+    menjadi `"Belum betul. Cuba lagi. <pancingan>"`. Pada percubaan salah kedua, pancingan sudah
+    ada dan verdict sama, jadi rentetannya **serupa** — React tidak menulis apa-apa ke DOM, dan
+    pembaca skrin tidak mengumumkan apa-apa.
+
+    Diukur dengan `MutationObserver` pada kawasan itu: percubaan pertama menghasilkan **1**
+    mutasi, percubaan kedua menghasilkan **0**.
+
+    Anak yang melihat mendapat goncangan dan ikon ✕ pada kedua-dua percubaan. Anak yang
+    mendengar mendapat ayat sekali sahaja, kemudian senyap — dan senyap selepas menekan butang
+    tidak dapat dibezakan daripada butang yang rosak.
+
+    Dua pembetulan, kedua-duanya menyentuh teks yang ibu bapa dan anak dengar, jadi kedua-duanya
+    perlu kelulusan:
+
+    | Pembetulan | Kos |
+    |---|---|
+    | Ayat berbeza pada percubaan kedua, cth. *"Belum betul. Cuba sekali lagi."* | Satu rentetan baharu, dan nadanya mesti dipilih dengan sengaja seperti yang pertama |
+    | Kandungan berubah tanpa teks baharu — cth. menyebut pilihan yang baru digugurkan: *"Belum betul. Cuba lagi. 38 bukan jawapannya."* | Lebih banyak perkataan setiap kali, dan ia menamakan kesilapan anak dengan kuat |
+
+    Cadangan saya yang pertama: ia lebih pendek, dan *"sekali lagi"* membawa maklumat sebenar —
+    anak sudah cuba dua kali dan ada satu percubaan lagi sebelum jawapan didedah.
+14. **Betul/salah tidak sampai kepada pembaca skrin langsung.** ~~Diagnosis, belum dibaiki.~~
+    **DISELESAIKAN.** Kawasan `aria-live` kini membawa verdict, dan `aria-disabled` menggantikan
+    `disabled` supaya fokus kekal. Perinciannya dalam SPEC §9; had yang tinggal dalam item 16.
 
     SPEC §9 membina keseluruhan strategi kebolehcapaian di atas satu ayat: *"Betul/salah
     **tidak pernah** disampaikan melalui warna sahaja — sentiasa ikon + gerakan + bunyi."*
@@ -709,8 +752,10 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     Tidak dicadang: menukar `aria-label` sebagai saluran pengumuman utama. Banyak AT tidak
     membacakan semula label yang berubah semasa fokus berada padanya, jadi ia kelihatan
     berfungsi dalam ujian dan senyap pada peranti sebenar.
-15. **Butang Mula boleh difokus tetapi tidak boleh ditekan dengan papan kekunci.** Diagnosis,
-    belum dibaiki.
+15. **Butang Mula boleh difokus tetapi tidak boleh ditekan dengan papan kekunci.**
+    ~~Diagnosis, belum dibaiki.~~ **DISELESAIKAN.** `onClick` dengan penjaga `detail === 0`,
+    dan laluan papan kekunci tidak menggunakan pegangan gerak isyarat. Perinciannya dalam
+    SPEC §9. Diagnosis asal dikekalkan di bawah kerana ia yang menerangkan kenapa.
 
     DESIGN §10 meminta cincin fokus untuk ibu bapa pada desktop, dan ia ada. Diukur:
     `tabIndex 0`, garis luar fokus **3px**. Butang itu kelihatan sepenuhnya boleh digunakan.
@@ -749,8 +794,12 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     dipasang oleh satu effect yang berjalan **selepas** render dan tidak akan wujud semasa
     click itu sendiri.
 
-    **Apa yang pane tidak boleh buktikan:** `Howler.autoUnlock` sudah `false` dan
-    `_audioUnlocked` sudah `true` di sini, kerana context pane bermula dalam keadaan berjalan.
-    Yang diukur ialah **perambatan** (`keydown` sampai ke `document`) dan **kelumpuhan**
-    (Enter tidak membuat apa-apa). Dakwaan buka kunci bersandar pada sumber Howler, sama
-    seperti sebelum ini, dan hanya peranti sebenar boleh mengesahkannya.
+    ~~**Apa yang pane tidak boleh buktikan:**~~ **Disahkan pada laptop.** Menekan Enter pada
+    butang Mula yang difokus **membuka kunci audio**, dan soalan pertama berbunyi. Dakwaan itu
+    tidak lagi bersandar pada sumber Howler.
+
+    Yang pane boleh ukur ialah **perambatan** (`keydown` sampai ke `document` dalam fasa
+    capture) dan **kelumpuhan** (Enter tidak membuat apa-apa sebelum pembaikan). Ia tidak boleh
+    mengukur pembukaan kunci, kerana `Howler.autoUnlock` sudah `false` dan `_audioUnlocked`
+    sudah `true` di situ — context pane bermula dalam keadaan berjalan. Peranti yang menutup
+    jurang itu, seperti iPhone menutup jurang PR #33.
