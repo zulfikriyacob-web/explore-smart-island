@@ -45,6 +45,28 @@ const questionBaseShape = {
   id: z.string().min(1),
   difficulty: DifficultySchema,
   learningStandard: z.string().min(1).optional(),
+  /**
+   * Which sub-skill of that learning standard this question is evidence for,
+   * as `<SP>/<id>` — "1.2.2/after".
+   *
+   * A learning standard is not one skill. 1.6.1 is "nilai tempat **dan** nilai
+   * digit", and a child who can name the digit in the tens place has shown one
+   * of four things the standard asks for. Recording the answer against the
+   * standard alone lets five correct answers to the same question report the
+   * whole standard as mastered, which would be a false claim on a parent's
+   * dashboard. The sub-skill is what the evidence actually attaches to.
+   *
+   * The standard stays on the question as well: it is what the dashboard names
+   * and what a teacher signed off. Existence of the id is checked against
+   * `src/content/kssr/<subject>-y<year>.skills.json` by `validate:content`,
+   * which has the filesystem; the shape and the prefix are checked here.
+   */
+  subSkill: z
+    .string()
+    .regex(/^\d+(\.\d+){2}\/[a-z][a-z0-9_]*$/, {
+      message: 'subSkill must look like "1.2.2/after"',
+    })
+    .optional(),
   prompt: LocalizedTextSchema,
   /** Mandatory: a 7-year-old cannot read the prompt. (SPEC 3.3) */
   promptAudio: LocalizedAudioSchema,
@@ -300,6 +322,35 @@ export const TopicPackSchema = z
           code: 'custom',
           path: ['questions', i, 'learningStandard'],
           message: `question "${q.id}" cites learningStandard "${q.learningStandard}" which the pack does not declare`,
+        });
+      }
+    }
+
+    /*
+      A sub-skill belongs to exactly one learning standard, and says so in its
+      own name. `1.2.2/after` under a question mapped to 1.6.1 is a question
+      claiming evidence for a standard it is not about — the same shape of error
+      as an SP cited under the wrong SK, and decidable from the strings alone.
+
+      A sub-skill without a standard is the other half of it: the code would
+      have nothing to roll up into, so the evidence would be recorded and never
+      reach a dashboard.
+    */
+    for (const [i, q] of pack.questions.entries()) {
+      if (!q.subSkill) continue;
+      if (!q.learningStandard) {
+        ctx.addIssue({
+          code: 'custom',
+          path: ['questions', i, 'subSkill'],
+          message: `question "${q.id}" names subSkill "${q.subSkill}" but cites no learningStandard`,
+        });
+        continue;
+      }
+      if (!q.subSkill.startsWith(`${q.learningStandard}/`)) {
+        ctx.addIssue({
+          code: 'custom',
+          path: ['questions', i, 'subSkill'],
+          message: `question "${q.id}" names subSkill "${q.subSkill}", which does not belong to its learningStandard "${q.learningStandard}"`,
         });
       }
     }

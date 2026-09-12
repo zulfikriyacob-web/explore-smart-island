@@ -271,6 +271,41 @@ describe('pack rules', () => {
     expect(issueMessages(result)).toContain('sits under content standard "7.2"');
   });
 
+  /*
+    A sub-skill names the standard it belongs to. Under the wrong one it is a
+    question claiming evidence for a standard it is not about — the same shape
+    of error as an SP cited under the wrong SK, and decidable from the strings.
+  */
+  it('rejects a subSkill that belongs to another learning standard', async () => {
+    const pack = await mathPack();
+    const questions = structuredClone(pack.questions) as Array<{ subSkill?: string }>;
+    questions[0]!.subSkill = '1.6.1/digit_at_tens';
+    const result = TopicPackSchema.safeParse({ ...pack, questions });
+    expect(result.success).toBe(false);
+    expect(issueMessages(result)).toContain('does not belong to its learningStandard');
+  });
+
+  it('rejects a subSkill on a question that cites no learning standard', async () => {
+    const pack = await mathPack();
+    const questions = structuredClone(pack.questions) as Array<{
+      subSkill?: string;
+      learningStandard?: string;
+    }>;
+    delete questions[0]!.learningStandard;
+    const result = TopicPackSchema.safeParse({ ...pack, questions });
+    expect(result.success).toBe(false);
+    expect(issueMessages(result)).toContain('cites no learningStandard');
+  });
+
+  it('rejects a subSkill that is not shaped like one', async () => {
+    const pack = await mathPack();
+    const questions = structuredClone(pack.questions) as Array<{ subSkill?: string }>;
+    questions[0]!.subSkill = 'compare_greater';
+    const result = TopicPackSchema.safeParse({ ...pack, questions });
+    expect(result.success).toBe(false);
+    expect(issueMessages(result)).toContain('subSkill must look like');
+  });
+
   it('rejects a DSKP code that is not shaped like one', async () => {
     const pack = await mathPack();
     const kssr = structuredClone(pack.kssr) as { contentStandards: string[] };

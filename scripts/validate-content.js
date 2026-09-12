@@ -122,6 +122,126 @@ async function loadCatalogue(subject, year) {
 }
 
 /**
+ * The sub-skill list for a subject and year, from
+ * `src/content/kssr/<subject>-y<year>.skills.json`.
+ *
+ * Separate from the catalogue on purpose. The catalogue is what the DSKP says,
+ * checkable against the PDF line by line. This file is a decomposition — a
+ * teacher's, for the six standards answered so far — and only four of the
+ * catalogue's 56 learning standards carry sub-points the document numbered
+ * itself. Merging the two would make it impossible to tell transcription from
+ * judgement, which is the property the catalogue exists to have.
+ *
+ * Returns null when no skills file has been written for that subject and year.
+ */
+async function loadSkills(subject, year) {
+  const file = path.join(KSSR_DIR, `${subject}-y${year}.skills.json`);
+  let raw;
+  try {
+    raw = JSON.parse(await readFile(file, 'utf8'));
+  } catch (err) {
+    if (err.code === 'ENOENT') return null;
+    throw new Error(`skills file ${path.relative(ROOT, file)} is unreadable: ${err.message}`);
+  }
+
+  // "1.2.2/after" -> its label, plus the standards each id hangs off.
+  const ids = new Map();
+  const byStandard = new Map();
+  for (const [sp, entry] of Object.entries(raw.standards ?? {})) {
+    byStandard.set(sp, entry);
+    for (const s of entry.subSkills ?? []) ids.set(`${sp}/${s.id}`, { sp, ...s });
+  }
+  return { file, sourceKinds: raw.sourceKinds ?? {}, ids, byStandard };
+}
+
+/**
+ * The skills file describes standards that exist, names nothing twice, and
+ * declares a source kind it defined.
+ *
+ * A sub-skill under a standard the DSKP does not have is the same failure as an
+ * invented SP code, one level down: well-formed, plausible, and referring to
+ * nothing. It reaches a parent's dashboard as a curriculum claim.
+ */
+function checkSkillsFile(skills, catalogue) {
+  const errors = [];
+  const rel = path.relative(ROOT, skills.file).split(path.sep).join('/');
+
+  for (const [sp, entry] of skills.byStandard) {
+    if (!catalogue.topicOf.has(sp)) {
+      errors.push(`${rel}: standard "${sp}" does not exist in the DSKP catalogue`);
+    }
+    const list = entry.subSkills ?? [];
+    if (list.length === 0) {
+      errors.push(`${rel}: standard "${sp}" declares no sub-skills`);
+    }
+    // Where a decomposition came from is the honest part of this file: whether
+    // the DSKP numbered it, said it in a sentence, put it in a CATATAN, or
+    // whether we decided it. An undeclared kind makes that unreadable.
+    if (!entry.source || !skills.sourceKinds[entry.source]) {
+      errors.push(
+        `${rel}: standard "${sp}" declares source "${entry.source ?? '(none)'}", which is not one of: ` +
+          `${Object.keys(skills.sourceKinds).join(', ')}`,
+      );
+    }
+    const seen = new Set();
+    for (const s of list) {
+      if (seen.has(s.id)) errors.push(`${rel}: standard "${sp}" names sub-skill "${s.id}" twice`);
+      seen.add(s.id);
+    }
+  }
+  return errors;
+}
+
+/** Every sub-skill a pack cites must exist in the skills file. */
+function checkPackSubSkills(pack, skills) {
+  const errors = [];
+  for (const [i, q] of pack.questions.entries()) {
+    if (!q.subSkill) continue;
+    if (!skills.ids.has(q.subSkill)) {
+      errors.push(
+        `questions.${i} ("${q.id}") cites subSkill "${q.subSkill}", which is not in ` +
+          `${path.relative(ROOT, skills.file).split(path.sep).join('/')}`,
+      );
+    }
+  }
+  return errors;
+}
+
+/**
+ * How much of each standard the pack actually asks about.
+ *
+ * Not an error at any level — a pack is allowed to be one activity out of
+ * several — but it is the number that decides whether a standard can ever read
+ * "Dikuasai" on the parent dashboard (SPEC §5.7), so it is printed rather than
+ * left to be discovered.
+ */
+function subSkillCoverage(pack, skills) {
+  const lines = [];
+  const cited = new Map();
+  for (const q of pack.questions) {
+    if (!q.subSkill) continue;
+    const sp = q.subSkill.slice(0, q.subSkill.indexOf('/'));
+    if (!cited.has(sp)) cited.set(sp, new Set());
+    cited.get(sp).add(q.subSkill);
+  }
+  for (const sp of [...cited.keys()].sort()) {
+    const total = (skills.byStandard.get(sp)?.subSkills ?? []).length;
+    const tested = cited.get(sp).size;
+    if (total > 0 && tested < total) {
+      lines.push(`${sp}: ${tested} of ${total} sub-skills tested — it cannot report as mastered`);
+    }
+  }
+  const unmapped = pack.questions.filter((q) => q.learningStandard && !q.subSkill);
+  if (unmapped.length > 0) {
+    lines.push(
+      `${unmapped.length} question(s) carry a learningStandard but no subSkill: ` +
+        `${unmapped.map((q) => q.id).join(', ')}`,
+    );
+  }
+  return lines;
+}
+
+/**
  * Every DSKP code a pack cites must exist in the catalogue, and the pack should
  * not straddle two topics without saying so.
  */
@@ -218,6 +338,19 @@ async function validatePack(file) {
     const codes = checkKssrCodes(pack, catalogue);
     errors.push(...codes.errors);
     warnings.push(...codes.warnings);
+
+    const skills = await loadSkills(pack.subject, pack.year);
+    if (skills === null) {
+      if (pack.questions.some((q) => q.subSkill)) {
+        errors.push(
+          `questions cite subSkill but there is no src/content/kssr/${pack.subject}-y${pack.year}.skills.json`,
+        );
+      }
+    } else {
+      errors.push(...checkSkillsFile(skills, catalogue));
+      errors.push(...checkPackSubSkills(pack, skills));
+      warnings.push(...subSkillCoverage(pack, skills));
+    }
   }
 
   // A pack's filename must match its topicId, or caches and routes disagree.

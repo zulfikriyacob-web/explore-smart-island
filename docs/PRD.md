@@ -332,7 +332,26 @@ Anak **tidak** mempunyai log masuk sendiri. Mereka memilih avatar mereka daripad
 Tiada e-mel, tiada nombor telefon, tiada foto anak dikumpul.
 
 ### Papan pemuka menunjukkan
-1. **Petak penguasaan** — setiap topik: Belum mula / Sedang belajar / Dikuasai
+1. **Petak penguasaan** — **empat** label, bukan tiga: Belum dicuba / Sedang belajar /
+   Hampir menguasai / Dikuasai, dengan satu baris liputan di bawahnya:
+
+   ```
+   Nilai tempat                    Hampir menguasai
+   1 daripada 4 kemahiran diuji
+   ```
+
+   Label menjawab *bagaimana anak pada apa yang dia sudah buat*. Baris liputan menjawab
+   *berapa banyak app sebenarnya sudah tanya*. **"Dikuasai" ditahan selagi liputan belum
+   penuh** — satu peraturan, bukan perbendaharaan kata baharu.
+
+   Baki yang belum diuji dilekatkan kepada kita, bukan kepada anak: perkataannya *"belum
+   diuji oleh app"*. §15 menyenaraikan hilang kepercayaan ibu bapa sebagai risiko pemetaan
+   salah, dan baris yang menyalahkan anak untuk kandungan yang kami belum tulis ialah jalan
+   terpantas ke situ.
+
+   Ambang dan sebabnya dalam SPEC §5.7. Ringkasnya: satu jawapan betul tidak menjadikan
+   kemahiran dikuasai, kerana satu jawapan pada mcq tiga pilihan betul 33% daripada masa
+   secara tekaan semata-mata.
 2. **Fokus minggu ini** — 3 topik terlemah, dengan cadangan aktiviti
 3. **Masa & konsistensi** — minit sehari, hari aktif minggu ini
 4. **Laporan mingguan** — ringkasan e-mel setiap Ahad malam (boleh dimatikan)

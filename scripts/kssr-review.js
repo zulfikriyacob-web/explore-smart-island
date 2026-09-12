@@ -34,6 +34,14 @@ const ROOT = path.resolve(HERE, '..');
 const PACKS_DIR = path.join(ROOT, 'src', 'content', 'packs');
 const KSSR_DIR = path.join(ROOT, 'src', 'content', 'kssr');
 
+/** How a sub-skill list came to exist, in the words the form shows a teacher. */
+const SOURCE_LABEL = {
+  'dskp-detail': 'DSKP menyenaraikannya sendiri',
+  'dskp-sentence': 'dibaca daripada ayat SP',
+  'dskp-catatan': 'daripada CATATAN DSKP',
+  editorial: 'keputusan app, bukan DSKP',
+};
+
 /** Guru membaca Bahasa Melayu; borang ini satu bahasa, bukan dua lajur. */
 const LANG = 'ms';
 
@@ -98,6 +106,19 @@ async function loadCatalogue(subject, year) {
     }
   }
   return { document: raw.document, notes: raw.notes ?? [], learning, content };
+}
+
+/** The sub-skill decomposition, keyed by standard. Null when none is written. */
+async function loadSkills(subject, year) {
+  const file = path.join(KSSR_DIR, `${subject}-y${year}.skills.json`);
+  let raw;
+  try {
+    raw = JSON.parse(await readFile(file, 'utf8'));
+  } catch (err) {
+    if (err.code === 'ENOENT') return null;
+    throw new Error(`skills file ${path.relative(ROOT, file)} is unreadable: ${err.message}`);
+  }
+  return { byStandard: new Map(Object.entries(raw.standards ?? {})) };
 }
 
 /**
@@ -166,6 +187,69 @@ function emitQuestion(out, q, index, catalogue) {
   out.push('');
 
   return { unmapped: false, unknown: false };
+}
+
+/**
+ * The sub-skill list, and the second question this form asks.
+ *
+ * The first question — does this question teach this SP — is about one row at a
+ * time. This one is about a list we wrote: is it complete? Nobody inside this
+ * repo can answer it. Four of the catalogue's 56 standards carry sub-points the
+ * DSKP numbered; the rest were decomposed by reading, and a decomposition that
+ * is missing a skill silently caps what a child can ever be shown as mastering.
+ */
+function emitSubSkills(out, pack, skills) {
+  const cited = new Map();
+  for (const q of pack.questions) {
+    if (!q.subSkill) continue;
+    const sp = q.subSkill.slice(0, q.subSkill.indexOf('/'));
+    if (!cited.has(sp)) cited.set(sp, new Set());
+    cited.get(sp).add(q.subSkill);
+  }
+  const standards = [...skills.byStandard.keys()].filter((sp) => cited.has(sp)).sort();
+  if (standards.length === 0) return;
+
+  out.push('## Sub-kemahiran — adakah senarai ini lengkap?');
+  out.push('');
+  out.push(
+    `Setiap SP di bawah dipecahkan kepada sub-kemahiran, dan app merekod bukti bagi setiap ` +
+      `satu **secara berasingan**. Satu SP hanya boleh dilaporkan "Dikuasai" apabila setiap ` +
+      `sub-kemahirannya dikuasai — jadi kalau satu kemahiran hilang daripada senarai, anak ` +
+      `tidak akan pernah ditanya mengenainya, dan kalau ada yang lebih daripada sepatutnya, ` +
+      `anak tidak akan pernah sampai ke hujung.`,
+  );
+  out.push('');
+  out.push(
+    `Lajur **Asal** kata dari mana pecahan itu datang. Yang bertanda *keputusan app* ialah ` +
+      `bacaan kami, bukan DSKP — itu yang paling perlu mata cikgu.`,
+  );
+  out.push('');
+
+  for (const sp of standards) {
+    const entry = skills.byStandard.get(sp);
+    const list = entry.subSkills ?? [];
+    const tested = cited.get(sp);
+    out.push(`### \`${sp}\` — ${cell(entry.title ?? '')}`);
+    out.push('');
+    out.push(`Asal: **${SOURCE_LABEL[entry.source] ?? entry.source ?? 'tidak dinyatakan'}**`);
+    out.push('');
+    out.push('| Sub-kemahiran | Diuji oleh pek ini? |');
+    out.push('|---|---|');
+    for (const s of list) {
+      const asked = tested.has(`${sp}/${s.id}`);
+      out.push(`| ${cell(s.label?.[LANG] ?? s.id)} | ${asked ? 'ya' : '—'} |`);
+    }
+    out.push('');
+    out.push(
+      `**Ada kemahiran yang hilang daripada senarai ${sp} ini?** ☐ Tidak, lengkap  ` +
+        `☐ Ada — yang hilang: \`________________________\``,
+    );
+    out.push('');
+    out.push(
+      `**Ada yang tidak sepatutnya di situ?** ☐ Tidak  ☐ Ada: \`________________________\``,
+    );
+    out.push('');
+  }
 }
 
 /**
@@ -325,6 +409,9 @@ async function emitPack(pack, out) {
     if (r.unmapped) unmapped++;
     if (r.unknown) unknown++;
   });
+
+  const skills = await loadSkills(pack.subject, pack.year);
+  if (skills !== null) emitSubSkills(out, pack, skills);
 
   emitReference(out, pack, catalogue);
 
