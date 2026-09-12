@@ -627,10 +627,20 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     arah pemikiran sama. Yang benar-benar `reverse` ialah *"Dalam nombor 63, digit manakah
     yang bernilai 60?"*. Maksudnya tiga "bentuk" yang kami sangka ada, sebenarnya satu.
 
-    **Ambang kini terbuka semula.** "Dua bentuk berbeza" tidak menyebut apa-apa yang wujud.
-    Paksi mana yang mesti berbeza ialah keputusan yang belum dibuat; analisis penuh dan
-    cadangan ada dalam borang `kssr:review`, dan SPEC §5.7 kekal pada tiga `questionId`
-    berbeza sehingga ia diputuskan.
+    **Ambang DIPUTUSKAN: `promptForm` yang dikira.** Dua bentuk berlainan, **di samping**
+    tiga `questionId` berbeza dan dua sesi — bukan menggantikannya. Dua bar itu mengukur risiko
+    berbeza, dan menukar satu dengan satu lagi membawa kadar tersalah label seorang peneka
+    kembali daripada 3.7% ke 11%.
+
+    `responseMode` ditolak sebagai paksi bukti kerana **senarai sub-kemahiran sudah
+    memisahkannya** di mana ia penting — mengetuk untuk membilang lawan memilih nombor ialah
+    dua sub-kemahiran, bukan dua bentuk. `representation` ditolak kerana ia mengubah kesukaran,
+    yang sudah ada medannya sendiri. Jadual penuh dalam SPEC §5.7.
+
+    **Pengecualian, dan ia belum disemak guru.** Sub-kemahiran yang hanya menyokong satu
+    bentuk kekal pada tiga id sahaja — bar yang tiada siapa boleh lepasi tidak memberitahu ibu
+    bapa apa-apa. Senarainya sepuluh entri, kesemuanya membilang 1.5.1, dalam
+    `math-y1.skills.json` dengan sebab setiap satu dan `teacherReviewed: false`.
 13. ~~**Adakah `masteredOnce` patut mengubah apa yang ibu bapa lihat?**~~
     **DISELESAIKAN — kedua-duanya diterima, tiada label keempat.**
 

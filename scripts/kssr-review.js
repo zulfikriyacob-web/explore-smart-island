@@ -317,6 +317,14 @@ function emitAxes(out, pack) {
         `perubahan skema untuk meletakkan gambar dalam arahan.`,
     );
     out.push('');
+    out.push(
+      `**Kami rasa dua nasihat cikgu bertembung di sini, dan mungkin cikgu tidak perasan** — ` +
+        `ia diberi dalam dua surat berasingan, beberapa minggu berbeza. Yang pertama kata ` +
+        `soalan ini salah bentuk. Yang kedua memberi definisi \`reverse\` yang menjadikan ` +
+        `soalan ini **betul**, cuma bukan satu-satunya bentuk yang diperlukan. Kami tidak ` +
+        `memilih antara keduanya; itu keputusan cikgu.`,
+    );
+    out.push('');
     out.push('Kedua-duanya tidak boleh betul serentak, dan jawapannya mengubah kerja:');
     out.push('');
     out.push('| Kalau | Maka |');
@@ -333,6 +341,44 @@ function emitAxes(out, pack) {
     out.push(
       `**Yang mana?** ☐ Terbalik, kemahiran sama  ☐ Kemahiran lain, tulis semula  ` +
         `☐ Lain: \`__________________\``,
+    );
+    out.push('');
+  }
+
+  /*
+    The number the teacher should have before answering the threshold question.
+    Put ahead of it, not after: it is the difference between "which axis counts"
+    read as theory and read as a decision with a visible consequence.
+  */
+  const bySkill = new Map();
+  for (const q of tagged) {
+    if (!q.subSkill) continue;
+    if (!bySkill.has(q.subSkill)) bySkill.set(q.subSkill, new Set());
+    bySkill.get(q.subSkill).add(q.promptForm);
+  }
+  const single = [...bySkill.values()].filter((f) => f.size < 2).length;
+  if (bySkill.size > 0 && single === bySkill.size) {
+    out.push('### Sebelum cikgu jawab: pek ini tiada kepelbagaian bentuk langsung');
+    out.push('');
+    out.push(
+      `Kami mengira selepas menanda. **Kesemua ${bySkill.size} sub-kemahiran yang pek ini ` +
+        `sentuh ditanya dalam satu bentuk sahaja.** Lapan daripada sepuluh soalan ialah ` +
+        `*terus*, dan dua *terbalik* itu ialah dua soalan yang cikgu sendiri kata ditulis ` +
+        `terbalik.`,
+    );
+    out.push('');
+    out.push(
+      `Maksudnya seluruh bekalan kepelbagaian bentuk kami datang daripada satu kesilapan — ` +
+        `dan kalau cikgu jawab "tulis semula" pada soalan sebelum ini, kami akan tinggal ` +
+        `dengan **sifar**.`,
+    );
+    out.push('');
+    out.push(
+      `Kesannya kalau bentuk dikira: **tiada satu pun kemahiran boleh mencapai "Dikuasai" hari ` +
+        `ini.** Bukan kerana anak, dan bukan kerana kemahiran yang belum diuji — kerana setiap ` +
+        `soalan yang kami tulis bertanya dengan cara yang sama. Itu jurang penulisan, dan kami ` +
+        `rasa betul untuk app berkata begitu daripada berpura-pura sebaliknya. Tetapi cikgu ` +
+        `patut tahu harganya sebelum menjawab soalan seterusnya.`,
     );
     out.push('');
   }
