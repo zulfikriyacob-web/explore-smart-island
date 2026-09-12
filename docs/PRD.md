@@ -509,13 +509,52 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     | Pek 7.0 Ruang | Fail pek sendiri, aktiviti sendiri, kemasukan pulau sendiri |
 
     Rakaman ialah bahagian yang tidak boleh dipendekkan dengan menulis kod — lihat §5.
-11. **`explain` q008 bercakap bahasa tambah untuk standard membilang.** Soalan itu kini
-    dipetakan kepada `1.5.1 Membilang nombor`, atas kekuatan catatan DSKP *"membilang …
-    sepuluh-sepuluh … secara tertib menaik"* dan pengalih perhatiannya (46 ialah tambah satu,
-    35 ialah tolak sepuluh). Tetapi `explain`-nya berbunyi `45 + 10 = 55`, iaitu ayat
-    matematik tambah — yang tergolong dalam 2.2.2, bukan 1.5.1.
 
-    Kod itu betul; perkataannya yang tidak sepadan. Membetulkannya bermakna menulis semula
-    `explain` (dan mungkin `hint`) kepada bahasa membilang, cth. *"bilang sepuluh-sepuluh:
-    45, 55"*. Suntingan teks sahaja — `promptAudio` tidak menyebut `explain`, jadi tiada
-    rakaman terjejas. Ditinggalkan supaya pek tidak berubah makna dalam PR pemetaan.
+    **Kemas kini selepas semakan guru — dua perkara baharu.**
+
+    Pertama, **q008 menyertai baris ini.** Ia kini `2.2.2`, tajuk 2.0 Operasi Asas (item 11),
+    jadi pek merentas tiga tajuk: `spans 3 DSKP topics`. Tiga soalan daripada sepuluh berada
+    di luar tajuk pek. Itu mengubah pengiraan dalam jadual di atas — mengeluarkan ketiga-tiga
+    meninggalkan aktiviti tujuh soalan, bukan lapan.
+
+    Kedua, dan lebih penting: **q005 dan q009 bukan sekadar berada dalam pek yang salah — ia
+    ditulis terbalik.** SP 7.2.1 ialah *"**Menamakan** bentuk…"*. Soalan kita memberi nama
+    dalam arahan (*"Yang mana bentuk segi tiga?"*) dan meminta murid memilih gambar. Itu
+    **pengecaman**, bukan penamaan. Guru mencadangkan arah yang betul: tunjuk satu bentuk,
+    tanya *"Apakah nama bentuk ini?"*, dengan nama-nama sebagai pilihan teks.
+
+    Itu bukan suntingan teks. Ia menukar jenis soalan daripada `mcq-image` kepada `mcq`
+    dengan **imej dalam arahan** — dan skema tidak mempunyai tempat untuk imej dalam arahan
+    (SPEC §3.3). Apa yang perlu berubah direkod di sini supaya keputusan itu tidak perlu
+    diselidik semula:
+
+    | Lapisan | Perubahan |
+    |---|---|
+    | `schema.ts` | Medan pilihan `promptImage: { image, alt }` pada `questionBaseShape` — `alt` dwibahasa, seperti setiap imej lain (SPEC §3.4) |
+    | `collectAssetRefs` | Mesti memulangkan `promptImage` sebagai `kind: 'image'`. Soalan tanpa imej arahannya **tidak boleh dijawab**, jadi ia gagal binaan, bukan beri amaran |
+    | `QuizScreen.tsx` | Perenggan arahan sudah memegang dua float — kancil 88px kanan, butang audio 64px kiri (DESIGN §7). Imej arahan ialah elemen ketiga yang bersaing untuk ruang itu |
+    | **Keputusan reka bentuk sebenar** | Di mana imej itu duduk tanpa memindahkan Y baris pertama teks. DESIGN §5.2 mengukur teks bermula pada Y 89 dengan sebaran 0.65px merentas kesepuluh-sepuluh soalan; blok imej di atas teks memecahkan sebaran itu untuk dua soalan sahaja |
+    | Rakaman | Arahan berubah, jadi `q005` dan `q009` perlu rakaman BM baharu juga |
+
+    Jalan keluar yang mungkin, belum dipilih: letakkan imej arahan dalam **slot yang sudah
+    ditempah** dan bukan blok baharu — slot kancil 88×88 kosong pada bahagian soalan (kancil
+    tidak pernah muncul semasa anak berfikir, DESIGN §6), jadi ia satu-satunya tempat dalam
+    kad yang sudah lapang dan sudah tidak menggerakkan teks. Itu memerlukan pindaan bertulis
+    kepada DESIGN §7 sebelum dilaksana, kerana slot itu hari ini ialah slot maskot.
+11. ~~**`explain` q008 bercakap bahasa tambah untuk standard membilang.**~~
+    **DISELESAIKAN oleh semakan guru — dan ke arah yang bertentangan.**
+
+    Rekod ini menjangka pembetulannya ialah menulis semula `explain` kepada bahasa membilang,
+    supaya perkataan sepadan dengan kod `1.5.1`. Guru memutuskan sebaliknya: **soalan,
+    pancingan dan penerangan ketiga-tiganya membawa murid kepada operasi tambah, jadi kodnya
+    yang salah.** Soalan itu kini `2.2.2 Menambah dua nombor hasil tambah dalam lingkungan
+    100`, dan teksnya menjadi *"45 tambah 10 jadi berapa?"* atas cadangan guru.
+
+    Yang berbaloi dibawa ke hadapan: jurang itu dikesan daripada **perkataan soalan**, bukan
+    daripada kod. Ketidaksepadanan antara apa yang soalan minta murid buat dan apa yang
+    kodnya namakan ialah isyarat, dan isyarat itu betul — cuma kesimpulan kami tentang arah
+    pembetulannya yang salah. Borang `kssr:review` meletakkan pancingan dan penerangan
+    bersebelahan kod atas sebab inilah; itu yang membolehkan guru melihatnya.
+
+    Kesan sampingan: q008 kini tajuk **2.0 Operasi Asas**, jadi pek ini merentas **tiga**
+    tajuk DSKP, bukan dua. Lihat item 10 — q008 menyertai baris yang sama.
