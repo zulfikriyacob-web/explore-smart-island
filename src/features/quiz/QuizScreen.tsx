@@ -36,6 +36,28 @@ const LANG = 'ms' as const;
 const VERDICT = {
   correct: { ms: 'Betul!', en: 'Correct!' },
   wrong: { ms: 'Belum betul. Cuba lagi.', en: 'Not yet. Try again.' },
+  /*
+    The second miss says something different, and it has to.
+
+    A live region announces when its text *changes*. On the second wrong answer
+    the hint is already showing and the verdict was the same sentence, so the
+    string was identical, React wrote nothing, and nothing was announced —
+    measured with a MutationObserver: one mutation on the first attempt, zero on
+    the second. A child who can see gets the shake and the cross both times; a
+    child who listens got the sentence once and then silence, and silence after
+    pressing a button is indistinguishable from a broken button.
+
+    "Sekali lagi" is not decoration to force a different string. It carries the
+    same information a sighted child reads off the wilted options: one attempt
+    is left before the answer is shown.
+  */
+  wrongLastChance: { ms: 'Belum betul. Cuba sekali lagi.', en: 'Not yet. One more try.' },
+  /*
+    And on the attempt that reveals the answer, the invitation is dropped rather
+    than repeated. "Cuba sekali lagi" after the answer has been shown would be
+    untrue. This says strictly less than the approved sentence, never more.
+  */
+  wrongRevealed: { ms: 'Belum betul.', en: 'Not yet.' },
 } as const;
 
 /** Every image a question will draw, for the one-ahead prefetch. */
@@ -148,7 +170,11 @@ export function QuizScreen() {
       ? null
       : session.lastAnswerCorrect
         ? VERDICT.correct[LANG]
-        : VERDICT.wrong[LANG];
+        : session.revealed
+          ? VERDICT.wrongRevealed[LANG]
+          : session.attempts >= 2
+            ? VERDICT.wrongLastChance[LANG]
+            : VERDICT.wrong[LANG];
 
   // Everything the feedback area has to say right now, in the order it appears
   // on screen. Empty between questions, which announces nothing.

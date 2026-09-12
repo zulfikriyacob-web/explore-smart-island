@@ -1316,10 +1316,24 @@ bantuan yang tiba; "betul" senyap sepenuhnya.
 
 Jadi kawasan `aria-live` membawa **verdict**, bukan hanya bantuan:
 
-| | BM | EN |
+| Keadaan | BM | EN |
 |---|---|---|
 | Betul | `Betul!` | `Correct!` |
-| Salah | `Belum betul. Cuba lagi.` | `Not yet. Try again.` |
+| Salah, percubaan pertama | `Belum betul. Cuba lagi.` | `Not yet. Try again.` |
+| Salah, percubaan kedua | `Belum betul. Cuba sekali lagi.` | `Not yet. One more try.` |
+| Salah, jawapan didedah | `Belum betul.` | `Not yet.` |
+
+**Tiga ayat untuk salah, bukan satu, dan sebabnya bukan gaya.** Kawasan `aria-live` mengumumkan
+apabila teksnya **berubah**. Dengan satu ayat, percubaan salah kedua menghasilkan rentetan yang
+serupa — React tidak menulis apa-apa ke DOM dan tiada apa diumumkan. Diukur dengan
+`MutationObserver`: 1 mutasi pada percubaan pertama, **0** pada kedua. Anak yang melihat mendapat
+goncangan dan ikon ✕ dua-dua kali; anak yang mendengar mendapat ayat sekali, kemudian senyap —
+dan senyap selepas menekan butang tidak dapat dibezakan daripada butang yang rosak.
+
+*"Sekali lagi"* membawa maklumat yang sama seperti yang dibaca anak yang melihat daripada pilihan
+yang layu: satu percubaan tinggal. Dan pada percubaan yang mendedahkan jawapan, undangan itu
+**digugurkan** — "cuba sekali lagi" selepas jawapan ditunjukkan tidak benar. Ayat ketiga berkata
+**kurang**, tidak pernah lebih.
 
 **Nadanya terikat.** Bukan "Salah!". DESIGN §9 menjadikan bunyi jawapan salah satu nada lembut
 menurun dan **bukan** buzzer; ayat ini ialah apa yang anak dengar **menggantikan** nada itu, dan
