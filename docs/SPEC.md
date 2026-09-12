@@ -727,9 +727,19 @@ nombor dihafal. Bukti dikira mengikut `questionId` berbeza.
 
 > **Belum mencukupi, dan diketahui.** Guru menetapkan bahawa tiga soalan itu mesti berbeza
 > **bentuk**, bukan sekadar berbeza nombor — tiga soalan berbentuk sama mengukur hafalan
-> bentuk. Hari ini enjin hanya boleh menuntut tiga `questionId` berbeza. Cadangan medan
-> `frame` ada dalam PRD §16; ia belum dibina, dan sehingga ia dibina ambang ini lebih longgar
-> daripada yang guru minta.
+> bentuk. Hari ini enjin hanya boleh menuntut tiga `questionId` berbeza, jadi ambang ini
+> lebih longgar daripada yang guru minta.
+>
+> **Keputusan dibuat, belum dibina: tuntut 2 bentuk, laporkan yang kurang daripada 3.**
+> Menuntut tiga menjadikan *Dikuasai* mustahil dicapai sehingga 36 sub-kemahiran × 3 bentuk =
+> **108 soalan dan 108 rakaman BM** wujud, dan label yang tiada siapa pernah capai tidak
+> memberitahu ibu bapa apa-apa. Dua sudah mematahkan hafalan bentuk; yang ketiga dilaporkan
+> sebagai jurang kandungan, tidak dikuatkuasakan.
+>
+> Ia belum dibina kerana perbendaharaan `frame` belum disemak guru — `direct`, `inverted`,
+> `select`, `story`, `visual` ialah calon, dan enum yang dikunci sebelum disemak mengunci
+> kandungan bersamanya. Itu permukaan yang sama seperti senarai sub-kemahiran, jadi ia pergi
+> melalui saluran yang sama: borang `kssr:review`. Reka bentuk penuh dalam PRD §16 item 12.
 
 **Percubaan pertama sahaja.** Ketepatan sudah mengukur kualiti percubaan pertama (§5.2), dan
 percubaan kedua berlaku selepas satu pilihan salah dilumpuhkan — pada mcq tiga pilihan, tekaan
@@ -755,14 +765,36 @@ memadam pembelajaran sebelumnya**: anak yang pernah sampai dan tergelincir berad
 berbeza daripada anak yang tidak pernah sampai, dan memadam beza itu membuang separuh yang
 lebih berguna.
 
-**`masteredOnce` ialah data, bukan paparan.** Ibu bapa tetap nampak tiga status. Ia dibenarkan
-mengubah **dua** perkara, dan tiada satu pun daripadanya label baharu:
+**`masteredOnce` ialah data, bukan paparan.** Ibu bapa tetap nampak tiga status. Ia mengubah
+**dua** perkara, kedua-duanya diluluskan, dan tiada satu pun daripadanya label baharu:
 
-1. **Ayat sokongan di bawah status.** *Sedang dinilai* dengan `masteredOnce` berbunyi
-   "pernah dikuasai, sedang disemak semula" dan bukan "belum cukup bukti". Perkataannya
-   penting: bukan "hilang penguasaan". Ini keputusan yang belum diluluskan — lihat PRD §16.
-2. **Susunan "Fokus minggu ini"** (PRD §11). Kemahiran yang tergelincir mendahului kemahiran
-   yang belum pernah dimulakan, kerana ia lebih dekat untuk dipulihkan.
+**1. Ayat sokongan di bawah status.** Teks yang diluluskan, verbatim:
+
+```
+Sedang dinilai — sudah pernah tunjuk kemahiran ini;
+                 app sedang semak semula
+```
+
+Perkataannya ialah keseluruhan keputusan. Dua calon terdahulu ditolak dan sebabnya patut
+kekal di sini, kerana ayat ini akan ditulis semula suatu hari oleh seseorang yang tidak
+tahu apa yang sudah cuba:
+
+| Calon | Kenapa ditolak |
+|---|---|
+| "belum cukup bukti" | Betul, dan membuang maklumat: ia sama bagi anak yang tidak pernah sampai |
+| "pernah dikuasai, sedang disemak semula" | Masih berbunyi seperti **audit**. Pasif, dan anak tiada dalam ayat |
+
+Yang diluluskan meletakkan **anak sebagai subjek separuh pertama** — *sudah pernah tunjuk
+kemahiran ini* — dan **app sebagai subjek separuh kedua** — *app sedang semak semula*. Tiada
+apa yang hilang; app yang sedang bekerja. Itu bezanya antara laporan dan notis penurunan
+pangkat.
+
+> **Belum dikunci.** Ayat ini akan diuji pada seorang ibu bapa sebenar sebelum ia dihantar.
+> Sehingga itu ia teks yang diluluskan, bukan teks yang disahkan.
+
+**2. Susunan "Fokus minggu ini"** (PRD §11). Kemahiran yang tergelincir mendahului kemahiran
+yang belum pernah dimulakan, kerana ia lebih dekat untuk dipulihkan. `standardCoverage()`
+memulangkan `slippedIds` untuk kedua-dua keputusan ini.
 
 #### Gulungan SP
 

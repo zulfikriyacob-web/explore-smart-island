@@ -253,6 +253,66 @@ function emitSubSkills(out, pack, skills) {
 }
 
 /**
+ * Candidate names for the *shape* of a question, and the third thing this form
+ * asks a teacher.
+ *
+ * Not derived from any file, because the field does not exist yet. It is asked
+ * here, before it is built, for the reason the sub-skill list is asked here: an
+ * enum locked into the schema locks the content written against it, and the
+ * teacher is the only person who can say whether these five carve the space
+ * correctly. (PRD §16 item 12, SPEC §5.7.)
+ */
+const FRAME_CANDIDATES = [
+  { id: 'direct', label: 'Terus', example: 'Apakah nilai digit 6 dalam 63?' },
+  { id: 'inverted', label: 'Terbalik', example: 'Dalam 47, digit 4 bernilai berapa?' },
+  { id: 'select', label: 'Pilih', example: 'Pilih nilai yang betul bagi digit 8 dalam 82.' },
+  { id: 'story', label: 'Situasi', example: 'Ali ada 23 guli. Ayah beri 5 lagi. Berapa semua?' },
+  { id: 'visual', label: 'Gambar', example: 'Soalan dibawa oleh gambar, bukan ayat.' },
+];
+
+function emitFrames(out) {
+  out.push('## Bentuk soalan — adakah lima nama ini cukup?');
+  out.push('');
+  out.push(
+    `Cikgu menetapkan bahawa tiga soalan itu mesti berbeza **bentuk**, bukan sekadar berbeza ` +
+      `nombor — tiga soalan berbentuk sama mengukur hafalan bentuk. Kami menerima itu, dan ` +
+      `app akan menuntut **dua bentuk berlainan** sebelum satu kemahiran boleh dikira dikuasai, ` +
+      `serta melaporkan mana-mana kemahiran yang ada kurang daripada tiga.`,
+  );
+  out.push('');
+  out.push(
+    `Sebelum kami membinanya, nama-nama ini perlu mata cikgu. Sebaik sahaja ia masuk ke dalam ` +
+      `kod, setiap soalan yang ditulis selepas itu terikat kepadanya.`,
+  );
+  out.push('');
+  out.push('| Nama | Contoh |');
+  out.push('|---|---|');
+  for (const f of FRAME_CANDIDATES) {
+    out.push(`| **${cell(f.label)}** | ${cell(f.example)} |`);
+  }
+  out.push('');
+  out.push(
+    `**Ada bentuk yang hilang?** ☐ Tidak, cukup  ☐ Ada: \`________________________________\``,
+  );
+  out.push('');
+  out.push(
+    `**Ada dua daripadanya yang sebenarnya bentuk yang sama?** ☐ Tidak  ` +
+      `☐ Ada: \`________________________\``,
+  );
+  out.push('');
+  out.push(
+    `**Dua bentuk cukup untuk "Dikuasai", atau perlu tiga?** ☐ Dua cukup  ☐ Perlu tiga`,
+  );
+  out.push('');
+  out.push(
+    `> Konteks untuk soalan terakhir: menuntut tiga bermakna setiap satu daripada 36 ` +
+      `sub-kemahiran memerlukan tiga soalan berlainan bentuk — 108 soalan dan 108 rakaman ` +
+      `suara — sebelum satu pun kemahiran boleh mencapai "Dikuasai".`,
+  );
+  out.push('');
+}
+
+/**
  * Every SP the form cites, once, at the end — full text, sub-points, CATATAN,
  * and the content standard, topic and area it sits under.
  *
@@ -411,7 +471,10 @@ async function emitPack(pack, out) {
   });
 
   const skills = await loadSkills(pack.subject, pack.year);
-  if (skills !== null) emitSubSkills(out, pack, skills);
+  if (skills !== null) {
+    emitSubSkills(out, pack, skills);
+    emitFrames(out);
+  }
 
   emitReference(out, pack, catalogue);
 

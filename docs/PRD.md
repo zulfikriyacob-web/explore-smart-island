@@ -607,25 +607,35 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     (*"Pilih nilai yang betul…"*), `story` (situasi harian), `visual` (soalan dibawa oleh
     gambar).
 
-    **Berapa `frame` patut dituntut?** Guru memberi tiga. Cadangan saya: **tuntut 2,
-    laporkan yang kurang daripada 3.** Menuntut tiga bermakna setiap satu daripada 36
-    sub-kemahiran memerlukan tiga soalan berbentuk berlainan — **108 soalan, 108 rakaman BM**
-    sebelum satu pun kemahiran boleh mencapai Dikuasai. Dua sudah mematahkan hafalan bentuk;
-    yang ketiga ialah pelaburan yang patut dibuat dengan mata terbuka, bukan dikuatkuasakan
-    sebelum kandungan wujud. Nombor itu keputusan awak.
-13. **Adakah `masteredOnce` patut mengubah apa yang ibu bapa lihat?**
-    Status kekal tiga; `masteredOnce` ialah data. Tetapi ia menandakan keadaan yang berbeza
-    secara bermakna — anak yang pernah sampai dan tergelincir bukan anak yang tidak pernah
-    sampai — dan dua perubahan boleh membawanya tanpa label keempat:
+    **Berapa `frame` dituntut — DIPUTUSKAN: tuntut 2, laporkan yang kurang daripada 3.**
+    Menuntut tiga bermakna setiap satu daripada 36 sub-kemahiran memerlukan tiga soalan
+    berbentuk berlainan — **108 soalan, 108 rakaman BM** sebelum satu pun kemahiran boleh
+    mencapai Dikuasai, dan **label yang tiada siapa pernah capai tidak memberitahu ibu bapa
+    apa-apa**. Dua sudah mematahkan hafalan bentuk; yang ketiga dilaporkan sebagai jurang
+    kandungan, tidak dikuatkuasakan.
 
-    1. **Ayat sokongan.** *Sedang dinilai* dengan `masteredOnce` berbunyi "pernah dikuasai,
-       sedang disemak semula" dan bukan "belum cukup bukti". Perkataan penting: **bukan**
-       "hilang penguasaan". Ini satu-satunya bahagian yang menyentuh teks yang ibu bapa baca,
-       jadi ia perlu kelulusan.
-    2. **Susunan "Fokus minggu ini"** (§11). Kemahiran yang tergelincir mendahului yang belum
-       pernah dimulakan — lebih dekat untuk dipulihkan. Tidak kelihatan sebagai label langsung.
+    **Masih belum dibina, dan sengaja.** Perbendaharaan mesti disemak guru dahulu: enum yang
+    dikunci mengunci kandungan bersamanya, dan ia permukaan yang sama seperti senarai
+    sub-kemahiran. Soalan itu kini dalam borang `kssr:review`. Bina selepas jawapannya masuk,
+    bukan sebelum.
+13. ~~**Adakah `masteredOnce` patut mengubah apa yang ibu bapa lihat?**~~
+    **DISELESAIKAN — kedua-duanya diterima, tiada label keempat.**
 
-    Cadangan saya: **buat kedua-duanya.** Risikonya ayat pertama boleh dibaca sebagai notis
-    penurunan pangkat; itu masalah perkataan, dan perkataan boleh diuji pada seorang ibu bapa
-    sebelum ia dihantar. `standardCoverage()` sudah memulangkan `slippedIds` supaya kedua-dua
-    keputusan boleh dibuat tanpa menyentuh semula fungsi tulen itu.
+    **Ayat sokongan**, teks diluluskan:
+
+    ```
+    Sedang dinilai — sudah pernah tunjuk kemahiran ini;
+                     app sedang semak semula
+    ```
+
+    Dua calon terdahulu ditolak: *"belum cukup bukti"* membuang maklumat — ia berbunyi sama
+    bagi anak yang tidak pernah sampai. *"Pernah dikuasai, sedang disemak semula"* masih
+    berbunyi seperti **audit**: pasif, dan anak tiada dalam ayat. Yang diluluskan meletakkan
+    **anak sebagai subjek separuh pertama** dan **app sebagai subjek separuh kedua** — tiada
+    apa yang hilang, app yang sedang bekerja.
+
+    **Belum dikunci:** akan diuji pada seorang ibu bapa sebenar sebelum dihantar.
+
+    **Susunan "Fokus minggu ini"** (§11): kemahiran yang tergelincir mendahului yang belum
+    pernah dimulakan. `standardCoverage()` memulangkan `slippedIds` untuk kedua-duanya.
+    Perincian dalam SPEC §5.7.
