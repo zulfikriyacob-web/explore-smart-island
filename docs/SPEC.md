@@ -730,6 +730,13 @@ nombor dihafal. Bukti dikira mengikut `questionId` berbeza.
 > bentuk. Hari ini enjin hanya boleh menuntut tiga `questionId` berbeza, jadi ambang ini
 > lebih longgar daripada yang guru minta.
 >
+> ⚠️ **Bahagian bentuk di bawah dipertikaikan.** Borang semakan bertanda
+> (`docs/kssr/guru-semakan-pusingan-2-bertanda.md`, 12 September 2026) menjawab **tidak** kepada
+> soalan paksi: kepelbagaian `promptForm` ialah ukuran **kualiti bank soalan**, bukan gerbang
+> penguasaan, dan ambang asas kekal pada tiga item merentas dua sesi sahaja. Ia juga membatalkan
+> senarai pengecualian seluruhnya. Belum dilaksana — PRD §16 item 18 membawa jadualnya dan
+> keputusan itu belum dibuat. Baca item itu sebelum membina apa-apa di atas bahagian ini.
+
 **Dan ditanya dalam dua cara berbeza: `promptForm` mesti berbeza.**
 
 Tiga id boleh menjadi satu soalan ditanya tiga kali dengan nombor ditukar. Paksi yang dikira
