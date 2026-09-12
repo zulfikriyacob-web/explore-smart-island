@@ -666,6 +666,31 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     pasangan itu benar-benar wujud sebagai sub-kemahiran berasingan. Kalau pasangannya tiada,
     buktinya tidak ada tempat lain untuk pergi dan pengecualian tetap diperlukan. Direkod
     bersama peraturan dalam fail kemahiran, bukan hanya di sini.
+
+    #### Jurang mana yang lebih besar — dan apa yang ditulis dahulu
+
+    Selepas semua kerja bentuk ini, mudah membaca keseluruhannya sebagai *"tulis bentuk
+    kedua"*. Nombornya kata sebaliknya.
+
+    | Bar | Berapa daripada 9 sub-kemahiran yang disentuh gagal |
+    |---|---|
+    | Dua `promptForm` berlainan | **9** |
+    | Tiga `questionId` berlainan | **8** |
+
+    Lapan daripada sembilan ada **satu soalan sahaja**. Hanya `1.2.1/count_objects` ada dua,
+    dan kedua-duanya `direct`. Jadi bar tiga-soalan ialah jurang yang lebih besar, dan ia lebih
+    murah untuk ditutup: soalan biasa, tiada perubahan skema, tiada bentuk baharu untuk
+    direka — cuma nombor berbeza dan rakaman.
+
+    **Tulis soalan kedua dan ketiga untuk sub-kemahiran yang sudah ada, sebelum menulis bentuk
+    kedua.** Bentuk tetap perlu selepas itu, dan tiada satu pun kemahiran mencapai *Dikuasai*
+    tanpanya — tetapi memulakan dengan bentuk bermakna membina benda yang paling mahal dahulu
+    untuk sub-kemahiran yang masih gagal bar yang lebih murah.
+
+    Satu pengecualian kepada urutan itu: `7.2.1/name_triangle` dan `name_circle` sudah membawa
+    bentuk `reverse`, jadi pasangan `direct` mereka menutup kedua-dua bar sekali gus. Itu
+    menjadikannya kerja bentuk yang paling berbaloi dalam pek — dan ia yang disekat oleh
+    gambar-dalam-arahan (item 10).
 13. ~~**Adakah `masteredOnce` patut mengubah apa yang ibu bapa lihat?**~~
     **DISELESAIKAN — kedua-duanya diterima, tiada label keempat.**
 
