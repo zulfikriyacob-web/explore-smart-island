@@ -539,21 +539,24 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     di luar tajuk pek. Itu mengubah pengiraan dalam jadual di atas — mengeluarkan ketiga-tiga
     meninggalkan aktiviti tujuh soalan, bukan lapan.
 
-    Kedua: ~~**q005 dan q009 ditulis terbalik.**~~ **DISELESAIKAN, pusingan 2 — dan bukan
-    dengan memilih antara dua nasihat guru. Kedua-duanya betul, untuk perkara berbeza.**
+    Kedua: **q005 dan q009 ditulis terbalik bagi 7.2.1, dan akan ditulis semula — keputusan
+    muktamad daripada borang bertanda.**
 
-    Soalan itu **kekal**. *"Yang mana bentuk segi tiga?"* sah sebagai bentuk `reverse` bagi
-    `name_triangle`: anak diberi nama dan mencari bentuknya, iaitu definisi `reverse` guru
-    sendiri. Yang **kurang** ialah pasangan `direct` — *"Apakah nama bentuk ini?"* dengan
-    gambar dalam soalan.
+    Satu rekod perantaraan di sini pernah berkata soalan itu *kekal* sebagai bentuk `reverse`
+    dan hanya perlu *"tulis pasangannya"*. Borang bertanda membatalkannya: kedua-dua soalan
+    ditanda **☑ Tidak** untuk 7.2.1 — *"Ini menguji pengecaman segi tiga, bukan menamakan segi
+    tiga"* — dan soalan bentuk dijawab **☑ Kemahiran lain, tulis semula**. Guru juga
+    membetulkan penandaan kami: ia bukan `reverse`, tetapi `direct` / `visual` / `select`
+    sebagai item pengecaman.
 
-    Jadi kerjanya bukan *"tulis semula"*. Ia **"tulis pasangannya"**, dan bezanya besar: ia
-    mengekalkan satu-satunya kepelbagaian bentuk yang pek ini ada, dan menamakan tepat apa yang
-    perlu ditulis dan bukan apa yang perlu dibuang.
+    **Sehingga ditulis semula, q005 dan q009 tidak mendakwa apa-apa SP.** Kedua-duanya kekal
+    dalam aktiviti sebagai latihan pengecaman bentuk, tetapi `learningStandard` dan
+    `subSkill` dibuang: soalan yang guru kata tidak mengajar 7.2.1 tidak boleh terus
+    menyumbang bukti kepada `name_triangle` dan `name_circle`. Pek tidak lagi mengisytiharkan
+    SK 7.2, dan amaran merentas-tajuk turun daripada tiga tajuk kepada dua.
 
-    Ia **masih** memerlukan gambar dalam arahan, dan skema masih tiada tempat untuknya — jadual
-    lapisan di bawah kekal terpakai sepenuhnya. Yang berubah ialah kos: dua soalan baharu di
-    samping dua yang sedia ada, bukan dua penulisan semula yang membuang bukti yang sudah ada.
+    Jadual lapisan di bawah **kembali terpakai sepenuhnya**: tulis semula memerlukan gambar
+    dalam arahan, dan skema masih tiada tempat untuknya.
 
     Itu bukan suntingan teks. Ia menukar jenis soalan daripada `mcq-image` kepada `mcq`
     dengan **imej dalam arahan** — dan skema tidak mempunyai tempat untuk imej dalam arahan
@@ -637,60 +640,33 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     arah pemikiran sama. Yang benar-benar `reverse` ialah *"Dalam nombor 63, digit manakah
     yang bernilai 60?"*. Maksudnya tiga "bentuk" yang kami sangka ada, sebenarnya satu.
 
-    **Ambang DIPUTUSKAN: `promptForm` yang dikira.** Dua bentuk berlainan, **di samping**
-    tiga `questionId` berbeza dan dua sesi — bukan menggantikannya. Dua bar itu mengukur risiko
-    berbeza, dan menukar satu dengan satu lagi membawa kadar tersalah label seorang peneka
-    kembali daripada 3.7% ke 11%.
+    ~~**Ambang DIPUTUSKAN: `promptForm` yang dikira.**~~ ~~**MUKTAMAD selepas semakan guru
+    pusingan 2.**~~ Kedua-dua pengisytiharan itu dibatalkan — lihat di bawah dan item 18.
 
-    `responseMode` ditolak sebagai paksi bukti kerana **senarai sub-kemahiran sudah
-    memisahkannya** di mana ia penting — mengetuk untuk membilang lawan memilih nombor ialah
-    dua sub-kemahiran, bukan dua bentuk. `representation` ditolak kerana ia mengubah kesukaran,
-    yang sudah ada medannya sendiri. Jadual penuh dalam SPEC §5.7.
+    **AMBANG MUKTAMAD, daripada borang semakan bertanda: tiga item berbeza, betul cubaan
+    pertama, merentas sekurang-kurangnya dua sesi. Tiada syarat bentuk.**
 
-    **MUKTAMAD selepas semakan guru pusingan 2.** Dua peraturan ditambah:
+    Bar dua-bentuk, peraturan *"bentuk sama + ayat berbeza = satu bentuk"* sebagai syarat,
+    `responseMode` sebagai paksi yang *kadang-kadang* dikira, sembilan pengecualian, dan
+    peraturan *"reverse ialah sub-kemahiran sebelah"* bersama syarat guru padanya — **semuanya
+    dibatalkan**. Kepelbagaian bentuk ialah ukuran kualiti bank soalan, bukan gerbang
+    penguasaan, jadi tiada apa untuk dikira dan tiada apa untuk dikecualikan.
 
-    **(a) Bentuk sama + ayat berbeza = satu bentuk.** `wordingVariant` tidak pernah dikira.
-    Dikuatkuasakan dalam `coverage.ts` (dengan ujian, bukan dengan ketiadaan medan) dan
-    disebut dengan nama oleh `validate:content` apabila satu-satunya kepelbagaian ialah ayat.
+    Nombor bentuk **dipindahkan**, tidak dibuang: `validate:content` mencetaknya berlabel
+    `item bank:` sebagai panduan penulisan.
 
-    **(b) `responseMode` dikira kadang-kadang** — hanya apabila ia mengubah cara murid
-    **berfikir**, bukan cara dia menekan. Peraturan pertimbangan, bukan mekanikal; lihat
-    item 17. Sehingga ia dibina, ia tidak dikira sama sekali.
+    #### Jurang yang tinggal — dan pembetulan pada jadual yang pernah ada di sini
 
-    **Pengecualian: sembilan, disemak dan diluluskan guru.** `teacherReviewed: true` dalam
-    `math-y1.skills.json`. `count_10_up` **dibuang** — kami menandakannya sebagai pengecualian
-    paling lemah dalam borang, dan guru bersetuju: not RM10 dan bingkai-sepuluh memberi konteks
-    harian yang jujur, jadi bentuk situasi memang boleh ditulis untuknya.
+    Jadual yang pernah ada di bahagian ini berkata **8** daripada 9 sub-kemahiran gagal bar
+    tiga-soalan. **Itu salah.** Lapan ada **satu** soalan sahaja; yang kesembilan,
+    `count_objects`, ada **dua** — dan dua masih kurang daripada tiga. **Kesemua 9** gagal bar
+    itu. "Ada satu soalan sahaja" telah dibaca sebagai "gagal bar", dan dua perkara itu tidak
+    sama. Pembetulan ini tidak mengubah arah kesimpulannya; ia menjadikan jurang itu lebih besar.
 
-    **Syarat guru pada peraturan "reverse ialah sub-kemahiran sebelah":** ia hanya sah kalau
-    pasangan itu benar-benar wujud sebagai sub-kemahiran berasingan. Kalau pasangannya tiada,
-    buktinya tidak ada tempat lain untuk pergi dan pengecualian tetap diperlukan. Direkod
-    bersama peraturan dalam fail kemahiran, bukan hanya di sini.
-
-    #### Jurang mana yang lebih besar — dan apa yang ditulis dahulu
-
-    Selepas semua kerja bentuk ini, mudah membaca keseluruhannya sebagai *"tulis bentuk
-    kedua"*. Nombornya kata sebaliknya.
-
-    | Bar | Berapa daripada 9 sub-kemahiran yang disentuh gagal |
-    |---|---|
-    | Dua `promptForm` berlainan | **9** |
-    | Tiga `questionId` berlainan | **8** |
-
-    Lapan daripada sembilan ada **satu soalan sahaja**. Hanya `1.2.1/count_objects` ada dua,
-    dan kedua-duanya `direct`. Jadi bar tiga-soalan ialah jurang yang lebih besar, dan ia lebih
-    murah untuk ditutup: soalan biasa, tiada perubahan skema, tiada bentuk baharu untuk
-    direka — cuma nombor berbeza dan rakaman.
-
-    **Tulis soalan kedua dan ketiga untuk sub-kemahiran yang sudah ada, sebelum menulis bentuk
-    kedua.** Bentuk tetap perlu selepas itu, dan tiada satu pun kemahiran mencapai *Dikuasai*
-    tanpanya — tetapi memulakan dengan bentuk bermakna membina benda yang paling mahal dahulu
-    untuk sub-kemahiran yang masih gagal bar yang lebih murah.
-
-    Satu pengecualian kepada urutan itu: `7.2.1/name_triangle` dan `name_circle` sudah membawa
-    bentuk `reverse`, jadi pasangan `direct` mereka menutup kedua-dua bar sekali gus. Itu
-    menjadikannya kerja bentuk yang paling berbaloi dalam pek — dan ia yang disekat oleh
-    gambar-dalam-arahan (item 10).
+    Dengan bar bentuk hilang, bar soalan ialah **satu-satunya** jurang kepada *Dikuasai*. Ia
+    ditutup dengan soalan biasa — tiada skema, tiada bentuk baharu, cuma nombor berbeza dan
+    rakaman. `validate:content` kini mencetak berapa soalan lagi setiap sub-kemahiran perlukan,
+    dan jumlahnya.
 13. ~~**Adakah `masteredOnce` patut mengubah apa yang ibu bapa lihat?**~~
     **DISELESAIKAN — kedua-duanya diterima, tiada label keempat.**
 
@@ -712,11 +688,41 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     **Susunan "Fokus minggu ini"** (§11): kemahiran yang tergelincir mendahului yang belum
     pernah dimulakan. `standardCoverage()` memulangkan `slippedIds` untuk kedua-duanya.
     Perincian dalam SPEC §5.7.
-18. **Borang bertanda membatalkan ambang yang PR #43 gabungkan. Belum diputuskan.**
+19. **Merekod ketukan dan nombor akhir secara berasingan pada count-tap — bertembung dengan
+    ujian pengguna. Belum diputuskan.**
+
+    Borang bertanda mencatat pada q003 dan q006: *"Jika app merekod ketukan dan nombor akhir
+    secara berasingan, aktiviti ini boleh memberi bukti kepada membilang objek dan menamakan
+    nombor bagi kuantiti."* Itu akan membolehkan satu count-tap menyumbang kepada dua
+    sub-kemahiran 1.2.1: `count_objects` dan `quantity_to_number`.
+
+    **Tetapi count-tap hari ini tiada nombor akhir yang berasingan.** Ketukan itu sendiri ialah
+    jawapan, dan kiraan ketukan dihantar terus. Langkah nombor dibuang dengan sengaja:
+
+    > *"The number pad this used to name is gone — user testing showed it made counting two
+    > steps, and a 7-year-old could not tell which step had failed."* — `schema.ts`,
+    > `CountTapSchema`, `answerInput` (SPEC §3.4)
+
+    Jadi "merekod berasingan" hanya boleh bermakna satu daripada dua perkara, dan kedua-duanya
+    berharga:
+
+    | Pilihan | Harga |
+    |---|---|
+    | **Kembalikan langkah nombor** — anak mengetuk, kemudian memilih atau menaip jumlah | Membalikkan keputusan ujian pengguna: kanak-kanak tersekat antara dua langkah dan tidak tahu yang mana gagal |
+    | **Kira satu ketukan sebagai bukti untuk kedua-dua sub-kemahiran** | Mengira satu tindakan sebagai dua bukti. Tiada tindakan menamakan nombor untuk diperhati, jadi `quantity_to_number` akan menerima bukti yang tidak pernah berlaku |
+
+    Pilihan pertama mungkin betul — tetapi ia keputusan reka bentuk yang perlu diuji semula
+    pada kanak-kanak, bukan suntingan pemetaan.
+
+    **Tidak dilaksana.** Sehingga diputuskan, count-tap memberi bukti kepada `count_objects`
+    sahaja, seperti hari ini.
+18. ~~**Borang bertanda membatalkan ambang yang PR #43 gabungkan. Belum diputuskan.**~~
+    **DISELESAIKAN — bar bentuk dibalikkan mengikut borang.**
 
     `docs/kssr/guru-semakan-pusingan-2-bertanda.md` dikembalikan bertanda pada 12 September
-    2026. Empat jawapannya **membatalkan** keputusan yang kami rekod sebagai diluluskan sehari
-    sebelumnya, dan satu daripadanya membatalkan asas kepada tiga yang lain.
+    2026. Empat jawapannya **membatalkan** keputusan yang kami rekod sebagai diluluskan pada
+    hari yang sama — PR #43 digabung pada 12 September 2026, 19:55; rekod asal di sini tersilap
+    menyebut "sehari sebelumnya" — dan satu daripadanya membatalkan asas kepada tiga yang lain.
 
     | Soalan | Kami rekod | Borang bertanda kata |
     |---|---|---|
@@ -731,35 +737,69 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     laporan kualiti kandungan — yang `validate:content` sudah cetak setiap binaan — dan bukan
     gerbang yang menahan label seorang anak.
 
-    **Belum dilaksana.** Ia membalikkan `coverage.ts`, `FORMS_FOR_MASTERY`, blok pengecualian
-    dalam fail kemahiran, dan bahagian ambang SPEC §5.7. Itu keputusan awak, bukan keputusan
-    saya, dan ia patut dibuat sambil melihat borang itu sendiri.
+    **Dilaksana, atas keputusan pemilik projek selepas membaca borang.** `FORMS_FOR_MASTERY`
+    dan `formExempt` dibuang daripada `coverage.ts`; bukti kini hanya `questionId` dan
+    `sessionId`. Blok pengecualian dibuang daripada fail kemahiran, digantikan satu nota
+    pembatalan. SPEC §5.7 menulis semula bahagian ambang. `validate:content` kini melaporkan
+    dua perkara berasingan: jurang bar tiga soalan, iaitu jurang sebenar, dan kepelbagaian
+    bentuk berlabel `item bank:`, iaitu laporan kualiti kandungan dan bukan gerbang. Borang
+    `kssr:review` berhenti bertanya soalan paksi, pengecualian dan peraturan sebelah, kerana
+    ketiga-tiganya sudah dijawab.
 
-    **Tiga nota kandungan dalam borang yang sama, belum dilaksana juga:**
+    **Tiga nota kandungan dalam borang yang sama:**
 
-    - **1.2.1** — namakan semula *"Memilih nombor yang mewakili kuantiti yang dibilang"* kepada
-      *"Menamakan nombor bagi kumpulan objek sebagai mewakili kuantiti"*. Alasannya tajam:
-      **"Memilih" ialah cara jawab, bukan nama kemahiran.** Nama sub-kemahiran kita membawa
-      `responseMode` di dalamnya, dan itu mencampurkan dua paksi yang guru sendiri asingkan.
-    - **2.2.2** — *"Menambah gandaan sepuluh"* dan *"Tambah dalam bentuk situasi harian"* bukan
-      sub-kemahiran wajib. Guna empat kelompok: `two_digit_plus_one_digit_no_bridge`,
-      `two_digit_plus_one_digit_bridge`, `two_digit_plus_two_digit_no_bridge`,
-      `two_digit_plus_two_digit_bridge`. q008 masuk yang ketiga, dengan tag diagnostik
-      `multiple_of_10`. Situasi harian pindah ke **2.4.2**.
-    - **1.2.1 / q003, q006** — kalau app merekod ketukan dan nombor akhir **berasingan**, satu
-      aktiviti count-tap boleh memberi bukti kepada **dua** sub-kemahiran sekali gus.
+    - **1.2.1 — dilaksana.** *"Memilih nombor yang mewakili kuantiti yang dibilang"* dinamakan
+      semula *"Menamakan nombor bagi kumpulan objek sebagai mewakili kuantiti"*, iaitu
+      perkataan DSKP 1.2.1(ii). Alasannya tajam: **"Memilih" ialah cara jawab, bukan nama
+      kemahiran.** Nama sub-kemahiran kita membawa `responseMode` di dalamnya, dan itu
+      mencampurkan dua paksi yang guru sendiri asingkan.
 
-    **Dua petikan yang tidak ada dalam borang ini**, direkod supaya tiada siapa mencarinya:
-    ayat *"Nisbah 1/6 tidak boleh dianggap murid gagal 5 kemahiran lain"* dan keperluan
-    *"setiap sub-kemahiran patut ada sekurang-kurangnya satu direct + satu reverse, kecuali
-    yang membilang"* **tidak muncul** dalam dokumen ini. Kedua-duanya mungkin datang daripada
-    perbualan lain. Larangan liputan-bukan-penguasaan SPEC §5.7 kekal sebagai keputusan kami
-    sendiri sehingga ada sumber manusia yang boleh dirujuk.
+      Label `1.2.2/quantity_to_number` — *"Memilih nombor bagi sekumpulan objek"* — membawa
+      kecacatan yang sama. Guru tidak menyentuhnya, jadi ia **tidak diubah**; disebut di sini
+      supaya ia ditanya, bukan diteka.
+    - **2.2.2 — dilaksana.** *"Menambah gandaan sepuluh"* dan *"Tambah dalam bentuk situasi
+      harian"* bukan sub-kemahiran wajib. Empat kelompok, id verbatim guru:
+      `two_digit_plus_one_digit_no_bridge`, `two_digit_plus_one_digit_bridge`,
+      `two_digit_plus_two_digit_no_bridge`, `two_digit_plus_two_digit_bridge`. q008 masuk yang
+      ketiga, dengan tag diagnostik `multiple_of_10`. Situasi harian direkod sebagai milik
+      **2.4.2**, belum dipecahkan kerana tiada soalan memetik 2.4.2.
+    - **1.2.1 / q003, q006 — tidak dilaksana.** Merekod ketukan dan nombor akhir secara
+      berasingan bertembung dengan keputusan ujian pengguna yang membuang langkah nombor.
+      Item 19.
 
-    **Dan borang ini bukan tandatangan.** Ia berkata begitu sendiri: ruang nama dan sekolah
-    sengaja kosong, dan ia *"tidak patut digunakan sendiri untuk menaikkan `kssr.verified`"*.
-    `kssr.verified` kekal `false`.
-17. **Bila `responseMode` dikira sebagai bentuk berbeza?** Diagnosis, belum dibina.
+    #### Dua kesilapan pemilik projek semasa menyerahkan borang ini
+
+    Direkod atas permintaannya sendiri: *"DAN SAYA SALAH PADA DUA PERKARA — rekod
+    kedua-duanya."*
+
+    **1. Dua petikan dikaitkan dengan borang, dan kedua-duanya tiada di dalamnya.** Mesej yang
+    menyerahkan borang berkata guru mengesahkan larangan liputan-bukan-penguasaan *"dengan
+    perkataannya sendiri"*: *"Nisbah 1/6 tidak boleh dianggap murid gagal 5 kemahiran lain."*
+    Mesej itu meminta silang rujuk dari SPEC §5.7 ke fail ini, dan merekod keperluan *"setiap
+    sub-kemahiran patut ada sekurang-kurangnya satu direct + satu reverse, kecuali
+    sub-kemahiran yang membilang"* sebagai datang daripada guru. Dicari dalam fail: tiada
+    kedua-duanya. Dalam perkataan pemilik projek: *"Saya membacanya daripada mesej dan
+    menganggap ia daripada dokumen."*
+
+    Silang rujuk itu **tidak ditulis**, dan keperluan direct + reverse **tidak direkod** sebagai
+    keperluan kandungan guru. Atribusi palsu lebih teruk daripada tiada atribusi: seluruh sebab
+    silang rujuk diminta ialah supaya larangan itu ada sumber manusia yang **benar**. Larangan
+    liputan-bukan-penguasaan kekal sebagai **keputusan projek**, dan SPEC §5.7 kini menandanya
+    begitu.
+
+    **2. Borang ini disebut "ditandatangani", dan `kssr.verified` dikatakan boleh naik.**
+    Dalam perkataan pemilik projek: *"Saya kata kssr.verified boleh naik. Ia tidak boleh."*
+    Borang itu berkata sendiri bahawa ruang nama dan sekolah sengaja tidak diisi, bahawa ia
+    *"bukan tandatangan guru bertauliah"*, dan bahawa ia *"tidak patut digunakan sendiri untuk
+    menaikkan `kssr.verified`"*. **`kssr.verified` kekal `false`.**
+
+    Kedua-duanya bentuk kesilapan yang sama: membaca apa yang dijangka ada dalam dokumen, bukan
+    apa yang ada. Pembetulannya juga sama — buka fail, cari rentetan, baca nota statusnya.
+17. ~~**Bila `responseMode` dikira sebagai bentuk berbeza?**~~ **TIDAK LAGI RELEVAN.**
+    Borang bertanda (item 18) memutuskan bahawa tiada paksi soalan — termasuk `responseMode` —
+    ialah gerbang penguasaan, jadi soalan bila ia *dikira* tidak lagi wujud. Diagnosis di bawah
+    dikekalkan sebagai rekod: ia masih berguna kepada penulis soalan yang memilih
+    `responseMode` atas sebab pedagogi.
 
     Guru menetapkan peraturannya: ia dikira **hanya jika ia mengubah cara murid berfikir, bukan
     hanya cara dia menekan.** Dua contohnya menetapkan kedua-dua hujung — `select` → `input`

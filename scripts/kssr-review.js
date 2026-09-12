@@ -120,7 +120,6 @@ async function loadSkills(subject, year) {
   }
   return {
     byStandard: new Map(Object.entries(raw.standards ?? {})),
-    exemptions: raw.promptFormExemptions ?? null,
   };
 }
 
@@ -256,15 +255,16 @@ function emitSubSkills(out, pack, skills) {
 }
 
 /**
- * The three axes, the tagging we did with them, and the third thing this form
- * asks a teacher.
+ * The three axes and the tagging we did with them.
  *
  * The previous version of this section offered five flat names — direct,
  * inverted, select, story, visual — and asked whether they were enough. The
  * answer was no: they mixed how a question is built with how information is
  * shown and with what the child does. Those five are gone. What is asked now is
- * narrower and harder: we tagged ten questions using the teacher's own axes, and
- * one of those taggings contradicts something the same teacher told us earlier.
+ * narrower: whether we tagged this pack's questions with the teacher's own axes
+ * correctly. What it used to ask after that — which axis counts as evidence,
+ * and which sub-skills to exempt — a marked review answered, and those
+ * questions are gone rather than asked twice.
  */
 function emitAxes(out, pack) {
   const tagged = pack.questions.filter((q) => q.promptForm);
@@ -298,213 +298,6 @@ function emitAxes(out, pack) {
       `\`____________________________________\``,
   );
   out.push('');
-
-  /*
-    The question that matters most, and the only one that can undo a decision
-    already recorded. Worth its own heading so it is not read past.
-  */
-  const reversed = tagged.filter((q) => q.promptForm === 'reverse');
-  if (reversed.length > 0) {
-    out.push('### Soalan bentuk — `terbalik`, atau kemahiran lain?');
-    out.push('');
-    out.push(
-      `Kami menanda ${reversed.map((q) => `**"${cell(q.prompt[LANG])}"**`).join(' dan ')} sebagai ` +
-        `**terbalik**: anak diberi nama, dan perlu mencari bentuknya. Itu definisi cikgu ` +
-        `sendiri — diberi nilai, cari benda.`,
-    );
-    out.push('');
-    out.push(
-      `Tetapi cikgu juga pernah berkata soalan ini **ditulis terbalik** bagi SP 7.2.1, kerana ` +
-        `7.2.1 ialah *"menamakan"* dan soalan ini meminta pengecaman. Kami merekod itu sebagai ` +
-        `kerja yang perlu dibuat: tukar kepada "Apakah nama bentuk ini?", yang memerlukan ` +
-        `perubahan skema untuk meletakkan gambar dalam arahan.`,
-    );
-    out.push('');
-    out.push(
-      `**Kami rasa dua nasihat cikgu bertembung di sini, dan mungkin cikgu tidak perasan** — ` +
-        `ia diberi dalam dua surat berasingan, beberapa minggu berbeza. Yang pertama kata ` +
-        `soalan ini salah bentuk. Yang kedua memberi definisi \`reverse\` yang menjadikan ` +
-        `soalan ini **betul**, cuma bukan satu-satunya bentuk yang diperlukan. Kami tidak ` +
-        `memilih antara keduanya; itu keputusan cikgu.`,
-    );
-    out.push('');
-    out.push('Kedua-duanya tidak boleh betul serentak, dan jawapannya mengubah kerja:');
-    out.push('');
-    out.push('| Kalau | Maka |');
-    out.push('|---|---|');
-    out.push(
-      `| Ia **terbalik** bagi kemahiran yang sama | Soalan sedia ada kekal. Kami cuma perlu ` +
-        `menulis pasangan **terus** untuk setiap bentuk — soalan biasa, tiada perubahan skema |`,
-    );
-    out.push(
-      `| Ia **kemahiran lain** | Soalan sedia ada perlu ditulis semula, gambar mesti masuk ke ` +
-        `dalam arahan, dan skema perlu berubah dahulu |`,
-    );
-    out.push('');
-    out.push(
-      `**Yang mana?** ☐ Terbalik, kemahiran sama  ☐ Kemahiran lain, tulis semula  ` +
-        `☐ Lain: \`__________________\``,
-    );
-    out.push('');
-  }
-
-  /*
-    The number the teacher should have before answering the threshold question.
-    Put ahead of it, not after: it is the difference between "which axis counts"
-    read as theory and read as a decision with a visible consequence.
-  */
-  const bySkill = new Map();
-  for (const q of tagged) {
-    if (!q.subSkill) continue;
-    if (!bySkill.has(q.subSkill)) bySkill.set(q.subSkill, new Set());
-    bySkill.get(q.subSkill).add(q.promptForm);
-  }
-  const single = [...bySkill.values()].filter((f) => f.size < 2).length;
-  if (bySkill.size > 0 && single === bySkill.size) {
-    out.push('### Sebelum cikgu jawab: pek ini tiada kepelbagaian bentuk langsung');
-    out.push('');
-    out.push(
-      `Kami mengira selepas menanda. **Kesemua ${bySkill.size} sub-kemahiran yang pek ini ` +
-        `sentuh ditanya dalam satu bentuk sahaja.** Lapan daripada sepuluh soalan ialah ` +
-        `*terus*, dan dua *terbalik* itu ialah dua soalan yang cikgu sendiri kata ditulis ` +
-        `terbalik.`,
-    );
-    out.push('');
-    out.push(
-      `Maksudnya seluruh bekalan kepelbagaian bentuk kami datang daripada satu kesilapan — ` +
-        `dan kalau cikgu jawab "tulis semula" pada soalan sebelum ini, kami akan tinggal ` +
-        `dengan **sifar**.`,
-    );
-    out.push('');
-    out.push(
-      `Kesannya kalau bentuk dikira: **tiada satu pun kemahiran boleh mencapai "Dikuasai" hari ` +
-        `ini.** Bukan kerana anak, dan bukan kerana kemahiran yang belum diuji — kerana setiap ` +
-        `soalan yang kami tulis bertanya dengan cara yang sama. Itu jurang penulisan, dan kami ` +
-        `rasa betul untuk app berkata begitu daripada berpura-pura sebaliknya. Tetapi cikgu ` +
-        `patut tahu harganya sebelum menjawab soalan seterusnya.`,
-    );
-    out.push('');
-  }
-
-  out.push('### Paksi mana yang dikira sebagai bukti berasingan?');
-  out.push('');
-  out.push(
-    `Untuk mengira satu kemahiran sebagai *Dikuasai*, app perlu beberapa jawapan betul yang ` +
-      `benar-benar berlainan. Persoalannya: berlainan pada paksi yang mana?`,
-  );
-  out.push('');
-  out.push('| Paksi | Cadangan kami | Sebab |');
-  out.push('|---|---|---|');
-  out.push(
-    `| **Bentuk** (terus / terbalik / situasi) | **Dikira** | Arah pemikiran berubah. Anak ` +
-      `yang boleh buat terus tetapi tidak terbalik belum faham sepenuhnya |`,
-  );
-  out.push(
-    `| **Cara jawab** (pilih / ketuk / …) | **Tidak dikira** | Di mana ia benar-benar menguji ` +
-      `perkara berlainan, senarai sub-kemahiran sudah memisahkannya — cth. mengetuk untuk ` +
-      `membilang lawan memilih nombor ialah dua sub-kemahiran, bukan dua bentuk |`,
-  );
-  out.push(
-    `| **Persembahan** (simbolik / visual / campuran) | **Tidak dikira** | Ia mengubah ` +
-      `kesukaran, bukan arah pemikiran. Kesukaran sudah ada medannya sendiri |`,
-  );
-  out.push(
-    `| **Variasi ayat** (A / B / C) | **Tidak dikira** | Itu sebab cikgu mengasingkannya |`,
-  );
-  out.push('');
-  out.push(`**Setuju?** ☐ Ya  ☐ Tidak — sepatutnya: \`____________________________________\``);
-  out.push('');
-  out.push(
-    `> Kesan pada pek hari ini, kalau **bentuk** yang dikira: kesepuluh-sepuluh soalan ` +
-      `menyentuh sembilan sub-kemahiran, dan **setiap satu daripada sembilan itu ditanya dalam ` +
-      `satu bentuk sahaja**. Tiada satu pun boleh mencapai *Dikuasai* sehingga soalan bentuk ` +
-      `kedua ditulis. Kami rasa itu betul dan bukan masalah — tetapi cikgu yang tahu.`,
-  );
-  out.push('');
-}
-
-/**
- * The sub-skills we propose to exempt from the form bar, and the rule that
- * shrank the list.
- *
- * Placed after the threshold question, not before: the exemption means nothing
- * until a teacher has understood what it is an exemption *from*.
- *
- * This is a curriculum decision wearing a technical hat — it decides which
- * sub-skills cannot reach "Dikuasai" by the ordinary route — and it is cheaper
- * to review beside the threshold than in a third round. The teacher wrote the
- * decomposition, so they will know at once if our rule misread their list.
- */
-function emitExemptions(out, skills) {
-  const ex = skills.exemptions;
-  const entries = Object.entries(ex?.exempt ?? {});
-  if (entries.length === 0) return;
-
-  const labelFor = (key) => {
-    const [sp, id] = key.split('/');
-    const found = (skills.byStandard.get(sp)?.subSkills ?? []).find((s) => s.id === id);
-    return found?.label?.[LANG] ?? id;
-  };
-
-  out.push('### Dan pengecualian: kemahiran yang hanya ada satu bentuk');
-  out.push('');
-  out.push(
-    `Kalau bentuk dikira, satu kemahiran yang hanya **boleh** ditanya dalam satu bentuk tidak ` +
-      `akan pernah mencapai *Dikuasai*. Itu mod kegagalan yang sama seperti menuntut tiga ` +
-      `bentuk: **bar yang tiada siapa boleh lepasi tidak memberitahu ibu bapa apa-apa.**`,
-  );
-  out.push('');
-  out.push(
-    `Jadi kemahiran begitu dikecualikan daripada syarat bentuk, dan kekal pada tiga soalan ` +
-      `berbeza merentas dua sesi seperti sebelum ini. Ini **cadangan kami, bukan keputusan ` +
-      `cikgu** — cikgu yang menulis pecahan sub-kemahiran itu, jadi cikgu yang akan tahu ` +
-      `dengan segera kalau kami tersalah baca senarainya.`,
-  );
-  out.push('');
-
-  if (ex.rule) {
-    out.push('**Peraturan yang mengecilkan senarai ini kepada sepuluh:**');
-    out.push('');
-    out.push(
-      `> Apabila bentuk *terbalik* bagi satu sub-kemahiran ialah sub-kemahiran **sebelah** ` +
-        `dalam senarai yang sama, ia **tidak** dikecualikan — buktinya cuma milik yang sebelah.`,
-    );
-    out.push('');
-    out.push(
-      `Contohnya: *terbalik* bagi **menentukan nombor sebelum** ialah **menentukan nombor ` +
-        `selepas**, dan kedua-duanya sudah ada dalam senarai 1.2.2. Jadi kedua-duanya masih ` +
-        `boleh ditanya secara *terus* dan *situasi*, dan tiada satu pun dikecualikan. ` +
-        `Peraturan itu memotong senarai daripada tekaan kepada sepuluh.`,
-    );
-    out.push('');
-    out.push(
-      `**Adakah peraturan itu membaca senarai cikgu dengan betul?** ☐ Ya  ` +
-        `☐ Tidak: \`____________________________________\``,
-    );
-    out.push('');
-  }
-
-  out.push(`**Sepuluh yang kami cadang kecualikan**, setiap satu dengan sebab kami:`);
-  out.push('');
-
-  for (const [key, why] of entries) {
-    const [sp] = key.split('/');
-    out.push(`**${cell(labelFor(key))}** · \`${key}\``);
-    out.push('');
-    out.push(`> ${cell(why)}`);
-    out.push('');
-    out.push(`☐ Setuju  ☐ Tidak — sebabnya: \`____________________________________\`  *(${sp})*`);
-    out.push('');
-  }
-
-  if (ex.notExempt) {
-    out.push(
-      `> Setiap sub-kemahiran lain **tidak** dikecualikan. Itu arah yang lebih selamat untuk ` +
-        `tersilap: tidak dikecualikan bermakna bar lebih tinggi, dan bar lebih tinggi tersilap ` +
-        `dengan mendakwa terlalu sedikit, bukan terlalu banyak.`,
-    );
-    out.push('');
-  }
 }
 
 /**
@@ -669,7 +462,6 @@ async function emitPack(pack, out) {
   if (skills !== null) {
     emitSubSkills(out, pack, skills);
     emitAxes(out, pack);
-    emitExemptions(out, skills);
   }
 
   emitReference(out, pack, catalogue);

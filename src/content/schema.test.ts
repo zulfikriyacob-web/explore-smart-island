@@ -265,10 +265,10 @@ describe('pack rules', () => {
   it('rejects a learning standard whose content standard is not declared', async () => {
     const pack = await mathPack();
     const kssr = structuredClone(pack.kssr) as { contentStandards: string[] };
-    kssr.contentStandards = kssr.contentStandards.filter((sk) => sk !== '7.2');
+    kssr.contentStandards = kssr.contentStandards.filter((sk) => sk !== '2.2');
     const result = TopicPackSchema.safeParse({ ...pack, kssr });
     expect(result.success).toBe(false);
-    expect(issueMessages(result)).toContain('sits under content standard "7.2"');
+    expect(issueMessages(result)).toContain('sits under content standard "2.2"');
   });
 
   /*
