@@ -118,7 +118,10 @@ async function loadSkills(subject, year) {
     if (err.code === 'ENOENT') return null;
     throw new Error(`skills file ${path.relative(ROOT, file)} is unreadable: ${err.message}`);
   }
-  return { byStandard: new Map(Object.entries(raw.standards ?? {})) };
+  return {
+    byStandard: new Map(Object.entries(raw.standards ?? {})),
+    exemptions: raw.promptFormExemptions ?? null,
+  };
 }
 
 /**
@@ -421,6 +424,90 @@ function emitAxes(out, pack) {
 }
 
 /**
+ * The sub-skills we propose to exempt from the form bar, and the rule that
+ * shrank the list.
+ *
+ * Placed after the threshold question, not before: the exemption means nothing
+ * until a teacher has understood what it is an exemption *from*.
+ *
+ * This is a curriculum decision wearing a technical hat — it decides which
+ * sub-skills cannot reach "Dikuasai" by the ordinary route — and it is cheaper
+ * to review beside the threshold than in a third round. The teacher wrote the
+ * decomposition, so they will know at once if our rule misread their list.
+ */
+function emitExemptions(out, skills) {
+  const ex = skills.exemptions;
+  const entries = Object.entries(ex?.exempt ?? {});
+  if (entries.length === 0) return;
+
+  const labelFor = (key) => {
+    const [sp, id] = key.split('/');
+    const found = (skills.byStandard.get(sp)?.subSkills ?? []).find((s) => s.id === id);
+    return found?.label?.[LANG] ?? id;
+  };
+
+  out.push('### Dan pengecualian: kemahiran yang hanya ada satu bentuk');
+  out.push('');
+  out.push(
+    `Kalau bentuk dikira, satu kemahiran yang hanya **boleh** ditanya dalam satu bentuk tidak ` +
+      `akan pernah mencapai *Dikuasai*. Itu mod kegagalan yang sama seperti menuntut tiga ` +
+      `bentuk: **bar yang tiada siapa boleh lepasi tidak memberitahu ibu bapa apa-apa.**`,
+  );
+  out.push('');
+  out.push(
+    `Jadi kemahiran begitu dikecualikan daripada syarat bentuk, dan kekal pada tiga soalan ` +
+      `berbeza merentas dua sesi seperti sebelum ini. Ini **cadangan kami, bukan keputusan ` +
+      `cikgu** — cikgu yang menulis pecahan sub-kemahiran itu, jadi cikgu yang akan tahu ` +
+      `dengan segera kalau kami tersalah baca senarainya.`,
+  );
+  out.push('');
+
+  if (ex.rule) {
+    out.push('**Peraturan yang mengecilkan senarai ini kepada sepuluh:**');
+    out.push('');
+    out.push(
+      `> Apabila bentuk *terbalik* bagi satu sub-kemahiran ialah sub-kemahiran **sebelah** ` +
+        `dalam senarai yang sama, ia **tidak** dikecualikan — buktinya cuma milik yang sebelah.`,
+    );
+    out.push('');
+    out.push(
+      `Contohnya: *terbalik* bagi **menentukan nombor sebelum** ialah **menentukan nombor ` +
+        `selepas**, dan kedua-duanya sudah ada dalam senarai 1.2.2. Jadi kedua-duanya masih ` +
+        `boleh ditanya secara *terus* dan *situasi*, dan tiada satu pun dikecualikan. ` +
+        `Peraturan itu memotong senarai daripada tekaan kepada sepuluh.`,
+    );
+    out.push('');
+    out.push(
+      `**Adakah peraturan itu membaca senarai cikgu dengan betul?** ☐ Ya  ` +
+        `☐ Tidak: \`____________________________________\``,
+    );
+    out.push('');
+  }
+
+  out.push(`**Sepuluh yang kami cadang kecualikan**, setiap satu dengan sebab kami:`);
+  out.push('');
+
+  for (const [key, why] of entries) {
+    const [sp] = key.split('/');
+    out.push(`**${cell(labelFor(key))}** · \`${key}\``);
+    out.push('');
+    out.push(`> ${cell(why)}`);
+    out.push('');
+    out.push(`☐ Setuju  ☐ Tidak — sebabnya: \`____________________________________\`  *(${sp})*`);
+    out.push('');
+  }
+
+  if (ex.notExempt) {
+    out.push(
+      `> Setiap sub-kemahiran lain **tidak** dikecualikan. Itu arah yang lebih selamat untuk ` +
+        `tersilap: tidak dikecualikan bermakna bar lebih tinggi, dan bar lebih tinggi tersilap ` +
+        `dengan mendakwa terlalu sedikit, bukan terlalu banyak.`,
+    );
+    out.push('');
+  }
+}
+
+/**
  * Every SP the form cites, once, at the end — full text, sub-points, CATATAN,
  * and the content standard, topic and area it sits under.
  *
@@ -582,6 +669,7 @@ async function emitPack(pack, out) {
   if (skills !== null) {
     emitSubSkills(out, pack, skills);
     emitAxes(out, pack);
+    emitExemptions(out, skills);
   }
 
   emitReference(out, pack, catalogue);

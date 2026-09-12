@@ -13,16 +13,16 @@
     "note": "CADANGAN KAMI, BUKAN KEPUTUSAN GURU. Ambang penguasaan menuntut dua promptForm berlainan (SPEC 5.7). Sub-kemahiran di sini hanya menyokong satu, jadi ambang itu akan menjadikannya kekal mustahil dicapai — mod kegagalan sama yang menjatuhkan peraturan tiga-bentuk. Yang dikecualikan kekal pada tiga questionId berbeza. Padam entri yang guru tolak; tambah yang dia namakan.",
     "rule": "Yang mengecilkan senarai ini: apabila 'reverse' bagi satu sub-kemahiran ialah sub-kemahiran sebelah dalam senarai yang sama, reverse bukan tidak wujud — buktinya cuma milik yang sebelah. Contoh: reverse bagi 'before' ialah 'after'; reverse bagi 'count_objects' ialah 'number_to_quantity'. Sub-kemahiran begitu masih ada 'direct' dan 'contextual', jadi ia TIDAK dikecualikan.",
     "exempt": {
-      "1.5.1/count_1_up": "reverse ialah count_1_down, sub-kemahiran sebelah. contextual menjadikannya masalah berayat yang anak mesti baca sebelum dia boleh membilang — itu mengukur bacaan, bukan membilang.",
-      "1.5.1/count_1_down": "sama; reverse ialah count_1_up.",
-      "1.5.1/count_2_up": "sama; reverse ialah count_2_down.",
-      "1.5.1/count_2_down": "sama; reverse ialah count_2_up.",
-      "1.5.1/count_4_up": "sama; reverse ialah count_4_down.",
-      "1.5.1/count_4_down": "sama; reverse ialah count_4_up.",
-      "1.5.1/count_5_up": "sama; reverse ialah count_5_down.",
-      "1.5.1/count_5_down": "sama; reverse ialah count_5_up.",
-      "1.5.1/count_10_up": "sama; reverse ialah count_10_down.",
-      "1.5.1/count_10_down": "sama; reverse ialah count_10_up."
+      "1.5.1/count_1_up": "Bentuk terbalik ialah membilang satu-satu MENURUN, yang sudah menjadi sub-kemahiran sebelah — buktinya milik yang itu, bukan yang ini. Yang tinggal ialah bentuk situasi, dan itu menjadikannya masalah berayat yang anak mesti baca sebelum dia boleh membilang: ia mengukur bacaan, bukan membilang.",
+      "1.5.1/count_1_down": "Bentuk terbalik ialah membilang satu-satu MENAIK, sub-kemahiran sebelah. Bentuk situasi menuntut anak membaca cerita dahulu sebelum membilang undur, dan membilang undur sudah pun yang paling sukar antara sepuluh ini.",
+      "1.5.1/count_2_up": "Bentuk terbalik ialah dua-dua menurun, sub-kemahiran sebelah. Bentuk situasi untuk membilang dua-dua — sepasang kasut, sepasang tangan — boleh ditulis, tetapi ia menjadi soalan darab bersamar, bukan soalan membilang.",
+      "1.5.1/count_2_down": "Bentuk terbalik ialah dua-dua menaik, sub-kemahiran sebelah. Situasi menurun dua-dua jarang berlaku secara semula jadi, dan yang dikarang menambah bacaan tanpa menambah matematik.",
+      "1.5.1/count_4_up": "Bentuk terbalik ialah empat-empat menurun, sub-kemahiran sebelah. Empat-empat ialah selang yang paling jarang dalam kehidupan harian antara lima selang DSKP, jadi bentuk situasi di sini hampir semestinya karangan.",
+      "1.5.1/count_4_down": "Bentuk terbalik ialah empat-empat menaik, sub-kemahiran sebelah. Sama seperti di atas, dan lebih teruk: menurun empat-empat tiada konteks harian yang jujur.",
+      "1.5.1/count_5_up": "Bentuk terbalik ialah lima-lima menurun, sub-kemahiran sebelah. Bentuk situasi ada — jari, syiling lima sen — tetapi ia bertukar menjadi soalan wang atau darab, iaitu SP lain.",
+      "1.5.1/count_5_down": "Bentuk terbalik ialah lima-lima menaik, sub-kemahiran sebelah. Konteks harian untuk mengira undur lima-lima hampir tiada tanpa mengarang.",
+      "1.5.1/count_10_up": "Bentuk terbalik ialah sepuluh-sepuluh menurun, sub-kemahiran sebelah. PENGECUALIAN PALING LEMAH ANTARA SEPULUH: not RM10 dan bingkai-sepuluh memberi konteks harian yang jujur, jadi bentuk situasi mungkin memang boleh ditulis di sini. Kalau cikgu setuju ia boleh, buang entri ini.",
+      "1.5.1/count_10_down": "Bentuk terbalik ialah sepuluh-sepuluh menaik, sub-kemahiran sebelah. Lebih kuat daripada pasangan menaiknya: membelanja RM10 pada satu masa ialah konteks, tetapi ia menjadi soalan wang, iaitu SP 4.0."
     },
     "notExempt": "Setiap sub-kemahiran lain menyokong sekurang-kurangnya dua bentuk, jadi tiada satu pun dikecualikan. Ini arah yang lebih selamat untuk tersilap: bukan dikecualikan bermakna ambang lebih tinggi, dan ambang lebih tinggi tersilap dengan mendakwa terlalu sedikit, bukan terlalu banyak."
   },
