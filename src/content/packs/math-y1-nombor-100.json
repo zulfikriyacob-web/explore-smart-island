@@ -7,8 +7,8 @@
   "title": { "ms": "Nombor Hingga 100", "en": "Numbers to 100" },
   "kssr": {
     "document": "DSKP KSSR (Semakan) Matematik Tahun 1, Bahagian Pembangunan Kurikulum KPM, cetakan pertama Mei 2015",
-    "contentStandards": ["1.2", "1.5", "1.6", "7.2"],
-    "learningStandards": ["1.2.1", "1.2.2", "1.5.1", "1.6.1", "7.2.1"],
+    "contentStandards": ["1.2", "1.6", "2.2", "7.2"],
+    "learningStandards": ["1.2.1", "1.2.2", "1.6.1", "2.2.2", "7.2.1"],
     "verified": false
   },
   "activities": [
@@ -58,7 +58,7 @@
       "type": "mcq",
       "difficulty": 1,
       "learningStandard": "1.2.2",
-      "prompt": { "ms": "Nombor apa selepas 29?", "en": "Which number comes after 29?" },
+      "prompt": { "ms": "Apakah nombor selepas 29?", "en": "What is the number after 29?" },
       "promptAudio": { "ms": "/audio/ms/q002.mp3", "en": "/audio/en/q002.mp3" },
       "hint": { "ms": "Bilang: dua puluh sembilan, kemudian?", "en": "Count on: twenty-nine, then?" },
       "payload": {
@@ -95,8 +95,8 @@
       "difficulty": 2,
       "learningStandard": "1.6.1",
       "prompt": {
-        "ms": "Dalam nombor 63, digit mana di tempat puluh?",
-        "en": "In the number 63, which digit is in the tens place?"
+        "ms": "Nombor 63. Apakah digit di tempat puluh?",
+        "en": "The number 63. Which digit is in the tens place?"
       },
       "promptAudio": { "ms": "/audio/ms/q004.mp3", "en": "/audio/en/q004.mp3" },
       "hint": { "ms": "Tempat puluh ada di sebelah kiri.", "en": "The tens place is on the left." },
@@ -163,8 +163,8 @@
       "difficulty": 2,
       "learningStandard": "1.2.2",
       "prompt": {
-        "ms": "Susunan mana yang menaik?",
-        "en": "Which row is in ascending order?"
+        "ms": "Susunan manakah dari kecil ke besar?",
+        "en": "Which row goes from smallest to biggest?"
       },
       "promptAudio": { "ms": "/audio/ms/q007.mp3", "en": "/audio/en/q007.mp3" },
       "hint": { "ms": "Menaik bermaksud kecil ke besar.", "en": "Ascending means small to big." },
@@ -182,8 +182,8 @@
       "id": "q008",
       "type": "mcq",
       "difficulty": 3,
-      "learningStandard": "1.5.1",
-      "prompt": { "ms": "10 lebih daripada 45 ialah?", "en": "10 more than 45 is?" },
+      "learningStandard": "2.2.2",
+      "prompt": { "ms": "45 tambah 10 jadi berapa?", "en": "What is 45 plus 10?" },
       "promptAudio": { "ms": "/audio/ms/q008.mp3", "en": "/audio/en/q008.mp3" },
       "hint": { "ms": "Tambah satu pada tempat puluh.", "en": "Add one to the tens place." },
       "explain": { "ms": "45 + 10 = 55.", "en": "45 + 10 = 55." },
