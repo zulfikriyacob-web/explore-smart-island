@@ -253,61 +253,123 @@ function emitSubSkills(out, pack, skills) {
 }
 
 /**
- * Candidate names for the *shape* of a question, and the third thing this form
+ * The three axes, the tagging we did with them, and the third thing this form
  * asks a teacher.
  *
- * Not derived from any file, because the field does not exist yet. It is asked
- * here, before it is built, for the reason the sub-skill list is asked here: an
- * enum locked into the schema locks the content written against it, and the
- * teacher is the only person who can say whether these five carve the space
- * correctly. (PRD §16 item 12, SPEC §5.7.)
+ * The previous version of this section offered five flat names — direct,
+ * inverted, select, story, visual — and asked whether they were enough. The
+ * answer was no: they mixed how a question is built with how information is
+ * shown and with what the child does. Those five are gone. What is asked now is
+ * narrower and harder: we tagged ten questions using the teacher's own axes, and
+ * one of those taggings contradicts something the same teacher told us earlier.
  */
-const FRAME_CANDIDATES = [
-  { id: 'direct', label: 'Terus', example: 'Apakah nilai digit 6 dalam 63?' },
-  { id: 'inverted', label: 'Terbalik', example: 'Dalam 47, digit 4 bernilai berapa?' },
-  { id: 'select', label: 'Pilih', example: 'Pilih nilai yang betul bagi digit 8 dalam 82.' },
-  { id: 'story', label: 'Situasi', example: 'Ali ada 23 guli. Ayah beri 5 lagi. Berapa semua?' },
-  { id: 'visual', label: 'Gambar', example: 'Soalan dibawa oleh gambar, bukan ayat.' },
-];
+function emitAxes(out, pack) {
+  const tagged = pack.questions.filter((q) => q.promptForm);
+  if (tagged.length === 0) return;
 
-function emitFrames(out) {
-  out.push('## Bentuk soalan — adakah lima nama ini cukup?');
+  const FORM = { direct: 'Terus', reverse: 'Terbalik', contextual: 'Situasi' };
+  const REP = { symbolic: 'Simbolik', visual: 'Visual', mixed: 'Campuran' };
+  const MODE = { select: 'Pilih', input: 'Taip', tap: 'Ketuk', match: 'Padan', order: 'Susun' };
+
+  out.push('## Bentuk soalan — adakah penandaan kami betul?');
   out.push('');
   out.push(
-    `Cikgu menetapkan bahawa tiga soalan itu mesti berbeza **bentuk**, bukan sekadar berbeza ` +
-      `nombor — tiga soalan berbentuk sama mengukur hafalan bentuk. Kami menerima itu, dan ` +
-      `app akan menuntut **dua bentuk berlainan** sebelum satu kemahiran boleh dikira dikuasai, ` +
-      `serta melaporkan mana-mana kemahiran yang ada kurang daripada tiga.`,
+    `Cikgu memecahkan variasi soalan kepada tiga paksi, dan kami menerimanya bulat-bulat. ` +
+      `Kami kemudian menanda kesepuluh-sepuluh soalan pek ini dengannya. Yang kami minta di ` +
+      `sini ialah sama ada penandaan itu betul — bukan sama ada paksinya betul.`,
   );
+  out.push('');
+  out.push('| # | Soalan | Bentuk | Persembahan | Cara jawab |');
+  out.push('|---|---|---|---|---|');
+  tagged.forEach((q, i) => {
+    const prompt = q.prompt[LANG];
+    const short = prompt.length > 40 ? `${prompt.slice(0, 39)}…` : prompt;
+    out.push(
+      `| ${i + 1} | ${cell(short)} | ${FORM[q.promptForm] ?? q.promptForm} | ` +
+        `${REP[q.representation] ?? q.representation} | ${MODE[q.responseMode] ?? q.responseMode} |`,
+    );
+  });
   out.push('');
   out.push(
-    `Sebelum kami membinanya, nama-nama ini perlu mata cikgu. Sebaik sahaja ia masuk ke dalam ` +
-      `kod, setiap soalan yang ditulis selepas itu terikat kepadanya.`,
+    `**Ada penandaan yang salah?** ☐ Tidak  ☐ Ada — yang mana dan sepatutnya apa: ` +
+      `\`____________________________________\``,
   );
   out.push('');
-  out.push('| Nama | Contoh |');
-  out.push('|---|---|');
-  for (const f of FRAME_CANDIDATES) {
-    out.push(`| **${cell(f.label)}** | ${cell(f.example)} |`);
+
+  /*
+    The question that matters most, and the only one that can undo a decision
+    already recorded. Worth its own heading so it is not read past.
+  */
+  const reversed = tagged.filter((q) => q.promptForm === 'reverse');
+  if (reversed.length > 0) {
+    out.push('### Soalan bentuk — `terbalik`, atau kemahiran lain?');
+    out.push('');
+    out.push(
+      `Kami menanda ${reversed.map((q) => `**"${cell(q.prompt[LANG])}"**`).join(' dan ')} sebagai ` +
+        `**terbalik**: anak diberi nama, dan perlu mencari bentuknya. Itu definisi cikgu ` +
+        `sendiri — diberi nilai, cari benda.`,
+    );
+    out.push('');
+    out.push(
+      `Tetapi cikgu juga pernah berkata soalan ini **ditulis terbalik** bagi SP 7.2.1, kerana ` +
+        `7.2.1 ialah *"menamakan"* dan soalan ini meminta pengecaman. Kami merekod itu sebagai ` +
+        `kerja yang perlu dibuat: tukar kepada "Apakah nama bentuk ini?", yang memerlukan ` +
+        `perubahan skema untuk meletakkan gambar dalam arahan.`,
+    );
+    out.push('');
+    out.push('Kedua-duanya tidak boleh betul serentak, dan jawapannya mengubah kerja:');
+    out.push('');
+    out.push('| Kalau | Maka |');
+    out.push('|---|---|');
+    out.push(
+      `| Ia **terbalik** bagi kemahiran yang sama | Soalan sedia ada kekal. Kami cuma perlu ` +
+        `menulis pasangan **terus** untuk setiap bentuk — soalan biasa, tiada perubahan skema |`,
+    );
+    out.push(
+      `| Ia **kemahiran lain** | Soalan sedia ada perlu ditulis semula, gambar mesti masuk ke ` +
+        `dalam arahan, dan skema perlu berubah dahulu |`,
+    );
+    out.push('');
+    out.push(
+      `**Yang mana?** ☐ Terbalik, kemahiran sama  ☐ Kemahiran lain, tulis semula  ` +
+        `☐ Lain: \`__________________\``,
+    );
+    out.push('');
   }
+
+  out.push('### Paksi mana yang dikira sebagai bukti berasingan?');
   out.push('');
   out.push(
-    `**Ada bentuk yang hilang?** ☐ Tidak, cukup  ☐ Ada: \`________________________________\``,
+    `Untuk mengira satu kemahiran sebagai *Dikuasai*, app perlu beberapa jawapan betul yang ` +
+      `benar-benar berlainan. Persoalannya: berlainan pada paksi yang mana?`,
   );
   out.push('');
+  out.push('| Paksi | Cadangan kami | Sebab |');
+  out.push('|---|---|---|');
   out.push(
-    `**Ada dua daripadanya yang sebenarnya bentuk yang sama?** ☐ Tidak  ` +
-      `☐ Ada: \`________________________\``,
+    `| **Bentuk** (terus / terbalik / situasi) | **Dikira** | Arah pemikiran berubah. Anak ` +
+      `yang boleh buat terus tetapi tidak terbalik belum faham sepenuhnya |`,
+  );
+  out.push(
+    `| **Cara jawab** (pilih / ketuk / …) | **Tidak dikira** | Di mana ia benar-benar menguji ` +
+      `perkara berlainan, senarai sub-kemahiran sudah memisahkannya — cth. mengetuk untuk ` +
+      `membilang lawan memilih nombor ialah dua sub-kemahiran, bukan dua bentuk |`,
+  );
+  out.push(
+    `| **Persembahan** (simbolik / visual / campuran) | **Tidak dikira** | Ia mengubah ` +
+      `kesukaran, bukan arah pemikiran. Kesukaran sudah ada medannya sendiri |`,
+  );
+  out.push(
+    `| **Variasi ayat** (A / B / C) | **Tidak dikira** | Itu sebab cikgu mengasingkannya |`,
   );
   out.push('');
-  out.push(
-    `**Dua bentuk cukup untuk "Dikuasai", atau perlu tiga?** ☐ Dua cukup  ☐ Perlu tiga`,
-  );
+  out.push(`**Setuju?** ☐ Ya  ☐ Tidak — sepatutnya: \`____________________________________\``);
   out.push('');
   out.push(
-    `> Konteks untuk soalan terakhir: menuntut tiga bermakna setiap satu daripada 36 ` +
-      `sub-kemahiran memerlukan tiga soalan berlainan bentuk — 108 soalan dan 108 rakaman ` +
-      `suara — sebelum satu pun kemahiran boleh mencapai "Dikuasai".`,
+    `> Kesan pada pek hari ini, kalau **bentuk** yang dikira: kesepuluh-sepuluh soalan ` +
+      `menyentuh sembilan sub-kemahiran, dan **setiap satu daripada sembilan itu ditanya dalam ` +
+      `satu bentuk sahaja**. Tiada satu pun boleh mencapai *Dikuasai* sehingga soalan bentuk ` +
+      `kedua ditulis. Kami rasa itu betul dan bukan masalah — tetapi cikgu yang tahu.`,
   );
   out.push('');
 }
@@ -473,7 +535,7 @@ async function emitPack(pack, out) {
   const skills = await loadSkills(pack.subject, pack.year);
   if (skills !== null) {
     emitSubSkills(out, pack, skills);
-    emitFrames(out);
+    emitAxes(out, pack);
   }
 
   emitReference(out, pack, catalogue);

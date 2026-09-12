@@ -730,16 +730,23 @@ nombor dihafal. Bukti dikira mengikut `questionId` berbeza.
 > bentuk. Hari ini enjin hanya boleh menuntut tiga `questionId` berbeza, jadi ambang ini
 > lebih longgar daripada yang guru minta.
 >
-> **Keputusan dibuat, belum dibina: tuntut 2 bentuk, laporkan yang kurang daripada 3.**
-> Menuntut tiga menjadikan *Dikuasai* mustahil dicapai sehingga 36 sub-kemahiran × 3 bentuk =
-> **108 soalan dan 108 rakaman BM** wujud, dan label yang tiada siapa pernah capai tidak
-> memberitahu ibu bapa apa-apa. Dua sudah mematahkan hafalan bentuk; yang ketiga dilaporkan
-> sebagai jurang kandungan, tidak dikuatkuasakan.
+> ~~**Keputusan dibuat, belum dibina: tuntut 2 bentuk, laporkan yang kurang daripada 3.**~~
+> **Ambang itu tidak lagi bermakna, dan sedang diputuskan semula.**
 >
-> Ia belum dibina kerana perbendaharaan `frame` belum disemak guru — `direct`, `inverted`,
-> `select`, `story`, `visual` ialah calon, dan enum yang dikunci sebelum disemak mengunci
-> kandungan bersamanya. Itu permukaan yang sama seperti senarai sub-kemahiran, jadi ia pergi
-> melalui saluran yang sama: borang `kssr:review`. Reka bentuk penuh dalam PRD §16 item 12.
+> Perbendaharaan `frame` lima nama — `direct`, `inverted`, `select`, `story`, `visual` — telah
+> **ditolak guru**. Ia mencampurkan tiga perkara berbeza, dan diganti dengan tiga paksi:
+> `promptForm`, `representation`, `responseMode`, ditambah `wordingVariant` untuk variasi
+> bahasa yang bukan perbezaan pedagogi. Ketiga-tiganya kini dalam skema
+> (docs/kssr/guru-struktur-variasi-soalan.md).
+>
+> "Dua bentuk berbeza" tidak lagi menyebut apa-apa yang wujud: dua soalan boleh berbeza
+> `wordingVariant` dan sama `promptForm`, iaitu hafalan ayat. **Paksi mana yang mesti berbeza
+> sebelum dua jawapan dikira bukti berasingan ialah keputusan terbuka** — PRD §16 item 12
+> membawa analisisnya dan borang `kssr:review` membawa soalannya kepada guru.
+>
+> Sehingga ia diputuskan, ambang §5.7 kekal **tiga `questionId` berbeza**, yang kini diketahui
+> melebih-lebihkan kepelbagaian bukti. `validate:content` mencetak sejauh mana ia
+> melebih-lebih, setiap binaan.
 
 **Percubaan pertama sahaja.** Ketepatan sudah mengukur kualiti percubaan pertama (§5.2), dan
 percubaan kedua berlaku selepas satu pilihan salah dilumpuhkan — pada mcq tiga pilihan, tekaan

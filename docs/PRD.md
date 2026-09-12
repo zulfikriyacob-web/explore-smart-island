@@ -607,17 +607,30 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     (*"Pilih nilai yang betul…"*), `story` (situasi harian), `visual` (soalan dibawa oleh
     gambar).
 
-    **Berapa `frame` dituntut — DIPUTUSKAN: tuntut 2, laporkan yang kurang daripada 3.**
-    Menuntut tiga bermakna setiap satu daripada 36 sub-kemahiran memerlukan tiga soalan
-    berbentuk berlainan — **108 soalan, 108 rakaman BM** sebelum satu pun kemahiran boleh
-    mencapai Dikuasai, dan **label yang tiada siapa pernah capai tidak memberitahu ibu bapa
-    apa-apa**. Dua sudah mematahkan hafalan bentuk; yang ketiga dilaporkan sebagai jurang
-    kandungan, tidak dikuatkuasakan.
+    ~~**Berapa `frame` dituntut — tuntut 2, laporkan yang kurang daripada 3.**~~
 
-    **Masih belum dibina, dan sengaja.** Perbendaharaan mesti disemak guru dahulu: enum yang
-    dikunci mengunci kandungan bersamanya, dan ia permukaan yang sama seperti senarai
-    sub-kemahiran. Soalan itu kini dalam borang `kssr:review`. Bina selepas jawapannya masuk,
-    bukan sebelum.
+    **Perbendaharaan lima nama ditolak guru, dan medan `frame` tunggal tidak pernah wujud.**
+    Ia mencampurkan tiga perkara: cara soalan dibentuk, cara maklumat dipersembahkan, cara
+    murid menjawab. Satu soalan boleh serentak ketiga-tiganya.
+
+    Yang dibina sebagai gantinya — nilai verbatim daripada guru:
+
+    | Paksi | Nilai |
+    |---|---|
+    | `promptForm` | `direct` · `reverse` · `contextual` |
+    | `representation` | `symbolic` · `visual` · `mixed` |
+    | `responseMode` | `select` · `input` · `tap` · `match` · `order` |
+    | `wordingVariant` | `A` · `B` · `C` — variasi bahasa, **bukan** perbezaan pedagogi |
+
+    Pembetulan guru pada `reverse` menjatuhkan contohnya sendiri: *"Apakah nilai digit 6 dalam
+    63?"* dan *"Dalam 63, digit 6 bernilai berapa?"* kedua-duanya **`direct`** — ayat berubah,
+    arah pemikiran sama. Yang benar-benar `reverse` ialah *"Dalam nombor 63, digit manakah
+    yang bernilai 60?"*. Maksudnya tiga "bentuk" yang kami sangka ada, sebenarnya satu.
+
+    **Ambang kini terbuka semula.** "Dua bentuk berbeza" tidak menyebut apa-apa yang wujud.
+    Paksi mana yang mesti berbeza ialah keputusan yang belum dibuat; analisis penuh dan
+    cadangan ada dalam borang `kssr:review`, dan SPEC §5.7 kekal pada tiga `questionId`
+    berbeza sehingga ia diputuskan.
 13. ~~**Adakah `masteredOnce` patut mengubah apa yang ibu bapa lihat?**~~
     **DISELESAIKAN — kedua-duanya diterima, tiada label keempat.**
 
