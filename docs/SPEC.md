@@ -731,8 +731,12 @@ bukti dan ukuran kualiti bank soalan, bukan syarat universal untuk Dikuasai"*, d
 `responseMode`, `representation` serta `wordingVariant` juga bukan gerbang penguasaan.
 
 Satu versi terdahulu bahagian ini menuntut dua `promptForm` berlainan di atas tiga soalan, dan
-mengecualikan sembilan sub-kemahiran membilang daripadanya. **Kedua-duanya dibatalkan.** Sebabnya
-kekal di sini kerana ia akan dicadangkan semula oleh seseorang yang munasabah:
+mengecualikan sembilan sub-kemahiran membilang daripadanya. Ia bukan cadangan sahaja: `coverage.ts`
+menguatkuasakannya di `main` selama kira-kira tiga belas jam. Bar bentuk masuk bersama
+`feat/question-axes` (`0573b25`, 12 September 2026, 18:34), diisytiharkan muktamad dengan sembilan
+pengecualian dalam PR #43 (19:55), dan dibuang dalam PR #45 (13 September 2026, 07:21).
+**Kedua-duanya dibatalkan.** Sebabnya kekal di sini kerana ia akan dicadangkan semula oleh seseorang
+yang munasabah:
 
 > **Kekurangan variasi bentuk ialah isu liputan bank soalan, bukan kegagalan murid mencapai
 > penguasaan.** Bar bentuk menahan label seorang anak kerana **kita** belum menulis soalan

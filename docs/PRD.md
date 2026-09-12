@@ -767,6 +767,15 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
       berasingan bertembung dengan keputusan ujian pengguna yang membuang langkah nombor.
       Item 19.
 
+    **1.6.1 — nama berbeza, bukan pemetaan salah.** Catatan guru pada 1.6.1 menamakan empat
+    pecahannya `place_tens`, `place_ones`, `value_tens`, `value_ones`; id kita ialah
+    `digit_at_tens`, `digit_at_ones`, `value_of_tens_digit`, `value_of_ones_digit`. Pemetaan q004
+    betul menurut kedua-dua dokumen guru: borang ini kata *"Sesuai untuk place_tens sahaja"*, dan
+    pecahan A dalam `guru-sub-kemahiran-math-y1.md` ialah *"Mengenal digit di tempat puluh"*
+    dengan contoh yang sama seperti q004. Id kita **tidak dinamakan semula** — *"Empat pecahan ini
+    dikekalkan"* bercakap tentang pecahannya, bukan namanya. Kalau id guru mahu diguna, itu
+    keputusan berasingan.
+
     #### Dua kesilapan pemilik projek semasa menyerahkan borang ini
 
     Direkod atas permintaannya sendiri: *"DAN SAYA SALAH PADA DUA PERKARA — rekod

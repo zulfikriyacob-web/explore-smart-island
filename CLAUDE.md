@@ -158,6 +158,48 @@ work, and it burns through usage limits fast.
   that worked yesterday may belong to another device today. Re-read the IP before
   handing a URL to a phone, and start the server with `--host` or the phone gets
   nothing.
+- **The permission classifier refuses history rewrites.** `git commit --amend`
+  followed by `git push --force-with-lease`, to drop a stray file from a pushed
+  commit, was refused. Undo with a follow-up commit instead (`git rm --cached`,
+  then commit). Nothing already pushed gets rewritten.
+- **Session transcripts can be searched, with care.** They live at
+  `C:\Users\zulfi\.claude\projects\C--dev-explore-smart-island\<session-id>.jsonl`,
+  one JSON record per line, so a single line can be a whole tool result. Grep with
+  `-o` and a wide context window returns `[Omitted long matching line]`:
+  `.{0,150}` before and `.{0,400}` after did, and `.{0,200}` either side did not.
+  Keep the window small, or parse the file with a short node script and keep only
+  the `text` blocks. Compaction summaries sit in the same file as user messages
+  beginning "This session is being continued". They are summaries, and see below.
+
+### Received documents, and what is said about them
+
+**A description of a document is not the document.** `docs/kssr/` holds what
+teachers and a parent actually sent, byte-identical under a provenance header. A
+message that relays one can misquote it, and has. A compaction summary is a relay
+too.
+
+On 12–13 September 2026, around the marked round-2 review form:
+
+- The message that delivered it attributed two sentences to the teacher: *"Nisbah
+  1/6 tidak boleh dianggap murid gagal 5 kemahiran lain"*, and a requirement for
+  one direct plus one reverse question per sub-skill. Neither is in the file. A
+  cross-reference from SPEC §5.7 to the form was requested on the strength of the
+  first. It was not written, because a false attribution is worse than none.
+- The same message called the form signed, and treated `kssr.verified` as able to
+  rise on it. The form's own status note says the name and school are blank on
+  purpose, that it is not a certified teacher's signature, and that it must not by
+  itself raise `kssr.verified`. It stays `false`.
+- The record of those two errors was first written with a third: it said PR #43
+  merged "the day before" the form. `git log` says the same day. That date came
+  from memory, not from git.
+
+The project owner asked for both of their errors to be recorded. The full record
+is PRD §16 item 18.
+
+Before attributing words to a document, search the file for the exact string.
+Before stating when something merged, or in what order, read `git log`. Before
+acting on a status — verified, signed, approved — read the document's own status
+note. When a summary and a file disagree, the file is right.
 
 ### Verifying visual work
 
@@ -219,6 +261,10 @@ work, and it burns through usage limits fast.
   this pane is about the pane. One thing the pane does share with an iPhone: its
   AudioContext `sampleRate` is 48000, so Howler's `Howler.unload()` branch for a
   rate other than 44100 is live in both.
+- **The quiz screen can carry two `aria-live` regions.** On a count-tap question
+  the tally in `QuestionVisual.tsx` is one, so `document.querySelector('[aria-live]')`
+  can return the tally instead of the feedback region. Select the feedback region
+  as `p.sr-only[aria-live]` (`QuizScreen.tsx`).
 
 ### Controls that unmount themselves
 
