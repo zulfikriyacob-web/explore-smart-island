@@ -101,115 +101,111 @@ async function loadCatalogue(subject, year) {
 }
 
 /**
- * What a teacher needs to see of the answer itself. A code is easy to agree
- * with in the abstract; what decides it is the actual question a child is
- * asked and the actual thing they have to do.
+ * What a teacher needs to see of the answer itself, on one line. A code is easy
+ * to agree with in the abstract; what decides it is the actual question a child
+ * is asked and the actual thing they have to do.
  */
-function answerLines(q) {
+function answerLine(q) {
+  const mark = (o, label) =>
+    o.id === q.payload.correctOptionId ? `**${label} ← betul**` : label;
   switch (q.type) {
     case 'mcq':
-      return q.payload.options.map(
-        (o) =>
-          `  - ${o.text[LANG]}${o.id === q.payload.correctOptionId ? '  ← **jawapan betul**' : ''}`,
-      );
+      return `Pilihan: ${q.payload.options.map((o) => mark(o, o.text[LANG])).join(' · ')}`;
     case 'mcq-image':
-      return q.payload.options.map(
-        (o) =>
-          `  - gambar: ${o.alt[LANG]}${o.id === q.payload.correctOptionId ? '  ← **jawapan betul**' : ''}`,
-      );
+      return `Pilihan (gambar): ${q.payload.options.map((o) => mark(o, o.alt[LANG])).join(' · ')}`;
     case 'count-tap':
-      return [
-        `  - Anak mengetuk setiap objek sambil membilang, kemudian menghantar kiraannya.`,
-        `  - Objek: **${q.payload.itemCount}** · jawapan betul: **${q.payload.correctAnswer}**`,
-      ];
+      return (
+        `Anak mengetuk setiap objek sambil membilang, kemudian menghantar kiraannya. ` +
+        `Objek: **${q.payload.itemCount}** · betul: **${q.payload.correctAnswer}**`
+      );
     default:
-      return [`  - (jenis soalan \`${q.type}\` tidak dikenali borang ini)`];
+      return `(jenis soalan \`${q.type}\` tidak dikenali borang ini)`;
   }
 }
 
-/** One numbered section per question — the thing a teacher actually reads. */
+/**
+ * One block per question, sized to a phone screen.
+ *
+ * The SP text and its CATATAN are **not** here. Four questions share 1.2.2, and
+ * repeating its four sub-points and three notes beside each of them was most of
+ * a form that a teacher reads as a favour. They live once, at the end, and each
+ * question cites the code.
+ */
 function emitQuestion(out, q, index, catalogue) {
   const entry = q.learningStandard ? catalogue.learning.get(q.learningStandard) : undefined;
 
-  out.push(`### ${index}. \`${q.id}\``);
+  out.push(`### ${index}. \`${q.id}\` — ${q.prompt[LANG]}`);
   out.push('');
-  out.push(`**Soalan yang dilihat anak:**`);
-  out.push('');
-  out.push(`> ${q.prompt[LANG]}`);
-  out.push('');
-  out.push(...answerLines(q));
-  out.push('');
-
-  if (q.type === 'mcq' || q.type === 'mcq-image') {
-    if (q.payload.shuffle) {
-      out.push(`*Susunan pilihan diacak setiap kali; urutan di atas ialah urutan dalam fail.*`);
-      out.push('');
-    }
-  }
-  if (q.hint) {
-    out.push(`**Pancingan** (selepas satu kali salah): ${q.hint[LANG]}`);
-    out.push('');
-  }
-  if (q.explain) {
-    out.push(`**Penerangan** (bersama jawapan didedah): ${q.explain[LANG]}`);
-    out.push('');
-  }
+  out.push(`- ${answerLine(q)}`);
+  if (q.hint) out.push(`- Pancingan (selepas satu kali salah): ${q.hint[LANG]}`);
+  if (q.explain) out.push(`- Penerangan (bersama jawapan didedah): ${q.explain[LANG]}`);
 
   if (!q.learningStandard) {
-    out.push(`**Kami tidak mendakwa apa-apa SP untuk soalan ini.**`);
-    out.push('');
-    out.push(`Soalan tanpa kod tidak muncul dalam laporan kurikulum langsung. Kalau ia`);
-    out.push(`sepatutnya membawa satu, tulis kodnya di bawah.`);
-    out.push('');
-    out.push(`**SP yang sepatutnya:** \`________\``);
+    out.push(`- **Kami tidak mendakwa apa-apa SP untuk soalan ini.** Kalau ia sepatutnya`);
+    out.push(`  membawa satu, tulis kodnya di sini: \`______\``);
     out.push('');
     return { unmapped: true, unknown: false };
   }
 
   if (!entry) {
-    out.push(`**Kami mendakwa SP \`${q.learningStandard}\` — dan kod itu tiada dalam dokumen.**`);
-    out.push('');
-    out.push(`Ini ralat kami, bukan soalan untuk guru. \`npm run validate:content\` sepatutnya`);
-    out.push(`menangkapnya sebelum borang ini dijana.`);
+    out.push(
+      `- **Kami mendakwa \`${q.learningStandard}\` — kod itu tiada dalam dokumen.** Ralat kami,` +
+        ` bukan soalan untuk guru; \`validate:content\` sepatutnya menangkapnya.`,
+    );
     out.push('');
     return { unmapped: false, unknown: true };
   }
 
-  const { area, topic, topicTitle, sk, sp } = entry;
-
-  out.push(`**Kami mendakwa soalan ini mengajar:**`);
+  const { sp } = entry;
+  out.push(`- **Didakwa: \`${sp.code}\` — ${sp.title}**`);
   out.push('');
-  out.push(`| | |`);
-  out.push(`|---|---|`);
-  out.push(`| Bidang | ${cell(area)} |`);
-  out.push(`| Tajuk | ${cell(`${topic} ${topicTitle}`)} |`);
-  out.push(`| Standard Kandungan | **${cell(sk.code)}** ${cell(sk.title)} |`);
-  out.push(`| Standard Pembelajaran | **${cell(sp.code)}** ${cell(sp.title)} |`);
-  out.push('');
-
-  if (sp.details?.length) {
-    out.push(`Teks penuh SP \`${sp.code}\`, seperti dalam DSKP:`);
-    out.push('');
-    out.push(`> ${sp.title}`);
-    for (const d of sp.details) out.push(`> ${d}`);
-    out.push('');
-  }
-
-  if (sp.catatan?.length) {
-    out.push(`**CATATAN** DSKP bagi SP ini:`);
-    out.push('');
-    for (const c of sp.catatan) out.push(`> ${c}`);
-    out.push('');
-  }
-
-  out.push(`**Adakah soalan ini benar-benar mengajar ${sp.code}?**`);
-  out.push('');
-  out.push(`☐ Ya    ☐ Tidak — SP yang betul: \`________\`    ☐ Tidak pasti`);
-  out.push('');
-  out.push(`Catatan guru: ______________________________________________`);
+  out.push(
+    `Mengajar \`${sp.code}\`? ☐ Ya ☐ Tidak → SP betul \`____\` ☐ Tidak pasti · ` +
+      `Catatan: \`______________________\``,
+  );
   out.push('');
 
   return { unmapped: false, unknown: false };
+}
+
+/**
+ * Every SP the form cites, once, at the end — full text, sub-points, CATATAN,
+ * and the content standard, topic and area it sits under.
+ *
+ * This is the reference a teacher checks us against, so nothing is abbreviated
+ * in it. Deduplicating is what buys the room to leave it whole.
+ */
+function emitReference(out, pack, catalogue) {
+  const cited = [];
+  for (const q of pack.questions) {
+    if (q.learningStandard && !cited.includes(q.learningStandard)) cited.push(q.learningStandard);
+  }
+  cited.sort();
+
+  out.push('## Rujukan — teks penuh setiap SP yang didakwa');
+  out.push('');
+  out.push(`Disalin daripada dokumen di atas. Ini yang borang ini minta cikgu semak kami terhadapnya.`);
+  out.push('');
+
+  for (const code of cited) {
+    const entry = catalogue.learning.get(code);
+    if (!entry) continue;
+    const { area, topic, topicTitle, sk, sp } = entry;
+    out.push(`### \`${sp.code}\` — ${sp.title}`);
+    out.push('');
+    out.push(`${area} · ${topic} ${topicTitle} · SK **${sk.code}** ${sk.title}`);
+    out.push('');
+    if (sp.details?.length) {
+      for (const d of sp.details) out.push(`> ${d}`);
+      out.push('');
+    }
+    if (sp.catatan?.length) {
+      out.push(`CATATAN DSKP:`);
+      out.push('');
+      for (const c of sp.catatan) out.push(`> ${c}`);
+      out.push('');
+    }
+  }
 }
 
 function emitHeader(out, pack, catalogue) {
@@ -242,24 +238,16 @@ function emitHeader(out, pack, catalogue) {
   out.push('');
   out.push(
     `Satu soalan sahaja, bagi setiap soalan kuiz: **adakah soalan ini benar-benar mengajar ` +
-      `Standard Pembelajaran yang kami dakwakan?**`,
+      `Standard Pembelajaran yang kami dakwakan?** Mesin sudah menyemak bahawa setiap kod ` +
+      `**wujud** dalam DSKP; yang ia tidak boleh putuskan ialah sama ada soalan itu mengajarnya. ` +
+      `Teks penuh setiap SP ada dalam **Rujukan** di hujung borang. Sehingga borang ini dijawab, ` +
+      `pek membawa \`verified: false\` dan papan pemuka ibu bapa tidak memaparkan satu pun kod ` +
+      `SP (PRD §15).`,
   );
   out.push('');
   out.push(
-    `Kami sudah menyemak bahawa setiap kod **wujud** dalam DSKP — itu semakan mesin, dan ia ` +
-      `berjalan pada setiap binaan. Yang mesin tidak boleh putuskan ialah sama ada soalan itu ` +
-      `benar-benar mengajar perkara yang kodnya namakan. Itu sebabnya borang ini wujud.`,
-  );
-  out.push('');
-  out.push(
-    `Kami **tidak** meminta pandangan tentang mutu soalan, pilihan perkataan, atau aras ` +
-      `kesukaran dalam borang ini. Kalau cikgu nampak sesuatu, tulis dalam ruang catatan — ` +
-      `ia dialu-alukan, cuma bukan soalan yang borang ini tanya.`,
-  );
-  out.push('');
-  out.push(
-    `Sehingga borang ini dijawab, pek ini membawa \`verified: false\` dan papan pemuka ibu ` +
-      `bapa **tidak** memaparkan satu pun kod SP (PRD §15).`,
+    `*Pilihan bertanda ← betul. Susunannya diacak setiap kali anak bermain; urutan di sini ` +
+      `ialah urutan dalam fail.*`,
   );
   out.push('');
 }
@@ -337,6 +325,8 @@ async function emitPack(pack, out) {
     if (r.unmapped) unmapped++;
     if (r.unknown) unknown++;
   });
+
+  emitReference(out, pack, catalogue);
 
   out.push('---');
   out.push('');
