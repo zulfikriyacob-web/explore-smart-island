@@ -137,6 +137,27 @@ describe('sub-skill status', () => {
     expect(skillState({ attempted: true, evidence: evidence(2) }).status).toBe('evaluating');
   });
 
+  /*
+    The rule wordingVariant exists for. Three questions, three different
+    sentences, one direction of thinking — that is a memorised phrasing set,
+    not a mastered skill, and the form bar has to see through it.
+  */
+  it('counts one form when only the wording differs', () => {
+    const reworded: Evidence[] = [
+      { questionId: 'q1', sessionId: 's1', promptForm: 'direct', wordingVariant: 'A' },
+      { questionId: 'q2', sessionId: 's2', promptForm: 'direct', wordingVariant: 'B' },
+      { questionId: 'q3', sessionId: 's3', promptForm: 'direct', wordingVariant: 'C' },
+    ];
+    expect(skillState({ attempted: true, evidence: reworded }).status).toBe('evaluating');
+
+    // One genuinely different form is what tips it, not a fourth sentence.
+    const withReverse = [
+      ...reworded,
+      { questionId: 'q4', sessionId: 's2', promptForm: 'reverse', wordingVariant: 'A' },
+    ];
+    expect(skillState({ attempted: true, evidence: withReverse }).status).toBe('mastered');
+  });
+
   /* Content written before the axes existed cannot satisfy the form bar. */
   it('does not let untagged evidence stand in for a form', () => {
     const untagged = evidence(3).map(({ promptForm: _drop, ...e }) => e);

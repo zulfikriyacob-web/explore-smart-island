@@ -275,18 +275,32 @@ function promptFormDiversity(pack) {
   const bySkill = new Map();
   for (const q of tagged) {
     if (!q.promptForm) continue;
-    if (!bySkill.has(q.subSkill)) bySkill.set(q.subSkill, { forms: new Set(), ids: [] });
+    if (!bySkill.has(q.subSkill)) {
+      bySkill.set(q.subSkill, { forms: new Set(), wordings: new Set(), ids: [] });
+    }
     const e = bySkill.get(q.subSkill);
     e.forms.add(q.promptForm);
+    if (q.wordingVariant) e.wordings.add(q.wordingVariant);
     e.ids.push(q.id);
   }
 
   const single = [...bySkill.entries()].filter(([, e]) => e.forms.size < 2);
   for (const [skill, e] of single) {
     const shape = e.ids.length > 1 ? `${e.ids.length} questions` : '1 question';
+    /*
+      Say so explicitly when the only variety is the sentence. Same promptForm
+      plus different wordingVariant is ONE form — that is what the wording axis
+      is for — and a content writer looking at three visibly different questions
+      is exactly the person who would assume otherwise.
+    */
+    const rewordedOnly = e.wordings.size > 1;
     lines.push(
       `${skill}: ${shape} (${e.ids.join(', ')}) but only 1 promptForm (${[...e.forms][0]}) — ` +
-        `asked one way only`,
+        `asked one way only` +
+        (rewordedOnly
+          ? `. ${e.wordings.size} wordingVariants (${[...e.wordings].sort().join(', ')}) do not ` +
+            `make a second form`
+          : ''),
     );
   }
   if (bySkill.size > 0 && single.length === bySkill.size) {

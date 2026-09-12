@@ -738,7 +738,7 @@ ialah `promptForm` — `direct`, `reverse`, `contextual` — dan hanya itu:
 | Paksi | Dikira? | Sebab |
 |---|---|---|
 | `promptForm` | **Ya** | Arah pemikiran berubah. Anak yang boleh `direct` tetapi tidak `reverse` belum faham sepenuhnya |
-| `responseMode` | Tidak | Di mana ia benar-benar menguji perkara lain, **senarai sub-kemahiran sudah memisahkannya** — mengetuk untuk membilang lawan memilih nombor ialah dua sub-kemahiran. Mengiranya lagi mengira satu pembezaan dua kali pada dua tingkat. Di mana ia tidak, bezanya pada mekanik menjawab: kotak input untuk anak Tahun 1 mengukur menaip sebanyak matematik |
+| `responseMode` | **Kadang-kadang** | Lihat di bawah — ia dikira hanya apabila ia mengubah cara murid **berfikir**, bukan hanya cara dia menekan |
 | `representation` | Tidak | Ia mengubah **kesukaran**, bukan arah pemikiran, dan kesukaran sudah ada medannya (`difficulty`, §5.5). Dua medan mengukur benda sama bermakna satu akan menyimpang |
 | `wordingVariant` | Tidak | Itu sebab ia diasingkan |
 
@@ -747,18 +747,53 @@ ialah `promptForm` — `direct`, `reverse`, `contextual` — dan hanya itu:
 > terhafal tidak mungkin. Menukar yang pertama dengan yang kedua membawa kadar peneka kembali
 > ke **11%** — satu anak daripada sembilan — dan itu bukan tugas syarat bentuk.
 
-**Pengecualian: sub-kemahiran yang hanya menyokong satu bentuk.** Disenaraikan dengan sebabnya
-dalam `<subject>-y<year>.skills.json`, dan **ditanda belum disemak guru**. Yang dikecualikan
-kekal pada tiga `questionId` berbeza sahaja. Alasannya sama seperti yang menjatuhkan peraturan
-tiga-bentuk: **bar yang tiada siapa boleh lepasi tidak memberitahu ibu bapa apa-apa.**
+#### `responseMode`: kadang-kadang bentuk, dan tiada mesin boleh memutuskannya
 
-Yang mengecilkan senarai itu kepada sepuluh entri ialah satu peraturan: apabila `reverse` bagi
-satu sub-kemahiran ialah sub-kemahiran **sebelah** dalam senarai yang sama, `reverse` bukan
-tidak wujud — buktinya cuma milik yang sebelah. `reverse` bagi *before* ialah *after*; bagi
-*count_objects* ialah *number_to_quantity*. Sub-kemahiran begitu masih ada `direct` dan
-`contextual`, jadi ia tidak dikecualikan. Yang tinggal ialah sepuluh sub-kemahiran membilang
-1.5.1, di mana `contextual` menjadikannya masalah berayat yang anak mesti **baca** sebelum dia
-boleh membilang.
+Peraturan guru: `responseMode` dikira sebagai bentuk berbeza **hanya jika ia mengubah cara murid
+berfikir, bukan hanya cara dia menekan.** Dua contohnya menetapkan kedua-dua hujung:
+
+| Pasangan | Sub-kemahiran | Dikira? | Kenapa |
+|---|---|---|---|
+| `select` → `input` | nilai digit puluh | **Ya** | Memilih daripada tiga pilihan ialah pengecaman; menaip `60` ialah pengeluaran. Anak yang boleh kenal tidak semestinya boleh keluarkan |
+| `tap` → `select` | membilang objek | Tidak | Kedua-duanya memberi bahan jawapan kepada anak. Yang berubah ialah jarinya |
+
+**Ini peraturan pertimbangan, bukan peraturan mekanikal**, dan ia tidak boleh dikuatkuasakan
+daripada pasangan nilai sahaja — perkara yang sama (`select` → `input`) mengubah pemikiran pada
+satu sub-kemahiran dan tidak pada sub-kemahiran lain. Reka bentuknya, dan kenapa ia belum
+dibina, ada dalam PRD §16 item 17. Sehingga ia dibina, **`responseMode` tidak dikira sama
+sekali** — arah yang lebih selamat untuk tersilap, kerana ia hanya boleh mendakwa terlalu
+sedikit.
+
+**Bentuk sama + ayat berbeza = SATU bentuk.** `wordingVariant` tidak pernah dikira, dan itu
+sebab ia wujud: app boleh mempelbagaikan ayat supaya anak tidak menghafalnya, tanpa variasi itu
+berpura-pura menjadi bukti baharu. Tiga soalan dengan tiga ayat berlainan dan satu arah
+pemikiran ialah **satu** bentuk. `Evidence` membawa medan itu supaya peraturan ini dinyatakan
+dan diuji, bukan sekadar tidak dilaksanakan — medan yang tiada kelihatan sama seperti medan yang
+seseorang terlupa. `validate:content` menyebutnya dengan nama apabila satu-satunya kepelbagaian
+ialah ayat.
+
+**Pengecualian: sub-kemahiran yang hanya menyokong satu bentuk.** Disenaraikan dengan sebabnya
+dalam `<subject>-y<year>.skills.json`, dan **disemak guru**. Yang dikecualikan kekal pada tiga
+`questionId` berbeza sahaja. Alasannya sama seperti yang menjatuhkan peraturan tiga-bentuk:
+**bar yang tiada siapa boleh lepasi tidak memberitahu ibu bapa apa-apa.**
+
+Yang mengecilkan senarai itu ialah satu peraturan: apabila `reverse` bagi satu sub-kemahiran
+ialah sub-kemahiran **sebelah** dalam senarai yang sama, `reverse` bukan tidak wujud — buktinya
+cuma milik yang sebelah. `reverse` bagi *before* ialah *after*; bagi *count_objects* ialah
+*number_to_quantity*. Sub-kemahiran begitu masih ada `direct` dan `contextual`, jadi ia tidak
+dikecualikan.
+
+> **Syarat pada peraturan itu, daripada guru:** ia hanya sah kalau pasangan itu **benar-benar
+> wujud** sebagai sub-kemahiran berasingan dalam senarai. Kalau pasangannya tiada, buktinya
+> tidak mempunyai tempat lain untuk pergi dan pengecualian tetap diperlukan. Semak senarai
+> sebelum memakai peraturan ini; jangan andaikan pasangan itu ada kerana ia sepatutnya ada.
+
+Senarai muktamad ialah **sembilan** sub-kemahiran membilang 1.5.1, di mana `contextual`
+menjadikannya masalah berayat yang anak mesti **baca** sebelum dia boleh membilang.
+`count_10_up` **ditolak guru** — kami sendiri menandakannya sebagai yang paling lemah dalam
+borang, kerana not RM10 dan bingkai-sepuluh memberi konteks harian yang jujur, dan guru
+bersetuju. Pasangan menurunnya kekal: membelanja RM10 pada satu masa menjadi soalan wang,
+iaitu SP 4.0.
 
 > **Perbendaharaan lima nama sudah mati.** `direct`, `inverted`, `select`, `story`, `visual`
 > ditolak guru kerana ia mencampurkan tiga perkara berbeza. Tiga paksi menggantikannya

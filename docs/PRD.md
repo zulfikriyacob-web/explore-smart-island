@@ -539,11 +539,21 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     di luar tajuk pek. Itu mengubah pengiraan dalam jadual di atas — mengeluarkan ketiga-tiga
     meninggalkan aktiviti tujuh soalan, bukan lapan.
 
-    Kedua, dan lebih penting: **q005 dan q009 bukan sekadar berada dalam pek yang salah — ia
-    ditulis terbalik.** SP 7.2.1 ialah *"**Menamakan** bentuk…"*. Soalan kita memberi nama
-    dalam arahan (*"Yang mana bentuk segi tiga?"*) dan meminta murid memilih gambar. Itu
-    **pengecaman**, bukan penamaan. Guru mencadangkan arah yang betul: tunjuk satu bentuk,
-    tanya *"Apakah nama bentuk ini?"*, dengan nama-nama sebagai pilihan teks.
+    Kedua: ~~**q005 dan q009 ditulis terbalik.**~~ **DISELESAIKAN, pusingan 2 — dan bukan
+    dengan memilih antara dua nasihat guru. Kedua-duanya betul, untuk perkara berbeza.**
+
+    Soalan itu **kekal**. *"Yang mana bentuk segi tiga?"* sah sebagai bentuk `reverse` bagi
+    `name_triangle`: anak diberi nama dan mencari bentuknya, iaitu definisi `reverse` guru
+    sendiri. Yang **kurang** ialah pasangan `direct` — *"Apakah nama bentuk ini?"* dengan
+    gambar dalam soalan.
+
+    Jadi kerjanya bukan *"tulis semula"*. Ia **"tulis pasangannya"**, dan bezanya besar: ia
+    mengekalkan satu-satunya kepelbagaian bentuk yang pek ini ada, dan menamakan tepat apa yang
+    perlu ditulis dan bukan apa yang perlu dibuang.
+
+    Ia **masih** memerlukan gambar dalam arahan, dan skema masih tiada tempat untuknya — jadual
+    lapisan di bawah kekal terpakai sepenuhnya. Yang berubah ialah kos: dua soalan baharu di
+    samping dua yang sedia ada, bukan dua penulisan semula yang membuang bukti yang sudah ada.
 
     Itu bukan suntingan teks. Ia menukar jenis soalan daripada `mcq-image` kepada `mcq`
     dengan **imej dalam arahan** — dan skema tidak mempunyai tempat untuk imej dalam arahan
@@ -637,10 +647,25 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     dua sub-kemahiran, bukan dua bentuk. `representation` ditolak kerana ia mengubah kesukaran,
     yang sudah ada medannya sendiri. Jadual penuh dalam SPEC §5.7.
 
-    **Pengecualian, dan ia belum disemak guru.** Sub-kemahiran yang hanya menyokong satu
-    bentuk kekal pada tiga id sahaja — bar yang tiada siapa boleh lepasi tidak memberitahu ibu
-    bapa apa-apa. Senarainya sepuluh entri, kesemuanya membilang 1.5.1, dalam
-    `math-y1.skills.json` dengan sebab setiap satu dan `teacherReviewed: false`.
+    **MUKTAMAD selepas semakan guru pusingan 2.** Dua peraturan ditambah:
+
+    **(a) Bentuk sama + ayat berbeza = satu bentuk.** `wordingVariant` tidak pernah dikira.
+    Dikuatkuasakan dalam `coverage.ts` (dengan ujian, bukan dengan ketiadaan medan) dan
+    disebut dengan nama oleh `validate:content` apabila satu-satunya kepelbagaian ialah ayat.
+
+    **(b) `responseMode` dikira kadang-kadang** — hanya apabila ia mengubah cara murid
+    **berfikir**, bukan cara dia menekan. Peraturan pertimbangan, bukan mekanikal; lihat
+    item 17. Sehingga ia dibina, ia tidak dikira sama sekali.
+
+    **Pengecualian: sembilan, disemak dan diluluskan guru.** `teacherReviewed: true` dalam
+    `math-y1.skills.json`. `count_10_up` **dibuang** — kami menandakannya sebagai pengecualian
+    paling lemah dalam borang, dan guru bersetuju: not RM10 dan bingkai-sepuluh memberi konteks
+    harian yang jujur, jadi bentuk situasi memang boleh ditulis untuknya.
+
+    **Syarat guru pada peraturan "reverse ialah sub-kemahiran sebelah":** ia hanya sah kalau
+    pasangan itu benar-benar wujud sebagai sub-kemahiran berasingan. Kalau pasangannya tiada,
+    buktinya tidak ada tempat lain untuk pergi dan pengecualian tetap diperlukan. Direkod
+    bersama peraturan dalam fail kemahiran, bukan hanya di sini.
 13. ~~**Adakah `masteredOnce` patut mengubah apa yang ibu bapa lihat?**~~
     **DISELESAIKAN — kedua-duanya diterima, tiada label keempat.**
 
@@ -662,6 +687,50 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     **Susunan "Fokus minggu ini"** (§11): kemahiran yang tergelincir mendahului yang belum
     pernah dimulakan. `standardCoverage()` memulangkan `slippedIds` untuk kedua-duanya.
     Perincian dalam SPEC §5.7.
+17. **Bila `responseMode` dikira sebagai bentuk berbeza?** Diagnosis, belum dibina.
+
+    Guru menetapkan peraturannya: ia dikira **hanya jika ia mengubah cara murid berfikir, bukan
+    hanya cara dia menekan.** Dua contohnya menetapkan kedua-dua hujung — `select` → `input`
+    untuk nilai digit puluh **mengubah** pemikiran (pengecaman lawan pengeluaran); `tap` →
+    `select` untuk membilang **tidak** (kedua-duanya memberi bahan jawapan kepada anak).
+
+    **Boleh ia dikuatkuasakan secara mekanikal? Tidak.** Pasangan nilai yang sama membawa
+    jawapan berbeza pada sub-kemahiran berbeza. `select` → `input` mengubah pemikiran untuk
+    nilai digit, tetapi untuk `count_objects` menaip "7" selepas mengetuk tujuh objek tidak
+    menambah apa-apa pemikiran baharu — anak sudah tahu jawapannya sebelum dia menaip.
+    Peraturan itu tentang **apa yang sub-kemahiran itu tuntut**, bukan tentang pasangan mod.
+
+    Satu heuristik mekanikal hampir berjaya dan patut direkod supaya ia tidak dicuba semula
+    secara buta: **pengeluaran lawan pengecaman** — `input` menuntut anak menghasilkan jawapan,
+    manakala `select` dan `tap` mempersembahkan bahannya. Ia meliputi kedua-dua contoh guru.
+    Tetapi ia pecah pada `order` dan `match`: menyusun 18, 42, 27 ialah pengeluaran juga, dan
+    sama ada itu bermakna "bentuk berbeza" bergantung pada sub-kemahiran — untuk
+    `order_ascending` ia **memang** kemahirannya, bukan variasi bentuknya.
+
+    **Cadangan: keputusan penulis kandungan, direkod per sub-kemahiran.** Medan pilihan dalam
+    fail kemahiran, lalai **tidak dikira**:
+
+    ```
+    "value_of_tens_digit": {
+      "responseModeCountsAsForm": true,
+      "why": "select ialah pengecaman, input ialah pengeluaran — anak yang boleh kenal 60
+              dalam senarai belum semestinya boleh mengeluarkannya"
+    }
+    ```
+
+    Tiga sebab bentuk ini:
+
+    - **Lalai selamat.** Tidak dikira bermakna bar lebih tinggi, dan bar lebih tinggi hanya
+      boleh mendakwa terlalu sedikit.
+    - **Ia disemak di tempat yang sama seperti pecahan sub-kemahiran** — borang `kssr:review`
+      sudah merender senarai itu, jadi soalan keempat masuk ke dalam jadual yang sama.
+    - **`validate:content` boleh menyemak bentuknya, bukan kebenarannya** — bahawa medan itu
+      wujud, bahawa `why` ada, dan bahawa sub-kemahiran itu benar-benar mempunyai soalan dalam
+      dua `responseMode` sebelum ia mendakwa faedah itu.
+
+    Tidak dibina sehingga awak setuju pada bentuknya, dan tidak dibina sebelum sesiapa
+    benar-benar perlukannya: hari ini **tiada** sub-kemahiran dalam pek mempunyai dua
+    `responseMode`, jadi medan itu tidak akan mengubah satu pun nombor.
 16. ~~**Jawapan salah kedua pada soalan yang sama tidak diumumkan.**~~ **DISELESAIKAN.**
     Percubaan kedua kini berkata **"Belum betul. Cuba sekali lagi."** Diukur: mutasi kawasan
     `aria-live` naik daripada 1 kepada 2, dan teksnya berbeza.

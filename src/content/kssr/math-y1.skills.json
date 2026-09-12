@@ -9,9 +9,13 @@
     "note": "Setiap sub-kemahiran di bawah datang daripada jawapan bertulis guru itu. Id yang guru sendiri cadangkan digunakan verbatim; yang lain dinamakan mengikut corak yang sama. Contoh soalan tidak disalin ke sini — ia hidup dalam dokumen sumber, tidak disunting."
   },
   "promptFormExemptions": {
-    "teacherReviewed": false,
-    "note": "CADANGAN KAMI, BUKAN KEPUTUSAN GURU. Ambang penguasaan menuntut dua promptForm berlainan (SPEC 5.7). Sub-kemahiran di sini hanya menyokong satu, jadi ambang itu akan menjadikannya kekal mustahil dicapai — mod kegagalan sama yang menjatuhkan peraturan tiga-bentuk. Yang dikecualikan kekal pada tiga questionId berbeza. Padam entri yang guru tolak; tambah yang dia namakan.",
-    "rule": "Yang mengecilkan senarai ini: apabila 'reverse' bagi satu sub-kemahiran ialah sub-kemahiran sebelah dalam senarai yang sama, reverse bukan tidak wujud — buktinya cuma milik yang sebelah. Contoh: reverse bagi 'before' ialah 'after'; reverse bagi 'count_objects' ialah 'number_to_quantity'. Sub-kemahiran begitu masih ada 'direct' dan 'contextual', jadi ia TIDAK dikecualikan.",
+    "teacherReviewed": true,
+    "note": "DISEMAK DAN DILULUSKAN GURU, pusingan 2. Sembilan daripada sepuluh cadangan diterima. Ambang penguasaan menuntut dua promptForm berlainan (SPEC 5.7); sub-kemahiran di sini hanya menyokong satu, jadi ambang itu akan menjadikannya kekal mustahil dicapai — mod kegagalan sama yang menjatuhkan peraturan tiga-bentuk. Yang dikecualikan kekal pada tiga questionId berbeza.",
+    "removedOnReview": {
+      "1.5.1/count_10_up": "Ditolak guru. Kami sendiri menandakannya sebagai pengecualian paling lemah dalam borang, kerana not RM10 dan bingkai-sepuluh memberi konteks harian yang jujur. Guru bersetuju: bentuk situasi memang boleh ditulis untuk membilang sepuluh-sepuluh menaik, jadi ia tidak layak dikecualikan. Pasangan menurunnya kekal dikecualikan — membelanja RM10 pada satu masa menjadi soalan wang, iaitu SP 4.0."
+    },
+    "rule": "Apabila 'reverse' bagi satu sub-kemahiran ialah sub-kemahiran sebelah dalam senarai yang sama, reverse bukan tidak wujud — buktinya cuma milik yang sebelah. Contoh: reverse bagi 'before' ialah 'after'; reverse bagi 'count_objects' ialah 'number_to_quantity'. Sub-kemahiran begitu masih ada 'direct' dan 'contextual', jadi ia TIDAK dikecualikan.",
+    "ruleCondition": "SYARAT GURU, pusingan 2: peraturan di atas hanya sah kalau pasangan itu BENAR-BENAR WUJUD sebagai sub-kemahiran berasingan dalam senarai. Kalau pasangannya tiada, buktinya tidak mempunyai tempat lain untuk pergi dan pengecualian tetap diperlukan. Semak senarai sebelum memakai peraturan ini, jangan andaikan pasangan itu ada kerana ia sepatutnya ada.",
     "exempt": {
       "1.5.1/count_1_up": "Bentuk terbalik ialah membilang satu-satu MENURUN, yang sudah menjadi sub-kemahiran sebelah — buktinya milik yang itu, bukan yang ini. Yang tinggal ialah bentuk situasi, dan itu menjadikannya masalah berayat yang anak mesti baca sebelum dia boleh membilang: ia mengukur bacaan, bukan membilang.",
       "1.5.1/count_1_down": "Bentuk terbalik ialah membilang satu-satu MENAIK, sub-kemahiran sebelah. Bentuk situasi menuntut anak membaca cerita dahulu sebelum membilang undur, dan membilang undur sudah pun yang paling sukar antara sepuluh ini.",
@@ -21,8 +25,7 @@
       "1.5.1/count_4_down": "Bentuk terbalik ialah empat-empat menaik, sub-kemahiran sebelah. Sama seperti di atas, dan lebih teruk: menurun empat-empat tiada konteks harian yang jujur.",
       "1.5.1/count_5_up": "Bentuk terbalik ialah lima-lima menurun, sub-kemahiran sebelah. Bentuk situasi ada — jari, syiling lima sen — tetapi ia bertukar menjadi soalan wang atau darab, iaitu SP lain.",
       "1.5.1/count_5_down": "Bentuk terbalik ialah lima-lima menaik, sub-kemahiran sebelah. Konteks harian untuk mengira undur lima-lima hampir tiada tanpa mengarang.",
-      "1.5.1/count_10_up": "Bentuk terbalik ialah sepuluh-sepuluh menurun, sub-kemahiran sebelah. PENGECUALIAN PALING LEMAH ANTARA SEPULUH: not RM10 dan bingkai-sepuluh memberi konteks harian yang jujur, jadi bentuk situasi mungkin memang boleh ditulis di sini. Kalau cikgu setuju ia boleh, buang entri ini.",
-      "1.5.1/count_10_down": "Bentuk terbalik ialah sepuluh-sepuluh menaik, sub-kemahiran sebelah. Lebih kuat daripada pasangan menaiknya: membelanja RM10 pada satu masa ialah konteks, tetapi ia menjadi soalan wang, iaitu SP 4.0."
+      "1.5.1/count_10_down": "Bentuk terbalik ialah sepuluh-sepuluh menaik, sub-kemahiran sebelah. Membelanja RM10 pada satu masa ialah konteks, tetapi ia menjadi soalan wang, iaitu SP 4.0. Pasangan menaiknya DITOLAK guru atas sebab yang tidak terpakai di sini — lihat removedOnReview."
     },
     "notExempt": "Setiap sub-kemahiran lain menyokong sekurang-kurangnya dua bentuk, jadi tiada satu pun dikecualikan. Ini arah yang lebih selamat untuk tersilap: bukan dikecualikan bermakna ambang lebih tinggi, dan ambang lebih tinggi tersilap dengan mendakwa terlalu sedikit, bukan terlalu banyak."
   },

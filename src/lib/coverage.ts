@@ -53,6 +53,20 @@ export interface Evidence {
    * cannot help satisfy the form bar.
    */
   promptForm?: string;
+  /**
+   * Which wording of that form. Recorded and **never counted**.
+   *
+   * Two questions with the same `promptForm` and different `wordingVariant` are
+   * **one** form. That is the whole reason the axis exists: the app can vary the
+   * sentence so a child does not memorise it, without the variation pretending
+   * to be new evidence. "Apakah nilai digit 6 dalam 63?" and "Dalam 63, digit 6
+   * bernilai berapa?" read differently and ask for the same thinking.
+   *
+   * It is on this interface rather than absent from it so the rule is stated
+   * and tested, not merely unimplemented. A field that is missing looks the
+   * same as a field somebody forgot.
+   */
+  wordingVariant?: string;
 }
 
 /**
