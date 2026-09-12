@@ -662,3 +662,95 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     **Susunan "Fokus minggu ini"** (§11): kemahiran yang tergelincir mendahului yang belum
     pernah dimulakan. `standardCoverage()` memulangkan `slippedIds` untuk kedua-duanya.
     Perincian dalam SPEC §5.7.
+14. **Betul/salah tidak sampai kepada pembaca skrin langsung.** Diagnosis, belum dibaiki.
+
+    SPEC §9 membina keseluruhan strategi kebolehcapaian di atas satu ayat: *"Betul/salah
+    **tidak pernah** disampaikan melalui warna sahaja — sentiasa ikon + gerakan + bunyi."*
+    **Pembaca skrin tidak menerima satu pun daripada tiga.** Ikon dalam slot `aria-hidden`,
+    gerakan visual, bunyi ialah nada marimba tanpa padanan teks.
+
+    Diukur pada halaman berjalan, soalan 1, selepas menekan jawapan:
+
+    | | Selepas SALAH | Selepas BETUL |
+    |---|---|---|
+    | Kawasan `aria-live` | `"Lihat nombor di hadapan dahulu."` — pancingan sahaja | **kosong** |
+    | `aria-label` butang | `"Jawapan 38"` — tidak berubah | `"Jawapan 74"` — tidak berubah |
+    | Ikon ✓/✕ | dalam `aria-hidden`, tiada dalam pokok kebolehcapaian | sama |
+    | Sempadan | `rgb(121,21,28)` | `rgb(21,122,67)` — warna, tidak kelihatan kepada AT |
+    | `document.activeElement` | kekal pada butang | **BODY** |
+
+    Dua perkara lebih teruk daripada "senyap":
+
+    **Betul lebih senyap daripada salah.** Satu-satunya perkara yang diumumkan ialah
+    pancingan, dan pancingan hanya muncul selepas jawapan salah. Jadi "salah" boleh disimpulkan
+    secara tidak sengaja, dan "betul" tidak menghasilkan apa-apa langsung.
+
+    **Jawapan betul memusnahkan fokus.** Semua butang jawapan menjadi `disabled`, dan butang
+    yang baru ditekan hilang daripada susunan tab semasa fokus berada padanya — diukur, fokus
+    melompat daripada `BUTTON[Jawapan 74]` ke `BODY`. Pengguna papan kekunci mesti menavigasi
+    semula dari atas dokumen untuk mencapai "Soalan seterusnya".
+
+    **Cadangan, mengikut susunan kos:**
+
+    1. **Kawasan `aria-live` membawa keputusan, bukan hanya bantuan.** `spokenFeedback` kini
+       pancingan + dedahan; ia patut bermula dengan verdict. Teks mesti dwibahasa (SPEC §3.1)
+       dan nadanya terikat: **"Betul!"** dan **"Belum betul. Cuba lagi."** — bukan "Salah!".
+       Corak untuk pemalar berlabel `LANG` sudah ada dalam `QuizScreen` bagi dedahan count-tap.
+    2. **`aria-disabled` menggantikan `disabled` pada butang jawapan.** `handlePress` sudah
+       pulang awal apabila `isLocked`, jadi tindakan sudah disekat tanpa `disabled`. Menukarnya
+       mengekalkan butang dalam susunan tab, dan fokus tidak ke mana-mana. Ini membaiki
+       kehilangan fokus **tanpa** memindahkan fokus, yang lebih baik daripada melompat ke
+       "Soalan seterusnya" — memindahkan fokus mengganggu pengguna yang tidak memintanya.
+    3. **Pilihan yang dipangkah membawa keadaannya dalam labelnya**, cth. `"Jawapan 38, salah"`,
+       supaya pengguna yang membaca semula senarai tahu yang mana sudah gugur. Kesan kedua;
+       jangan harap AT mengumumkan perubahan label secara automatik — itu kerja kawasan
+       `aria-live`.
+
+    Tidak dicadang: menukar `aria-label` sebagai saluran pengumuman utama. Banyak AT tidak
+    membacakan semula label yang berubah semasa fokus berada padanya, jadi ia kelihatan
+    berfungsi dalam ujian dan senyap pada peranti sebenar.
+15. **Butang Mula boleh difokus tetapi tidak boleh ditekan dengan papan kekunci.** Diagnosis,
+    belum dibaiki.
+
+    DESIGN §10 meminta cincin fokus untuk ibu bapa pada desktop, dan ia ada. Diukur:
+    `tabIndex 0`, garis luar fokus **3px**. Butang itu kelihatan sepenuhnya boleh digunakan.
+
+    Ia tidak. Diukur pada butang yang difokus:
+
+    | Tindakan | Hasil |
+    |---|---|
+    | `Enter` (keydown + keyup) | aktiviti **tidak** bermula |
+    | `click` sintetik | aktiviti **tidak** bermula |
+
+    `BlockButton` hanya mengendali `onPointerDown`. Tiada laluan click langsung. **Butang yang
+    boleh difokus tetapi tidak boleh ditekan lebih teruk daripada tiada fokus langsung** — ia
+    menjanjikan sesuatu yang tidak wujud.
+
+    **Bolehkah Enter membuka kunci audio? Ya, dan ia tidak memerlukan laluan baharu.** Howler
+    mendaftar pembuka kuncinya pada `document`, fasa capture, untuk `touchstart`, `touchend`,
+    `click` **dan `keydown`**. Diukur dalam pane: `keydown` pada butang Mula yang difokus
+    **sampai ke `document` dalam fasa capture**. Papan kekunci menggunakan salah satu daripada
+    empat peristiwa yang Howler sudah dengar.
+
+    Dan susunannya bertentangan dengan pepijat sentuh, yang menjadikannya selamat:
+
+    ```
+    Sentuh:       pointerdown (kita bertindak, komponen tanggal)  ->  touchstart (terlewat)
+    Papan kekunci: keydown (Howler buka kunci)                    ->  click (kita boleh bertindak)
+    ```
+
+    Pembukaan kunci berlaku **dahulu** pada laluan papan kekunci. Jadi ia **tidak memerlukan
+    pegangan gerak isyarat PR #33 langsung.**
+
+    **Cadangan:** tambah laluan pengaktifan papan kekunci yang menghantar `START` **tanpa**
+    melibatkan `holdForGesture`. Tiada apa untuk dipegang — `keydown` sudah sampai ke
+    `document` sebelum apa-apa tanggal. Melibatkan pegangan itu pada laluan ini akan
+    menyebabkan skrin mula berlengah sehingga pemasa 1000 ms, kerana pendengar pelepas
+    dipasang oleh satu effect yang berjalan **selepas** render dan tidak akan wujud semasa
+    click itu sendiri.
+
+    **Apa yang pane tidak boleh buktikan:** `Howler.autoUnlock` sudah `false` dan
+    `_audioUnlocked` sudah `true` di sini, kerana context pane bermula dalam keadaan berjalan.
+    Yang diukur ialah **perambatan** (`keydown` sampai ke `document`) dan **kelumpuhan**
+    (Enter tidak membuat apa-apa). Dakwaan buka kunci bersandar pada sumber Howler, sama
+    seperti sebelum ini, dan hanya peranti sebenar boleh mengesahkannya.
