@@ -402,6 +402,28 @@ dalam `content/packs/` dan **gagal dalam CI** jika ada aset hilang, `correctOpti
 tidak sepadan dengan mana-mana pilihan, atau satu kod DSKP tidak wujud. Ini menangkap ralat
 kandungan sebelum sampai ke kanak-kanak.
 
+### 3.6 Skrip yang menjana kerja untuk orang di luar repo
+
+Dua skrip mengubah pek menjadi dokumen yang dipegang seseorang yang tidak akan membuka repo
+ini. Kedua-duanya **mencetak ke stdout dan tidak menyimpan apa-apa**: jadual yang di-commit
+menyimpang daripada pek pada suntingan kandungan pertama, dan salinan basi lebih buruk
+daripada tiada salinan kerana ia kelihatan semasa.
+
+| Skrip | Menjana | Untuk siapa |
+|---|---|---|
+| `npm run audio:script` | Skrip rakaman audio arahan — satu baris setiap fail, dengan ayat yang perlu dibaca dan keadaan fail dalam `public/` | Pelakon suara (§8) |
+| `npm run kssr:review` | Borang semakan pemetaan KSSR — setiap soalan bersebelahan teks penuh SP yang didakwanya dan CATATAN DSKP, dengan satu soalan Ya/Tidak setiap satu | Guru yang menaikkan `kssr.verified` (§3.2, PRD §15) |
+
+```
+npm run audio:script > skrip-rakaman.md
+npm run kssr:review  > semakan-guru.md
+```
+
+Kedua-duanya menghurai pek melalui skema §3.5 yang sama, jadi tiada satu pun boleh dibina
+daripada pek yang rosak. `kssr:review` pergi lebih jauh dan **enggan** menjana borang yang
+memetik kod DSKP yang tiada dalam katalog — bertanya kepada guru tentang kod yang kita reka
+membuang masanya dan mengajarnya untuk tidak mempercayai baki borang itu.
+
 ---
 
 ## 4. Enjin sesi kuiz
