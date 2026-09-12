@@ -848,7 +848,7 @@ semua 10 di muka — ini mematikan sambungan yang perlahan.
   Main automatik dan butang ulang berkongsi satu pemanggil pemain, jadi menekan butang semasa
   audio automatik sedang berjalan **menggantikan** klip itu, bukan menindihnya — satu klip
   boleh didengar pada satu masa, tidak pernah dua.
-### Buka kunci audio iOS — lima peraturan, semuanya diperoleh dengan susah payah
+### Buka kunci audio iOS — enam peraturan, semuanya diperoleh dengan susah payah
 
 Bunyi tidak keluar langsung pada iPhone selama empat pusingan, dengan empat punca berlainan.
 Ini yang tinggal selepas semuanya. **Jangan pinda tanpa mengukur pada iPhone sebenar** — mesin
@@ -905,6 +905,31 @@ menjawab dan pergi. Sebab itu autoplay **menunggu** di pihak kita dan tidak pern
 > kerana tiada apa menyala apabila ia bertukar, jadi menunggu padanya boleh terkandas, dan
 > pada peranti ia menjadi `true` sesaat **selepas** context mula berjalan. `ctx.state` ada
 > peristiwa, menentukan kebolehdengaran sekarang, dan menjadi `false` semula pada gangguan.
+
+**6. Satu kawalan tidak boleh menanggalkan dirinya di dalam gerak isyarat yang perlu sampai
+kepada Howler.** Peristiwa yang dihantar pada nod yang sudah tertanggal tidak merambat, jadi ia
+tidak pernah sampai ke `document` — dan di situ sahaja Howler mendaftar pembuka kuncinya, dalam
+fasa capture, untuk `touchstart`, `touchend`, `click` dan `keydown`, dan **bukan** untuk
+sebarang peristiwa pointer (`howler.js` 2.2.4, baris 409-412).
+
+Butang Mula mengendalikan `pointerdown`, menghantar `START`, dan React 18 membuang pemasangan
+skrin mula dalam satu mikrotugas — sebelum pelayar sempat menghantar `touchstart`. Diukur pada
+butang itu: `isConnected === false` selepas pembuangan itu, dan **tiada satu pun** daripada
+empat peristiwa itu sampai ke `document`. `click` tidak dihantar langsung, kerana click
+memerlukan sasaran yang masih ada dalam pokok DOM. Gerak isyarat pertama sesi hilang, context
+tidak pernah dibuka kunci, dan tekanan Mula pada permulaan sejuk senyap.
+
+Jadi skrin mula kekal terpasang sehingga gerak isyarat yang menekannya tamat — ia bertukar pada
+`click`, peristiwa terakhir satu ketukan, dengan pemasa 1000 ms sebagai sandaran untuk jari yang
+tergelincir keluar. `START` tetap keluar pada `pointerdown`: kependaman tekanan itu sebabnya ia
+di situ. **Ini perubahan susun atur, bukan perubahan masa** — tiada apa di sini menunggu janji,
+bingkai atau jam untuk menentukan apa yang anak lihat.
+
+Ini semantik DOM, bukan kerenah iOS; ia berlaku di mana-mana. iOS sahaja tempat ia berharga,
+kerana iOS yang menuntut gerak isyarat dipercayai — pada komputer riba context sudah berjalan,
+jadi gerak isyarat yang hilang tidak berkos apa-apa dan pepijat ini kelihatan sempurna di sana
+melalui tiga sesi. Peraturannya am: mana-mana butang yang mengendalikan tekanan **dan**
+mengeluarkan dirinya mempunyai kecacatan ini, sama ada audio terlibat atau tidak.
 
 - Bunyi UI: `tap`, `correct`, `wrong`, `star`, `unlock`. Jaga bunyi `wrong` sebagai
   nada lembut menurun — bukan buzzer.
