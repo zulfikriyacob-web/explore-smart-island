@@ -985,6 +985,37 @@ jadi gerak isyarat yang hilang tidak berkos apa-apa dan pepijat ini kelihatan se
 melalui tiga sesi. Peraturannya am: mana-mana butang yang mengendalikan tekanan **dan**
 mengeluarkan dirinya mempunyai kecacatan ini, sama ada audio terlibat atau tidak.
 
+### Klip TTS tiba dengan tag ID3 — buang sebelum commit
+
+**Alat TTS sentiasa menambah tag ID3v2.4 sebanyak 16,648 bait di hadapan setiap fail.**
+Sepuluh rakaman BM yang pertama membawanya; ia dibuang sebelum ia sampai ke repo. Empat klip
+gelombang kedua membawanya juga, dengan saiz tag yang sama tepat. Ini akan berulang setiap
+kali rakaman baharu masuk, jadi ia langkah tetap, bukan kejadian.
+
+Ia **tidak** memecahkan apa-apa — pelayar main fail bertag dengan baik. Yang ia kos ialah
+saiz dan ketekalan: 16,648 bait setiap klip, dan empat klip ialah 66,592 bait, iaitu 8%
+daripada keseluruhan audio aktiviti. Belanjawan §7.6 longgar hari ini; ia tidak akan kekal
+longgar apabila trek EN masuk.
+
+**Langkah:** jatuhkan `n` bait pertama, dengan `n` diambil daripada pengepala tag itu
+sendiri — 10 bait, campur saiz syncsafe dalam bait 6–9, campur 10 lagi kalau bendera footer
+(bit 4 bait 5) ditetapkan. Jangan andaikan 16,648; sahkan.
+
+**Sahkan selepas membuang, tiga perkara, semuanya daripada bait:**
+
+| Semakan | Lulus bermaksud |
+|---|---|
+| Bait pertama | `ff fb …` — sync bingkai. Sepadan dengan klip yang sudah bersih |
+| Kiraan bingkai dan tempoh | **Tidak berubah** daripada sebelum. Kalau ia berubah, potongan masuk ke dalam audio |
+| Bait ekor selepas bingkai terakhir | `0` |
+
+Semakan paling jujur ialah penyahkod pelayar, bukan penghurai kita sendiri: `fetch` fail itu
+dan `decodeAudioData` ia, kemudian bandingkan `duration`. Pengepala boleh berbohong; penyahkod
+yang memutuskan sama ada anak mendengar sesuatu.
+
+Panjang tag yang diisytiharkan mesti mendarat **tepat** pada bingkai sah pertama. Kalau
+kedua-duanya tidak sepadan, fail itu bukan apa yang anda sangka — berhenti, jangan potong.
+
 - Bunyi UI: `tap`, `correct`, `wrong`, `star`, `unlock`. Jaga bunyi `wrong` sebagai
   nada lembut menurun — bukan buzzer.
 - Haptik melalui `navigator.vibrate`: 10 ms pada ketukan, 30 ms pada betul. Langkau pada iOS
