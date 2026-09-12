@@ -794,8 +794,12 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     dipasang oleh satu effect yang berjalan **selepas** render dan tidak akan wujud semasa
     click itu sendiri.
 
-    **Apa yang pane tidak boleh buktikan:** `Howler.autoUnlock` sudah `false` dan
-    `_audioUnlocked` sudah `true` di sini, kerana context pane bermula dalam keadaan berjalan.
-    Yang diukur ialah **perambatan** (`keydown` sampai ke `document`) dan **kelumpuhan**
-    (Enter tidak membuat apa-apa). Dakwaan buka kunci bersandar pada sumber Howler, sama
-    seperti sebelum ini, dan hanya peranti sebenar boleh mengesahkannya.
+    ~~**Apa yang pane tidak boleh buktikan:**~~ **Disahkan pada laptop.** Menekan Enter pada
+    butang Mula yang difokus **membuka kunci audio**, dan soalan pertama berbunyi. Dakwaan itu
+    tidak lagi bersandar pada sumber Howler.
+
+    Yang pane boleh ukur ialah **perambatan** (`keydown` sampai ke `document` dalam fasa
+    capture) dan **kelumpuhan** (Enter tidak membuat apa-apa sebelum pembaikan). Ia tidak boleh
+    mengukur pembukaan kunci, kerana `Howler.autoUnlock` sudah `false` dan `_audioUnlocked`
+    sudah `true` di situ — context pane bermula dalam keadaan berjalan. Peranti yang menutup
+    jurang itu, seperti iPhone menutup jurang PR #33.
