@@ -8,3 +8,20 @@ Thumbs.db
 
 # Session scratch space, if it is ever pointed inside the repo.
 scratchpad/
+
+# Generated documents, by the exact names SPEC 3.6 uses in its examples.
+#
+# `audio:script` and `kssr:review` print to stdout and save nothing, because a
+# committed copy drifts from the pack on the first content edit and a stale
+# review form is worse than none — it looks current. Redirecting one to a file
+# is still the way you get something to hand to a person, and one of those files
+# then sits in the root waiting for the next `git add -A`. It has already been
+# committed once.
+#
+# Exact names, not `/*.md`. Ignoring every root markdown file would silently
+# swallow the next CLAUDE.md-sized document somebody adds here, and a file git
+# refuses to see fails quietly — which is the failure mode this repo keeps
+# paying for. Redirect somewhere else and the pattern does not cover you; that
+# is the trade, and it is the safer half of it.
+/semakan-guru.md
+/skrip-rakaman.md
