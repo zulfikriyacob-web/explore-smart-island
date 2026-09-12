@@ -118,26 +118,61 @@ Cukup untuk menghalang kanak-kanak 8 tahun, tidak menyusahkan orang dewasa.
 Dipetakan kepada DSKP Matematik KSSR Tahap 1. Setiap aktiviti membawa kod Standard
 Pembelajaran supaya laporan ibu bapa boleh merujuk kurikulum sebenar.
 
-> ⚠️ **Nota pengesahan:** pemetaan topik di bawah adalah rangka kerja berdasarkan struktur
-> DSKP KSSR (Semakan 2017). Kod SP sebenar (cth. `1.1.1`) **mesti disahkan terhadap fail
-> DSKP rasmi KPM** sebelum kandungan dimuktamadkan. Jangan hantar ke produksi tanpa semakan
-> seorang guru berpengalaman.
+### Tahun 1 — daripada DSKP, bukan daripada ingatan
 
-### Tahun 1
-| Bidang | Topik aktiviti | Contoh kemahiran |
+**Sumber:** DSKP KSSR (Semakan) Matematik Tahun 1, Bahagian Pembangunan Kurikulum KPM,
+cetakan pertama Mei 2015, ISBN 978-967-420-104-3. Dihantar oleh seorang guru dan dibaca
+terus. Senarai penuh SK dan SP disalin ke `src/content/kssr/math-y1.json`, dan
+`validate:content` menyemak setiap kod pek terhadapnya.
+
+DSKP Tahun 1 mempunyai **lapan tajuk** merentas **tiga bidang**. Bukan enam.
+
+| Bidang | Tajuk | Standard Kandungan |
 |---|---|---|
-| Nombor & Operasi | Nombor bulat hingga 100 | Membilang, nilai tempat, tertib menaik/menurun |
-| Nombor & Operasi | Tambah & tolak dalam lingkungan 100 | Fakta asas, ayat matematik |
-| Sukatan & Geometri | Wang hingga RM10 | Kenal syiling & not, jumlah harga |
-| Sukatan & Geometri | Masa & waktu | Hari, bulan, waktu tepat pada jam |
-| Sukatan & Geometri | Bentuk 2D & 3D | Kenal pasti, ciri sisi/bucu |
-| Perkaitan & Algebra | Pola mudah | Sambung pola bentuk & nombor |
+| Nombor dan Operasi | **1.0 Nombor Bulat Hingga 100** | 1.1 kuantiti secara intuitif · 1.2 nilai nombor · 1.3 menulis nombor · 1.4 kombinasi nombor · 1.5 rangkaian nombor · 1.6 nilai tempat · 1.7 menganggar · 1.8 membundarkan · 1.9 pola nombor · 1.10 penyelesaian masalah |
+| Nombor dan Operasi | **2.0 Operasi Asas** | 2.1 konsep tambah dan tolak · 2.2 tambah dalam lingkungan 100 · 2.3 tolak dalam lingkungan 100 · 2.4 penyelesaian masalah · 2.5 tambah berulang · 2.6 tolak berturut-turut |
+| Nombor dan Operasi | **3.0 Pecahan** | 3.1 konsep perdua dan perempat pecahan wajar · 3.2 penyelesaian masalah |
+| Nombor dan Operasi | **4.0 Wang** | 4.1 wang kertas dan duit syiling · 4.2 sumber kewangan dan simpanan · 4.3 penyelesaian masalah |
+| Sukatan dan Geometri | **5.0 Masa dan Waktu** | 5.1 hari dan bulan · 5.2 muka jam · 5.3 penyelesaian masalah |
+| Sukatan dan Geometri | **6.0 Ukuran dan Sukatan** | 6.1 unit relatif untuk mengukur panjang, jisim dan isi padu cecair · 6.2 penyelesaian masalah |
+| Sukatan dan Geometri | **7.0 Ruang** | 7.1 bentuk tiga dimensi · 7.2 bentuk dua dimensi · 7.3 penyelesaian masalah |
+| Statistik dan Kebarangkalian | **8.0 Pengurusan Data** | 8.1 mengumpul, mengelas dan menyusun data · 8.2 piktograf · 8.3 penyelesaian masalah |
 
-### Tahun 2
+**Empat perkara yang senarai lama silap**, direkod supaya tiada siapa memulihkannya:
+
+- **Pecahan (3.0) ialah Tahun 1**, bukan Tahun 3. Skopnya sempit — satu perdua, satu
+  perempat, dua perempat, tiga perempat — tetapi ia ada.
+- **Pengurusan Data (8.0) ialah Tahun 1**, bukan Tahun 3. Piktograf, satu gambar satu nilai.
+- **Ukuran dan Sukatan (6.0) ialah Tahun 1**, bukan Tahun 2. Unit **bukan piawai** sahaja;
+  sentimeter dan kilogram datang kemudian.
+- **"Perkaitan dan Algebra" tiada dalam Tahun 1.** Jadual 8 DSKP meletakkan Koordinat serta
+  Nisbah dan Kadaran dalam bidang itu, dan kedua-duanya bukan sekolah rendah peringkat ini.
+  Pola bukan satu bidang — ia hidup di dalam tajuk: **1.9** untuk pola nombor, **7.1.3** dan
+  **7.2.3** untuk pola bentuk.
+
+Satu lagi yang senarai lama silap dan bukan hal tahun: **Wang (4.0) ialah Nombor dan
+Operasi**, bukan Sukatan dan Geometri.
+
+> ⚠️ **Status pengesahan.** Bahagian ini kini sepadan dengan dokumen, tetapi
+> `kssr.verified` kekal `false` di dalam pek. Membaca DSKP dengan betul dan seorang guru
+> mengesahkan bahawa satu soalan benar-benar mengajar kod yang didakwanya ialah dua perkara
+> berbeza. Hanya semakan guru menaikkan bendera itu (PRD §15).
+
+### Tahun 2 — **BELUM DISAHKAN**
+
+Kami tiada DSKP Tahun 2. Senarai di bawah ialah senarai asal, tidak disemak, dan Tahun 1
+baru sahaja menunjukkan bahawa tekaan yang munasabah meletakkan tiga topik pada tahun yang
+salah. **Jangan tulis kandungan daripadanya.**
+
 Nombor hingga 1,000 · Tambah & tolak dengan mengumpul semula · **Darab & bahagi (2, 3, 4, 5, 10)** ·
 Wang hingga RM100 · Masa (setengah jam, suku jam) · Ukuran panjang & jisim · Perwakilan data mudah
 
-### Tahun 3
+### Tahun 3 — **BELUM DISAHKAN**
+
+Sama: tiada DSKP, tidak disemak. Perhatikan bahawa Pecahan dan Piktograf muncul di sini
+kerana senarai lama meletakkannya di sini — dan kedua-duanya sudah bermula dalam Tahun 1.
+Apa yang sebenarnya milik Tahun 3 hanya boleh diketahui daripada DSKP Tahun 3.
+
 Nombor hingga 10,000 · Semua operasi asas · **Pecahan wajar mudah** · Perpuluhan asas ·
 Wang, masa, ukuran lanjutan · Piktograf & carta palang
 

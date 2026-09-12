@@ -94,9 +94,9 @@ Satu fail = satu topik. Ini yang dimuatkan dan dicache.
   "islandId": "pulau-nombor",
   "title": { "ms": "Nombor Hingga 100", "en": "Numbers to 100" },
   "kssr": {
-    "document": "DSKP Matematik Tahun 1 (Semakan 2017)",
-    "contentStandard": "1.1",
-    "learningStandards": ["1.1.1", "1.1.2", "1.1.3"],
+    "document": "DSKP KSSR (Semakan) Matematik Tahun 1, Bahagian Pembangunan Kurikulum KPM, cetakan pertama Mei 2015",
+    "contentStandards": ["1.2", "1.5", "1.6"],
+    "learningStandards": ["1.2.1", "1.2.2", "1.5.1", "1.6.1"],
     "verified": false
   },
   "activities": [
@@ -111,8 +111,19 @@ Satu fail = satu topik. Ini yang dimuatkan dan dicache.
 }
 ```
 
+`contentStandards` ialah **jamak**. Satu pek topik meliputi satu tajuk DSKP, dan satu tajuk
+memegang beberapa Standard Kandungan — pek matematik hari ini menyentuh 1.2, 1.5 dan 1.6.
+Medan tunggal yang pernah ada di sini hanya boleh betul dengan menjadi kabur, dan ia memang
+begitu: ia mengaku "1.1" untuk pek yang tidak mengandungi satu pun soalan 1.1.
+
+Setiap SP mesti berada di bawah salah satu SK yang diisytiharkan — 1.2.2 di bawah 1.2 —
+dan skema menguatkuasakannya. Ini semakan bentuk, bukan semakan kewujudan; untuk yang kedua
+lihat §3.5.
+
 `kssr.verified` bermula sebagai `false`. Ia menjadi `true` hanya selepas semakan guru
 (PRD §15). Papan pemuka ibu bapa **tidak** memaparkan kod SP untuk pek yang belum disahkan.
+**Kod yang sah bukan kod yang disahkan.** Katalog §3.5 membuktikan satu kod itu wujud dalam
+dokumen; ia tidak membuktikan soalan itu mengajarnya. Hanya seorang guru boleh.
 
 ### 3.3 Skema Soalan asas
 
@@ -123,7 +134,7 @@ interface QuestionBase {
   id: string;                    // unik dalam pek
   type: QuestionType;
   difficulty: Difficulty;
-  learningStandard?: string;     // cth "1.1.2"
+  learningStandard?: string;     // cth "1.2.2"
   prompt: LocalizedText;         // teks arahan
   promptAudio: LocalizedAudio;   // WAJIB — kanak-kanak umur 7 tidak boleh baca ini
   hint?: LocalizedText;          // ditunjukkan selepas 1 kali salah
@@ -160,7 +171,7 @@ subset ini mesti diluaskan dengan sengaja, dalam skema, sebelum kandungan dituli
   "id": "q001",
   "type": "mcq",
   "difficulty": 1,
-  "learningStandard": "1.1.2",
+  "learningStandard": "1.2.2",
   "prompt": { "ms": "Nombor manakah yang lebih besar?", "en": "Which number is bigger?" },
   "promptAudio": { "ms": "/audio/ms/q001.mp3", "en": "/audio/en/q001.mp3" },
   "hint": { "ms": "Lihat nombor di hadapan dahulu.", "en": "Look at the first digit." },
@@ -365,10 +376,31 @@ percubaan ketiga **dan** akan melukis dedahan pada percubaan itu.
 > kepada `mcq-image`, atau melumpuhkan butang hantar count-tap, akan mengubah apa yang
 > dibenarkan — kemas kini jadual ini bersama-sama.
 
+**Katalog DSKP — kod yang didakwa mesti wujud.** Dikuatkuasakan dalam `validate:content`.
+
+Zod boleh menyemak *bentuk* satu kod (`1.2.2` lulus, `abc` gagal). Ia tidak boleh menyemak
+sama ada kod itu ada dalam dokumen KPM, dan kod berbentuk betul tanpa rujukan ialah
+kegagalan yang paling senyap dalam projek ini: ia berakhir dalam laporan ibu bapa sebagai
+dakwaan kurikulum. Ia sudah berlaku — satu pek mengaku SK 1.1 dengan SP 1.1.1, 1.1.2 dan
+1.1.3, sedangkan SK 1.1 mempunyai **satu** SP. Dua daripada tiga tidak wujud, dan tiada apa
+menangkapnya.
+
+`src/content/kssr/<subject>-y<year>.json` menyimpan salinan senarai SK/SP dokumen itu.
+`validate:content` menyemak setiap `kssr.contentStandards`, setiap `kssr.learningStandards`
+dan setiap `learningStandard` soalan terhadapnya:
+
+| Keadaan | Kesan |
+|---|---|
+| Kod tiada dalam katalog | **Ralat** — gagal CI |
+| Tiada katalog untuk subjek/tahun itu | **Amaran** — kod tidak disemak langsung. Ini jurang kami, bukan ralat pek |
+| SP pek merentas lebih satu tajuk DSKP | **Amaran** — pek bertajuk untuk satu tajuk sahaja |
+
+Katalog hari ini: **matematik Tahun 1 sahaja.** Itu satu-satunya DSKP yang kami ada.
+
 **Skrip masa bina** `npm run validate:content` menjalankan skema terhadap setiap fail
-dalam `content/packs/` dan **gagal dalam CI** jika ada aset hilang atau `correctOptionId`
-tidak sepadan dengan mana-mana pilihan. Ini menangkap ralat kandungan sebelum sampai ke
-kanak-kanak.
+dalam `content/packs/` dan **gagal dalam CI** jika ada aset hilang, `correctOptionId`
+tidak sepadan dengan mana-mana pilihan, atau satu kod DSKP tidak wujud. Ini menangkap ralat
+kandungan sebelum sampai ke kanak-kanak.
 
 ---
 

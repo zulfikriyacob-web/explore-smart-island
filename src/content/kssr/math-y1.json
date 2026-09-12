@@ -1,0 +1,450 @@
+{
+  "catalogueVersion": 1,
+  "subject": "math",
+  "year": 1,
+  "document": {
+    "title": "Dokumen Standard Kurikulum dan Pentaksiran — Matematik Tahun 1",
+    "curriculum": "KSSR (Semakan)",
+    "publisher": "Bahagian Pembangunan Kurikulum, Kementerian Pendidikan Malaysia",
+    "printed": "Mei 2015",
+    "isbn": "978-967-420-104-3"
+  },
+  "notes": [
+    "Disalin terus daripada DSKP yang dihantar guru. Tajuk SK dan SP adalah kata-kata dokumen itu, termasuk ejaannya (cth. 'segiempat', 'segitiga').",
+    "SK 2.6 dicetak dengan satu SP sahaja dan ia bernombor 2.6.2; tiada 2.6.1 dalam dokumen. Direkod sebagaimana dicetak.",
+    "Katalog ini bukan pengesahan guru. Ia menyenaraikan kod yang wujud; sama ada satu soalan benar-benar mengajar kod itu masih keputusan seorang guru (PRD 15)."
+  ],
+  "areas": [
+    {
+      "area": "Nombor dan Operasi",
+      "topics": [
+        {
+          "topic": "1.0",
+          "title": "Nombor Bulat Hingga 100",
+          "contentStandards": [
+            {
+              "code": "1.1",
+              "title": "Kuantiti secara intuitif.",
+              "learningStandards": [
+                { "code": "1.1.1", "title": "Menyatakan kuantiti melalui perbandingan." }
+              ]
+            },
+            {
+              "code": "1.2",
+              "title": "Nilai nombor.",
+              "learningStandards": [
+                {
+                  "code": "1.2.1",
+                  "title": "Menamakan nombor hingga 100.",
+                  "details": [
+                    "(i) Membilang objek dalam kumpulan.",
+                    "(ii) Menamakan nombor bagi kumpulan objek sebagai mewakili kuantiti.",
+                    "(iii) Membandingkan kuantiti dua kumpulan objek."
+                  ]
+                },
+                {
+                  "code": "1.2.2",
+                  "title": "Menentukan nilai nombor hingga 100.",
+                  "details": [
+                    "(i) Menunjukkan kuantiti bagi nombor yang diberi.",
+                    "(ii) Memadankan kumpulan objek dengan nombor.",
+                    "(iii) Membandingkan nilai dua nombor.",
+                    "(iv) Menyusun kumpulan objek mengikut tertib menaik dan tertib menurun."
+                  ],
+                  "catatan": [
+                    "Menggunakan objek sebenar, gambar, garis nombor dan abakus 4:1.",
+                    "Menyatakan hubungannya 'lebih daripada' dan 'kurang daripada'.",
+                    "Sebarang nombor yang terletak di antaranya, sebelum dan selepas."
+                  ]
+                }
+              ]
+            },
+            {
+              "code": "1.3",
+              "title": "Menulis nombor.",
+              "learningStandards": [
+                { "code": "1.3.1", "title": "Menulis nombor dalam angka dan perkataan." }
+              ]
+            },
+            {
+              "code": "1.4",
+              "title": "Kombinasi nombor.",
+              "learningStandards": [
+                { "code": "1.4.1", "title": "Menyatakan kombinasi nombor satu digit." }
+              ]
+            },
+            {
+              "code": "1.5",
+              "title": "Rangkaian nombor.",
+              "learningStandards": [
+                {
+                  "code": "1.5.1",
+                  "title": "Membilang nombor.",
+                  "catatan": [
+                    "Membilang satu-satu, dua-dua, lima-lima, sepuluh-sepuluh dan empat-empat secara tertib menaik dan menurun dengan menggunakan pelbagai objek, gambar dan garis nombor."
+                  ]
+                },
+                { "code": "1.5.2", "title": "Melengkapkan sebarang rangkaian nombor." }
+              ]
+            },
+            {
+              "code": "1.6",
+              "title": "Nilai tempat.",
+              "learningStandards": [
+                {
+                  "code": "1.6.1",
+                  "title": "Menyatakan nilai tempat dan nilai digit bagi sebarang nombor."
+                }
+              ]
+            },
+            {
+              "code": "1.7",
+              "title": "Menganggar.",
+              "learningStandards": [
+                { "code": "1.7.1", "title": "Memberi anggaran bilangan objek yang munasabah." }
+              ]
+            },
+            {
+              "code": "1.8",
+              "title": "Membundarkan nombor.",
+              "learningStandards": [
+                { "code": "1.8.1", "title": "Membundarkan nombor bulat kepada puluh terdekat." }
+              ]
+            },
+            {
+              "code": "1.9",
+              "title": "Pola nombor.",
+              "learningStandards": [
+                { "code": "1.9.1", "title": "Mengenal pasti pola bagi siri nombor yang diberi." },
+                { "code": "1.9.2", "title": "Melengkapkan pelbagai pola nombor yang mudah." }
+              ]
+            },
+            {
+              "code": "1.10",
+              "title": "Penyelesaian masalah.",
+              "learningStandards": [
+                {
+                  "code": "1.10.1",
+                  "title": "Menyelesaikan masalah yang melibatkan situasi harian."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "topic": "2.0",
+          "title": "Operasi Asas",
+          "contentStandards": [
+            {
+              "code": "2.1",
+              "title": "Konsep tambah dan tolak.",
+              "learningStandards": [
+                {
+                  "code": "2.1.1",
+                  "title": "Menggunakan dan mempelbagaikan perbendaharaan kata yang relevan dalam konteks tambah dan tolak."
+                },
+                {
+                  "code": "2.1.2",
+                  "title": "Memperkenalkan simbol bagi tambah, tolak dan sama dengan."
+                },
+                {
+                  "code": "2.1.3",
+                  "title": "Menggunakan simbol tambah, tolak dan sama dengan bagi menulis ayat matematik berdasarkan situasi yang diberi."
+                }
+              ]
+            },
+            {
+              "code": "2.2",
+              "title": "Tambah dalam lingkungan 100.",
+              "learningStandards": [
+                {
+                  "code": "2.2.1",
+                  "title": "Menambah dalam lingkungan fakta asas.",
+                  "catatan": ["Menyatakan secara spontan fakta asas tambah."]
+                },
+                {
+                  "code": "2.2.2",
+                  "title": "Menambah dua nombor hasil tambah dalam lingkungan 100."
+                }
+              ]
+            },
+            {
+              "code": "2.3",
+              "title": "Tolak dalam lingkungan 100.",
+              "learningStandards": [
+                {
+                  "code": "2.3.1",
+                  "title": "Menolak dalam lingkungan fakta asas.",
+                  "catatan": ["Menyatakan secara spontan fakta asas tolak."]
+                },
+                { "code": "2.3.2", "title": "Menolak dua nombor dalam lingkungan 100." }
+              ]
+            },
+            {
+              "code": "2.4",
+              "title": "Penyelesaian masalah.",
+              "learningStandards": [
+                {
+                  "code": "2.4.1",
+                  "title": "Mereka cerita masalah tambah dan tolak dalam lingkungan 100."
+                },
+                {
+                  "code": "2.4.2",
+                  "title": "Menyelesaikan masalah tambah dan tolak yang melibatkan situasi harian."
+                }
+              ]
+            },
+            {
+              "code": "2.5",
+              "title": "Tambah berulang.",
+              "learningStandards": [
+                {
+                  "code": "2.5.1",
+                  "title": "Menulis ayat matematik tambah berulang dua-dua, lima-lima, sepuluh-sepuluh dan empat-empat."
+                }
+              ]
+            },
+            {
+              "code": "2.6",
+              "title": "Tolak berturut-turut.",
+              "learningStandards": [
+                {
+                  "code": "2.6.2",
+                  "title": "Menulis ayat matematik tolak berturut-turut dua-dua, lima-lima, sepuluh-sepuluh dan empat-empat."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "topic": "3.0",
+          "title": "Pecahan",
+          "contentStandards": [
+            {
+              "code": "3.1",
+              "title": "Konsep perdua dan perempat pecahan wajar.",
+              "learningStandards": [
+                {
+                  "code": "3.1.1",
+                  "title": "Mengenal pasti satu perdua, satu perempat, dua perempat dan tiga perempat."
+                }
+              ]
+            },
+            {
+              "code": "3.2",
+              "title": "Penyelesaian masalah.",
+              "learningStandards": [
+                { "code": "3.2.1", "title": "Menyelesaikan masalah yang melibatkan situasi harian." }
+              ]
+            }
+          ]
+        },
+        {
+          "topic": "4.0",
+          "title": "Wang",
+          "contentStandards": [
+            {
+              "code": "4.1",
+              "title": "Wang kertas dan duit syiling.",
+              "learningStandards": [
+                {
+                  "code": "4.1.1",
+                  "title": "Mengenal pasti mata wang Malaysia dalam bentuk syiling dan wang kertas."
+                },
+                {
+                  "code": "4.1.2",
+                  "title": "Mewakilkan nilai wang.",
+                  "details": ["(i) Sen hingga RM1.", "(ii) Ringgit hingga RM10."]
+                },
+                {
+                  "code": "4.1.3",
+                  "title": "Menukar wang.",
+                  "details": ["(i) Syiling hingga RM1.", "(ii) Ringgit hingga RM10."]
+                }
+              ]
+            },
+            {
+              "code": "4.2",
+              "title": "Sumber kewangan dan simpanan.",
+              "learningStandards": [
+                { "code": "4.2.1", "title": "Mengenal pasti sumber kewangan dan simpanan." },
+                {
+                  "code": "4.2.2",
+                  "title": "Merekod simpanan dan perbelanjaan daripada sumber kewangan."
+                }
+              ]
+            },
+            {
+              "code": "4.3",
+              "title": "Penyelesaian masalah.",
+              "learningStandards": [
+                {
+                  "code": "4.3.1",
+                  "title": "Menyelesaikan masalah harian melibatkan penambahan dan penolakan wang."
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": "Sukatan dan Geometri",
+      "topics": [
+        {
+          "topic": "5.0",
+          "title": "Masa dan Waktu",
+          "contentStandards": [
+            {
+              "code": "5.1",
+              "title": "Hari dan bulan.",
+              "learningStandards": [
+                { "code": "5.1.1", "title": "Menyatakan waktu dalam sehari." },
+                { "code": "5.1.2", "title": "Menyatakan dalam urutan peristiwa dalam sehari." },
+                { "code": "5.1.3", "title": "Menamakan hari dalam seminggu." },
+                { "code": "5.1.4", "title": "Menamakan bulan dalam setahun." }
+              ]
+            },
+            {
+              "code": "5.2",
+              "title": "Muka jam.",
+              "learningStandards": [
+                { "code": "5.2.1", "title": "Mengenal pasti jarum jam pada muka jam." },
+                {
+                  "code": "5.2.2",
+                  "title": "Mengenal pasti dan menyatakan 'setengah', 'satu perempat' dan 'tiga perempat' berdasarkan muka jam."
+                },
+                {
+                  "code": "5.2.3",
+                  "title": "Menyebut dan menulis waktu dalam jam, setengah dan satu perempat jam sahaja dengan menggunakan jam analog."
+                }
+              ]
+            },
+            {
+              "code": "5.3",
+              "title": "Penyelesaian masalah.",
+              "learningStandards": [
+                { "code": "5.3.1", "title": "Menyelesaikan masalah yang melibatkan situasi harian." }
+              ]
+            }
+          ]
+        },
+        {
+          "topic": "6.0",
+          "title": "Ukuran dan Sukatan",
+          "contentStandards": [
+            {
+              "code": "6.1",
+              "title": "Unit relatif untuk mengukur panjang, jisim dan isi padu cecair.",
+              "learningStandards": [
+                {
+                  "code": "6.1.1",
+                  "title": "Menggunakan dan mempelbagaikan perbendaharaan kata ukuran panjang, jisim dan isi padu cecair dalam konteks."
+                },
+                {
+                  "code": "6.1.2",
+                  "title": "Membuat pengukuran, jisim dan menyukat objek menggunakan unit bukan piawai."
+                },
+                {
+                  "code": "6.1.3",
+                  "title": "Membanding dua atau lebih ukuran, jisim dan isi padu cecair objek menggunakan unit bukan piawai."
+                }
+              ]
+            },
+            {
+              "code": "6.2",
+              "title": "Penyelesaian masalah.",
+              "learningStandards": [
+                { "code": "6.2.1", "title": "Menyelesaikan masalah yang melibatkan situasi harian." }
+              ]
+            }
+          ]
+        },
+        {
+          "topic": "7.0",
+          "title": "Ruang",
+          "contentStandards": [
+            {
+              "code": "7.1",
+              "title": "Bentuk tiga dimensi.",
+              "learningStandards": [
+                {
+                  "code": "7.1.1",
+                  "title": "Menamakan bentuk kuboid, kubus, kon, piramid tapak segiempat sama, silinder dan sfera."
+                },
+                {
+                  "code": "7.1.2",
+                  "title": "Memperihalkan permukaan, sisi dan bucu bagi bentuk tiga dimensi."
+                },
+                { "code": "7.1.3", "title": "Menyusun objek mengikut pola." },
+                {
+                  "code": "7.1.4",
+                  "title": "Menghasilkan bentuk baru dari gabungan bentuk tiga dimensi."
+                }
+              ]
+            },
+            {
+              "code": "7.2",
+              "title": "Bentuk dua dimensi.",
+              "learningStandards": [
+                {
+                  "code": "7.2.1",
+                  "title": "Menamakan bentuk segiempat sama, segiempat tepat, segitiga dan bulatan."
+                },
+                {
+                  "code": "7.2.2",
+                  "title": "Memperihalkan garis lurus, sisi, bucu dan lengkung bagi bentuk dua dimensi."
+                },
+                { "code": "7.2.3", "title": "Menyusun bentuk dua dimensi mengikut pola." },
+                { "code": "7.2.4", "title": "Menghasilkan corak berasaskan bentuk dua dimensi." }
+              ]
+            },
+            {
+              "code": "7.3",
+              "title": "Penyelesaian masalah.",
+              "learningStandards": [
+                { "code": "7.3.1", "title": "Menyelesaikan masalah yang melibatkan situasi harian." }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "area": "Statistik dan Kebarangkalian",
+      "topics": [
+        {
+          "topic": "8.0",
+          "title": "Pengurusan Data",
+          "contentStandards": [
+            {
+              "code": "8.1",
+              "title": "Mengumpul, mengelas dan menyusun data.",
+              "learningStandards": [
+                { "code": "8.1.1", "title": "Mengumpul data berdasarkan situasi harian." }
+              ]
+            },
+            {
+              "code": "8.2",
+              "title": "Piktograf.",
+              "learningStandards": [
+                {
+                  "code": "8.2.1",
+                  "title": "Membaca dan mendapatkan maklumat dari piktograf.",
+                  "catatan": ["Petunjuk melibatkan satu gambar satu nilai."]
+                }
+              ]
+            },
+            {
+              "code": "8.3",
+              "title": "Penyelesaian masalah.",
+              "learningStandards": [
+                { "code": "8.3.1", "title": "Menyelesaikan masalah yang melibatkan situasi harian." }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
