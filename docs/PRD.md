@@ -712,6 +712,53 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     **Susunan "Fokus minggu ini"** (§11): kemahiran yang tergelincir mendahului yang belum
     pernah dimulakan. `standardCoverage()` memulangkan `slippedIds` untuk kedua-duanya.
     Perincian dalam SPEC §5.7.
+18. **Borang bertanda membatalkan ambang yang PR #43 gabungkan. Belum diputuskan.**
+
+    `docs/kssr/guru-semakan-pusingan-2-bertanda.md` dikembalikan bertanda pada 12 September
+    2026. Empat jawapannya **membatalkan** keputusan yang kami rekod sebagai diluluskan sehari
+    sebelumnya, dan satu daripadanya membatalkan asas kepada tiga yang lain.
+
+    | Soalan | Kami rekod | Borang bertanda kata |
+    |---|---|---|
+    | Paksi bukti | `promptForm` dikira | **☑ Tidak** — *"Kepelbagaian prompt_form ialah penguat bukti dan ukuran kualiti bank soalan, bukan syarat universal untuk Dikuasai."* |
+    | Ambang | 3 soalan · 2 sesi · **2 bentuk** | *"Baseline mastery kekal: 3 item berbeza, betul cubaan pertama, merentas sekurang-kurangnya 2 sesi."* — tiada syarat bentuk |
+    | Pengecualian | 9 diluluskan | **Kesepuluh-sepuluh ☑ Tidak.** *"Senarai pengecualian dibatalkan seluruhnya."* |
+    | Peraturan "reverse ialah sebelah" | Disahkan dengan syarat | **☑ Tidak** — *"tidak lagi diperlukan kerana kepelbagaian bentuk bukan syarat wajib mastery."* |
+    | q005/q009 | Kekal, tulis pasangan `direct` | **☑ Kemahiran lain, tulis semula** |
+
+    Sebabnya satu dan konsisten: **kekurangan variasi bentuk ialah isu liputan bank soalan,
+    bukan kegagalan murid mencapai penguasaan.** Kalau itu betul, bar bentuk sepatutnya menjadi
+    laporan kualiti kandungan — yang `validate:content` sudah cetak setiap binaan — dan bukan
+    gerbang yang menahan label seorang anak.
+
+    **Belum dilaksana.** Ia membalikkan `coverage.ts`, `FORMS_FOR_MASTERY`, blok pengecualian
+    dalam fail kemahiran, dan bahagian ambang SPEC §5.7. Itu keputusan awak, bukan keputusan
+    saya, dan ia patut dibuat sambil melihat borang itu sendiri.
+
+    **Tiga nota kandungan dalam borang yang sama, belum dilaksana juga:**
+
+    - **1.2.1** — namakan semula *"Memilih nombor yang mewakili kuantiti yang dibilang"* kepada
+      *"Menamakan nombor bagi kumpulan objek sebagai mewakili kuantiti"*. Alasannya tajam:
+      **"Memilih" ialah cara jawab, bukan nama kemahiran.** Nama sub-kemahiran kita membawa
+      `responseMode` di dalamnya, dan itu mencampurkan dua paksi yang guru sendiri asingkan.
+    - **2.2.2** — *"Menambah gandaan sepuluh"* dan *"Tambah dalam bentuk situasi harian"* bukan
+      sub-kemahiran wajib. Guna empat kelompok: `two_digit_plus_one_digit_no_bridge`,
+      `two_digit_plus_one_digit_bridge`, `two_digit_plus_two_digit_no_bridge`,
+      `two_digit_plus_two_digit_bridge`. q008 masuk yang ketiga, dengan tag diagnostik
+      `multiple_of_10`. Situasi harian pindah ke **2.4.2**.
+    - **1.2.1 / q003, q006** — kalau app merekod ketukan dan nombor akhir **berasingan**, satu
+      aktiviti count-tap boleh memberi bukti kepada **dua** sub-kemahiran sekali gus.
+
+    **Dua petikan yang tidak ada dalam borang ini**, direkod supaya tiada siapa mencarinya:
+    ayat *"Nisbah 1/6 tidak boleh dianggap murid gagal 5 kemahiran lain"* dan keperluan
+    *"setiap sub-kemahiran patut ada sekurang-kurangnya satu direct + satu reverse, kecuali
+    yang membilang"* **tidak muncul** dalam dokumen ini. Kedua-duanya mungkin datang daripada
+    perbualan lain. Larangan liputan-bukan-penguasaan SPEC §5.7 kekal sebagai keputusan kami
+    sendiri sehingga ada sumber manusia yang boleh dirujuk.
+
+    **Dan borang ini bukan tandatangan.** Ia berkata begitu sendiri: ruang nama dan sekolah
+    sengaja kosong, dan ia *"tidak patut digunakan sendiri untuk menaikkan `kssr.verified`"*.
+    `kssr.verified` kekal `false`.
 17. **Bila `responseMode` dikira sebagai bentuk berbeza?** Diagnosis, belum dibina.
 
     Guru menetapkan peraturannya: ia dikira **hanya jika ia mengubah cara murid berfikir, bukan
