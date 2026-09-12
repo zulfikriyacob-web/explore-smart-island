@@ -8,27 +8,7 @@
     "author": "Guru penyemak (semakan pemetaan KSSR)",
     "note": "Setiap sub-kemahiran di bawah datang daripada jawapan bertulis guru itu. Id yang guru sendiri cadangkan digunakan verbatim; yang lain dinamakan mengikut corak yang sama. Contoh soalan tidak disalin ke sini — ia hidup dalam dokumen sumber, tidak disunting."
   },
-  "promptFormExemptions": {
-    "teacherReviewed": true,
-    "note": "DISEMAK DAN DILULUSKAN GURU, pusingan 2. Sembilan daripada sepuluh cadangan diterima. Ambang penguasaan menuntut dua promptForm berlainan (SPEC 5.7); sub-kemahiran di sini hanya menyokong satu, jadi ambang itu akan menjadikannya kekal mustahil dicapai — mod kegagalan sama yang menjatuhkan peraturan tiga-bentuk. Yang dikecualikan kekal pada tiga questionId berbeza.",
-    "removedOnReview": {
-      "1.5.1/count_10_up": "Ditolak guru. Kami sendiri menandakannya sebagai pengecualian paling lemah dalam borang, kerana not RM10 dan bingkai-sepuluh memberi konteks harian yang jujur. Guru bersetuju: bentuk situasi memang boleh ditulis untuk membilang sepuluh-sepuluh menaik, jadi ia tidak layak dikecualikan. Pasangan menurunnya kekal dikecualikan — membelanja RM10 pada satu masa menjadi soalan wang, iaitu SP 4.0."
-    },
-    "rule": "Apabila 'reverse' bagi satu sub-kemahiran ialah sub-kemahiran sebelah dalam senarai yang sama, reverse bukan tidak wujud — buktinya cuma milik yang sebelah. Contoh: reverse bagi 'before' ialah 'after'; reverse bagi 'count_objects' ialah 'number_to_quantity'. Sub-kemahiran begitu masih ada 'direct' dan 'contextual', jadi ia TIDAK dikecualikan.",
-    "ruleCondition": "SYARAT GURU, pusingan 2: peraturan di atas hanya sah kalau pasangan itu BENAR-BENAR WUJUD sebagai sub-kemahiran berasingan dalam senarai. Kalau pasangannya tiada, buktinya tidak mempunyai tempat lain untuk pergi dan pengecualian tetap diperlukan. Semak senarai sebelum memakai peraturan ini, jangan andaikan pasangan itu ada kerana ia sepatutnya ada.",
-    "exempt": {
-      "1.5.1/count_1_up": "Bentuk terbalik ialah membilang satu-satu MENURUN, yang sudah menjadi sub-kemahiran sebelah — buktinya milik yang itu, bukan yang ini. Yang tinggal ialah bentuk situasi, dan itu menjadikannya masalah berayat yang anak mesti baca sebelum dia boleh membilang: ia mengukur bacaan, bukan membilang.",
-      "1.5.1/count_1_down": "Bentuk terbalik ialah membilang satu-satu MENAIK, sub-kemahiran sebelah. Bentuk situasi menuntut anak membaca cerita dahulu sebelum membilang undur, dan membilang undur sudah pun yang paling sukar antara sepuluh ini.",
-      "1.5.1/count_2_up": "Bentuk terbalik ialah dua-dua menurun, sub-kemahiran sebelah. Bentuk situasi untuk membilang dua-dua — sepasang kasut, sepasang tangan — boleh ditulis, tetapi ia menjadi soalan darab bersamar, bukan soalan membilang.",
-      "1.5.1/count_2_down": "Bentuk terbalik ialah dua-dua menaik, sub-kemahiran sebelah. Situasi menurun dua-dua jarang berlaku secara semula jadi, dan yang dikarang menambah bacaan tanpa menambah matematik.",
-      "1.5.1/count_4_up": "Bentuk terbalik ialah empat-empat menurun, sub-kemahiran sebelah. Empat-empat ialah selang yang paling jarang dalam kehidupan harian antara lima selang DSKP, jadi bentuk situasi di sini hampir semestinya karangan.",
-      "1.5.1/count_4_down": "Bentuk terbalik ialah empat-empat menaik, sub-kemahiran sebelah. Sama seperti di atas, dan lebih teruk: menurun empat-empat tiada konteks harian yang jujur.",
-      "1.5.1/count_5_up": "Bentuk terbalik ialah lima-lima menurun, sub-kemahiran sebelah. Bentuk situasi ada — jari, syiling lima sen — tetapi ia bertukar menjadi soalan wang atau darab, iaitu SP lain.",
-      "1.5.1/count_5_down": "Bentuk terbalik ialah lima-lima menaik, sub-kemahiran sebelah. Konteks harian untuk mengira undur lima-lima hampir tiada tanpa mengarang.",
-      "1.5.1/count_10_down": "Bentuk terbalik ialah sepuluh-sepuluh menaik, sub-kemahiran sebelah. Membelanja RM10 pada satu masa ialah konteks, tetapi ia menjadi soalan wang, iaitu SP 4.0. Pasangan menaiknya DITOLAK guru atas sebab yang tidak terpakai di sini — lihat removedOnReview."
-    },
-    "notExempt": "Setiap sub-kemahiran lain menyokong sekurang-kurangnya dua bentuk, jadi tiada satu pun dikecualikan. Ini arah yang lebih selamat untuk tersilap: bukan dikecualikan bermakna ambang lebih tinggi, dan ambang lebih tinggi tersilap dengan mendakwa terlalu sedikit, bukan terlalu banyak."
-  },
+  "promptFormExemptionsWithdrawn": "Blok pengecualian bentuk yang pernah ada di sini dibatalkan seluruhnya oleh borang semakan bertanda (docs/kssr/guru-semakan-pusingan-2-bertanda.md). Guru menjawab TIDAK kepada kesepuluh-sepuluh cadangan dan kepada peraturan 'reverse ialah sub-kemahiran sebelah', atas satu sebab: kepelbagaian bentuk bukan syarat penguasaan, jadi tiada apa untuk dikecualikan daripadanya. Kekurangan variasi bentuk ialah isu liputan bank soalan, bukan kegagalan murid. Ambang kekal tiga item berbeza, cubaan pertama, merentas dua sesi, untuk setiap sub-kemahiran tanpa kecuali.",
   "sourceKinds": {
     "dskp-detail": "DSKP menyenaraikannya sendiri sebagai sub-titik rumi di bawah SP itu. Senarai tertutup.",
     "dskp-sentence": "Ayat SP itu sendiri menamakannya, tetapi DSKP tidak menomborkannya. Bacaan kami tentang ayat itu, bukan senarai dokumen.",
@@ -47,9 +27,10 @@
         {
           "id": "quantity_to_number",
           "label": {
-            "ms": "Memilih nombor yang mewakili kuantiti yang dibilang",
-            "en": "Choosing the number that represents the counted quantity"
-          }
+            "ms": "Menamakan nombor bagi kumpulan objek sebagai mewakili kuantiti",
+            "en": "Naming the number for a group of objects as representing its quantity"
+          },
+          "labelNote": "Dinamakan semula atas semakan guru (docs/kssr/guru-semakan-pusingan-2-bertanda.md). Label lama bermula 'Memilih nombor…', dan memilih ialah cara jawab, bukan nama kemahiran — nama sub-kemahiran tidak boleh membawa responseMode di dalamnya. Label baharu mengikut perkataan DSKP 1.2.1(ii)."
         },
         {
           "id": "compare_groups",
@@ -155,44 +136,41 @@
     "2.2.2": {
       "title": "Menambah dua nombor hasil tambah dalam lingkungan 100.",
       "source": "editorial",
+      "sourceNote": "Empat kelompok ditetapkan guru dalam borang semakan bertanda (docs/kssr/guru-semakan-pusingan-2-bertanda.md), mengikut struktur digit dan sama ada tambahan melintasi puluh. DSKP tidak memecahkan SP ini, jadi ia masih keputusan reka bentuk pembelajaran, bukan sub-titik rasmi — tetapi kini keputusan guru, bukan bacaan kami. Id verbatim daripada guru.",
       "subSkills": [
         {
-          "id": "add_2d_1d_no_regroup",
+          "id": "two_digit_plus_one_digit_no_bridge",
           "label": {
-            "ms": "Dua digit campur satu digit, tanpa melintasi puluh",
-            "en": "Two digits plus one digit, no crossing of a ten"
+            "ms": "Dua digit tambah satu digit, tanpa melintasi puluh",
+            "en": "Two digits plus one digit, without bridging a ten"
           }
         },
         {
-          "id": "add_2d_1d_regroup",
+          "id": "two_digit_plus_one_digit_bridge",
           "label": {
-            "ms": "Dua digit campur satu digit, melintasi puluh",
-            "en": "Two digits plus one digit, crossing a ten"
+            "ms": "Dua digit tambah satu digit, melintasi puluh",
+            "en": "Two digits plus one digit, bridging a ten"
           }
         },
         {
-          "id": "add_2d_2d_no_regroup",
+          "id": "two_digit_plus_two_digit_no_bridge",
           "label": {
-            "ms": "Dua digit campur dua digit, tanpa melintasi puluh",
-            "en": "Two digits plus two digits, no crossing of a ten"
+            "ms": "Dua digit tambah dua digit, tanpa melintasi puluh",
+            "en": "Two digits plus two digits, without bridging a ten"
           }
         },
         {
-          "id": "add_2d_2d_regroup",
+          "id": "two_digit_plus_two_digit_bridge",
           "label": {
-            "ms": "Dua digit campur dua digit, melintasi puluh",
-            "en": "Two digits plus two digits, crossing a ten"
+            "ms": "Dua digit tambah dua digit, melintasi puluh",
+            "en": "Two digits plus two digits, bridging a ten"
           }
-        },
-        {
-          "id": "add_multiple_of_10",
-          "label": { "ms": "Menambah gandaan sepuluh", "en": "Adding a multiple of ten" }
-        },
-        {
-          "id": "add_word_problem",
-          "label": { "ms": "Tambah dalam bentuk situasi harian", "en": "Addition set in an everyday situation" }
         }
-      ]
+      ],
+      "removedOnReview": {
+        "add_multiple_of_10": "Bukan sub-kemahiran wajib. Guru: jadikannya tag diagnostik multiple_of_10 pada soalan. 45 + 10 ialah dua digit tambah dua digit tanpa melintasi puluh; 'gandaan sepuluh' ialah ciri soalan itu, bukan kemahiran berasingan yang anak mesti kuasai.",
+        "add_word_problem": "Bukan sub-kemahiran 2.2.2. Guru: letakkan di bawah 2.4.2, Menyelesaikan masalah tambah dan tolak yang melibatkan situasi harian. Situasi harian ialah SP tersendiri dalam DSKP, bukan pecahan tambah. Belum dipecahkan di fail ini kerana tiada soalan pek memetik 2.4.2."
+      }
     },
     "7.2.1": {
       "title": "Menamakan bentuk segiempat sama, segiempat tepat, segitiga dan bulatan.",

@@ -40,33 +40,20 @@ export interface Evidence {
   questionId: string;
   /** Which run of an activity. Evidence from one sitting is weaker (see below). */
   sessionId: string;
-  /**
-   * How that question was built — `direct`, `reverse` or `contextual`.
-   *
-   * Counting distinct questions is not enough. "Apakah nilai digit 6 dalam 63?"
-   * and "Dalam 63, digit 6 bernilai berapa?" are two question ids asking for
-   * one direction of thinking; only "digit manakah yang bernilai 60?" turns it
-   * around. Three of the first kind measure a memorised sentence.
-   *
-   * Undefined on evidence from content written before the axes existed. Such
-   * evidence still counts toward the question and session bars, and simply
-   * cannot help satisfy the form bar.
-   */
-  promptForm?: string;
-  /**
-   * Which wording of that form. Recorded and **never counted**.
-   *
-   * Two questions with the same `promptForm` and different `wordingVariant` are
-   * **one** form. That is the whole reason the axis exists: the app can vary the
-   * sentence so a child does not memorise it, without the variation pretending
-   * to be new evidence. "Apakah nilai digit 6 dalam 63?" and "Dalam 63, digit 6
-   * bernilai berapa?" read differently and ask for the same thinking.
-   *
-   * It is on this interface rather than absent from it so the rule is stated
-   * and tested, not merely unimplemented. A field that is missing looks the
-   * same as a field somebody forgot.
-   */
-  wordingVariant?: string;
+  /*
+    No promptForm, representation, responseMode or wordingVariant here, and that
+    is a decision rather than an omission.
+
+    A form bar lived on this interface for one merge. A teacher's marked review
+    removed it: variety of question form strengthens evidence and measures the
+    quality of the item bank, but it is not a universal condition for mastery
+    (docs/kssr/guru-semakan-pusingan-2-bertanda.md). Holding a child's label back
+    because we have only written one kind of question punishes the child for
+    content we have not written.
+
+    The axes still describe every question, and validate:content still reports
+    how varied the bank is. They simply do not reach mastery.
+  */
 }
 
 /**
@@ -106,27 +93,6 @@ export const EVIDENCE_FOR_MASTERY = 3;
  */
 export const SESSIONS_FOR_MASTERY = 2;
 
-/**
- * And asked in two different ways.
- *
- * Distinct question ids overstate how varied the evidence is: measured on the
- * shipped pack, all nine sub-skills it touches are asked in exactly one
- * `promptForm`, and the only two `reverse` questions are the two a teacher
- * already flagged as written backwards. Three ids can be one question asked
- * three times with the numbers changed.
- *
- * **This is in addition to the three distinct questions, not instead of them.**
- * The two bars measure different risks: three questions is what makes a guesser
- * unlikely (3.7%, see above), and two forms is what makes a memorised sentence
- * unlikely. Trading the first for the second would take the guesser rate back
- * to 11% — one child in nine — which is not what the form requirement was for.
- *
- * Waived for sub-skills that only have one form available, listed with reasons
- * in `<subject>-y<year>.skills.json`. A bar nobody can clear tells a parent
- * nothing, which is the same argument that retired the three-form rule.
- */
-export const FORMS_FOR_MASTERY = 2;
-
 export interface SkillState {
   status: SkillStatus;
   /**
@@ -156,30 +122,14 @@ export interface SkillInput {
   latestWasWrong?: boolean;
   /** Carried in from storage; never reset here. */
   masteredOnce?: boolean;
-  /**
-   * This sub-skill only supports one `promptForm`, so the form bar is waived
-   * for it. From the skills file, where each exemption carries its reason and
-   * is marked as awaiting a teacher's review.
-   */
-  formExempt?: boolean;
 }
 
 export function skillState(input: SkillInput): SkillState {
-  const {
-    attempted,
-    evidence,
-    latestWasWrong = false,
-    masteredOnce = false,
-    formExempt = false,
-  } = input;
+  const { attempted, evidence, latestWasWrong = false, masteredOnce = false } = input;
 
   const questions = new Set(evidence.map((e) => e.questionId));
   const sessions = new Set(evidence.map((e) => e.sessionId));
-  const forms = new Set(evidence.map((e) => e.promptForm).filter(Boolean));
-  const barMet =
-    questions.size >= EVIDENCE_FOR_MASTERY &&
-    sessions.size >= SESSIONS_FOR_MASTERY &&
-    (formExempt || forms.size >= FORMS_FOR_MASTERY);
+  const barMet = questions.size >= EVIDENCE_FOR_MASTERY && sessions.size >= SESSIONS_FOR_MASTERY;
 
   const banked = masteredOnce || barMet;
 

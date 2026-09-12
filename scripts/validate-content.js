@@ -16,6 +16,7 @@ import { fileURLToPath } from 'node:url';
 
 import { TopicPackSchema, collectAssetRefs } from '../src/content/schema.ts';
 import { MAX_ATTEMPTS } from '../src/lib/scoring.ts';
+import { EVIDENCE_FOR_MASTERY } from '../src/lib/coverage.ts';
 
 /**
  * Placeholder art carries this marker. A picture that is a dashed box is not a
@@ -248,18 +249,54 @@ function subSkillCoverage(pack, skills) {
 }
 
 /**
- * How many genuinely different ways each sub-skill is asked about.
+ * How far each sub-skill is from being able to reach "Dikuasai" at all.
  *
- * Counting distinct questions is not enough: the teacher's correction is that
- * two questions can read completely differently and still ask for the same
- * direction of thinking. "Apakah nilai digit 6 dalam 63?" and "Dalam 63, digit
- * 6 bernilai berapa?" are both `direct`; only "digit manakah yang bernilai 60?"
- * is `reverse`. (docs/kssr/guru-struktur-variasi-soalan.md.)
+ * The mastery bar is three distinct questions, answered right on a first
+ * attempt, across two sessions (SPEC §5.7). A sub-skill with fewer than three
+ * questions in the item bank cannot clear that bar however well a child does,
+ * so this is the number that decides whether any label can ever read
+ * "Dikuasai" — and it is closed by writing ordinary questions, nothing more.
+ */
+function questionBarGap(pack) {
+  const lines = [];
+  const bySkill = new Map();
+  for (const q of pack.questions) {
+    if (!q.subSkill) continue;
+    if (!bySkill.has(q.subSkill)) bySkill.set(q.subSkill, []);
+    bySkill.get(q.subSkill).push(q.id);
+  }
+  let needed = 0;
+  for (const [skill, ids] of bySkill) {
+    const short = EVIDENCE_FOR_MASTERY - ids.length;
+    if (short <= 0) continue;
+    needed += short;
+    lines.push(
+      `${skill}: ${ids.length} of ${EVIDENCE_FOR_MASTERY} questions (${ids.join(', ')}) — cannot ` +
+        `reach mastery until ${short} more ${short === 1 ? 'is' : 'are'} written`,
+    );
+  }
+  if (needed > 0) {
+    lines.push(
+      `${needed} more question(s) would let every sub-skill this pack touches reach mastery`,
+    );
+  }
+  return lines;
+}
+
+/**
+ * Item-bank quality: how many genuinely different ways each sub-skill is asked.
  *
- * Reported, not enforced. Which axis has to differ before two answers count as
- * separate evidence is an open decision — SPEC §5.7 still counts distinct
- * question ids — so this prints the shape of the problem rather than failing on
- * it. The untagged line is the one that would make the report a lie.
+ * **A content report, not a mastery gate.** A teacher's marked review settled
+ * this: variety of promptForm strengthens evidence and measures the quality of
+ * the question bank, but it is not a universal condition for "Dikuasai"
+ * (docs/kssr/guru-semakan-pusingan-2-bertanda.md). A child is never held back
+ * because we have only written one kind of question. The number stays because
+ * it is still what whoever writes the next question should look at.
+ *
+ * Two questions can read completely differently and still be one form: "Apakah
+ * nilai digit 6 dalam 63?" and "Dalam 63, digit 6 bernilai berapa?" are both
+ * `direct`; only "digit manakah yang bernilai 60?" is `reverse`.
+ * (docs/kssr/guru-struktur-variasi-soalan.md.)
  */
 function promptFormDiversity(pack) {
   const lines = [];
@@ -295,18 +332,18 @@ function promptFormDiversity(pack) {
     */
     const rewordedOnly = e.wordings.size > 1;
     lines.push(
-      `${skill}: ${shape} (${e.ids.join(', ')}) but only 1 promptForm (${[...e.forms][0]}) — ` +
-        `asked one way only` +
+      `item bank: ${skill} is asked in 1 promptForm only (${[...e.forms][0]}) across ${shape} ` +
+        `(${e.ids.join(', ')})` +
         (rewordedOnly
-          ? `. ${e.wordings.size} wordingVariants (${[...e.wordings].sort().join(', ')}) do not ` +
-            `make a second form`
+          ? `; ${e.wordings.size} wordingVariants (${[...e.wordings].sort().join(', ')}) are ` +
+            `still one form`
           : ''),
     );
   }
   if (bySkill.size > 0 && single.length === bySkill.size) {
     lines.push(
-      `every sub-skill this pack touches is asked in exactly one promptForm. ` +
-        `Distinct question ids overstate how varied the evidence is.`,
+      `item bank: every sub-skill this pack touches is asked in exactly one promptForm. ` +
+        `That is question-bank variety, not a reason any child cannot reach mastery.`,
     );
   }
   return lines;
@@ -421,6 +458,7 @@ async function validatePack(file) {
       errors.push(...checkSkillsFile(skills, catalogue));
       errors.push(...checkPackSubSkills(pack, skills));
       warnings.push(...subSkillCoverage(pack, skills));
+      warnings.push(...questionBarGap(pack));
       warnings.push(...promptFormDiversity(pack));
     }
   }

@@ -2,7 +2,6 @@ import { describe, expect, it } from 'vitest';
 
 import {
   EVIDENCE_FOR_MASTERY,
-  FORMS_FOR_MASTERY,
   SESSIONS_FOR_MASTERY,
   skillState,
   standardCoverage,
@@ -10,21 +9,12 @@ import {
   type SubSkillState,
 } from './coverage.ts';
 
-/**
- * n distinct questions across `sessions` sittings, in two prompt forms so the
- * form bar is satisfied by default. Tests that care about forms set them.
- */
+/** n distinct questions, spread across `sessions` sittings. */
 function evidence(n: number, sessions = n): Evidence[] {
   return Array.from({ length: n }, (_, i) => ({
     questionId: `q${i + 1}`,
     sessionId: `s${(i % sessions) + 1}`,
-    promptForm: i === 0 ? 'reverse' : 'direct',
   }));
-}
-
-/** Same, asked one way only — what the shipped pack actually looks like. */
-function oneForm(n: number, sessions = n): Evidence[] {
-  return evidence(n, sessions).map((e) => ({ ...e, promptForm: 'direct' }));
 }
 
 describe('sub-skill status', () => {
@@ -51,6 +41,12 @@ describe('sub-skill status', () => {
     expect(skillState({ attempted: true, evidence: evidence(2) }).status).toBe('evaluating');
   });
 
+  /*
+    The whole bar, as a teacher's marked review settled it: three distinct items,
+    first attempt, across two sessions. Nothing about the form of the questions.
+    A child who answers three direct questions correctly over two sittings has
+    shown the skill; that we have not yet written a reverse one is our gap.
+  */
   it('is mastered on three distinct questions across two sessions', () => {
     expect(skillState({ attempted: true, evidence: evidence(3) })).toEqual({
       status: 'mastered',
@@ -106,71 +102,9 @@ describe('sub-skill status', () => {
     expect(untouched).toEqual({ status: 'not-tested', masteredOnce: true });
   });
 
-  /*
-    Three ids can be one question asked three times with the numbers changed.
-    Measured on the shipped pack: all nine sub-skills it touches are asked in
-    exactly one promptForm, so this is the common case, not the edge one.
-  */
-  it('stays evaluating when three questions are all the same form', () => {
-    expect(skillState({ attempted: true, evidence: oneForm(3) }).status).toBe('evaluating');
-  });
-
-  it('is mastered when three questions span two forms', () => {
-    expect(skillState({ attempted: true, evidence: evidence(3) }).status).toBe('mastered');
-  });
-
-  /*
-    Waived where only one form exists — a bar nobody can clear tells a parent
-    nothing, the same argument that retired the three-form rule.
-  */
-  it('waives the form bar for an exempt sub-skill', () => {
-    expect(
-      skillState({ attempted: true, evidence: oneForm(3), formExempt: true }).status,
-    ).toBe('mastered');
-  });
-
-  /*
-    The form bar is in addition to the question bar, not instead of it: two
-    forms in two questions would take the guesser mislabel rate back to 11%.
-  */
-  it('still needs three questions even with two forms', () => {
-    expect(skillState({ attempted: true, evidence: evidence(2) }).status).toBe('evaluating');
-  });
-
-  /*
-    The rule wordingVariant exists for. Three questions, three different
-    sentences, one direction of thinking — that is a memorised phrasing set,
-    not a mastered skill, and the form bar has to see through it.
-  */
-  it('counts one form when only the wording differs', () => {
-    const reworded: Evidence[] = [
-      { questionId: 'q1', sessionId: 's1', promptForm: 'direct', wordingVariant: 'A' },
-      { questionId: 'q2', sessionId: 's2', promptForm: 'direct', wordingVariant: 'B' },
-      { questionId: 'q3', sessionId: 's3', promptForm: 'direct', wordingVariant: 'C' },
-    ];
-    expect(skillState({ attempted: true, evidence: reworded }).status).toBe('evaluating');
-
-    // One genuinely different form is what tips it, not a fourth sentence.
-    const withReverse = [
-      ...reworded,
-      { questionId: 'q4', sessionId: 's2', promptForm: 'reverse', wordingVariant: 'A' },
-    ];
-    expect(skillState({ attempted: true, evidence: withReverse }).status).toBe('mastered');
-  });
-
-  /* Content written before the axes existed cannot satisfy the form bar. */
-  it('does not let untagged evidence stand in for a form', () => {
-    const untagged = evidence(3).map(({ promptForm: _drop, ...e }) => e);
-    expect(skillState({ attempted: true, evidence: untagged }).status).toBe('evaluating');
-    expect(skillState({ attempted: true, evidence: untagged, formExempt: true }).status).toBe(
-      'mastered',
-    );
-  });
-
   it('states its own thresholds', () => {
     expect(EVIDENCE_FOR_MASTERY).toBe(3);
     expect(SESSIONS_FOR_MASTERY).toBe(2);
-    expect(FORMS_FOR_MASTERY).toBe(2);
   });
 });
 
@@ -204,17 +138,20 @@ describe('standard roll-up', () => {
   });
 
   /*
-    A ratio alone tells a parent too little: "1 of 6" plus the name of the one
-    skill actually asked about is what the teacher asked for.
+    A ratio alone tells a parent too little: "1 of 4" plus the name of the one
+    skill actually asked about is what the display shape in SPEC 5.7 needs.
   */
   it('names which sub-skills were tested and which were not', () => {
     const r = standardCoverage([
-      sub('2.2.2/add_multiple_of_10', 'mastered'),
-      sub('2.2.2/add_2d_1d_no_regroup', 'not-tested'),
-      sub('2.2.2/add_word_problem', 'not-tested'),
+      sub('2.2.2/two_digit_plus_two_digit_no_bridge', 'mastered'),
+      sub('2.2.2/two_digit_plus_one_digit_no_bridge', 'not-tested'),
+      sub('2.2.2/two_digit_plus_two_digit_bridge', 'not-tested'),
     ]);
-    expect(r.testedIds).toEqual(['2.2.2/add_multiple_of_10']);
-    expect(r.untestedIds).toEqual(['2.2.2/add_2d_1d_no_regroup', '2.2.2/add_word_problem']);
+    expect(r.testedIds).toEqual(['2.2.2/two_digit_plus_two_digit_no_bridge']);
+    expect(r.untestedIds).toEqual([
+      '2.2.2/two_digit_plus_one_digit_no_bridge',
+      '2.2.2/two_digit_plus_two_digit_bridge',
+    ]);
   });
 
   it('is mastered only when every sub-skill is', () => {
