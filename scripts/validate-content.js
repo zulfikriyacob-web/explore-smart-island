@@ -225,11 +225,17 @@ function subSkillCoverage(pack, skills) {
     cited.get(sp).add(q.subSkill);
   }
   for (const sp of [...cited.keys()].sort()) {
-    const total = (skills.byStandard.get(sp)?.subSkills ?? []).length;
-    const tested = cited.get(sp).size;
-    if (total > 0 && tested < total) {
-      lines.push(`${sp}: ${tested} of ${total} sub-skills tested — it cannot report as mastered`);
-    }
+    const list = skills.byStandard.get(sp)?.subSkills ?? [];
+    const tested = cited.get(sp);
+    if (list.length === 0 || tested.size >= list.length) continue;
+    // Named, not just counted — the same reason the parent dashboard names them
+    // (SPEC §5.7). A ratio says how far there is to go; the names say what to
+    // write next.
+    const missing = list.map((s) => s.id).filter((id) => !tested.has(`${sp}/${id}`));
+    lines.push(
+      `${sp}: ${tested.size} of ${list.length} sub-skills tested — it cannot report as ` +
+        `mastered. Untested: ${missing.join(', ')}`,
+    );
   }
   const unmapped = pack.questions.filter((q) => q.learningStandard && !q.subSkill);
   if (unmapped.length > 0) {

@@ -2,11 +2,10 @@
  * Sub-skill evidence and the learning-standard roll-up (SPEC §5.7).
  *
  * A learning standard is not one skill. 1.6.1 is "nilai tempat **dan** nilai
- * digit", and a child who can name the digit in the tens place has shown one of
- * the four things a teacher broke that standard into. Averaging answers across
- * the standard lets five correct answers to the same question report the whole
- * of it as mastered — a false claim, on the one screen a parent is asked to
- * trust (PRD §11, §15).
+ * digit", and a teacher broke it into four. The pack tests one of them.
+ * Averaging answers across the standard lets five correct answers to that one
+ * question report the whole of it as mastered — a false claim, on the one screen
+ * a parent is asked to trust (PRD §11, §15).
  *
  * So evidence attaches to a sub-skill, and the standard is a roll-up of its
  * sub-skills. Two questions, kept apart on purpose:
@@ -15,6 +14,13 @@
  *     moving average in `mastery.ts`, unchanged and untouched.
  *   - **How much** of the standard has the app actually asked? That is coverage,
  *     and it is the question this module exists for.
+ *
+ * **Coverage is not mastery, and this module will not let it be read as such.**
+ * `coverage` is `tested / total` — the share of a standard the app has *asked
+ * about*. It is never a score. A standard at 1 of 6 means five sub-skills have
+ * not been assessed; it does not mean a child failed five. Anything rendering
+ * that ratio as a percentage of mastery is a bug, and SPEC §5.7 states it as a
+ * prohibition rather than a preference.
  *
  * Pure functions only. Nothing here reads the clock, the catalogue or storage:
  * the caller assembles the evidence and passes it in, the same discipline that
@@ -36,22 +42,30 @@ export interface Evidence {
   sessionId: string;
 }
 
-export type SkillLabel = 'not-tried' | 'learning' | 'almost' | 'mastered';
+/**
+ * Three statuses, set by the teacher who reviewed the mapping.
+ *
+ * `not-tested` is a statement about **us**: the app has never asked. It is not
+ * a statement about the child, and must never be presented as one.
+ */
+export type SkillStatus = 'not-tested' | 'evaluating' | 'mastered';
 
 /**
  * Distinct questions answered right on the first attempt before a sub-skill may
  * be called mastered.
  *
  * Three, because of what a wrong guess costs. `mcq` is capped at three options
- * (SPEC §3.4), so a child guessing blindly is right one time in three. One item
- * of evidence therefore mislabels **33%** of guessers as having mastered the
- * skill; two items, 11%; three items, **3.7%** — the first value under one in
- * twenty. count-tap and a wider `mcq-image` are both harder to guess, so three
- * is sized to the easiest question in the pack rather than the average one.
+ * (SPEC §3.4), so a child guessing blindly is right one time in three: one item
+ * of evidence mislabels 33% of guessers, two mislabels 11%, three mislabels
+ * 3.7% — the first value under one in twenty. Sized to the easiest question in
+ * the pack rather than the average one.
  *
- * Distinct *questions*, not distinct answers: the teacher's wording is "beri
- * beberapa soalan dengan nombor, gambar atau susunan yang berbeza". The same
- * question answered three times is one number memorised, not a skill.
+ * **That 3.7% is a design figure and nothing else.** It is the chance of three
+ * blind guesses all landing under one assumption about one question type. It is
+ * **not** a probability that a child has learned anything, and it must never
+ * reach a screen as "97% sure". SPEC §5.7 carries the prohibition next to the
+ * arithmetic, deliberately, because a number left alone finds its way onto a
+ * dashboard.
  */
 export const EVIDENCE_FOR_MASTERY = 3;
 
@@ -65,46 +79,58 @@ export const EVIDENCE_FOR_MASTERY = 3;
  */
 export const SESSIONS_FOR_MASTERY = 2;
 
-/**
- * Where one sub-skill stands.
- *
- * `latestWasWrong` drops a sub-skill that would otherwise qualify back to
- * `almost`. A label is a claim about now, and the most recent thing that
- * happened is the strongest evidence about now — without this, one bad run
- * leaves "Dikuasai" on screen while the child is visibly struggling.
- */
-export function skillLabel(
-  evidence: readonly Evidence[],
-  latestWasWrong = false,
-): SkillLabel {
-  if (evidence.length === 0) return 'not-tried';
-  const questions = new Set(evidence.map((e) => e.questionId));
-  const sessions = new Set(evidence.map((e) => e.sessionId));
-  const enough =
-    questions.size >= EVIDENCE_FOR_MASTERY && sessions.size >= SESSIONS_FOR_MASTERY;
-  if (enough && !latestWasWrong) return 'mastered';
-  return 'almost';
+export interface SkillState {
+  status: SkillStatus;
+  /**
+   * The evidence bar was met at some point, even if the status has since
+   * dropped back to `evaluating`.
+   *
+   * Sticky on purpose. A Year 1 child mis-taps, gets tired, rushes. The app
+   * should notice a slip without erasing what came before it — a child who
+   * reached mastery and slipped is in a different place from one who never
+   * reached it, and deleting the difference loses the more useful half.
+   *
+   * Data, not display. A parent sees three statuses; see SPEC §5.7 for what
+   * this is allowed to change in the words around them.
+   */
+  masteredOnce: boolean;
 }
 
-/**
- * A sub-skill that has been attempted but never answered right on a first
- * attempt is `learning`: the child is working on it and has nothing banked yet.
- * `not-tried` is reserved for a sub-skill the app has never asked about, which
- * is a statement about us, not about the child.
- */
-export function skillLabelFor(
-  attempted: boolean,
-  evidence: readonly Evidence[],
-  latestWasWrong = false,
-): SkillLabel {
-  if (evidence.length === 0) return attempted ? 'learning' : 'not-tried';
-  return skillLabel(evidence, latestWasWrong);
+export interface SkillInput {
+  /** Has the app ever asked about this sub-skill? */
+  attempted: boolean;
+  /** First-attempt-correct answers banked for it. */
+  evidence: readonly Evidence[];
+  /**
+   * Was the most recent answer wrong? A status is a claim about now, and the
+   * most recent thing that happened is the strongest evidence about now.
+   */
+  latestWasWrong?: boolean;
+  /** Carried in from storage; never reset here. */
+  masteredOnce?: boolean;
+}
+
+export function skillState(input: SkillInput): SkillState {
+  const { attempted, evidence, latestWasWrong = false, masteredOnce = false } = input;
+
+  const questions = new Set(evidence.map((e) => e.questionId));
+  const sessions = new Set(evidence.map((e) => e.sessionId));
+  const barMet =
+    questions.size >= EVIDENCE_FOR_MASTERY && sessions.size >= SESSIONS_FOR_MASTERY;
+
+  const banked = masteredOnce || barMet;
+
+  if (!attempted && evidence.length === 0) {
+    return { status: 'not-tested', masteredOnce: banked };
+  }
+  return { status: barMet && !latestWasWrong ? 'mastered' : 'evaluating', masteredOnce: banked };
 }
 
 export interface SubSkillState {
   /** `<SP>/<id>`, e.g. "1.2.2/after". */
   id: string;
-  label: SkillLabel;
+  status: SkillStatus;
+  masteredOnce?: boolean;
 }
 
 export interface StandardCoverage {
@@ -112,11 +138,26 @@ export interface StandardCoverage {
   tested: number;
   /** Sub-skills the standard has, from the skills file. */
   total: number;
-  /** Sub-skills at `mastered`. */
+  /** Sub-skills currently at `mastered`. */
   mastered: number;
-  /** `tested / total`, 0 when the standard has no sub-skills recorded yet. */
+  /**
+   * `tested / total`. **The share asked about, not a score.** Rendering this as
+   * a percentage of mastery is the thing SPEC §5.7 forbids outright.
+   */
   coverage: number;
-  label: SkillLabel;
+  status: SkillStatus;
+  /**
+   * Which sub-skills have been tested, and which have not — by id, in the order
+   * the skills file lists them.
+   *
+   * Returned because a ratio on its own tells a parent too little. "1 of 6" and
+   * a name beside it — *Tambah gandaan 10* — says what the child was actually
+   * asked. The caller turns ids into labels; this module holds no catalogue.
+   */
+  testedIds: string[];
+  untestedIds: string[];
+  /** Tested, banked the bar before, and currently back at `evaluating`. */
+  slippedIds: string[];
 }
 
 /**
@@ -127,22 +168,27 @@ export interface StandardCoverage {
  * has never asked about nilai digit, however many times it asked about nilai
  * tempat. A standard the app cannot fully test cannot be reported as fully
  * learned, and the pack getting a "cannot" is information about the pack.
- *
- * `almost` is where a standard sits when nothing is wrong but not everything
- * has been asked — every tested sub-skill mastered, coverage short of whole.
- * Without that rung the only options are to overclaim or to say nothing.
  */
 export function standardCoverage(subSkills: readonly SubSkillState[]): StandardCoverage {
   const total = subSkills.length;
-  const tested = subSkills.filter((s) => s.label !== 'not-tried').length;
-  const mastered = subSkills.filter((s) => s.label === 'mastered').length;
-  const coverage = total === 0 ? 0 : tested / total;
+  const testedIds = subSkills.filter((s) => s.status !== 'not-tested').map((s) => s.id);
+  const untestedIds = subSkills.filter((s) => s.status === 'not-tested').map((s) => s.id);
+  const mastered = subSkills.filter((s) => s.status === 'mastered').length;
+  const slippedIds = subSkills
+    .filter((s) => s.status === 'evaluating' && s.masteredOnce === true)
+    .map((s) => s.id);
 
-  let label: SkillLabel;
-  if (tested === 0) label = 'not-tried';
-  else if (total > 0 && mastered === total) label = 'mastered';
-  else if (mastered === tested) label = 'almost';
-  else label = 'learning';
+  const status: SkillStatus =
+    testedIds.length === 0 ? 'not-tested' : total > 0 && mastered === total ? 'mastered' : 'evaluating';
 
-  return { tested, total, mastered, coverage, label };
+  return {
+    tested: testedIds.length,
+    total,
+    mastered,
+    coverage: total === 0 ? 0 : testedIds.length / total,
+    status,
+    testedIds,
+    untestedIds,
+    slippedIds,
+  };
 }

@@ -631,34 +631,35 @@ if (new Date(ms).toISOString().slice(0, 10) !== iso) {
 Tarikh dihurai sebagai tengah malam UTC supaya anjakan waktu jimat siang tidak menggerakkan
 sempadan hari.
 
-### 5.7 Sub-kemahiran, liputan, dan empat label
+### 5.7 Sub-kemahiran, liputan, dan tiga status
+
+Satu bahagian, bukan tersebar. Hujah peneka, kedua-dua larangan, dan bentuk paparan hidup
+bersama di sini dengan sengaja: **nombor yang dibiarkan sendirian akan berakhir di papan
+pemuka.** 3.7% di bawah adalah tepat itu — angka yang, dipetik tanpa ayat di sebelahnya,
+menjadi dakwaan tentang seorang anak yang ia tidak pernah buat.
 
 **Satu Standard Pembelajaran bukan satu kemahiran.** SP 1.6.1 ialah *"nilai tempat **dan**
-nilai digit"*, dan seorang guru memecahkannya kepada empat: digit di tempat puluh, digit di
-tempat sa, nilai digit puluh, nilai digit sa. Pek hari ini menguji **satu** daripada empat.
-
-§5.4 purata jawapan merentas SP. Dengan itu, lima jawapan betul kepada soalan yang sama akan
-melaporkan 1.6.1 sebagai **Dikuasai** pada papan pemuka ibu bapa — dakwaan palsu, pada satu
-skrin yang ibu bapa diminta percaya (PRD §11, §15). Sebab itu bukti melekat pada
-**sub-kemahiran**, dan SP ialah gulungan sub-kemahirannya.
+nilai digit"*, dan seorang guru memecahkannya kepada empat. Pek hari ini menguji **satu**.
+§5.4 purata jawapan merentas SP; dengan itu, lima jawapan betul kepada soalan yang sama akan
+melaporkan 1.6.1 sebagai dikuasai. Jadi bukti melekat pada **sub-kemahiran**, dan SP ialah
+gulungan sub-kemahirannya.
 
 Dua soalan berbeza, sengaja diasingkan:
 
 | Soalan | Dijawab oleh |
 |---|---|
-| **Berapa baik** anak pada apa yang sudah ditanya? | Purata bergerak §5.4, `mastery.ts`, tidak berubah |
+| **Berapa baik** anak pada apa yang sudah ditanya? | Purata bergerak §5.4, `mastery.ts` |
 | **Berapa banyak** SP itu app sebenarnya tanya? | Liputan, `lib/coverage.ts` |
 
 #### Di mana sub-kemahiran hidup
 
 `src/content/kssr/<subject>-y<year>.skills.json`, **berasingan** daripada katalog DSKP.
 Katalog ialah apa yang dokumen kata, boleh disemak baris demi baris terhadap PDF. Fail
-kemahiran ialah **pecahan** — hanya 4 daripada 56 SP dalam katalog membawa sub-titik yang
-DSKP sendiri nomborkan. Mencampurkan kedua-duanya memusnahkan sifat yang katalog wujud untuk
-memilikinya: keupayaan membezakan transkripsi daripada pertimbangan.
+kemahiran ialah **pecahan** — hanya 4 daripada 56 SP membawa sub-titik yang DSKP sendiri
+nomborkan. Mencampurkan kedua-duanya memusnahkan keupayaan membezakan transkripsi daripada
+pertimbangan.
 
-Setiap SP mengisytiharkan **asal** pecahannya, dan nilai ini bukan hiasan — ia memberitahu
-pembaca sama ada senarai itu tertutup atau ialah bacaan yang boleh salah:
+Setiap SP mengisytiharkan asal pecahannya:
 
 | Asal | Maksud |
 |---|---|
@@ -667,28 +668,35 @@ pembaca sama ada senarai itu tertutup atau ialah bacaan yang boleh salah:
 | `dskp-catatan` | CATATAN memperincikannya. Perkataan dokumen, bukan sub-titik rasmi |
 | `editorial` | Keputusan reka bentuk app. DSKP tidak memecahkannya |
 
-Soalan membawa `subSkill: "<SP>/<id>"` di samping `learningStandard`, yang **dikekalkan** —
-itu yang papan pemuka namakan dan yang guru tandatangan.
+Soalan membawa `subSkill: "<SP>/<id>"` di samping `learningStandard`, yang dikekalkan — itu
+yang papan pemuka namakan dan yang guru tandatangan.
 
-#### Empat label, bukan tiga
+#### Tiga status
 
-PRD §11 pernah menjanjikan tiga. Tiga tidak cukup halus, dan sebabnya bukan estetik: **satu
-jawapan betul tidak menjadikan kemahiran dikuasai. Satu jawapan boleh jadi kebetulan.**
+Ditetapkan oleh guru yang menyemak pemetaan. **Tiga, bukan empat.**
 
-| Label | Bila |
+```
+Belum diuji  ->  Sedang dinilai  ->  Dikuasai
+                        ^                |
+                        +----------------+
+                         kesilapan baharu
+```
+
+| Status | Bila |
 |---|---|
-| **Belum dicuba** | App tidak pernah bertanya. Kenyataan tentang kita, bukan tentang anak |
-| **Sedang belajar** | Dicuba, belum ada jawapan betul percubaan pertama |
-| **Hampir menguasai** | Ada bukti betul, tetapi nipis — kurang daripada ambang di bawah |
-| **Dikuasai** | Ambang dipenuhi |
+| **Belum diuji** | App tidak pernah bertanya. Kenyataan tentang **kita**, bukan tentang anak |
+| **Sedang dinilai** | Ditanya, bukti belum cukup — atau pernah cukup dan jawapan terakhir salah |
+| **Dikuasai** | Ambang di bawah dipenuhi, dan jawapan terakhir betul |
 
-Tanpa *Hampir menguasai*, tempat bukti-yang-betul-tetapi-nipis tiada, dan pilihan kita cuma
-berbohong atau tidak melaporkan apa-apa.
+Versi terdahulu bahagian ini membawa empat, dengan *Hampir menguasai* di antara. Guru
+menolaknya: sistem status mudah sudah memadai, dan kerja yang label keempat itu buat
+dilakukan dengan lebih baik oleh baris liputan di bawah — yang **menamakan** kemahiran, bukan
+sekadar mengira.
 
 #### Ambang: 3 soalan berbeza, percubaan pertama, merentas 2 sesi
 
 **Tiga, kerana inilah kos tekaan.** `mcq` terhad kepada tiga pilihan (§3.4), jadi anak yang
-meneka membuta adalah betul satu daripada tiga kali:
+meneka membuta betul satu daripada tiga kali:
 
 | Bukti | Kadar tersalah label seorang peneka |
 |---|---|
@@ -700,42 +708,148 @@ meneka membuta adalah betul satu daripada tiga kali:
 lebih luas kedua-duanya lebih sukar diteka, jadi tiga disaiz mengikut soalan **paling mudah**
 dalam pek, bukan yang purata.
 
-**Soalan berbeza, bukan jawapan berbeza.** Perkataan guru: *"beri beberapa soalan dengan
-nombor, gambar atau susunan yang berbeza"*. Soalan sama dijawab tiga kali ialah satu nombor
-dihafal.
+> ### LARANGAN 1 — 3.7% bukan keyakinan
+>
+> **Jangan sekali-kali memaparkan 3.7% sebagai keyakinan.** Ayat *"97% pasti anak menguasai
+> kemahiran ini"* tidak boleh ditulis, di mana-mana, kepada sesiapa.
+>
+> 3.7% ialah peluang **tiga tekaan rawak semuanya betul**, di bawah satu andaian tentang satu
+> jenis soalan. Ia bukan kebarangkalian bahawa seorang anak menguasai sesuatu. Kedua-duanya
+> tidak berkaitan: seorang anak yang benar-benar tahu tidak meneka langsung, dan seorang anak
+> yang keliru secara sistematik boleh salah 100% daripada masa tanpa pernah meneka.
+>
+> Nombor itu ialah **alasan reka bentuk dalaman** untuk memilih tiga dan bukan dua. Itu
+> keseluruhan kerjanya. Ia hidup dalam SPEC dan dalam komen `coverage.ts`; ia tidak pernah
+> keluar ke UI.
+
+**Soalan berbeza, bukan jawapan berbeza.** Soalan yang sama dijawab tiga kali ialah satu
+nombor dihafal. Bukti dikira mengikut `questionId` berbeza.
+
+> **Belum mencukupi, dan diketahui.** Guru menetapkan bahawa tiga soalan itu mesti berbeza
+> **bentuk**, bukan sekadar berbeza nombor — tiga soalan berbentuk sama mengukur hafalan
+> bentuk. Hari ini enjin hanya boleh menuntut tiga `questionId` berbeza, jadi ambang ini
+> lebih longgar daripada yang guru minta.
+>
+> **Keputusan dibuat, belum dibina: tuntut 2 bentuk, laporkan yang kurang daripada 3.**
+> Menuntut tiga menjadikan *Dikuasai* mustahil dicapai sehingga 36 sub-kemahiran × 3 bentuk =
+> **108 soalan dan 108 rakaman BM** wujud, dan label yang tiada siapa pernah capai tidak
+> memberitahu ibu bapa apa-apa. Dua sudah mematahkan hafalan bentuk; yang ketiga dilaporkan
+> sebagai jurang kandungan, tidak dikuatkuasakan.
+>
+> Ia belum dibina kerana perbendaharaan `frame` belum disemak guru — `direct`, `inverted`,
+> `select`, `story`, `visual` ialah calon, dan enum yang dikunci sebelum disemak mengunci
+> kandungan bersamanya. Itu permukaan yang sama seperti senarai sub-kemahiran, jadi ia pergi
+> melalui saluran yang sama: borang `kssr:review`. Reka bentuk penuh dalam PRD §16 item 12.
 
 **Percubaan pertama sahaja.** Ketepatan sudah mengukur kualiti percubaan pertama (§5.2), dan
 percubaan kedua berlaku selepas satu pilihan salah dilumpuhkan — pada mcq tiga pilihan, tekaan
 kedua ialah satu daripada dua.
 
 **Sekurang-kurangnya dua sesi.** Tiga jawapan betul dalam satu duduk boleh bersandar pada satu
-detik kefahaman yang sama, atau pada jawapan yang didedahkan dua soalan sebelumnya (§4.2). Sesi
-kedua ialah bukti termurah bahawa kemahiran itu bertahan selepas anak pulang.
+detik kefahaman yang sama, atau pada jawapan yang didedahkan dua soalan sebelumnya (§4.2).
 
-**Jawapan terakhir salah menurunkan semula kepada *Hampir*.** Label ialah dakwaan tentang
-sekarang, dan perkara terkini yang berlaku ialah bukti terkuat tentang sekarang.
+**Jawapan terakhir salah menurunkan semula kepada *Sedang dinilai*.** Status ialah dakwaan
+tentang sekarang.
+
+#### `masteredOnce` — turun tanpa memadam
+
+Dua medan, bukan satu:
+
+```
+masteredOnce:  true          // ambang pernah dipenuhi
+currentStatus: 'evaluating'  // dan jawapan terakhir salah
+```
+
+Murid Tahun 1 tersalah tekan, penat, tergesa-gesa. App patut peka kepada kemerosotan **tanpa
+memadam pembelajaran sebelumnya**: anak yang pernah sampai dan tergelincir berada di tempat
+berbeza daripada anak yang tidak pernah sampai, dan memadam beza itu membuang separuh yang
+lebih berguna.
+
+**`masteredOnce` ialah data, bukan paparan.** Ibu bapa tetap nampak tiga status. Ia mengubah
+**dua** perkara, kedua-duanya diluluskan, dan tiada satu pun daripadanya label baharu:
+
+**1. Ayat sokongan di bawah status.** Teks yang diluluskan, verbatim:
+
+```
+Sedang dinilai — sudah pernah tunjuk kemahiran ini;
+                 app sedang semak semula
+```
+
+Perkataannya ialah keseluruhan keputusan. Dua calon terdahulu ditolak dan sebabnya patut
+kekal di sini, kerana ayat ini akan ditulis semula suatu hari oleh seseorang yang tidak
+tahu apa yang sudah cuba:
+
+| Calon | Kenapa ditolak |
+|---|---|
+| "belum cukup bukti" | Betul, dan membuang maklumat: ia sama bagi anak yang tidak pernah sampai |
+| "pernah dikuasai, sedang disemak semula" | Masih berbunyi seperti **audit**. Pasif, dan anak tiada dalam ayat |
+
+Yang diluluskan meletakkan **anak sebagai subjek separuh pertama** — *sudah pernah tunjuk
+kemahiran ini* — dan **app sebagai subjek separuh kedua** — *app sedang semak semula*. Tiada
+apa yang hilang; app yang sedang bekerja. Itu bezanya antara laporan dan notis penurunan
+pangkat.
+
+> **Belum dikunci.** Ayat ini akan diuji pada seorang ibu bapa sebenar sebelum ia dihantar.
+> Sehingga itu ia teks yang diluluskan, bukan teks yang disahkan.
+
+**2. Susunan "Fokus minggu ini"** (PRD §11). Kemahiran yang tergelincir mendahului kemahiran
+yang belum pernah dimulakan, kerana ia lebih dekat untuk dipulihkan. `standardCoverage()`
+memulangkan `slippedIds` untuk kedua-dua keputusan ini.
 
 #### Gulungan SP
 
 - **Dikuasai** hanya apabila **setiap** sub-kemahiran dikuasai. Bukan purata, bukan majoriti.
-  1.6.1 tidak boleh membaca *Dikuasai* selagi app tidak pernah bertanya tentang nilai digit,
-  berapa kali sekalipun ia bertanya tentang nilai tempat.
-- **Hampir menguasai** apabila setiap sub-kemahiran yang **diuji** sudah dikuasai tetapi
-  liputan belum penuh. Tiada yang salah; cuma belum semuanya ditanya.
-- **Sedang belajar** apabila ada sub-kemahiran diuji yang belum dikuasai.
-- **Belum dicuba** apabila tiada satu pun diuji.
+  1.6.1 tidak boleh membaca *Dikuasai* selagi app tidak pernah bertanya tentang nilai digit.
+- **Sedang dinilai** apabila sekurang-kurangnya satu sub-kemahiran diuji tetapi belum semua
+  dikuasai.
+- **Belum diuji** apabila tiada satu pun diuji.
 
 Akibatnya SP tidak boleh dilaporkan dikuasai selagi kandungan untuk mengujinya belum wujud.
-Itu betul, dan ia mendedahkan betapa nipisnya pek — maklumat, bukan kecacatan. Dengan pek hari
-ini, **tiada satu pun daripada enam SP boleh mencapai Dikuasai**; `validate:content`
-mencetaknya setiap binaan.
+Dengan pek hari ini, **tiada satu pun daripada enam SP boleh mencapai Dikuasai**;
+`validate:content` mencetaknya setiap binaan.
+
+#### Bentuk paparan liputan
+
+> ### LARANGAN 2 — liputan bukan penguasaan
+>
+> **"1 daripada 6 diuji" tidak boleh dipaparkan sebagai "17% dikuasai".** Lima kemahiran lain
+> **belum diuji**; anak tidak gagal lima kemahiran. Nisbah itu mengukur apa yang **app**
+> sudah tanya, bukan apa yang anak boleh buat.
+>
+> `StandardCoverage.coverage` ialah `tested / total` dan tidak pernah skor. Apa-apa yang
+> merendernya sebagai peratusan penguasaan ialah pepijat.
+
+Dan nisbah sendirian pun tidak memadai — ia memberitahu ibu bapa terlalu sedikit. Bentuk yang
+guru berikan, dan yang ini ikut:
+
+```
+Liputan kemahiran: 1/6 diuji
+Kemahiran yang sudah diuji: Tambah gandaan 10
+Kemahiran lain belum dinilai.
+```
+
+**Namakan kemahiran yang sudah diuji.** "1/6" memberitahu ibu bapa bahawa ada lima perkara
+lain; namanya memberitahu mereka apa yang anak sebenarnya **ditanya**, dan itu yang boleh
+ditindaklanjuti. `standardCoverage()` memulangkan `testedIds` dan `untestedIds` dalam susunan
+fail kemahiran atas sebab ini; lapisan paparan menukar id kepada label.
+
+Ayat ketiga melekatkan baki kepada kita: *"Kemahiran lain belum dinilai"* — bukan apa-apa yang
+berbunyi seperti jurang anak. §15 menyenaraikan hilang kepercayaan ibu bapa sebagai risiko,
+dan baris yang menyalahkan anak untuk kandungan yang kami belum tulis ialah jalan terpantas ke
+situ.
+
+#### Yang tidak dibina
 
 `lib/coverage.ts` tulen: tiada jam, tiada katalog, tiada storan. Pemanggil himpunkan bukti dan
 menghulurkannya, disiplin sama seperti `updateStreak(s, todayISO)`.
 
-> `mastery.ts` **tidak disentuh**. `masteryLabel()` tiga-labelnya kini digantikan untuk papan
-> pemuka oleh §5.7, dan patut ditarik balik apabila stor kemajuan mendarat. Ia tidak mempunyai
-> pemanggil produksi hari ini.
+> `mastery.ts` **tidak disentuh**. `masteryLabel()` tiga-labelnya bukan tiga status ini —
+> namanya berbeza dan peraturannya berbeza — dan ia patut ditarik balik apabila stor kemajuan
+> mendarat. Ia tidak mempunyai pemanggil produksi hari ini.
+
+**Tiada skor keyakinan.** Pembezaan antara bukti penguasaan dan keyakinan semasa itu betul,
+tetapi skor yang tidak dipaparkan ialah kerja tanpa pengguna. `masteredOnce` menanggung
+perbezaan itu dengan satu boolean, dan itu memadai sehingga ada skrin yang memerlukan lebih.
 
 ---
 

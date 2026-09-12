@@ -332,26 +332,29 @@ Anak **tidak** mempunyai log masuk sendiri. Mereka memilih avatar mereka daripad
 Tiada e-mel, tiada nombor telefon, tiada foto anak dikumpul.
 
 ### Papan pemuka menunjukkan
-1. **Petak penguasaan** — **empat** label, bukan tiga: Belum dicuba / Sedang belajar /
-   Hampir menguasai / Dikuasai, dengan satu baris liputan di bawahnya:
+1. **Petak penguasaan** — **tiga** status, ditetapkan oleh guru penyemak:
+   **Belum diuji → Sedang dinilai → Dikuasai**, dan kesilapan baharu selepas dikuasai
+   menurunkannya semula ke *Sedang dinilai*.
+
+   Di bawah status, blok liputan — dan ia **menamakan** kemahiran, tidak sekadar mengira:
 
    ```
-   Nilai tempat                    Hampir menguasai
-   1 daripada 4 kemahiran diuji
+   Tambah dalam lingkungan 100                    Sedang dinilai
+   Liputan kemahiran: 1/6 diuji
+   Kemahiran yang sudah diuji: Tambah gandaan 10
+   Kemahiran lain belum dinilai.
    ```
 
-   Label menjawab *bagaimana anak pada apa yang dia sudah buat*. Baris liputan menjawab
-   *berapa banyak app sebenarnya sudah tanya*. **"Dikuasai" ditahan selagi liputan belum
-   penuh** — satu peraturan, bukan perbendaharaan kata baharu.
+   Nisbah sendirian memberitahu ibu bapa terlalu sedikit. "1/6" berkata ada lima perkara lain;
+   **namanya** berkata apa yang anak sebenarnya ditanya, dan itu yang boleh ditindaklanjuti.
 
-   Baki yang belum diuji dilekatkan kepada kita, bukan kepada anak: perkataannya *"belum
-   diuji oleh app"*. §15 menyenaraikan hilang kepercayaan ibu bapa sebagai risiko pemetaan
-   salah, dan baris yang menyalahkan anak untuk kandungan yang kami belum tulis ialah jalan
-   terpantas ke situ.
+   **"1 daripada 6 diuji" bukan "17% dikuasai".** Lima kemahiran lain belum diuji; anak tidak
+   gagal lima kemahiran. Larangan penuh, dan larangan kedua tentang nombor 3.7%, dalam
+   SPEC §5.7 — kedua-duanya hidup bersama nombor yang ia kawal, dengan sengaja.
 
-   Ambang dan sebabnya dalam SPEC §5.7. Ringkasnya: satu jawapan betul tidak menjadikan
-   kemahiran dikuasai, kerana satu jawapan pada mcq tiga pilihan betul 33% daripada masa
-   secara tekaan semata-mata.
+   Baki dilekatkan kepada kita, bukan kepada anak: *"Kemahiran lain belum dinilai."* §15
+   menyenaraikan hilang kepercayaan ibu bapa sebagai risiko pemetaan salah, dan baris yang
+   menyalahkan anak untuk kandungan yang kami belum tulis ialah jalan terpantas ke situ.
 2. **Fokus minggu ini** — 3 topik terlemah, dengan cadangan aktiviti
 3. **Masa & konsistensi** — minit sehari, hari aktif minggu ini
 4. **Laporan mingguan** — ringkasan e-mel setiap Ahad malam (boleh dimatikan)
@@ -577,3 +580,62 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
 
     Kesan sampingan: q008 kini tajuk **2.0 Operasi Asas**, jadi pek ini merentas **tiga**
     tajuk DSKP, bukan dua. Lihat item 10 — q008 menyertai baris yang sama.
+12. **"Tiga soalan berbeza" masih bermakna tiga `questionId` berbeza, bukan tiga bentuk.**
+    Guru menetapkan bahawa bukti mesti datang daripada **bentuk soalan** yang berlainan.
+    Contohnya untuk `1.6.1/value_of_tens_digit`:
+
+    > *"Apakah nilai digit 6 dalam 63?"* · *"Dalam 47, digit 4 bernilai berapa?"* ·
+    > *"Pilih nilai yang betul bagi digit 8 dalam 82."*
+
+    Tiga soalan berbentuk sama mengukur hafalan bentuk, bukan kemahiran. Enjin hari ini hanya
+    boleh menuntut tiga id berbeza, jadi ambang SPEC §5.7 lebih longgar daripada yang guru
+    minta.
+
+    **Cadangan, belum dibina:** medan `frame` pada soalan, daripada perbendaharaan tertutup.
+    Namanya `frame` dan bukan `variant` kerana yang berbeza ialah **cara bertanya**, bukan
+    kandungan — ketiga-tiga contoh di atas menguji pengiraan yang sama.
+
+    | Lapisan | Boleh buat apa |
+    |---|---|
+    | Skema | Menyemak `frame` ada dan daripada enum tertutup |
+    | `validate:content` | **Yang berguna:** mencetak sub-kemahiran yang soalannya kurang daripada tiga `frame` berbeza — iaitu sub-kemahiran yang **tidak boleh** mencapai Dikuasai walau berapa banyak pun soalan ditulis |
+    | Enjin | Menuntut `frame` berbeza, bukan id berbeza |
+    | **Tidak boleh disemak mesin** | Sama ada dua soalan bertanda `frame` berlainan benar-benar berlainan bentuk. Itu pertimbangan manusia — kelas yang sama seperti "adakah soalan ini mengajar SP ini", dan tempatnya ialah borang `kssr:review` |
+
+    Perbendaharaan permulaan, perlu mata guru sebelum ia ditetapkan: `direct` (*"Apakah nilai
+    digit 6 dalam 63?"*), `inverted` (*"Dalam 47, digit 4 bernilai berapa?"*), `select`
+    (*"Pilih nilai yang betul…"*), `story` (situasi harian), `visual` (soalan dibawa oleh
+    gambar).
+
+    **Berapa `frame` dituntut — DIPUTUSKAN: tuntut 2, laporkan yang kurang daripada 3.**
+    Menuntut tiga bermakna setiap satu daripada 36 sub-kemahiran memerlukan tiga soalan
+    berbentuk berlainan — **108 soalan, 108 rakaman BM** sebelum satu pun kemahiran boleh
+    mencapai Dikuasai, dan **label yang tiada siapa pernah capai tidak memberitahu ibu bapa
+    apa-apa**. Dua sudah mematahkan hafalan bentuk; yang ketiga dilaporkan sebagai jurang
+    kandungan, tidak dikuatkuasakan.
+
+    **Masih belum dibina, dan sengaja.** Perbendaharaan mesti disemak guru dahulu: enum yang
+    dikunci mengunci kandungan bersamanya, dan ia permukaan yang sama seperti senarai
+    sub-kemahiran. Soalan itu kini dalam borang `kssr:review`. Bina selepas jawapannya masuk,
+    bukan sebelum.
+13. ~~**Adakah `masteredOnce` patut mengubah apa yang ibu bapa lihat?**~~
+    **DISELESAIKAN — kedua-duanya diterima, tiada label keempat.**
+
+    **Ayat sokongan**, teks diluluskan:
+
+    ```
+    Sedang dinilai — sudah pernah tunjuk kemahiran ini;
+                     app sedang semak semula
+    ```
+
+    Dua calon terdahulu ditolak: *"belum cukup bukti"* membuang maklumat — ia berbunyi sama
+    bagi anak yang tidak pernah sampai. *"Pernah dikuasai, sedang disemak semula"* masih
+    berbunyi seperti **audit**: pasif, dan anak tiada dalam ayat. Yang diluluskan meletakkan
+    **anak sebagai subjek separuh pertama** dan **app sebagai subjek separuh kedua** — tiada
+    apa yang hilang, app yang sedang bekerja.
+
+    **Belum dikunci:** akan diuji pada seorang ibu bapa sebenar sebelum dihantar.
+
+    **Susunan "Fokus minggu ini"** (§11): kemahiran yang tergelincir mendahului yang belum
+    pernah dimulakan. `standardCoverage()` memulangkan `slippedIds` untuk kedua-duanya.
+    Perincian dalam SPEC §5.7.
