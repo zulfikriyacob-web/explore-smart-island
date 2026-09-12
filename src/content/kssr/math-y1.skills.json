@@ -1,0 +1,187 @@
+{
+  "skillsVersion": 1,
+  "subject": "math",
+  "year": 1,
+  "catalogue": "math-y1.json",
+  "source": {
+    "document": "docs/kssr/guru-sub-kemahiran-math-y1.md",
+    "author": "Guru penyemak (semakan pemetaan KSSR)",
+    "note": "Setiap sub-kemahiran di bawah datang daripada jawapan bertulis guru itu. Id yang guru sendiri cadangkan digunakan verbatim; yang lain dinamakan mengikut corak yang sama. Contoh soalan tidak disalin ke sini — ia hidup dalam dokumen sumber, tidak disunting."
+  },
+  "sourceKinds": {
+    "dskp-detail": "DSKP menyenaraikannya sendiri sebagai sub-titik rumi di bawah SP itu. Senarai tertutup.",
+    "dskp-sentence": "Ayat SP itu sendiri menamakannya, tetapi DSKP tidak menomborkannya. Bacaan kami tentang ayat itu, bukan senarai dokumen.",
+    "dskp-catatan": "CATATAN DSKP memperincikannya. Bukan sub-titik rasmi, tetapi perkataan dokumen.",
+    "editorial": "Keputusan reka bentuk pembelajaran app. DSKP tidak memecahkannya langsung."
+  },
+  "standards": {
+    "1.2.1": {
+      "title": "Menamakan nombor hingga 100.",
+      "source": "dskp-detail",
+      "subSkills": [
+        {
+          "id": "count_objects",
+          "label": { "ms": "Membilang objek satu demi satu", "en": "Counting objects one by one" }
+        },
+        {
+          "id": "quantity_to_number",
+          "label": {
+            "ms": "Memilih nombor yang mewakili kuantiti yang dibilang",
+            "en": "Choosing the number that represents the counted quantity"
+          }
+        },
+        {
+          "id": "compare_groups",
+          "label": {
+            "ms": "Membandingkan dua kumpulan objek — lebih banyak, lebih sedikit, sama banyak",
+            "en": "Comparing two groups of objects — more, fewer, the same"
+          }
+        }
+      ]
+    },
+    "1.2.2": {
+      "title": "Menentukan nilai nombor hingga 100.",
+      "source": "dskp-detail",
+      "subSkills": [
+        {
+          "id": "number_to_quantity",
+          "label": {
+            "ms": "Menunjukkan kuantiti bagi nombor yang diberi",
+            "en": "Showing the quantity for a given number"
+          }
+        },
+        {
+          "id": "quantity_to_number",
+          "label": {
+            "ms": "Memilih nombor bagi sekumpulan objek",
+            "en": "Choosing the number for a group of objects"
+          }
+        },
+        {
+          "id": "compare_greater",
+          "label": { "ms": "Menentukan nombor yang lebih besar", "en": "Deciding which number is bigger" }
+        },
+        {
+          "id": "compare_smaller",
+          "label": { "ms": "Menentukan nombor yang lebih kecil", "en": "Deciding which number is smaller" }
+        },
+        {
+          "id": "before",
+          "label": { "ms": "Menentukan nombor sebelum", "en": "Finding the number before" }
+        },
+        {
+          "id": "after",
+          "label": { "ms": "Menentukan nombor selepas", "en": "Finding the number after" }
+        },
+        {
+          "id": "between",
+          "label": { "ms": "Menentukan nombor di antara", "en": "Finding the number in between" }
+        },
+        {
+          "id": "order_ascending",
+          "label": { "ms": "Menyusun tertib menaik", "en": "Ordering smallest to biggest" }
+        },
+        {
+          "id": "order_descending",
+          "label": { "ms": "Menyusun tertib menurun", "en": "Ordering biggest to smallest" }
+        }
+      ]
+    },
+    "1.5.1": {
+      "title": "Membilang nombor.",
+      "source": "dskp-catatan",
+      "subSkills": [
+        { "id": "count_1_up", "label": { "ms": "Membilang satu-satu menaik", "en": "Counting up in ones" } },
+        { "id": "count_1_down", "label": { "ms": "Membilang satu-satu menurun", "en": "Counting down in ones" } },
+        { "id": "count_2_up", "label": { "ms": "Membilang dua-dua menaik", "en": "Counting up in twos" } },
+        { "id": "count_2_down", "label": { "ms": "Membilang dua-dua menurun", "en": "Counting down in twos" } },
+        { "id": "count_4_up", "label": { "ms": "Membilang empat-empat menaik", "en": "Counting up in fours" } },
+        { "id": "count_4_down", "label": { "ms": "Membilang empat-empat menurun", "en": "Counting down in fours" } },
+        { "id": "count_5_up", "label": { "ms": "Membilang lima-lima menaik", "en": "Counting up in fives" } },
+        { "id": "count_5_down", "label": { "ms": "Membilang lima-lima menurun", "en": "Counting down in fives" } },
+        { "id": "count_10_up", "label": { "ms": "Membilang sepuluh-sepuluh menaik", "en": "Counting up in tens" } },
+        { "id": "count_10_down", "label": { "ms": "Membilang sepuluh-sepuluh menurun", "en": "Counting down in tens" } }
+      ]
+    },
+    "1.6.1": {
+      "title": "Menyatakan nilai tempat dan nilai digit bagi sebarang nombor.",
+      "source": "dskp-sentence",
+      "subSkills": [
+        {
+          "id": "digit_at_tens",
+          "label": { "ms": "Mengenal digit di tempat puluh", "en": "Identifying the digit in the tens place" }
+        },
+        {
+          "id": "digit_at_ones",
+          "label": { "ms": "Mengenal digit di tempat sa", "en": "Identifying the digit in the ones place" }
+        },
+        {
+          "id": "value_of_tens_digit",
+          "label": {
+            "ms": "Menyatakan nilai digit di tempat puluh",
+            "en": "Stating the value of the digit in the tens place"
+          }
+        },
+        {
+          "id": "value_of_ones_digit",
+          "label": {
+            "ms": "Menyatakan nilai digit di tempat sa",
+            "en": "Stating the value of the digit in the ones place"
+          }
+        }
+      ]
+    },
+    "2.2.2": {
+      "title": "Menambah dua nombor hasil tambah dalam lingkungan 100.",
+      "source": "editorial",
+      "subSkills": [
+        {
+          "id": "add_2d_1d_no_regroup",
+          "label": {
+            "ms": "Dua digit campur satu digit, tanpa melintasi puluh",
+            "en": "Two digits plus one digit, no crossing of a ten"
+          }
+        },
+        {
+          "id": "add_2d_1d_regroup",
+          "label": {
+            "ms": "Dua digit campur satu digit, melintasi puluh",
+            "en": "Two digits plus one digit, crossing a ten"
+          }
+        },
+        {
+          "id": "add_2d_2d_no_regroup",
+          "label": {
+            "ms": "Dua digit campur dua digit, tanpa melintasi puluh",
+            "en": "Two digits plus two digits, no crossing of a ten"
+          }
+        },
+        {
+          "id": "add_2d_2d_regroup",
+          "label": {
+            "ms": "Dua digit campur dua digit, melintasi puluh",
+            "en": "Two digits plus two digits, crossing a ten"
+          }
+        },
+        {
+          "id": "add_multiple_of_10",
+          "label": { "ms": "Menambah gandaan sepuluh", "en": "Adding a multiple of ten" }
+        },
+        {
+          "id": "add_word_problem",
+          "label": { "ms": "Tambah dalam bentuk situasi harian", "en": "Addition set in an everyday situation" }
+        }
+      ]
+    },
+    "7.2.1": {
+      "title": "Menamakan bentuk segiempat sama, segiempat tepat, segitiga dan bulatan.",
+      "source": "dskp-sentence",
+      "subSkills": [
+        { "id": "name_square", "label": { "ms": "Menamakan segi empat sama", "en": "Naming a square" } },
+        { "id": "name_rectangle", "label": { "ms": "Menamakan segi empat tepat", "en": "Naming a rectangle" } },
+        { "id": "name_triangle", "label": { "ms": "Menamakan segi tiga", "en": "Naming a triangle" } },
+        { "id": "name_circle", "label": { "ms": "Menamakan bulatan", "en": "Naming a circle" } }
+      ]
+    }
+  }
+}

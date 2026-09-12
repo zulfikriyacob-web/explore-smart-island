@@ -135,6 +135,7 @@ interface QuestionBase {
   type: QuestionType;
   difficulty: Difficulty;
   learningStandard?: string;     // cth "1.2.2"
+  subSkill?: string;             // cth "1.2.2/after" — §5.7
   prompt: LocalizedText;         // teks arahan
   promptAudio: LocalizedAudio;   // WAJIB — kanak-kanak umur 7 tidak boleh baca ini
   hint?: LocalizedText;          // ditunjukkan selepas 1 kali salah
@@ -394,6 +395,9 @@ dan setiap `learningStandard` soalan terhadapnya:
 | Kod tiada dalam katalog | **Ralat** — gagal CI |
 | Tiada katalog untuk subjek/tahun itu | **Amaran** — kod tidak disemak langsung. Ini jurang kami, bukan ralat pek |
 | SP pek merentas lebih satu tajuk DSKP | **Amaran** — pek bertajuk untuk satu tajuk sahaja |
+| `subSkill` tiada dalam fail kemahiran | **Ralat** — sub-kemahiran rekaan ialah kod rekaan, satu tingkat ke bawah |
+| Fail kemahiran menamakan SP yang tiada dalam katalog, atau `source` yang tidak diisytiharkan | **Ralat** |
+| SP diuji sebahagian sahaja | **Amaran** — mencetak `n of m sub-skills tested`, kerana itu yang menghalangnya daripada melaporkan *Dikuasai* (§5.7) |
 
 Katalog hari ini: **matematik Tahun 1 sahaja.** Itu satu-satunya DSKP yang kami ada.
 
@@ -627,6 +631,112 @@ if (new Date(ms).toISOString().slice(0, 10) !== iso) {
 Tarikh dihurai sebagai tengah malam UTC supaya anjakan waktu jimat siang tidak menggerakkan
 sempadan hari.
 
+### 5.7 Sub-kemahiran, liputan, dan empat label
+
+**Satu Standard Pembelajaran bukan satu kemahiran.** SP 1.6.1 ialah *"nilai tempat **dan**
+nilai digit"*, dan seorang guru memecahkannya kepada empat: digit di tempat puluh, digit di
+tempat sa, nilai digit puluh, nilai digit sa. Pek hari ini menguji **satu** daripada empat.
+
+§5.4 purata jawapan merentas SP. Dengan itu, lima jawapan betul kepada soalan yang sama akan
+melaporkan 1.6.1 sebagai **Dikuasai** pada papan pemuka ibu bapa — dakwaan palsu, pada satu
+skrin yang ibu bapa diminta percaya (PRD §11, §15). Sebab itu bukti melekat pada
+**sub-kemahiran**, dan SP ialah gulungan sub-kemahirannya.
+
+Dua soalan berbeza, sengaja diasingkan:
+
+| Soalan | Dijawab oleh |
+|---|---|
+| **Berapa baik** anak pada apa yang sudah ditanya? | Purata bergerak §5.4, `mastery.ts`, tidak berubah |
+| **Berapa banyak** SP itu app sebenarnya tanya? | Liputan, `lib/coverage.ts` |
+
+#### Di mana sub-kemahiran hidup
+
+`src/content/kssr/<subject>-y<year>.skills.json`, **berasingan** daripada katalog DSKP.
+Katalog ialah apa yang dokumen kata, boleh disemak baris demi baris terhadap PDF. Fail
+kemahiran ialah **pecahan** — hanya 4 daripada 56 SP dalam katalog membawa sub-titik yang
+DSKP sendiri nomborkan. Mencampurkan kedua-duanya memusnahkan sifat yang katalog wujud untuk
+memilikinya: keupayaan membezakan transkripsi daripada pertimbangan.
+
+Setiap SP mengisytiharkan **asal** pecahannya, dan nilai ini bukan hiasan — ia memberitahu
+pembaca sama ada senarai itu tertutup atau ialah bacaan yang boleh salah:
+
+| Asal | Maksud |
+|---|---|
+| `dskp-detail` | DSKP menomborkannya sendiri. Senarai tertutup |
+| `dskp-sentence` | Ayat SP menamakannya, DSKP tidak menomborkannya. Bacaan kita |
+| `dskp-catatan` | CATATAN memperincikannya. Perkataan dokumen, bukan sub-titik rasmi |
+| `editorial` | Keputusan reka bentuk app. DSKP tidak memecahkannya |
+
+Soalan membawa `subSkill: "<SP>/<id>"` di samping `learningStandard`, yang **dikekalkan** —
+itu yang papan pemuka namakan dan yang guru tandatangan.
+
+#### Empat label, bukan tiga
+
+PRD §11 pernah menjanjikan tiga. Tiga tidak cukup halus, dan sebabnya bukan estetik: **satu
+jawapan betul tidak menjadikan kemahiran dikuasai. Satu jawapan boleh jadi kebetulan.**
+
+| Label | Bila |
+|---|---|
+| **Belum dicuba** | App tidak pernah bertanya. Kenyataan tentang kita, bukan tentang anak |
+| **Sedang belajar** | Dicuba, belum ada jawapan betul percubaan pertama |
+| **Hampir menguasai** | Ada bukti betul, tetapi nipis — kurang daripada ambang di bawah |
+| **Dikuasai** | Ambang dipenuhi |
+
+Tanpa *Hampir menguasai*, tempat bukti-yang-betul-tetapi-nipis tiada, dan pilihan kita cuma
+berbohong atau tidak melaporkan apa-apa.
+
+#### Ambang: 3 soalan berbeza, percubaan pertama, merentas 2 sesi
+
+**Tiga, kerana inilah kos tekaan.** `mcq` terhad kepada tiga pilihan (§3.4), jadi anak yang
+meneka membuta adalah betul satu daripada tiga kali:
+
+| Bukti | Kadar tersalah label seorang peneka |
+|---|---|
+| 1 soalan | **33%** |
+| 2 soalan | 11% |
+| **3 soalan** | **3.7%** |
+
+3.7% ialah nilai pertama di bawah satu daripada dua puluh. `count-tap` dan `mcq-image` yang
+lebih luas kedua-duanya lebih sukar diteka, jadi tiga disaiz mengikut soalan **paling mudah**
+dalam pek, bukan yang purata.
+
+**Soalan berbeza, bukan jawapan berbeza.** Perkataan guru: *"beri beberapa soalan dengan
+nombor, gambar atau susunan yang berbeza"*. Soalan sama dijawab tiga kali ialah satu nombor
+dihafal.
+
+**Percubaan pertama sahaja.** Ketepatan sudah mengukur kualiti percubaan pertama (§5.2), dan
+percubaan kedua berlaku selepas satu pilihan salah dilumpuhkan — pada mcq tiga pilihan, tekaan
+kedua ialah satu daripada dua.
+
+**Sekurang-kurangnya dua sesi.** Tiga jawapan betul dalam satu duduk boleh bersandar pada satu
+detik kefahaman yang sama, atau pada jawapan yang didedahkan dua soalan sebelumnya (§4.2). Sesi
+kedua ialah bukti termurah bahawa kemahiran itu bertahan selepas anak pulang.
+
+**Jawapan terakhir salah menurunkan semula kepada *Hampir*.** Label ialah dakwaan tentang
+sekarang, dan perkara terkini yang berlaku ialah bukti terkuat tentang sekarang.
+
+#### Gulungan SP
+
+- **Dikuasai** hanya apabila **setiap** sub-kemahiran dikuasai. Bukan purata, bukan majoriti.
+  1.6.1 tidak boleh membaca *Dikuasai* selagi app tidak pernah bertanya tentang nilai digit,
+  berapa kali sekalipun ia bertanya tentang nilai tempat.
+- **Hampir menguasai** apabila setiap sub-kemahiran yang **diuji** sudah dikuasai tetapi
+  liputan belum penuh. Tiada yang salah; cuma belum semuanya ditanya.
+- **Sedang belajar** apabila ada sub-kemahiran diuji yang belum dikuasai.
+- **Belum dicuba** apabila tiada satu pun diuji.
+
+Akibatnya SP tidak boleh dilaporkan dikuasai selagi kandungan untuk mengujinya belum wujud.
+Itu betul, dan ia mendedahkan betapa nipisnya pek — maklumat, bukan kecacatan. Dengan pek hari
+ini, **tiada satu pun daripada enam SP boleh mencapai Dikuasai**; `validate:content`
+mencetaknya setiap binaan.
+
+`lib/coverage.ts` tulen: tiada jam, tiada katalog, tiada storan. Pemanggil himpunkan bukti dan
+menghulurkannya, disiplin sama seperti `updateStreak(s, todayISO)`.
+
+> `mastery.ts` **tidak disentuh**. `masteryLabel()` tiga-labelnya kini digantikan untuk papan
+> pemuka oleh §5.7, dan patut ditarik balik apabila stor kemajuan mendarat. Ia tidak mempunyai
+> pemanggil produksi hari ini.
+
 ---
 
 ## 6. Ketekalan & penyegerakan
@@ -666,6 +776,31 @@ hari ini:
 
 Sehingga salah satu daripadanya wujud, menukar storan menambah kerumitan tanpa menambah
 keupayaan.
+
+### Stor kemajuan — `esi.progress.v1`, bentuknya diputuskan, belum dibina
+
+**Tiada data penguasaan wujud hari ini pada mana-mana peranti.** `mastery.ts` tiada pemanggil
+produksi; satu-satunya kunci yang app tulis ialah `esi.session.v1`, iaitu sesi dalam terbang.
+Itu menjadikan bentuk kunci percuma untuk dipilih **sekarang**. Selepas stor kemajuan dihantar,
+perubahan yang sama berharga satu migrasi.
+
+Empat peraturan, diputuskan lebih awal supaya ia tidak diputuskan tergesa-gesa kemudian:
+
+1. **Kunci berversi sendiri, `esi.progress.v1`**, berasingan daripada kunci sesi. Sesi dibuang
+   apabila aktiviti tamat; kemajuan tidak.
+2. **Simpan bukti per id sub-kemahiran sahaja. Jangan sekali-kali simpan nombor peringkat SP.**
+   Gulungan §5.7 dikira semasa baca. Gulungan yang disimpan menjadi basi saat senarai
+   sub-kemahiran berubah — dan ia akan berubah: guru membetulkan pemetaan kami tiga daripada
+   sepuluh kali pada pusingan pertama.
+3. **Id yang hilang daripada senarai diabaikan semasa baca, tidak dipadam.** Kalau id kembali —
+   dan pembetulan guru boleh diterbalikkan — buktinya kembali bersamanya. Memadam ialah
+   kehilangan data untuk keputusan yang belum muktamad.
+4. **Rekod sub-kemahiran pada masa pemarkahan daripada pek hidup, bukan daripada sesi beku.**
+   Sesi tersimpan membekukan soalan (PRD §16 soalan 6), jadi salinan beku membawa `subSkill`
+   lama kalau pek berubah di tengah sesi.
+
+Preseden tingkah laku sudah ada: `loadSession` menolak blob rosak dan tidak pernah menghalang
+app daripada bermula. Stor kemajuan mengambil pendirian yang sama.
 
 ```ts
 interface SyncQueueItem {

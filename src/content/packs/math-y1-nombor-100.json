@@ -36,6 +36,7 @@
       "type": "mcq",
       "difficulty": 1,
       "learningStandard": "1.2.2",
+      "subSkill": "1.2.2/compare_greater",
       "prompt": { "ms": "Nombor manakah yang lebih besar?", "en": "Which number is bigger?" },
       "promptAudio": { "ms": "/audio/ms/q001.mp3", "en": "/audio/en/q001.mp3" },
       "hint": { "ms": "Lihat nombor di hadapan dahulu.", "en": "Look at the first digit." },
@@ -58,6 +59,7 @@
       "type": "mcq",
       "difficulty": 1,
       "learningStandard": "1.2.2",
+      "subSkill": "1.2.2/after",
       "prompt": { "ms": "Apakah nombor selepas 29?", "en": "What is the number after 29?" },
       "promptAudio": { "ms": "/audio/ms/q002.mp3", "en": "/audio/en/q002.mp3" },
       "hint": { "ms": "Bilang: dua puluh sembilan, kemudian?", "en": "Count on: twenty-nine, then?" },
@@ -76,6 +78,7 @@
       "type": "count-tap",
       "difficulty": 1,
       "learningStandard": "1.2.1",
+      "subSkill": "1.2.1/count_objects",
       "prompt": {
         "ms": "Ketuk setiap rambutan sambil mengira. Kemudian tekan Sedia.",
         "en": "Tap every rambutan as you count. Then press Sedia."
@@ -94,6 +97,7 @@
       "type": "mcq",
       "difficulty": 2,
       "learningStandard": "1.6.1",
+      "subSkill": "1.6.1/digit_at_tens",
       "prompt": {
         "ms": "Nombor 63. Apakah digit di tempat puluh?",
         "en": "The number 63. Which digit is in the tens place?"
@@ -115,6 +119,7 @@
       "type": "mcq-image",
       "difficulty": 1,
       "learningStandard": "7.2.1",
+      "subSkill": "7.2.1/name_triangle",
       "prompt": { "ms": "Yang mana bentuk segi tiga?", "en": "Which one is a triangle?" },
       "promptAudio": { "ms": "/audio/ms/q005.mp3", "en": "/audio/en/q005.mp3" },
       "payload": {
@@ -144,6 +149,7 @@
       "type": "count-tap",
       "difficulty": 1,
       "learningStandard": "1.2.1",
+      "subSkill": "1.2.1/count_objects",
       "prompt": {
         "ms": "Ketuk setiap pisang sambil mengira. Kemudian tekan Sedia.",
         "en": "Tap every banana as you count. Then press Sedia."
@@ -162,6 +168,7 @@
       "type": "mcq",
       "difficulty": 2,
       "learningStandard": "1.2.2",
+      "subSkill": "1.2.2/order_ascending",
       "prompt": {
         "ms": "Susunan manakah dari kecil ke besar?",
         "en": "Which row goes from smallest to biggest?"
@@ -183,6 +190,7 @@
       "type": "mcq",
       "difficulty": 3,
       "learningStandard": "2.2.2",
+      "subSkill": "2.2.2/add_multiple_of_10",
       "prompt": { "ms": "45 tambah 10 jadi berapa?", "en": "What is 45 plus 10?" },
       "promptAudio": { "ms": "/audio/ms/q008.mp3", "en": "/audio/en/q008.mp3" },
       "hint": { "ms": "Tambah satu pada tempat puluh.", "en": "Add one to the tens place." },
@@ -202,6 +210,7 @@
       "type": "mcq-image",
       "difficulty": 1,
       "learningStandard": "7.2.1",
+      "subSkill": "7.2.1/name_circle",
       "prompt": { "ms": "Yang mana bulatan?", "en": "Which one is a circle?" },
       "promptAudio": { "ms": "/audio/ms/q009.mp3", "en": "/audio/en/q009.mp3" },
       "payload": {
@@ -226,6 +235,7 @@
       "type": "mcq",
       "difficulty": 2,
       "learningStandard": "1.2.2",
+      "subSkill": "1.2.2/compare_smaller",
       "prompt": { "ms": "Nombor manakah paling kecil?", "en": "Which number is the smallest?" },
       "promptAudio": { "ms": "/audio/ms/q010.mp3", "en": "/audio/en/q010.mp3" },
       "hint": { "ms": "Banding tempat puluh dahulu.", "en": "Compare the tens place first." },
