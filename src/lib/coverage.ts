@@ -40,6 +40,13 @@ export interface Evidence {
   questionId: string;
   /** Which run of an activity. Evidence from one sitting is weaker (see below). */
   sessionId: string;
+  /**
+   * Did the question have exactly two options? A blind guess on it is right one
+   * time in two, not one in three, so it counts toward the four-question bar
+   * only (`EVIDENCE_WITH_TWO_OPTIONS`). A count-tap is `false`: it has no
+   * options to guess between.
+   */
+  twoOptions: boolean;
   /*
     No promptForm, representation, responseMode or wordingVariant here, and that
     is a decision rather than an omission.
@@ -65,17 +72,15 @@ export interface Evidence {
 export type SkillStatus = 'not-tested' | 'evaluating' | 'mastered';
 
 /**
- * Distinct questions answered right on the first attempt before a sub-skill may
- * be called mastered.
+ * Distinct questions **with three or more options** answered right on the first
+ * attempt before a sub-skill may be called mastered.
  *
  * Three, because of what a wrong guess costs. On a three-option question a
  * child guessing blindly is right one time in three: one item of evidence
  * mislabels 33% of guessers, two mislabels 11%, three mislabels 3.7% — the
- * first value under one in twenty. But `mcq` and `mcq-image` allow two options
- * (SPEC §3.4), where a guess is right one time in two and three items mislabel
- * 12.5%. The range for three items is 3.7% to 12.5%. This comment once said the
- * figure was sized to the easiest question in the pack; the easiest question
- * has two options. Whether that should change the bar is open (PRD §16 item 22).
+ * first value under one in twenty. `mcq` and `mcq-image` also allow two
+ * options (SPEC §3.4), where three items mislabel 12.5%, so two-option evidence
+ * does not count toward this bar: `EVIDENCE_WITH_TWO_OPTIONS`.
  *
  * **That 3.7% is a design figure and nothing else.** It is the chance of three
  * blind guesses all landing under one assumption about one question type. It is
@@ -85,6 +90,21 @@ export type SkillStatus = 'not-tested' | 'evaluating' | 'mastered';
  * dashboard.
  */
 export const EVIDENCE_FOR_MASTERY = 3;
+
+/**
+ * Or this many distinct questions of any kind.
+ *
+ * Four two-option questions guessed right is (1/2)^4 = 6.25%. Approved in
+ * teacher review for two-option questions (PRD §16 item 22).
+ *
+ * **Counted from what the child answered, not from what the pack holds.** Three
+ * three-option answers reach the bar at three whatever else the item bank
+ * contains; a two-option answer only matters to the child who gave it. Raising
+ * the bar for a whole sub-skill because one question in the bank has two
+ * options would hold a child back for how the bank is written — the mistake the
+ * teacher's marked review undid for question form.
+ */
+export const EVIDENCE_WITH_TWO_OPTIONS = 4;
 
 /**
  * And from at least two sittings.
@@ -127,12 +147,22 @@ export interface SkillInput {
   masteredOnce?: boolean;
 }
 
+/** Enough distinct questions, from enough distinct sittings, within one set of evidence. */
+function meetsBar(evidence: readonly Evidence[], questions: number): boolean {
+  return (
+    new Set(evidence.map((e) => e.questionId)).size >= questions &&
+    new Set(evidence.map((e) => e.sessionId)).size >= SESSIONS_FOR_MASTERY
+  );
+}
+
 export function skillState(input: SkillInput): SkillState {
   const { attempted, evidence, latestWasWrong = false, masteredOnce = false } = input;
 
-  const questions = new Set(evidence.map((e) => e.questionId));
-  const sessions = new Set(evidence.map((e) => e.sessionId));
-  const barMet = questions.size >= EVIDENCE_FOR_MASTERY && sessions.size >= SESSIONS_FOR_MASTERY;
+  const barMet =
+    meetsBar(
+      evidence.filter((e) => !e.twoOptions),
+      EVIDENCE_FOR_MASTERY,
+    ) || meetsBar(evidence, EVIDENCE_WITH_TWO_OPTIONS);
 
   const banked = masteredOnce || barMet;
 

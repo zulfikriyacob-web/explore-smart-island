@@ -674,6 +674,11 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     **7** sub-kemahiran — enam dengan satu soalan, `count_objects` dengan dua — dan **13** soalan
     lagi. Rekodnya dalam `docs/HANDOFF.md` §6.
 
+    **Kemas kini, 14 September 2026: satu.** Tiga belas soalan baharu (q011–q023) ditambah, dan
+    q004 mendapat pilihan ketiga. `validate:content` kini mencetak **satu** sub-kemahiran —
+    `1.2.2/order_ascending`: q007, q018 dan q019, satu daripadanya dua pilihan — dan **1** soalan
+    lagi, di bawah ambang SPEC §5.7 (item 22). Soalan itu ialah q024, yang ditahan (item 28).
+
     Dengan bar bentuk hilang, bar soalan ialah **satu-satunya** jurang kepada *Dikuasai*. Ia
     ditutup dengan soalan biasa — tiada skema, tiada bentuk baharu, cuma nombor berbeza dan
     rakaman. `validate:content` kini mencetak berapa soalan lagi setiap sub-kemahiran perlukan,
@@ -1092,8 +1097,9 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     `explain` q004 tidak pernah dilihat. Kedua-duanya tidak tepat pada masa itu: pembetulan dalam
     item 23.
 22. ~~**Ambang tiga soalan disaiz pada soalan tiga pilihan; soalan dua pilihan lebih mudah diteka.
-    Belum diputuskan — ia menyentuh ambang yang guru luluskan.**~~ **DIPUTUSKAN — SPEC menyatakan
-    julat; soalan dibawa ke pusingan semakan guru seterusnya.**
+    Belum diputuskan — ia menyentuh ambang yang guru luluskan.**~~ ~~**DIPUTUSKAN — SPEC menyatakan
+    julat; soalan dibawa ke pusingan semakan guru seterusnya.**~~ **DIJAWAB — empat soalan untuk
+    bukti dua pilihan, dikira daripada jawapan anak.**
 
     SPEC §5.7 pernah berkata tiga *"disaiz mengikut soalan paling mudah dalam pek"*. Salah:
     soalan paling mudah diteka ialah dua pilihan (item 21), dan skema membenarkannya bagi `mcq`
@@ -1125,6 +1131,20 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     seterusnya**: `kssr:review` kini menjana bahagian *"Ambang untuk soalan dua pilihan"* setiap
     kali soalan yang mendakwa sub-kemahiran mempunyai dua pilihan — hari ini q004. Kebarangkalian
     dalam borang dikira oleh penjana, bukan disalin.
+
+    **DIJAWAB, 14 September 2026.** Menurut dokumen pembetulan pemilik projek
+    (`docs/kssr/pembetulan-akhir-soalan-math-y1.md` — ringkasan pemilik projek, bukan perkataan
+    guru; item 29), guru meluluskan **empat soalan** untuk
+    soalan dua pilihan, `(1/2)⁴ = 6.25%`. Peraturan dalam SPEC §5.7, dikuatkuasakan dalam
+    `coverage.ts`: **(a)** ≥ 3 soalan berbeza tiga pilihan atau lebih, **atau (b)** ≥ 4 soalan
+    berbeza apa pun bilangan pilihannya — kedua-duanya percubaan pertama, merentas ≥ 2 sesi.
+
+    Jadual liputan dalam dokumen yang sama mengira ambang mengikut **bank**: satu soalan dua pilihan
+    (q019) menaikkan `order_ascending` kepada empat. Pemilik projek membetulkannya sebelum ia
+    dilaksana — *"Jadual dalam dokumen saya salah"* — kerana hujah 6.25% ialah tentang apa yang anak
+    jawab, dan mengira mengikut bank *"menghukum anak untuk komposisi bank soalan"*.
+
+    `kssr:review` berhenti bertanya soalan ini, kerana ia sudah dijawab.
 23. ~~**`explain` tidak boleh dicapai pada setiap `mcq`, bukan hanya yang dua pilihan. Tiga
     daripada tiga dalam pek. Belum diputuskan.**~~ **DISELESAIKAN — jawapan didedah apabila anak
     tidak boleh salah lagi.**
@@ -1195,3 +1215,154 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     Dibaiki dalam enjin, bukan butang: `sessionReducer` kini mengabaikan jawapan pada pilihan yang
     sudah dipangkah. Keadaan `wrong` tidak boleh dikunci dalam `BlockButton`, kerana butang Sedia
     count-tap memakai keadaan yang sama dan mesti boleh ditekan semula.
+24. **Tiga soalan tersekat pada gambar-dalam-arahan: q005, q009 dan q019.**
+
+    Item 10 merekod jurang skema ini untuk q005 dan q009: skema tiada tempat untuk imej dalam
+    arahan (SPEC §3.3). q019 kini menunggu jurang yang sama. Menurut dokumen pembetulan pemilik
+    projek, guru membenarkan tiga nombor untuk tertib **dengan sokongan visual**, dan tidak
+    tanpanya — jadi q019 ditulis dengan dua nombor, *"Kad Raju: 14, 9."*, dan dua pilihan.
+
+    | Soalan | Menunggu |
+    |---|---|
+    | q005 | Gambar bentuk dalam arahan, pilihan sebagai nama |
+    | q009 | Sama |
+    | q019 | Tiga nombor, dengan kad bernombor sebagai sokongan visual |
+
+    **Menyelesaikan jurang itu menyelesaikan ketiga-tiganya, dan menjadikan q024 tidak perlu.**
+    Dengan q019 tiga pilihan, `order_ascending` ada tiga soalan tiga pilihan — q007, q018, q019 —
+    dan syarat (a) SPEC §5.7 boleh dicapai tanpa soalan keempat. Hari ini ia ada dua, jadi ia
+    perlukan q024 (item 28).
+
+    **Kosnya belum diukur.** Jadual lapisan item 10 terpakai kepada ketiga-tiganya: `schema.ts`,
+    `collectAssetRefs`, `QuizScreen.tsx`, di mana imej duduk tanpa memindahkan baris pertama teks
+    soalan, dan rakaman. Dokumen pembetulan menyebut DESIGN §5.2 menetapkan teks bermula pada
+    Y 168; DESIGN §5.2 hari ini menetapkan **Y 89**. Y 168 pernah menjadi nilainya dan dibalikkan
+    di situ.
+
+    Pancingan q019 dalam spesifikasi — *"Cari nombor paling kecil dahulu."* — **dibuang**, atas
+    keputusan pemilik projek. Dua pilihan mendedah pada kesilapan pertama (SPEC §4.2), jadi ia tidak
+    pernah dilihat: masalah yang sama seperti `explain` yang mati dalam item 23. Kalau q019 menjadi
+    tiga pilihan, pancingan ditulis semula ketika itu.
+25. **Kad diseret untuk tertib — `responseMode: order`, kerja Fasa 3, dengan sebab pedagogi.**
+
+    Menurut dokumen pembetulan pemilik projek, guru menyatakan bahawa menyusun kad **menghasilkan**
+    susunan, manakala memilih daripada senarai hanya **mengecam** susunan, dan yang pertama lebih
+    dekat dengan apa yang SP 1.2.2 (iv) minta: *"Menyusun kumpulan objek mengikut tertib menaik dan
+    tertib menurun."* (`src/content/kssr/math-y1.json`).
+
+    **Itu sebab pedagogi, bukan andaian reka bentuk.** Item 17 sudah mencatat bahawa bagi
+    `order_ascending`, menyusun ialah kemahiran itu sendiri, bukan variasi bentuknya.
+
+    Hari ini `order_ascending` ditanya dengan `select` sahaja — q007, q018, q019. Jenis `sequence`
+    disenaraikan dalam SPEC §3.3 tetapi di luar subset MVP, dan skema menolaknya. Tidak dibina.
+    Direkod supaya apabila Fasa 3 tiba, sebabnya sudah ada dan tidak perlu ditemui semula.
+26. **Butang Sedia mesti membawa isyaratnya sendiri sebelum "Kemudian tekan Sedia." dibuang
+    daripada rakaman.**
+
+    Menurut dokumen pembetulan pemilik projek, guru mahu ayat itu dibuang daripada arahan
+    count-tap: arahan itu milik butang, bukan ayat, dan isyaratnya ialah **keadaan butang yang
+    berubah bila ketukan bermula, ikon, dan bunyi pendek**.
+
+    **Tetapi hari ini audio arahan ialah satu-satunya saluran bukan teks yang menyuruh anak
+    menekan Sedia.** Diagnosis, 14 September 2026, daripada kod dan skrip rakaman — tidak diuji
+    pada peranti atau pembaca skrin:
+
+    | Saluran | Hari ini | Menyuruh tekan Sedia? |
+    |---|---|---|
+    | Audio arahan | Dimainkan sendiri; dirakam daripada ayat yang mengandungi *"Kemudian tekan Sedia."* | **Ya — satu-satunya** |
+    | Butang | Perkataan "Sedia". Keadaan `rest` sejak soalan muncul, `wrong` hanya selepas jawapan salah (`QuizScreen.tsx`). Tidak berubah bila ketukan bermula. Tiada ikon | Tidak |
+    | Kiraan | Nombor pada setiap objek yang diketuk, dan *"Dibilang: N"* | Tidak — ia menunjukkan kiraan, bukan langkah seterusnya |
+    | Bunyi dan getaran ketukan | Tiada. Bunyi UI SPEC §8 belum dilaksanakan | Tidak |
+
+    **Diputuskan oleh pemilik projek:** q003, q006 dan q011 **kekal** membawa *"Kemudian tekan
+    Sedia."* sehingga isyarat itu dibina, dan q003 serta q006 tidak dirakam semula. Membuang ayat
+    dahulu meninggalkan anak yang belum boleh membaca tanpa sebarang isyarat. Kosnya: arahan q011
+    sembilan perkataan, di luar julat 3–7 kalibrasi buku teks.
+
+    **Urutan kerja:** bina isyarat butang, ukur pada bingkai 0 (CLAUDE.md prinsip 5) dan uji pada
+    kanak-kanak; kemudian buang ayat daripada ketiga-tiga arahan, dan rakam semula tiga klip.
+27. **Tiga belas soalan baharu wujud dalam fail, tetapi tiada anak boleh melihatnya. Enjin pemilih
+    soalan ialah keutamaan seterusnya.**
+
+    App membuka satu aktiviti sahaja, `math-y1-nombor-100-a1` (`ACTIVITY_ID`, `activity.ts`), dan
+    a1 memegang q001–q010. q011–q023 duduk dalam aktiviti a2–a7, satu sub-kemahiran setiap
+    aktiviti:
+
+    | Aktiviti | Sub-kemahiran | Soalan |
+    |---|---|---|
+    | a2 | `count_objects` | q003, q006, q011 |
+    | a3 | `compare_greater`, `compare_smaller` | q001, q012, q013, q010, q014, q015 |
+    | a4 | `after` | q002, q016, q017 |
+    | a5 | `order_ascending` | q007, q018, q019 |
+    | a6 | `digit_at_tens` | q004, q020, q021 |
+    | a7 | `two_digit_plus_two_digit_no_bridge` | q008, q022, q023 |
+
+    - Soalan lama dirujuk semula dalam aktiviti kemahirannya, supaya setiap aktiviti memegang
+      kemahirannya dengan lengkap. Bukti dikira mengikut `questionId`, jadi tiada soalan dikira dua
+      kali.
+    - a3 menggabungkan dua sub-kemahiran kerana kedua-duanya daripada sub-titik DSKP yang sama,
+      1.2.2 (iii) *"Membandingkan nilai dua nombor."*
+    - Tajuk aktiviti ialah label fail kemahiran, tanpa teks baharu; a3 memakai kedua-dua label.
+      Tiada skrin memaparkan tajuk aktiviti hari ini.
+
+    **a1 tidak disusun semula.** Ia aktiviti yang app buka, jadi menyusunnya mengikut kemahiran
+    menukar apa yang anak mainkan hari ini — contohnya kepada tiga soalan count-tap sahaja. Dan
+    ukuran yang sudah direkod merujuk a1 sepuluh soalan: DESIGN §5.2 dan §7 merentas kesepuluh-
+    sepuluh soalan pek, dan SPEC §10 kriteria 3. Enjin pemilih akan menggantikan senarai tetap a1,
+    jadi kos itu dibayar sekali, bersama enjin.
+
+    **Belum diukur:** susun atur q011–q023, kerana tiada skrin memaparkannya. Yang paling berisiko:
+    lapan objek q011 (had 9, SPEC §3.4), arahan tiga ayat q011, q021 dan q023, dan pilihan
+    *"Sama banyak"*.
+
+    **Keutamaan seterusnya, atas keputusan pemilik projek:** enjin yang memilih 10 soalan daripada
+    bank, dengan komposisi aras SPEC §5.5. Tanpa ia, soalan baharu hanya lulus `validate:content`.
+28. **Soalan untuk pusingan semakan guru seterusnya.**
+
+    - **q024 ditahan, dan tidak ditulis.** Dokumen pembetulan pemilik projek menulisnya dengan ayat
+      yang sama seperti q007 — *"Susunan manakah dari kecil ke besar?"* — dan nombor berbeza, dan
+      menurut dokumen itu guru pernah menulis supaya tidak sekadar menambah soalan yang sama tetapi
+      menukar nombor **dan** bentuk. Pemilik projek sedang bertanya guru sama ada ia memadai.
+      Sehingga itu `order_ascending` kurang satu soalan tiga pilihan untuk syarat (a) SPEC §5.7.
+      Item 24 menjadikan q024 tidak perlu.
+    - **q018 dipetakan ke `order_ascending`.** *"12, __, 18, 21."* ialah soalan isi tempat kosong.
+      Dokumen guru sendiri, dalam bahagian 1.5.1, berkata soalan begitu *"lebih hampir kepada
+      kemahiran melengkapkan rangkaian nombor"* (`docs/kssr/guru-sub-kemahiran-math-y1.md`). Tidak
+      ditukar; guru yang memutuskan. Senarai rakaman dokumen pembetulan membaca tempat kosong itu
+      sebagai *"kosong"*.
+29. **Jawapan guru untuk tiga pusingan semakan q011–q023 datang dalam mesej, bukan borang
+    bertanda. Jurang itu dinyatakan, bukan disembunyikan.**
+
+    Dua dokumen pemilik projek difailkan dalam `docs/kssr/`, kedua-duanya bertanda sebagai tulisan
+    pemilik projek yang guru semak — bukan dokumen guru:
+
+    | Fail | Apa |
+    |---|---|
+    | `soalan-baharu-math-y1.md` | Spesifikasi penuh q011–q023, **sebelum** semakan. Nota statusnya sendiri: *"Belum disemak guru."* |
+    | `pembetulan-akhir-soalan-math-y1.md` | Pembetulan **selepas** tiga pusingan semakan. Menang di mana kedua-duanya bercanggah |
+
+    **Yang tiada dalam repo:**
+
+    - **Jawapan guru sendiri** untuk tiga pusingan itu. Ia datang dalam mesej, bukan borang
+      bertanda, dan mesej itu tidak difailkan.
+    - `pembetulan-soalan-math-y1.md`, yang dokumen pembetulan akhir katakan ia gantikan.
+
+    Akibatnya, setiap *"menurut dokumen pembetulan, guru …"* — item 22, 24, 25, 26 dan 28, dan
+    SPEC §5.7 — ialah **ringkasan pemilik projek**, dan tidak boleh disemak terhadap perkataan guru.
+    `kssr.review` dalam pek masih merujuk borang pusingan 2 dan sepuluh soalan asal, dan tidak
+    dinaikkan atas dokumen ini.
+
+    **Yang dalam pek tetapi tiada dalam kedua-dua dokumen** — diberi atau diputuskan oleh pemilik
+    projek dalam sesi, 14 September 2026:
+
+    | Soalan | Butiran |
+    |---|---|
+    | q022 | Spesifikasi penuh: *"Saya tambah 15 jadi 38. Apakah nombor saya?"*, pilihan 23 · 28 · 53, pancingan, penerangan, `reverse` |
+    | q012, q014 | Arahan EN bagi arahan BM yang ditulis semula |
+    | q019 | Penerangan *"9 lebih kecil daripada 14."*; pancingan dibuang (item 24) |
+    | q011 | Arahan BM tiga ayat yang mengekalkan *"Kemudian tekan Sedia."* (item 26); pancingan dibuang kerana count-tap tidak boleh membawanya |
+    | q013, q015 | EN pilihan *"Sama banyak"*: *"The same"*, daripada label `compare_groups` fail kemahiran |
+    | Semua | `difficulty` disalin daripada soalan sedia ada sub-kemahiran yang sama; `wordingVariant` "A"; `layout` q011 `scatter`, seperti q003 |
+
+    **Untuk menutup jurang:** failkan jawapan guru seperti yang diterima, atau semak q011–q023 melalui
+    borang `kssr:review` yang dikembalikan bertanda.
