@@ -15,7 +15,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { TopicPackSchema, collectAssetRefs } from '../src/content/schema.ts';
-import { MAX_ATTEMPTS } from '../src/lib/scoring.ts';
+import { missesLeft } from '../src/features/quiz/session.ts';
 import { EVIDENCE_FOR_MASTERY } from '../src/lib/coverage.ts';
 
 /**
@@ -39,69 +39,46 @@ function resolveAsset(assetPath) {
 }
 
 /**
- * Can a child reach the third attempt on this question — the one that reveals
- * the answer?
+ * A hint is on screen only while the question is still open after a miss (SPEC
+ * 4.2). A two-option question reveals the answer on its first miss — the right
+ * option is the only one left — so a hint written for it is never seen.
  *
- * Every wrong answer strikes out the option it used, so an option question runs
- * out of wrong options before it runs out of attempts unless it carries more
- * than MAX_ATTEMPTS of them. count-tap has nothing to strike out: its submit
- * button is never disabled, so it always can.
+ * Asked through the engine's own `missesLeft`, so this check and the screen
+ * cannot disagree about when a question ends. A warning: dead text, not a
+ * broken screen.
  */
-function canReachReveal(question) {
-  if (question.type === 'count-tap') return true;
-  return question.payload.options.length - 1 >= MAX_ATTEMPTS;
-}
-
-/**
- * Does the screen draw a revealed answer for this question? count-tap falls back
- * to "Jawapannya N." with no `explain` written, so it always does.
- */
-function showsReveal(question) {
-  return question.type === 'count-tap' || question.explain !== undefined;
-}
-
-/**
- * The hint and the revealed answer share one band under the question card
- * (DESIGN §7). Two of them at once overflows it, and the overflow lands on the
- * help a stuck child needs. A question may carry a hint only when the reveal
- * cannot appear beside it.
- */
-function checkHintRevealClash(pack) {
-  const errors = [];
-  for (const [i, q] of pack.questions.entries()) {
-    if (q.hint === undefined) continue;
-    if (!canReachReveal(q) || !showsReveal(q)) continue;
-    const why =
-      q.type === 'count-tap'
-        ? `count-tap has no options to strike out, so a third miss is always reachable, and it reveals the answer even without an "explain"`
-        : `${q.payload.options.length} options leaves ${q.payload.options.length - 1} wrong ones, enough to reach attempt ${MAX_ATTEMPTS}, and "explain" is set`;
-    errors.push(
-      `questions.${i} ("${q.id}"): carries a hint and can show a revealed answer at the same time — ${why}. ` +
-        `Both are drawn in the band under the question card and would overflow it. Remove the hint, or remove what makes the reveal reachable.`,
-    );
-  }
-  return errors;
-}
-
-/**
- * An `explain` is drawn only with the reveal, and the reveal only comes on the
- * third miss (SPEC 4.2). An option question with MAX_ATTEMPTS options or fewer
- * runs out of wrong answers first — a struck-out option cannot be pressed again
- * — so its `explain` is written, stored, and never seen. That is every `mcq`.
- *
- * A warning, not an error, until PRD 16 item 23 decides whether such a question
- * loses its explain or shows it earlier.
- */
-function checkUnreachableExplain(pack) {
+function checkUnreachableHint(pack) {
   const warnings = [];
   for (const q of pack.questions) {
-    if (q.explain === undefined || canReachReveal(q)) continue;
-    const n = q.payload.options.length;
+    if (q.hint === undefined || q.type === 'count-tap') continue;
+    const firstWrong = q.payload.options.find((o) => o.id !== q.payload.correctOptionId);
+    if (missesLeft(q, 1, firstWrong ? [firstWrong.id] : []) > 0) continue;
     warnings.push(
-      `${q.id}: "explain" can never be shown — ${n} options leave ${n - 1} to get wrong, and the reveal needs ${MAX_ATTEMPTS} misses (PRD 16 item 23)`,
+      `${q.id}: "hint" can never be shown — with ${q.payload.options.length} options the first miss leaves only the answer, and that reveals it (SPEC 4.2)`,
     );
   }
   return warnings;
+}
+
+/**
+ * count-tap may not carry a hint.
+ *
+ * The rule this replaces kept a hint and a revealed answer from being drawn in
+ * the band at once. The reveal now takes the hint's place, so that reason is
+ * gone for every question type. It stays for count-tap alone because no
+ * count-tap hint has ever been measured while its objects are still being
+ * tapped — and the band does not shrink, the card holding those objects does
+ * (DESIGN 7). Measure that before lifting this.
+ */
+function checkCountTapHint(pack) {
+  const errors = [];
+  for (const [i, q] of pack.questions.entries()) {
+    if (q.type !== 'count-tap' || q.hint === undefined) continue;
+    errors.push(
+      `questions.${i} ("${q.id}"): count-tap may not carry a hint — no count-tap hint has been measured beside objects still to tap (DESIGN 7)`,
+    );
+  }
+  return errors;
 }
 
 /**
@@ -455,8 +432,8 @@ async function validatePack(file) {
 
   const pack = parsed.data;
 
-  errors.push(...checkHintRevealClash(pack));
-  warnings.push(...checkUnreachableExplain(pack));
+  errors.push(...checkCountTapHint(pack));
+  warnings.push(...checkUnreachableHint(pack));
 
   const catalogue = await loadCatalogue(pack.subject, pack.year);
   if (catalogue === null) {

@@ -42,7 +42,7 @@ export interface SessionState {
   disabledOptionIds: readonly string[];
   /** Outcome of the most recent attempt; null before the first one. */
   lastAnswerCorrect: boolean | null;
-  /** Set after three failed attempts: show the answer and `explain`. */
+  /** Set once the child can no longer be wrong (`missesLeft`): show the answer and `explain`. */
   revealed: boolean;
   /** When the current question was first shown, for msSpent. */
   questionStartedMs: number | null;
@@ -96,6 +96,34 @@ export function checkAnswer(question: Question, response: Response): boolean {
   }
 }
 
+/**
+ * Wrong answers the child can still give on this question.
+ *
+ * Two limits, and whichever runs out first ends the question. Every question
+ * has MAX_ATTEMPTS. An option question also strikes out each wrong option it
+ * is given, and answering a struck-out option again is ignored — so once only the
+ * right option is left the child can no longer be wrong, whatever attempts
+ * remain. That is when the answer and `explain` are shown (SPEC 4.2): after
+ * the second miss on three options, after the first on two, on the third on a
+ * count-tap.
+ *
+ * `explain` is the message for "you cannot get this wrong any more", not a
+ * third-attempt message. Tied to the third attempt, an mcq reached it only by
+ * tapping the same wrong option again, which the reducer now ignores.
+ */
+export function missesLeft(
+  question: Question,
+  attempts: number,
+  disabledOptionIds: readonly string[],
+): number {
+  const byAttempts = MAX_ATTEMPTS - attempts;
+  if (question.type === 'count-tap') return Math.max(0, byAttempts);
+  const wrongOptionsLeft = question.payload.options.filter(
+    (o) => o.id !== question.payload.correctOptionId && !disabledOptionIds.includes(o.id),
+  ).length;
+  return Math.max(0, Math.min(byAttempts, wrongOptionsLeft));
+}
+
 function beginQuestion(s: SessionState, nowMs: number): SessionState {
   return {
     ...s,
@@ -141,6 +169,18 @@ export function sessionReducer(state: SessionState, event: SessionEvent): Sessio
       const question = currentQuestion(state);
       if (question === null) return state;
 
+      // A struck-out option cannot be answered again. The option struck last is
+      // still pressable on screen — it draws its cross, it is not greyed out —
+      // and tapping it again used to spend an attempt: measured, three taps on
+      // one wrong option revealed the answer with the other never tried.
+      // (SPEC 4.2)
+      if (
+        event.response.kind === 'option' &&
+        state.disabledOptionIds.includes(event.response.optionId)
+      ) {
+        return state;
+      }
+
       const correct = checkAnswer(question, event.response);
       const attempts = state.attempts + 1;
 
@@ -169,15 +209,18 @@ export function sessionReducer(state: SessionState, event: SessionEvent): Sessio
           ? [...state.disabledOptionIds, event.response.optionId]
           : state.disabledOptionIds;
 
-      if (attempts >= MAX_ATTEMPTS) {
-        // Third miss: show the answer and `explain`, record 0, carry on. No
-        // other penalty. (SPEC 4.2)
+      if (missesLeft(question, attempts, disabled) === 0) {
+        // The child can no longer get this wrong: a third miss, or a miss that
+        // leaves only the right option. Show the answer and `explain`, record 0,
+        // carry on. No other penalty. (SPEC 4.2)
         const record: AnswerRecord = {
           questionId: question.id,
           attempts,
           correct: false,
           firstTry: false,
-          hintShown: true,
+          // Only a miss that left the question open put the hint on screen. On
+          // two options the first miss reveals, and no hint was ever shown.
+          hintShown: state.hintShown,
           msSpent: elapsed(state, event.nowMs),
         };
         return {
@@ -187,12 +230,11 @@ export function sessionReducer(state: SessionState, event: SessionEvent): Sessio
           answers: [...state.answers, record],
           disabledOptionIds: disabled,
           lastAnswerCorrect: false,
-          hintShown: true,
           revealed: true,
         };
       }
 
-      // First or second miss: shake, surface the hint, keep the question open.
+      // A miss that leaves the question open: shake, surface the hint.
       return {
         ...state,
         status: 'question',

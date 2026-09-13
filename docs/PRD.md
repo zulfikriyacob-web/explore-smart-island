@@ -1079,8 +1079,21 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
 
     **Kos menukar mana-mana mcq kepada dua pilihan:** peraturan percubaan baharu untuk jenis itu.
     Keputusan yang sama terpakai kepada q004, yang sudah pun di situ.
-22. **Ambang tiga soalan disaiz pada soalan tiga pilihan; soalan dua pilihan lebih mudah diteka.
-    Belum diputuskan — ia menyentuh ambang yang guru luluskan.**
+
+    **Kemas kini, 13 September 2026.** Sebab q001 ditahan dibatalkan oleh pemilik projek: *"q004
+    dua pilihan membatalkan sebab saya menahan q001 — kosnya sudah dibayar, bukan hipotesis."* Dua
+    baris pertama jadual di atas juga tiada lagi, kerana item 23: kesilapan yang meninggalkan hanya
+    jawapan betul kini mendedah, jadi tiada percubaan dipaksa dan `explain` q004 dipaparkan. Baris
+    ketiga dibawa ke guru oleh item 22. Yang tinggal ialah soalan kandungan — sama ada q001 dan q010
+    menjadi perbandingan dua nombor — dengan harga baharu yang item 23 tunjukkan: `hint` pada soalan
+    dua pilihan tidak pernah dilihat.
+
+    Jadual di atas juga berkata butang yang dipangkah tidak boleh ditekan semula, dan bahawa
+    `explain` q004 tidak pernah dilihat. Kedua-duanya tidak tepat pada masa itu: pembetulan dalam
+    item 23.
+22. ~~**Ambang tiga soalan disaiz pada soalan tiga pilihan; soalan dua pilihan lebih mudah diteka.
+    Belum diputuskan — ia menyentuh ambang yang guru luluskan.**~~ **DIPUTUSKAN — SPEC menyatakan
+    julat; soalan dibawa ke pusingan semakan guru seterusnya.**
 
     SPEC §5.7 pernah berkata tiga *"disaiz mengikut soalan paling mudah dalam pek"*. Salah:
     soalan paling mudah diteka ialah dua pilihan (item 21), dan skema membenarkannya bagi `mcq`
@@ -1105,8 +1118,16 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     **Cadangan: B sekarang; bawa A kepada guru jika item 21 memilih dua nombor.** B menjadikan
     SPEC benar tanpa mengubah apa yang guru luluskan, dan hari ini hanya satu soalan terjejas. A
     patut ditanya apabila bukti dua pilihan menjadi biasa, bukan sebelum.
-23. **`explain` tidak boleh dicapai pada setiap `mcq`, bukan hanya yang dua pilihan. Tiga
-    daripada tiga dalam pek. Belum diputuskan.**
+
+    **DIPUTUSKAN, 13 September 2026: B.** Dalam perkataan pemilik projek: *"Guru yang meluluskan
+    tiga; dia yang patut memutuskan sama ada ia mencukupi untuk soalan dua pilihan."* SPEC §5.7
+    menyatakan julat, ambang kekal tiga, dan soalan itu **ditanya pada pusingan semakan
+    seterusnya**: `kssr:review` kini menjana bahagian *"Ambang untuk soalan dua pilihan"* setiap
+    kali soalan yang mendakwa sub-kemahiran mempunyai dua pilihan — hari ini q004. Kebarangkalian
+    dalam borang dikira oleh penjana, bukan disalin.
+23. ~~**`explain` tidak boleh dicapai pada setiap `mcq`, bukan hanya yang dua pilihan. Tiga
+    daripada tiga dalam pek. Belum diputuskan.**~~ **DISELESAIKAN — jawapan didedah apabila anak
+    tidak boleh salah lagi.**
 
     `explain` dilukis hanya bersama dedahan, dan dedahan hanya pada kesilapan ketiga
     (`session.ts`, `revealed`). Setiap salah memangkah pilihan yang digunakan, dan pilihan yang
@@ -1142,3 +1163,35 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     peraturan: `explain` yang mati, markah untuk tekanan yang tidak menguji apa-apa, dan peraturan
     percubaan dua pilihan yang item 21 perlukan. Tetapi ia perubahan tingkah laku dan pemarkahan
     yang menyentuh SPEC §3.5, §4.2, §5.1 dan DESIGN §7, dan ia tidak dibina di sini.
+
+    **DIPUTUSKAN, 13 September 2026: (ii), dan dibina.** Dalam perkataan pemilik projek:
+    *"explain bukan mesej percubaan ketiga, ia mesej untuk bila anak tidak boleh gagal lagi."*
+
+    - `missesLeft()` dalam `session.ts` memutuskan bila soalan tamat. `validate:content` dan ayat
+      verdict memanggil fungsi yang sama, jadi ketiga-tiganya tidak boleh berbeza pendapat.
+    - Dedahan **menggantikan** pancingan dalam jalur, supaya jalur memegang satu blok. Diukur di
+      pane: `aria-live` membacakan *"Belum betul. &lt;explain&gt;"* pada ketiga-tiga dedahan baharu, dan
+      pancingan tidak dibaca bersamanya.
+    - *"Cuba sekali lagi"* kini bermaksud satu kesilapan lagi sebelum jawapan ditunjukkan, jadi
+      pada tiga pilihan ia dibaca selepas kesilapan pertama.
+    - **Kos yang tinggal: pancingan q004 kini tidak pernah dilihat.** Dua pilihan mendedah pada
+      kesilapan pertama, jadi *"Tempat puluh ada di sebelah kiri."* tiada peluang untuk muncul.
+      `validate:content` memberi amaran. Satu `explain` yang mati pada setiap mcq diganti oleh satu
+      `hint` yang mati pada satu soalan.
+    - Kad q001 terpotong 9px pada 390 × 740, dan 27px dengan inset iPhone — padding sahaja, teks
+      penuh (DESIGN §7).
+
+    **Pembetulan pada diagnosis di atas, 13 September 2026.** Item ini berkata pilihan yang
+    dipangkah tidak boleh ditekan semula, dan bahawa `explain` q001, q004 dan q008 tidak pernah
+    dilihat. **Kedua-duanya tidak tepat.** Pilihan yang **terakhir** dipangkah kekal boleh ditekan:
+    ia melukis ✕ dalam keadaan `wrong`, dan `BlockButton` hanya mengunci `disabled` dan `correct`.
+    Menekannya semula menghabiskan satu percubaan. Diukur di pane pada q001: tiga ketukan pada 47
+    mendedahkan jawapan tanpa 38 pernah dicuba, dan ketukan kedua tidak diumumkan kerana ayatnya
+    serupa. Jadi `explain` pada mcq tiga pilihan **boleh** dicapai sebelum ini — melalui laluan yang
+    salah, mengetuk jawapan salah yang sama tiga kali. Ujian *"reveals the answer after three
+    misses"*, yang item ini kata mengambil laluan yang tiada anak boleh ambil, sebenarnya mengambil
+    laluan itu.
+
+    Dibaiki dalam enjin, bukan butang: `sessionReducer` kini mengabaikan jawapan pada pilihan yang
+    sudah dipangkah. Keadaan `wrong` tidak boleh dikunci dalam `BlockButton`, kerana butang Sedia
+    count-tap memakai keadaan yang sama dan mesti boleh ditekan semula.

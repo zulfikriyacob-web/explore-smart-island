@@ -33,6 +33,11 @@ const hostileStorage: StorageLike = {
   },
 };
 
+/*
+  Three options, not two: one miss has to leave the question open for there to
+  be a mid-question state to restore. On two options the first miss reveals the
+  answer (SPEC 4.2).
+*/
 const question: Question = {
   id: 'q001',
   type: 'mcq',
@@ -43,6 +48,7 @@ const question: Question = {
     options: [
       { id: 'a', text: { ms: '47', en: '47' } },
       { id: 'b', text: { ms: '74', en: '74' } },
+      { id: 'c', text: { ms: '38', en: '38' } },
     ],
     correctOptionId: 'b',
     shuffle: true,

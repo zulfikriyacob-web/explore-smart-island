@@ -91,8 +91,8 @@ export const EVIDENCE_FOR_MASTERY = 3;
  *
  * Three correct answers inside one activity can all rest on the same moment of
  * understanding — or on the reveal a child saw two questions earlier (SPEC §4.2
- * shows the answer after the third attempt). A second session is the cheapest
- * evidence that the skill survived the walk home.
+ * shows the answer once a child can no longer get it wrong). A second session
+ * is the cheapest evidence that the skill survived the walk home.
  */
 export const SESSIONS_FOR_MASTERY = 2;
 
