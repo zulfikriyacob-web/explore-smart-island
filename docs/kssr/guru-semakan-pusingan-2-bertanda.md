@@ -11,6 +11,13 @@
   menaikkan kssr.verified". Jadi kssr.verified kekal false, dan borang ini
   bukan perkara yang menaikkannya.
 
+  KEMAS KINI 13 SEPTEMBER 2026. Boolean itu sudah diganti kssr.reviewStatus
+  tiga peringkat: unreviewed | teacher-reviewed | certified. Atas keputusan
+  pemilik projek, borang ini ialah dokumen bagi teacher-reviewed pek
+  math-y1-nombor-100. Ia BUKAN dokumen bagi certified, dan tidak boleh menjadi
+  satu: nota statusnya sendiri menolaknya. Perenggan di atas dikekalkan sebagai
+  rekod. Perinciannya dalam PRD 16 item 20.
+
   IA BERCANGGAH DENGAN AMBANG YANG DIGABUNG DALAM PR #43. Empat jawapannya
   membatalkan keputusan yang kami rekod sebagai diluluskan:
 
