@@ -760,7 +760,8 @@ banyak daripadanya dua pilihan.
 
 **Ambang untuk bukti dua pilihan: empat soalan** — 14 September 2026, PRD §16 item 22. Empat
 soalan dua pilihan diteka betul **6.25%**, `(1/2)⁴`. Menurut dokumen pembetulan pemilik projek,
-guru meluluskan empat untuk soalan dua pilihan. Peraturannya, dikuatkuasakan dalam `skillState()`
+guru meluluskan empat untuk soalan dua pilihan — ringkasan pemilik projek, bukan perkataan guru
+(`docs/kssr/pembetulan-akhir-soalan-math-y1.md`, PRD §16 item 29). Peraturannya, dikuatkuasakan dalam `skillState()`
 (`coverage.ts`):
 
 > Dikuasai jika **(a)** ≥ 3 soalan berbeza **tiga pilihan atau lebih** dijawab betul pada

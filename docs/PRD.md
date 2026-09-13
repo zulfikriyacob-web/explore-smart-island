@@ -1133,7 +1133,8 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     dalam borang dikira oleh penjana, bukan disalin.
 
     **DIJAWAB, 14 September 2026.** Menurut dokumen pembetulan pemilik projek
-    (`pembetulan-akhir-soalan-math-y1.md`, tiada dalam repo), guru meluluskan **empat soalan** untuk
+    (`docs/kssr/pembetulan-akhir-soalan-math-y1.md` — ringkasan pemilik projek, bukan perkataan
+    guru; item 29), guru meluluskan **empat soalan** untuk
     soalan dua pilihan, `(1/2)⁴ = 6.25%`. Peraturan dalam SPEC §5.7, dikuatkuasakan dalam
     `coverage.ts`: **(a)** ≥ 3 soalan berbeza tiga pilihan atau lebih, **atau (b)** ≥ 4 soalan
     berbeza apa pun bilangan pilihannya — kedua-duanya percubaan pertama, merentas ≥ 2 sesi.
@@ -1238,9 +1239,10 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     Y 168; DESIGN §5.2 hari ini menetapkan **Y 89**. Y 168 pernah menjadi nilainya dan dibalikkan
     di situ.
 
-    Sementara menunggu, pancingan q019 — *"Cari nombor paling kecil dahulu."* — tidak pernah
-    dilihat: dua pilihan mendedah pada kesilapan pertama (SPEC §4.2). `validate:content` memberi
-    amaran.
+    Pancingan q019 dalam spesifikasi — *"Cari nombor paling kecil dahulu."* — **dibuang**, atas
+    keputusan pemilik projek. Dua pilihan mendedah pada kesilapan pertama (SPEC §4.2), jadi ia tidak
+    pernah dilihat: masalah yang sama seperti `explain` yang mati dalam item 23. Kalau q019 menjadi
+    tiga pilihan, pancingan ditulis semula ketika itu.
 25. **Kad diseret untuk tertib — `responseMode: order`, kerja Fasa 3, dengan sebab pedagogi.**
 
     Menurut dokumen pembetulan pemilik projek, guru menyatakan bahawa menyusun kad **menghasilkan**
@@ -1328,3 +1330,39 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
       kemahiran melengkapkan rangkaian nombor"* (`docs/kssr/guru-sub-kemahiran-math-y1.md`). Tidak
       ditukar; guru yang memutuskan. Senarai rakaman dokumen pembetulan membaca tempat kosong itu
       sebagai *"kosong"*.
+29. **Jawapan guru untuk tiga pusingan semakan q011–q023 datang dalam mesej, bukan borang
+    bertanda. Jurang itu dinyatakan, bukan disembunyikan.**
+
+    Dua dokumen pemilik projek difailkan dalam `docs/kssr/`, kedua-duanya bertanda sebagai tulisan
+    pemilik projek yang guru semak — bukan dokumen guru:
+
+    | Fail | Apa |
+    |---|---|
+    | `soalan-baharu-math-y1.md` | Spesifikasi penuh q011–q023, **sebelum** semakan. Nota statusnya sendiri: *"Belum disemak guru."* |
+    | `pembetulan-akhir-soalan-math-y1.md` | Pembetulan **selepas** tiga pusingan semakan. Menang di mana kedua-duanya bercanggah |
+
+    **Yang tiada dalam repo:**
+
+    - **Jawapan guru sendiri** untuk tiga pusingan itu. Ia datang dalam mesej, bukan borang
+      bertanda, dan mesej itu tidak difailkan.
+    - `pembetulan-soalan-math-y1.md`, yang dokumen pembetulan akhir katakan ia gantikan.
+
+    Akibatnya, setiap *"menurut dokumen pembetulan, guru …"* — item 22, 24, 25, 26 dan 28, dan
+    SPEC §5.7 — ialah **ringkasan pemilik projek**, dan tidak boleh disemak terhadap perkataan guru.
+    `kssr.review` dalam pek masih merujuk borang pusingan 2 dan sepuluh soalan asal, dan tidak
+    dinaikkan atas dokumen ini.
+
+    **Yang dalam pek tetapi tiada dalam kedua-dua dokumen** — diberi atau diputuskan oleh pemilik
+    projek dalam sesi, 14 September 2026:
+
+    | Soalan | Butiran |
+    |---|---|
+    | q022 | Spesifikasi penuh: *"Saya tambah 15 jadi 38. Apakah nombor saya?"*, pilihan 23 · 28 · 53, pancingan, penerangan, `reverse` |
+    | q012, q014 | Arahan EN bagi arahan BM yang ditulis semula |
+    | q019 | Penerangan *"9 lebih kecil daripada 14."*; pancingan dibuang (item 24) |
+    | q011 | Arahan BM tiga ayat yang mengekalkan *"Kemudian tekan Sedia."* (item 26); pancingan dibuang kerana count-tap tidak boleh membawanya |
+    | q013, q015 | EN pilihan *"Sama banyak"*: *"The same"*, daripada label `compare_groups` fail kemahiran |
+    | Semua | `difficulty` disalin daripada soalan sedia ada sub-kemahiran yang sama; `wordingVariant` "A"; `layout` q011 `scatter`, seperti q003 |
+
+    **Untuk menutup jurang:** failkan jawapan guru seperti yang diterima, atau semak q011–q023 melalui
+    borang `kssr:review` yang dikembalikan bertanda.
