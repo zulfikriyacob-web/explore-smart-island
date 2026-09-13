@@ -224,3 +224,41 @@ did not surface on the confirming run, which is not the same as being gone.
 Still true, and checked again: a restored session never passes through the start
 screen, and "Main lagi" goes straight into the first question (SPEC §8,
 `store.test.ts`).
+
+---
+
+## 6. Counts and names carried forward without a check — 13 September 2026
+
+Not audio. Written here because otherwise it lives only in a session.
+
+The class, as the project owner named it: **a name that sounds right, copied
+forward, and nobody checked it against the file.** Three instances were found on
+13 September and corrected on `feat/review-status`. Times are from `git log`.
+
+| What the prose said | Where | What the file said |
+| --- | --- | --- |
+| Coverage example *"1/6 diuji"*, tested skill *"Tambah gandaan 10"* | SPEC §5.7, PRD §11, `coverage.ts` | The skills file never held that name. The label for `2.2.2/add_multiple_of_10` was *"Menambah gandaan sepuluh"*; *"Tambah gandaan 10"* is heading E of `docs/kssr/guru-sub-kemahiran-math-y1.md`, and the display layer renders labels, not headings. Written that way in `8dce0fe` (12 Sep, 17:50). The sub-skill was removed in `a6f780e` (13 Sep, 07:16) and 2.2.2 went from six to four; the example kept both the name and the six |
+| *"36 sub-kemahiran"* | Provenance header of `docs/kssr/guru-sub-kemahiran-math-y1.md` | 36 when written (`c139f23`, 12 Sep, 17:33). 34 from `a6f780e` |
+| *"Kesemua 9"* sub-skills fail the three-question bar, in the present tense | PRD §16 item 12 | 7. Written in `a6f780e`, the same commit that took `name_triangle` and `name_circle` off q005 and q009, so it was never true of the pack after that commit |
+
+All three were written, or went stale, between 12 September 17:33 and
+13 September 07:16.
+
+**Checked, and not instances:**
+
+- **`count_objects`.** Its id, its label, and its mapping to q003 and q006 are
+  unchanged since `c139f23`; the only other commits to touch the string added and
+  then removed an example inside the withdrawn exemption rule. Its sentence in
+  item 12 — the ninth sub-skill, the one with two questions — was right. The
+  error was the total beside it.
+- **`digit_at_tens`.** `15da14e` searched files, commit messages and session
+  transcripts for a finding of a wrong mapping under that name, and found none.
+  What exists is the note in PRD §16 item 18: a different name in the teacher's
+  document (`place_tens`) for a mapping both teacher documents confirm.
+
+**What would have caught each one.** A count or a label in prose is a copy of a
+file. Derive it from the file when writing it — `validate:content` prints the
+counts, `math-y1.skills.json` holds the labels — and when the file changes,
+search the docs for the old value. SPEC §3.6 already refuses to commit generated
+tables because copies drift. Hand-written prose has no such guard, only the
+habit.

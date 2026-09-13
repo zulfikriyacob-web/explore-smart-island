@@ -341,16 +341,16 @@ Tiada e-mel, tiada nombor telefon, tiada foto anak dikumpul.
 
    ```
    Tambah dalam lingkungan 100                    Sedang dinilai
-   Liputan kemahiran: 1/6 diuji
-   Kemahiran yang sudah diuji: Tambah gandaan 10
+   Liputan kemahiran: 1/4 diuji
+   Kemahiran yang sudah diuji: Dua digit tambah dua digit, tanpa melintasi puluh
    Kemahiran lain belum dinilai.
    ```
 
-   Nisbah sendirian memberitahu ibu bapa terlalu sedikit. "1/6" berkata ada lima perkara lain;
+   Nisbah sendirian memberitahu ibu bapa terlalu sedikit. "1/4" berkata ada tiga perkara lain;
    **namanya** berkata apa yang anak sebenarnya ditanya, dan itu yang boleh ditindaklanjuti.
 
-   **"1 daripada 6 diuji" bukan "17% dikuasai".** Lima kemahiran lain belum diuji; anak tidak
-   gagal lima kemahiran. Larangan penuh, dan larangan kedua tentang nombor 3.7%, dalam
+   **"1 daripada 4 diuji" bukan "25% dikuasai".** Tiga kemahiran lain belum diuji; anak tidak
+   gagal tiga kemahiran. Larangan penuh, dan larangan kedua tentang nombor 3.7%, dalam
    SPEC §5.7 — kedua-duanya hidup bersama nombor yang ia kawal, dengan sengaja.
 
    Baki dilekatkan kepada kita, bukan kepada anak: *"Kemahiran lain belum dinilai."* §15
@@ -661,9 +661,18 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
 
     Jadual yang pernah ada di bahagian ini berkata **8** daripada 9 sub-kemahiran gagal bar
     tiga-soalan. **Itu salah.** Lapan ada **satu** soalan sahaja; yang kesembilan,
-    `count_objects`, ada **dua** — dan dua masih kurang daripada tiga. **Kesemua 9** gagal bar
-    itu. "Ada satu soalan sahaja" telah dibaca sebagai "gagal bar", dan dua perkara itu tidak
-    sama. Pembetulan ini tidak mengubah arah kesimpulannya; ia menjadikan jurang itu lebih besar.
+    `count_objects`, ada **dua** — dan dua masih kurang daripada tiga. Kesemua 9 gagal bar itu,
+    **pada pek ketika jadual itu ditulis**. "Ada satu soalan sahaja" telah dibaca sebagai "gagal
+    bar", dan dua perkara itu tidak sama. Pembetulan ini tidak mengubah arah kesimpulannya; ia
+    menjadikan jurang itu lebih besar.
+
+    **Hari ini tujuh, bukan sembilan.** Perenggan di atas pernah berkata *"Kesemua 9"* dalam
+    masa kini, dan ia ditulis dalam commit yang sama (`a6f780e`) yang membuang
+    `7.2.1/name_triangle` dan `7.2.1/name_circle` daripada q005 dan q009 — jadi nombor itu tidak
+    pernah benar untuk pek selepas commit itu. `count_objects` bukan puncanya: id, label dan
+    pemetaannya kepada q003 dan q006 tidak berubah sejak `c139f23`. `validate:content` hari ini:
+    **7** sub-kemahiran — enam dengan satu soalan, `count_objects` dengan dua — dan **13** soalan
+    lagi. Rekodnya dalam `docs/HANDOFF.md` §6.
 
     Dengan bar bentuk hilang, bar soalan ialah **satu-satunya** jurang kepada *Dikuasai*. Ia
     ditutup dengan soalan biasa — tiada skema, tiada bentuk baharu, cuma nombor berbeza dan

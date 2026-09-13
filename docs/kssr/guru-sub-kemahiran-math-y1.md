@@ -11,8 +11,11 @@
   perlu ditambah, tambah di atas garis ini.
 
   Derivatif yang boleh dibaca mesin: src/content/kssr/math-y1.skills.json.
-  Fail itu membawa 36 sub-kemahiran yang diambil daripada dokumen ini,
-  dengan id yang guru sendiri cadangkan di mana ada. Contoh soalan di bawah
+  Fail itu membawa 34 sub-kemahiran yang diambil daripada dokumen ini,
+  dengan id yang guru sendiri cadangkan di mana ada. (36 sehingga 13
+  September 2026, apabila borang semakan bertanda membuang dua daripada
+  2.2.2 — E "Tambah gandaan 10" dan F situasi harian di bawah. Lihat
+  docs/HANDOFF.md bahagian 6.) Contoh soalan di bawah
   TIDAK disalin ke sana dengan sengaja — ia benih penulisan kandungan, dan
   ia hidup di sini supaya penulis membacanya dalam ayat guru sendiri.
 -->

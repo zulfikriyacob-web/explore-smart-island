@@ -17,8 +17,8 @@
  *
  * **Coverage is not mastery, and this module will not let it be read as such.**
  * `coverage` is `tested / total` — the share of a standard the app has *asked
- * about*. It is never a score. A standard at 1 of 6 means five sub-skills have
- * not been assessed; it does not mean a child failed five. Anything rendering
+ * about*. It is never a score. A standard at 1 of 4 means three sub-skills have
+ * not been assessed; it does not mean a child failed three. Anything rendering
  * that ratio as a percentage of mastery is a bug, and SPEC §5.7 states it as a
  * prohibition rather than a preference.
  *
@@ -163,9 +163,10 @@ export interface StandardCoverage {
    * Which sub-skills have been tested, and which have not — by id, in the order
    * the skills file lists them.
    *
-   * Returned because a ratio on its own tells a parent too little. "1 of 6" and
-   * a name beside it — *Tambah gandaan 10* — says what the child was actually
-   * asked. The caller turns ids into labels; this module holds no catalogue.
+   * Returned because a ratio on its own tells a parent too little. "1 of 4" and
+   * a name beside it — *Dua digit tambah dua digit, tanpa melintasi puluh* —
+   * says what the child was actually asked. The caller turns ids into labels
+   * from the skills file; this module holds no catalogue.
    */
   testedIds: string[];
   untestedIds: string[];
