@@ -10,7 +10,7 @@ import { promptPlayer } from '../../lib/player.ts';
 import { hintItem, optionItem, questionCard } from '../../motion/variants.ts';
 import { AnswerControls } from './AnswerControls.tsx';
 import { QuestionVisual } from './QuestionVisual.tsx';
-import { currentQuestion } from './session.ts';
+import { currentQuestion, missesLeft } from './session.ts';
 import { useQuizStore } from './store.ts';
 
 /**
@@ -120,11 +120,10 @@ export function QuizScreen() {
     question, so it is not rendered at all outside the feedback state — the
     88x88 slot stays reserved and empty, which is what the slot is for.
 
-    Consequence worth knowing: the reducer only reaches `feedback` on a correct
-    answer or a third miss, so `sympathy` needs three wrong attempts. A
-    three-option mcq strikes out an option per miss and leaves only the right
-    one, so it can never produce a third miss — in practice sympathy shows on
-    count-tap questions.
+    Consequence worth knowing: the reducer reaches `feedback` on a correct
+    answer, or once the child can no longer be wrong — the third miss on a
+    count-tap, the second on three options, the first on two — and `sympathy`
+    shows then. It used to need a third miss, which no mcq could produce.
   */
   const [kancil, setKancil] = useState<KancilState | null>(null);
   useEffect(() => {
@@ -138,7 +137,6 @@ export function QuizScreen() {
   if (!question) return null;
 
   const locked = session.status === 'feedback';
-  const showHint = session.hintShown && question.hint !== undefined;
 
   // One source for the revealed answer, so the paragraph a child reads and the
   // text a screen reader hears cannot drift apart.
@@ -147,6 +145,19 @@ export function QuizScreen() {
       ? (question.explain?.[LANG] ??
         `Jawapannya ${question.type === 'count-tap' ? question.payload.correctAnswer : ''}.`)
       : null;
+
+  /*
+    The band holds one block: the reveal takes the hint's place rather than
+    joining it.
+
+    The two used to be kept apart by content rules — a question that could
+    reach the reveal could not carry a hint. Revealing as soon as the child can
+    no longer be wrong (SPEC 4.2) makes the reveal reachable on every question,
+    and q001, q004 and q008 carry both, so both would be drawn together and
+    overflow the band. The hint is help for trying again. Once the answer is
+    shown there is no again, and the explanation is the better help.
+  */
+  const showHint = session.hintShown && question.hint !== undefined && revealText === null;
 
   /*
     The verdict, in words, because a screen reader receives none of the three
@@ -172,7 +183,9 @@ export function QuizScreen() {
         ? VERDICT.correct[LANG]
         : session.revealed
           ? VERDICT.wrongRevealed[LANG]
-          : session.attempts >= 2
+          : // "Sekali lagi" means one miss left before the answer is shown — after
+            // the first miss on three options, the second on a count-tap.
+            missesLeft(question, session.attempts, session.disabledOptionIds) === 1
             ? VERDICT.wrongLastChance[LANG]
             : VERDICT.wrong[LANG];
 
@@ -351,9 +364,11 @@ export function QuizScreen() {
           and no hint — and a child who has already answered wrong has read the
           question.
 
-          Never both at once: a question that can reach a third attempt must not
-          carry a hint alongside a revealed answer, and `validate:content`
-          enforces it rather than leaving it to pack authors to remember.
+          Never both at once: when the answer is revealed with words, those words
+          take the hint's place (`showHint` above), so the band holds one block on
+          every question type. A content rule used to do this job by forbidding a
+          hint on any question that could reveal; revealing as soon as the child
+          can no longer be wrong made that every question.
         */}
         {showHint && (
           <motion.p

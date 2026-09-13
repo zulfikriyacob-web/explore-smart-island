@@ -56,7 +56,7 @@ describe('sub-skill status', () => {
 
   /*
     Three correct answers inside one sitting can rest on one moment of
-    understanding, or on the reveal shown after a third attempt (SPEC 4.2).
+    understanding, or on a revealed answer (SPEC 4.2).
   */
   it('stays evaluating when all three land in one session', () => {
     expect(skillState({ attempted: true, evidence: evidence(3, 1) }).status).toBe('evaluating');

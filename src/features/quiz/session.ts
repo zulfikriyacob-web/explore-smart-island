@@ -96,6 +96,34 @@ export function checkAnswer(question: Question, response: Response): boolean {
   }
 }
 
+/**
+ * Wrong answers the child can still give on this question.
+ *
+ * Two limits, and whichever runs out first ends the question. Every question
+ * has MAX_ATTEMPTS. An option question also strikes out each wrong option it
+ * is given, and a struck-out option cannot be pressed again — so once only the
+ * right option is left the child can no longer be wrong, whatever attempts
+ * remain. That is when the answer and `explain` are shown (SPEC 4.2): after
+ * the second miss on three options, after the first on two, on the third on a
+ * count-tap.
+ *
+ * `explain` is the message for "you cannot get this wrong any more", not a
+ * third-attempt message. Tied to the third attempt it was unreachable on every
+ * mcq, because mcq has at most three options.
+ */
+export function missesLeft(
+  question: Question,
+  attempts: number,
+  disabledOptionIds: readonly string[],
+): number {
+  const byAttempts = MAX_ATTEMPTS - attempts;
+  if (question.type === 'count-tap') return Math.max(0, byAttempts);
+  const wrongOptionsLeft = question.payload.options.filter(
+    (o) => o.id !== question.payload.correctOptionId && !disabledOptionIds.includes(o.id),
+  ).length;
+  return Math.max(0, Math.min(byAttempts, wrongOptionsLeft));
+}
+
 function beginQuestion(s: SessionState, nowMs: number): SessionState {
   return {
     ...s,
@@ -169,15 +197,18 @@ export function sessionReducer(state: SessionState, event: SessionEvent): Sessio
           ? [...state.disabledOptionIds, event.response.optionId]
           : state.disabledOptionIds;
 
-      if (attempts >= MAX_ATTEMPTS) {
-        // Third miss: show the answer and `explain`, record 0, carry on. No
-        // other penalty. (SPEC 4.2)
+      if (missesLeft(question, attempts, disabled) === 0) {
+        // The child can no longer get this wrong: a third miss, or a miss that
+        // leaves only the right option. Show the answer and `explain`, record 0,
+        // carry on. No other penalty. (SPEC 4.2)
         const record: AnswerRecord = {
           questionId: question.id,
           attempts,
           correct: false,
           firstTry: false,
-          hintShown: true,
+          // Only a miss that left the question open put the hint on screen. On
+          // two options the first miss reveals, and no hint was ever shown.
+          hintShown: state.hintShown,
           msSpent: elapsed(state, event.nowMs),
         };
         return {
@@ -187,12 +218,11 @@ export function sessionReducer(state: SessionState, event: SessionEvent): Sessio
           answers: [...state.answers, record],
           disabledOptionIds: disabled,
           lastAnswerCorrect: false,
-          hintShown: true,
           revealed: true,
         };
       }
 
-      // First or second miss: shake, surface the hint, keep the question open.
+      // A miss that leaves the question open: shake, surface the hint.
       return {
         ...state,
         status: 'question',

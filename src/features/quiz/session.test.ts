@@ -6,6 +6,7 @@ import {
   checkAnswer,
   createSession,
   currentQuestion,
+  missesLeft,
   sessionReducer,
   type Response,
   type SessionEvent,
@@ -62,6 +63,13 @@ const countTap: Question = {
 };
 
 const pick = (optionId: string): Response => ({ kind: 'option', optionId });
+
+/** A wrong count on the count-tap fixture, which wants 7. */
+const miss = (nowMs: number): SessionEvent => ({
+  type: 'ANSWER',
+  response: { kind: 'count', value: 6 },
+  nowMs,
+});
 
 function run(state: SessionState, events: readonly SessionEvent[]): SessionState {
   return events.reduce(sessionReducer, state);
@@ -179,15 +187,44 @@ describe('attempt rules', () => {
     );
   });
 
-  it('strikes out a second option on the second miss', () => {
+  /*
+    Three options, two wrong: the second miss leaves only the answer, so the
+    child can no longer be wrong and the answer is shown then — not on a third
+    attempt that the UI cannot produce, because a struck-out option cannot be
+    pressed again.
+  */
+  it('reveals on the second miss when three options leave only the answer', () => {
     const s = run(started(), [
       { type: 'ANSWER', response: pick('a'), nowMs: 2_000 },
       { type: 'ANSWER', response: pick('c'), nowMs: 3_000 },
     ]);
-    expect(s.status).toBe('question');
+    expect(s.status).toBe('feedback');
+    expect(s.revealed).toBe(true);
     expect(s.attempts).toBe(2);
     expect(s.disabledOptionIds).toEqual(['a', 'c']);
-    expect(s.revealed).toBe(false);
+    expect(s.answers).toEqual([
+      {
+        questionId: 'q001',
+        attempts: 2,
+        correct: false,
+        firstTry: false,
+        hintShown: true,
+        msSpent: 2_000,
+      },
+    ]);
+  });
+
+  it('reveals on the first miss when two options leave only the answer, with no hint shown', () => {
+    const s = sessionReducer(started([mcqImage]), {
+      type: 'ANSWER',
+      response: pick('a'),
+      nowMs: 2_000,
+    });
+    expect(s.status).toBe('feedback');
+    expect(s.revealed).toBe(true);
+    expect(s.attempts).toBe(1);
+    expect(s.hintShown).toBe(false);
+    expect(s.answers[0]).toMatchObject({ attempts: 1, correct: false, hintShown: false });
   });
 
   it('does not list the same option twice if it is tapped again', () => {
@@ -198,18 +235,24 @@ describe('attempt rules', () => {
     expect(s.disabledOptionIds).toEqual(['a']);
   });
 
-  it('reveals the answer after three misses and records a zero, without blocking', () => {
-    const s = run(started(), [
-      { type: 'ANSWER', response: pick('a'), nowMs: 2_000 },
-      { type: 'ANSWER', response: pick('c'), nowMs: 3_000 },
-      { type: 'ANSWER', response: pick('a'), nowMs: 5_000 },
-    ]);
+  /*
+    count-tap has nothing to strike out, so only MAX_ATTEMPTS ends it. This test
+    used to take the three-option mcq to a third miss by pressing option `a`
+    again after it was struck out — a path the reducer accepts and the UI does
+    not — and that is how an unreachable `explain` on every mcq went unseen.
+  */
+  it('reveals a count-tap on the third miss and records a zero, without blocking', () => {
+    const open = run(started([countTap]), [miss(2_000), miss(3_000)]);
+    expect(open.status).toBe('question');
+    expect(open.revealed).toBe(false);
+
+    const s = sessionReducer(open, miss(5_000));
     expect(s.status).toBe('feedback');
     expect(s.revealed).toBe(true);
     expect(s.attempts).toBe(3);
     expect(s.answers).toEqual([
       {
-        questionId: 'q001',
+        questionId: 'q003',
         attempts: 3,
         correct: false,
         firstTry: false,
@@ -219,15 +262,52 @@ describe('attempt rules', () => {
     ]);
   });
 
-  it('never takes a fourth attempt', () => {
-    const s = run(started(), [
-      { type: 'ANSWER', response: pick('a'), nowMs: 2_000 },
-      { type: 'ANSWER', response: pick('c'), nowMs: 3_000 },
-      { type: 'ANSWER', response: pick('a'), nowMs: 4_000 },
-      { type: 'ANSWER', response: pick('a'), nowMs: 5_000 },
-    ]);
+  it('never takes another attempt once the answer is revealed', () => {
+    const s = run(started([countTap]), [miss(2_000), miss(3_000), miss(4_000), miss(5_000)]);
     expect(s.attempts).toBe(3);
     expect(s.answers).toHaveLength(1);
+  });
+});
+
+describe('missesLeft', () => {
+  const fourImages: Question = {
+    id: 'q900',
+    type: 'mcq-image',
+    difficulty: 1,
+    prompt: { ms: 'x', en: 'x' },
+    promptAudio: { ms: '/audio/ms/x.mp3', en: '/audio/en/x.mp3' },
+    payload: {
+      options: ['a', 'b', 'c', 'd'].map((id) => ({
+        id,
+        image: `/img/${id}.svg`,
+        alt: { ms: id, en: id },
+      })),
+      correctOptionId: 'b',
+      shuffle: true,
+    },
+  };
+
+  it('ends a two-option question on its first miss', () => {
+    expect(missesLeft(mcqImage, 0, [])).toBe(1);
+    expect(missesLeft(mcqImage, 1, ['a'])).toBe(0);
+  });
+
+  it('ends a three-option question on its second miss', () => {
+    expect(missesLeft(mcq, 0, [])).toBe(2);
+    expect(missesLeft(mcq, 1, ['a'])).toBe(1);
+    expect(missesLeft(mcq, 2, ['a', 'c'])).toBe(0);
+  });
+
+  it('lets four options run to the third miss, where attempts end it', () => {
+    expect(missesLeft(fourImages, 0, [])).toBe(3);
+    expect(missesLeft(fourImages, 2, ['a', 'c'])).toBe(1);
+    expect(missesLeft(fourImages, 3, ['a', 'c', 'd'])).toBe(0);
+  });
+
+  it('counts only attempts on a count-tap', () => {
+    expect(missesLeft(countTap, 0, [])).toBe(3);
+    expect(missesLeft(countTap, 2, [])).toBe(1);
+    expect(missesLeft(countTap, 3, [])).toBe(0);
   });
 });
 
@@ -267,17 +347,13 @@ describe('progression', () => {
   });
 
   it('lets a child who got everything wrong still reach the summary', () => {
-    const wrongThrice = (base: number): SessionEvent[] => [
-      { type: 'ANSWER', response: pick('a'), nowMs: base },
-      { type: 'ANSWER', response: pick('a'), nowMs: base + 1 },
-      { type: 'ANSWER', response: pick('a'), nowMs: base + 2 },
-    ];
+    // Every wrong option the screen lets a child press: two on the three-option
+    // mcq, one on the two-option mcq-image. Each question then reveals.
     const s = run(started(), [
-      ...wrongThrice(2_000),
+      { type: 'ANSWER', response: pick('a'), nowMs: 2_000 },
+      { type: 'ANSWER', response: pick('c'), nowMs: 2_100 },
       { type: 'NEXT', nowMs: 2_500 },
       { type: 'ANSWER', response: pick('a'), nowMs: 3_000 },
-      { type: 'ANSWER', response: pick('a'), nowMs: 3_100 },
-      { type: 'ANSWER', response: pick('a'), nowMs: 3_200 },
       { type: 'NEXT', nowMs: 3_500 },
     ]);
     expect(s.status).toBe('summary');
@@ -287,7 +363,9 @@ describe('progression', () => {
       gems: 10,
       points: 0,
       firstTryCount: 0,
-      hintShownCount: 2,
+      // The mcq showed its hint after its first miss; the two-option question
+      // revealed on its first miss and never showed one.
+      hintShownCount: 1,
     });
   });
 
