@@ -569,7 +569,6 @@
         "en": "Raju's cards: 14, 9. Order from small to big."
       },
       "promptAudio": { "ms": "/audio/ms/q019.mp3", "en": "/audio/en/q019.mp3" },
-      "hint": { "ms": "Cari nombor paling kecil dahulu.", "en": "Find the smallest number first." },
       "explain": { "ms": "9 lebih kecil daripada 14.", "en": "9 is smaller than 14." },
       "payload": {
         "options": [
