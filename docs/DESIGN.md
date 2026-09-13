@@ -47,6 +47,11 @@ metafora pulau dan mengelakkan penampilan "kertas hangat" yang kini menjadi lala
 Setiap pulau memiliki satu warna. Ia mewarnai butang topik, bar kemajuan, dan tajuk pulau —
 tiada tempat lain.
 
+Pengecualian yang direkod: `#D6F5F1`, warna cetek Matematik, juga dipakai **tetap** — tidak
+mengikut modul — untuk keadaan ditekan butang audio dan untuk jalur pancingan (§7). Jangan
+tukar jalur pancingan kepada warna cetek modul semasa: pada Membaca ia hampir sama dengan
+jalur dedahan.
+
 | Modul | Token | Hex | Gelap (teks di atas) | Cetek (latar) |
 |---|---|---|---|---|
 | Matematik | `--laut` | `#0FB5A6` | `#087A70` | `#D6F5F1` |
@@ -962,6 +967,42 @@ Limpahan q001 datang daripada panjang `explain`, bukan daripada dua blok: *"74 a
 seperti yang direka. Yang terpotong ialah padding bawah kad (24px) sahaja: baris terakhir teks
 soalan berakhir pada Y 206, dan pada 34px tepi kad yang kelihatan juga di Y 206 — teks penuh,
 tanpa satu piksel pun berbaki. `explain` yang lebih panjang daripada itu akan memotong teks soalan.
+
+**Disahkan pada iPhone pemilik projek, 13 September 2026** (model tidak direkod). Tiga keadaan
+dilihat seperti yang diukur: q001 salah pertama — pancingan; q001 salah kedua — pancingan hilang,
+`explain` dua baris, dan butang jawapan betul bersempadan `--mangga-dark`, yang membezakan
+"didedah" daripada "anak jawab betul"; q004 salah pertama — terus `explain`, tanpa pancingan.
+**Teks soalan tidak terpotong.** Kebimbangan 27px daripada pane tidak berlaku pada peranti itu.
+Ia belum tentu hilang pada peranti yang lebih sempit: pane mengukur soalan q001 empat baris pada
+390px, dan pemilik projek melaporkan tiga baris pada iPhonenya.
+
+**Warna jalur: pancingan `--laut-light` `#D6F5F1`, dedahan `--pasir` `#FFF3DC`. Disengajakan —
+direkod pada 13 September 2026, bukan semasa ia dibina.** Kedua-dua kelas masuk dalam `cfde44d`
+(8 September) tanpa sebab bertulis. Commit itu berkata warna diambil daripada prototaip, tetapi
+`design/brief-01d/handoff/skrin-kuiz.html` tiada jalur bantuan; ia hanya memakai `--laut-light`
+untuk keadaan ditekan. Pemilik projek memerhati pada iPhone bahawa ia berfungsi — anak nampak
+**jalur** bertukar, bukan hanya teksnya — dan meminta ia direkod sebagai keputusan.
+
+Isyaratnya **rona, bukan kecerahan**. Dikira daripada heks token:
+
+| Pasangan | Nisbah kontras | Rona |
+|---|---|---|
+| Pancingan lawan dedahan | 1.05:1 | 172° teal sejuk lawan 39° krim hangat |
+| Pancingan lawan latar `--laut-cetek` | 1.04:1 | 172° lawan 169° |
+| Dedahan lawan latar `--laut-cetek` | 1.01:1 | 39° lawan 169° |
+| `--arang` di atas pancingan | 10.62:1 ✓ | |
+| `--arang` di atas dedahan | 11.15:1 ✓ | |
+
+Dua akibat, supaya keputusan ini tidak dirosakkan tanpa sengaja:
+
+- **Warna jalur bukan satu-satunya saluran, dan tidak boleh menjadi satu.** Kecerahan kedua-dua
+  jalur hampir sama, jadi anak yang kurang peka warna mungkin tidak nampak pertukaran itu.
+  Maknanya dibawa juga oleh perkataan yang bertukar, ayat `aria-live`, dan sempadan
+  `--mangga-dark` pada butang jawapan (SPEC §9).
+- **Jalur pancingan tidak mengikut warna modul.** `#D6F5F1` kebetulan ialah warna cetek
+  Matematik (§2.2), tetapi jalur itu memakainya tetap pada setiap pulau. Kalau ia mengikut modul,
+  Membaca akan memakai `#FFE9D9` — rona 25°, 1.07:1 terhadap `--pasir` pada 39° — dan pancingan
+  serta dedahan hampir menjadi warna yang sama.
 
 ### Apa yang **tidak** kita animasikan
 
