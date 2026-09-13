@@ -370,6 +370,12 @@ export function QuizScreen() {
           every question type. A content rule used to do this job by forbidding a
           hint on any question that could reveal; revealing as soon as the child
           can no longer be wrong made that every question.
+
+          Two colours on purpose: the hint is --laut-light, the reveal --pasir, so a
+          child sees the band change and not only its text. The difference is hue,
+          not lightness (1.05:1), which is why the words and the answer's border
+          carry the meaning too. The hint does not follow the module colour:
+          Membaca's light tint is nearly --pasir. (DESIGN 7)
         */}
         {showHint && (
           <motion.p
