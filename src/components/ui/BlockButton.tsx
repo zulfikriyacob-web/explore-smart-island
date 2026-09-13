@@ -90,7 +90,11 @@ export function BlockButton({
   const [ripples, setRipples] = useState<Ripple[]>([]);
   const nextRipple = useRef(0);
 
-  const isLocked = state === 'disabled' || state === 'correct';
+  // A revealed answer is locked like a correct one: the question is over, and
+  // nothing had locked it. `wrong` stays unlocked on purpose — count-tap's Sedia
+  // wears it and must be pressable again; a struck option tapped twice is
+  // ignored by the reducer instead. (SPEC 4.2)
+  const isLocked = state === 'disabled' || state === 'correct' || state === 'revealed';
 
   const handlePress = useCallback(
     (event: React.PointerEvent<HTMLButtonElement>) => {

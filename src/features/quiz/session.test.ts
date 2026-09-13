@@ -227,19 +227,27 @@ describe('attempt rules', () => {
     expect(s.answers[0]).toMatchObject({ attempts: 1, correct: false, hintShown: false });
   });
 
-  it('does not list the same option twice if it is tapped again', () => {
-    const s = run(started(), [
-      { type: 'ANSWER', response: pick('a'), nowMs: 2_000 },
+  /*
+    The option struck last stays pressable on screen — it draws its cross and is
+    not greyed out — and tapping it again used to spend an attempt. Measured in
+    the Browser pane: three taps on 47 revealed the answer to q001 without 38
+    ever being tried, and the second tap announced nothing.
+  */
+  it('ignores a struck-out option tapped again, without spending an attempt', () => {
+    const once = sessionReducer(started(), { type: 'ANSWER', response: pick('a'), nowMs: 2_000 });
+    const again = run(once, [
       { type: 'ANSWER', response: pick('a'), nowMs: 3_000 },
+      { type: 'ANSWER', response: pick('a'), nowMs: 4_000 },
     ]);
-    expect(s.disabledOptionIds).toEqual(['a']);
+    expect(again).toBe(once);
+    expect(again.attempts).toBe(1);
+    expect(again.disabledOptionIds).toEqual(['a']);
   });
 
   /*
     count-tap has nothing to strike out, so only MAX_ATTEMPTS ends it. This test
-    used to take the three-option mcq to a third miss by pressing option `a`
-    again after it was struck out — a path the reducer accepts and the UI does
-    not — and that is how an unreachable `explain` on every mcq went unseen.
+    used to take the three-option mcq to a third miss by tapping option `a`
+    again after it was struck out, which the engine accepted.
   */
   it('reveals a count-tap on the third miss and records a zero, without blocking', () => {
     const open = run(started([countTap]), [miss(2_000), miss(3_000)]);

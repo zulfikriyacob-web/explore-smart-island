@@ -123,7 +123,8 @@ export function QuizScreen() {
     Consequence worth knowing: the reducer reaches `feedback` on a correct
     answer, or once the child can no longer be wrong — the third miss on a
     count-tap, the second on three options, the first on two — and `sympathy`
-    shows then. It used to need a third miss, which no mcq could produce.
+    shows then. It used to need a third miss, which an mcq reached only by
+    tapping the same wrong option again.
   */
   const [kancil, setKancil] = useState<KancilState | null>(null);
   useEffect(() => {

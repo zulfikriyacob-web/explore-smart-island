@@ -42,7 +42,7 @@ export interface SessionState {
   disabledOptionIds: readonly string[];
   /** Outcome of the most recent attempt; null before the first one. */
   lastAnswerCorrect: boolean | null;
-  /** Set after three failed attempts: show the answer and `explain`. */
+  /** Set once the child can no longer be wrong (`missesLeft`): show the answer and `explain`. */
   revealed: boolean;
   /** When the current question was first shown, for msSpent. */
   questionStartedMs: number | null;
@@ -101,15 +101,15 @@ export function checkAnswer(question: Question, response: Response): boolean {
  *
  * Two limits, and whichever runs out first ends the question. Every question
  * has MAX_ATTEMPTS. An option question also strikes out each wrong option it
- * is given, and a struck-out option cannot be pressed again — so once only the
+ * is given, and answering a struck-out option again is ignored — so once only the
  * right option is left the child can no longer be wrong, whatever attempts
  * remain. That is when the answer and `explain` are shown (SPEC 4.2): after
  * the second miss on three options, after the first on two, on the third on a
  * count-tap.
  *
  * `explain` is the message for "you cannot get this wrong any more", not a
- * third-attempt message. Tied to the third attempt it was unreachable on every
- * mcq, because mcq has at most three options.
+ * third-attempt message. Tied to the third attempt, an mcq reached it only by
+ * tapping the same wrong option again, which the reducer now ignores.
  */
 export function missesLeft(
   question: Question,
@@ -168,6 +168,18 @@ export function sessionReducer(state: SessionState, event: SessionEvent): Sessio
       if (state.status !== 'question') return state;
       const question = currentQuestion(state);
       if (question === null) return state;
+
+      // A struck-out option cannot be answered again. The option struck last is
+      // still pressable on screen — it draws its cross, it is not greyed out —
+      // and tapping it again used to spend an attempt: measured, three taps on
+      // one wrong option revealed the answer with the other never tried.
+      // (SPEC 4.2)
+      if (
+        event.response.kind === 'option' &&
+        state.disabledOptionIds.includes(event.response.optionId)
+      ) {
+        return state;
+      }
 
       const correct = checkAnswer(question, event.response);
       const attempts = state.attempts + 1;
