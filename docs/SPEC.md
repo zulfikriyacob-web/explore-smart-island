@@ -759,8 +759,8 @@ banyak daripadanya dua pilihan.
 > (`mcq-image`, tiada SP). Soalan paling mudah diteka ialah dua pilihan.
 
 **Ambang untuk bukti dua pilihan: empat soalan** — 14 September 2026, PRD §16 item 22. Empat
-soalan dua pilihan diteka betul **6.25%**, `(1/2)⁴`. Menurut dokumen pembetulan pemilik projek,
-guru meluluskan empat untuk soalan dua pilihan — ringkasan pemilik projek, bukan perkataan guru
+soalan dua pilihan diteka betul **6.25%**, `(1/2)⁴`. Menurut dokumen pembetulan,
+guru meluluskan empat untuk soalan dua pilihan — ringkasan yang ditulis Claude, bukan perkataan guru
 (`docs/kssr/pembetulan-akhir-soalan-math-y1.md`, PRD §16 item 29). Peraturannya, dikuatkuasakan dalam `skillState()`
 (`coverage.ts`):
 

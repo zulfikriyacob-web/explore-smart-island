@@ -1,17 +1,18 @@
 <!--
-  DOKUMEN PEMILIK PROJEK, BUKAN DOKUMEN GURU.
+  DITULIS OLEH CLAUDE, BUKAN DOKUMEN GURU.
 
   Pembetulan akhir kepada soalan-baharu-math-y1.md, selepas tiga pusingan
-  semakan guru. Pemilik projek menulisnya. Ia MERINGKASKAN keputusan guru;
-  ia bukan perkataan guru sendiri. Diserahkan pada 13 September 2026, dan
-  difailkan di sini atas permintaan pemilik projek.
+  semakan guru. Ditulis oleh Claude; pemilik projek menghantarnya kepada
+  guru. Ia MERINGKASKAN keputusan guru; ia bukan perkataan guru sendiri.
+  Diserahkan pada 13 September 2026, dan difailkan di sini atas permintaan
+  pemilik projek.
 
   JURANG, DINYATAKAN SUPAYA TIDAK TERSEMBUNYI:
 
   - Jawapan guru untuk tiga pusingan itu datang dalam mesej, bukan borang
     bertanda, dan mesej itu tiada dalam repo. Setiap "Guru: ..." di bawah,
     dan setiap "menurut dokumen pembetulan, guru ..." dalam PRD dan SPEC,
-    ialah ringkasan pemilik projek yang tidak boleh disemak terhadap
+    ialah ringkasan dalam dokumen ini, yang tidak boleh disemak terhadap
     perkataan guru.
   - Dokumen ini berkata ia menggantikan pembetulan-soalan-math-y1.md. Fail
     itu tidak diterima dan tidak difailkan.
@@ -31,13 +32,19 @@
   - Pancingan q019 daripada spesifikasi dibuang, kerana soalan dua pilihan
     tidak pernah memaparkannya (PRD §16 item 24).
 
-  DUA DAKWAAN YANG TIDAK SEPADAN DENGAN REPO:
+  DUA KESILAPAN DALAM DOKUMEN INI — DIBETULKAN DI SINI, BUKAN DI BAWAH.
+  Teks di bawah garis ialah rekod apa yang dihantar kepada guru, termasuk
+  kesilapannya, jadi ia tidak disunting. Kedua-duanya disahkan sebagai
+  kesilapan penulisnya pada 14 September 2026:
 
-  - Ia berkata dengan dua pilihan percubaan kedua dipaksa betul. Sejak
-    PR #51, kesilapan pertama pada soalan dua pilihan terus mendedahkan
-    jawapan (SPEC §4.2).
-  - Ia berkata DESIGN §5.2 menetapkan teks bermula pada Y 168. Fail itu
-    menetapkan Y 89; Y 168 pernah menjadi nilainya dan dibalikkan.
+  - Bahagian q004 berkata dengan dua pilihan "percubaan kedua dipaksa
+    betul", dan explain muncul pada percubaan pertama. Alasan lama itu
+    disalin tanpa disemak terhadap PR #51. Sejak PR #51, kesilapan pertama
+    pada soalan dua pilihan terus mendedahkan jawapan bersama explain;
+    tiada percubaan kedua (SPEC §4.2).
+  - Bahagian "Yang tersekat" menyebut "DESIGN §5.2 yang menetapkan teks
+    bermula pada Y 168". Salah: DESIGN §5.2 menetapkan Y 89. Y 168 pernah
+    menjadi nilainya dan dibalikkan di situ.
 
   Apa yang pek bawa, dan dari mana setiap butiran datang: PRD §16 item 29.
 

@@ -1,20 +1,16 @@
 <!--
-  DOKUMEN PEMILIK PROJEK, BUKAN DOKUMEN GURU.
+  DITULIS OLEH CLAUDE, BUKAN DOKUMEN GURU.
 
   Spesifikasi penuh tiga belas soalan baharu pek math-y1-nombor-100, q011
-  hingga q023. Pemilik projek menulisnya dan guru menyemaknya; guru tidak
+  hingga q023. Ditulis oleh Claude, seperti baris pertamanya berkata.
+  Pemilik projek menghantarnya kepada guru untuk disemak; guru tidak
   menulisnya. Diserahkan pada 13 September 2026, dan difailkan di sini atas
   permintaan pemilik projek.
 
-  DUA PERKARA DALAM TEKSNYA SENDIRI YANG PERLU DIBACA BERSAMA:
-
-  - Baris pertamanya berkata "Ditulis oleh Claude". Pemilik projek berkata
-    dia yang menulisnya. Kedua-duanya direkod di sini. Yang pasti: ia bukan
-    tulisan guru.
-  - Nota statusnya berkata "Belum disemak guru". Itu benar bagi versi ini:
-    ia versi SEBELUM tiga pusingan semakan. Selepas semakan,
-    pembetulan-akhir-soalan-math-y1.md dalam folder ini menang di mana
-    kedua-duanya bercanggah.
+  Nota statusnya berkata "Belum disemak guru". Itu benar bagi versi ini: ia
+  versi SEBELUM tiga pusingan semakan. Selepas semakan,
+  pembetulan-akhir-soalan-math-y1.md dalam folder ini menang di mana
+  kedua-duanya bercanggah.
 
   Ia menyebut epal sebagai aset baharu yang diperlukan. Epal sudah ada:
   public/img/fruit/epal.svg, disahkan kanak-kanak (DESIGN §8).
