@@ -156,8 +156,8 @@ interface QuestionBase {
   subSkill?: string;             // cth "1.2.2/after" — §5.7
   prompt: LocalizedText;         // teks arahan
   promptAudio: LocalizedAudio;   // WAJIB — kanak-kanak umur 7 tidak boleh baca ini
-  hint?: LocalizedText;          // ditunjukkan selepas 1 kali salah
-  explain?: LocalizedText;       // bersama jawapan, selepas kesilapan ketiga — tidak boleh dicapai pada mcq (PRD §16 item 23)
+  hint?: LocalizedText;          // selepas salah, selagi soalan masih terbuka (§4.2)
+  explain?: LocalizedText;       // bersama jawapan, apabila anak tidak boleh salah lagi (§4.2)
   tags?: string[];
 }
 
@@ -375,25 +375,26 @@ export const TopicPackSchema = z.object({ /* … */ })
   });
 ```
 
-**Had pancingan lawan jawapan didedah** — dikuatkuasakan dalam `validate:content`:
+**Pancingan, dedahan dan jalur** — `validate:content`:
 
-Pancingan dan jawapan didedah dilukis dalam **satu jalur** di bawah kad soalan (DESIGN §7).
-Dua blok dalam satu jalur melimpahkannya pada telefon, dan yang terpotong ialah bantuan untuk
-anak yang tersekat. Jadi satu soalan tidak boleh membawa pancingan **jika** ia boleh mencapai
-percubaan ketiga **dan** akan melukis dedahan pada percubaan itu.
+Pancingan dan jawapan didedah dilukis dalam **satu jalur** di bawah kad soalan (DESIGN §7). Dua
+blok dalam satu jalur melimpahkannya pada telefon. Dahulu peraturan kandungan yang menghalangnya:
+soalan yang boleh mendedah tidak boleh membawa pancingan. Sejak jawapan didedah sebaik sahaja anak
+tidak boleh salah lagi (§4.2), setiap soalan boleh mendedah, jadi **skrin** yang menghalangnya —
+dedahan yang membawa perkataan menggantikan pancingan dalam jalur — dan peraturan itu dibuang.
 
-| Jenis | Boleh capai percubaan ketiga? | Melukis dedahan? | Kesan |
-|---|---|---|---|
-| `count-tap` | Sentiasa — butang hantar tidak pernah dilumpuhkan | Sentiasa — ia jatuh balik kepada `Jawapannya N.` walaupun tanpa `explain` | **Tidak boleh ada `hint` langsung** |
-| `mcq`, `mcq-image` dengan ≤ 3 pilihan | Tidak — setiap salah melumpuhkan pilihan yang digunakan, jadi pilihan terakhir semestinya betul | — | `hint` dan `explain` kedua-duanya dibenarkan — tetapi `explain` tidak pernah dilukis, dan `validate:content` memberi amaran (PRD §16 item 23) |
-| `mcq-image` dengan ≥ 4 pilihan | Ya — tiga pilihan salah cukup untuk sampai ke sana | Ya, jika `explain` ditetapkan | **Tidak boleh ada kedua-dua** |
+Yang tinggal:
 
-`mcq` terhad kepada 3 pilihan oleh skema, jadi ia tidak akan mencapai percubaan ketiga.
-`mcq-image` **tiada had pilihan** — itu yang menjadikan barisan ketiga mungkin.
+| Semakan | Kesan | Sebab |
+|---|---|---|
+| `count-tap` membawa `hint` | **Ralat** | Tiada pancingan count-tap pernah diukur semasa objeknya masih diketuk. Jalur tidak mengecut; kad yang memegang objek itu yang mengalah. Ukur dahulu sebelum menarik balik |
+| Soalan pilihan yang kesilapan pertamanya sudah mendedah membawa `hint` — hari ini, dua pilihan | **Amaran** | Pancingan itu tidak pernah dilihat. Teks mati, bukan skrin rosak |
 
-> Peraturan ini dikira daripada soalan, bukan daripada jenisnya sahaja. Menambah had pilihan
-> kepada `mcq-image`, atau melumpuhkan butang hantar count-tap, akan mengubah apa yang
-> dibenarkan — kemas kini jadual ini bersama-sama.
+Amaran itu bertanya kepada `missesLeft()` (§4.2), fungsi yang sama yang enjin gunakan.
+
+> Peraturan ini dikira daripada soalan, bukan daripada jenisnya sahaja. Menukar had pilihan, atau
+> melumpuhkan butang hantar count-tap, mengubah bila dedahan berlaku — kemas kini §4.2 dan jadual
+> ini bersama-sama.
 
 **Katalog DSKP — kod yang didakwa mesti wujud.** Dikuatkuasakan dalam `validate:content`.
 
@@ -485,13 +486,33 @@ membuang masanya dan mengajarnya untuk tidak mempercayai baki borang itu.
 ### 4.2 Peraturan percubaan
 
 - Maksimum **3 percubaan** setiap soalan.
-- Percubaan 1 salah → goncang + **pancingan** muncul, pilihan yang salah dilumpuhkan.
-- Percubaan 2 salah → pancingan kekal, satu lagi pilihan salah dilumpuhkan.
-- Percubaan 3 salah → tunjukkan jawapan betul + `explain`, teruskan (0 markah, tiada hukuman lain).
-  **Tidak boleh berlaku pada soalan pilihan dengan tiga pilihan atau kurang — iaitu setiap
-  `mcq`.** Pilihan yang dipangkah tidak boleh ditekan semula, jadi pilihan terakhir semestinya
-  betul dan ditekan sebagai percubaan yang dipaksa. PRD §16 item 23.
+- Setiap salah → goncang, dan pilihan yang digunakan dilumpuhkan. Menjawab pilihan yang sudah
+  dilumpuhkan **diabaikan oleh enjin** — tiada percubaan dihabiskan. Pilihan yang terakhir
+  dipangkah masih boleh ditekan pada skrin (ia melukis ✕, bukan kelabu), jadi larangan ini tinggal
+  dalam `sessionReducer`, bukan dalam butang.
+- **Apabila anak tidak boleh salah lagi → tunjukkan jawapan betul + `explain`, teruskan** (0
+  markah, tiada hukuman lain). Itu berlaku pada yang mana dahulu:
+  - kesilapan ketiga; atau
+  - kesilapan yang meninggalkan **hanya jawapan betul** di antara pilihan.
+- Selagi soalan masih terbuka selepas salah → **pancingan** muncul.
 - **Jangan sekali-kali sekat kemajuan.** Kanak-kanak sentiasa boleh sampai ke skrin ringkasan.
+
+| Soalan | Dedahan pada | Pancingan dilihat | Markah yang boleh dicapai |
+|---|---|---|---|
+| `count-tap` | Kesilapan ketiga | Tiada — count-tap tidak membawa pancingan (§3.5) | 100 · 60 · 30 |
+| Pilihan, 4 atau lebih | Kesilapan ketiga | Selepas kesilapan pertama dan kedua | 100 · 60 · 30 |
+| Pilihan, 3 | Kesilapan kedua | Selepas kesilapan pertama | 100 · 60 |
+| Pilihan, 2 | Kesilapan pertama | **Tidak pernah** — `validate:content` memberi amaran | 100 |
+
+**`explain` ialah mesej untuk bila anak tidak boleh salah lagi, bukan mesej percubaan ketiga.**
+Diikat pada percubaan ketiga, `mcq` hanya sampai kepadanya dengan mengetuk pilihan salah yang sama
+berulang kali, kerana `mcq` paling banyak tiga pilihan (PRD §16 item 23). Satu fungsi
+memutuskannya — `missesLeft()` dalam
+`session.ts` — dan `validate:content` serta ayat verdict §9 memanggil fungsi yang sama.
+
+Dahulu, percubaan terakhir soalan pilihan ialah tekanan yang dipaksa pada satu-satunya butang
+yang tinggal, dan ia diberi 30 markah pada tiga pilihan, 60 pada dua. Tekanan itu tidak menguji
+apa-apa. Ia tiada lagi.
 
 **Pancingan adalah automatik dan percuma.** Ia muncul sendiri selepas satu jawapan salah.
 Tiada butang "minta pancingan", dan tiada potongan markah kerana melihatnya — bilangan
@@ -735,8 +756,12 @@ banyak daripadanya dua pilihan.
 > sukar diteka, dan berkata tiga *"disaiz mengikut soalan paling mudah dalam pek"*. Had itu
 > maksimum, bukan minimum: skema membenarkan dua pilihan bagi kedua-dua jenis, dan pek membawa
 > dua soalan begitu — q004 (`mcq`, satu-satunya bukti `1.6.1/digit_at_tens`) dan q009
-> (`mcq-image`, tiada SP). Soalan paling mudah diteka ialah dua pilihan. Sama ada ambang berubah
-> untuknya **belum diputuskan**: PRD §16 item 22.
+> (`mcq-image`, tiada SP). Soalan paling mudah diteka ialah dua pilihan.
+
+**Ambang tidak dinaikkan di sini.** Guru yang meluluskan tiga, jadi guru yang memutuskan sama ada
+tiga mencukupi untuk soalan dua pilihan. Julat di atas dinyatakan, dan soalan itu dibawa ke
+**pusingan semakan guru seterusnya**: borang `kssr:review` bertanya sendiri setiap kali pek membawa
+bukti dua pilihan (PRD §16 item 22).
 
 > ### LARANGAN 1 — 3.7% bukan keyakinan
 >
@@ -1348,9 +1373,12 @@ Jadi kawasan `aria-live` membawa **verdict**, bukan hanya bantuan:
 | Keadaan | BM | EN |
 |---|---|---|
 | Betul | `Betul!` | `Correct!` |
-| Salah, percubaan pertama | `Belum betul. Cuba lagi.` | `Not yet. Try again.` |
-| Salah, percubaan kedua | `Belum betul. Cuba sekali lagi.` | `Not yet. One more try.` |
+| Salah, dua kesilapan lagi atau lebih sebelum dedahan | `Belum betul. Cuba lagi.` | `Not yet. Try again.` |
+| Salah, satu kesilapan lagi sebelum dedahan | `Belum betul. Cuba sekali lagi.` | `Not yet. One more try.` |
 | Salah, jawapan didedah | `Belum betul.` | `Not yet.` |
+
+Baris dipilih oleh `missesLeft()` (§4.2), bukan oleh bilangan percubaan. Pada tiga pilihan,
+kesilapan pertama sudah pun *"sekali lagi"*; pada dua pilihan, kesilapan pertama terus mendedah.
 
 **Tiga ayat untuk salah, bukan satu, dan sebabnya bukan gaya.** Kawasan `aria-live` mengumumkan
 apabila teksnya **berubah**. Dengan satu ayat, percubaan salah kedua menghasilkan rentetan yang
@@ -1467,7 +1495,7 @@ nisbah yang sama seperti fail sumber.
 | `idle` | Rehat; skrin ganjaran selepas reaksi tamat | Gelung tak terhingga | Nafas 3.0 s, bob kepala lewat 6 bingkai daripada nafas, kedip setiap 4.2 s |
 | `thinking` | Soalan dipapar, belum dijawab | Gelung tak terhingga | Nafas separuh amplitud, kepala senget −8°, kedip setiap 6 s |
 | `happy` | Jawapan betul | 0.8 s (48 bingkai @60) | Badan lompat sekali, telinga naik, mata picing |
-| `sympathy` | Percubaan ketiga salah | 1.6 s (96 bingkai @60) | Kepala senget +12°, telinga ikut kepala, satu kedip |
+| `sympathy` | Anak tidak boleh salah lagi dan jawapan didedah (§4.2) | 1.6 s (96 bingkai @60) | Kepala senget +12°, telinga ikut kepala, satu kedip |
 
 `happy` dan `sympathy` ialah **reaksi**: main sekali, kemudian `onDone`. Gelung nafas dan
 kedip terus bermain di bawahnya — lapisan yang tidak disebut oleh sesuatu keadaan tidak

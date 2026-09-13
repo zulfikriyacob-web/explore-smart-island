@@ -338,11 +338,17 @@ yang sama seperti sempadan jawapan sebelum D1. Ia berada di luar tiga kerja yang
 tetapkan, jadi ia tidak disentuh; ia kekal satu-satunya sempadan butang dalam app yang di
 bawah lantai.
 
-**Keadaan `revealed` tidak boleh dicapai dengan kandungan hari ini.** `--mangga-dark`
-disahkan terkompil (`.border-mangga-dark` → `rgb(143 97 0)`), tetapi tiada soalan dalam pek
-yang boleh memaparkannya: `mcq` terhad kepada tiga pilihan jadi ia tidak pernah sampai ke
-percubaan ketiga, dan `count-tap` tidak mempunyai butang pilihan untuk ditanda. Nilainya
-betul; skrinnya belum wujud.
+~~**Keadaan `revealed` tidak boleh dicapai dengan kandungan hari ini.**~~ **Kini dicapai, dan
+diukur** (13 September 2026). Sejak jawapan didedah apabila anak tidak boleh salah lagi (SPEC
+§4.2), setiap soalan pilihan melukisnya. Diukur pada butang betul q001 selepas dua kesilapan, dalam
+renderer tanpa bingkai: sempadan `rgb(143, 97, 0)` pada bingkai 0, legap 1, tiada transform;
+**4.89:1** terhadap latar `rgb(230, 247, 244)` dan 5.42:1 terhadap muka putih — melepasi lantai 3:1
+§10. Denyut B6 bermula pada `scale: 1`, jadi beku ia sudah siap. Butang itu kini dikunci
+(`aria-disabled`) seperti butang betul; sebelum ini tiada apa menguncinya.
+
+Perenggan asal berkata `mcq` tidak pernah sampai ke keadaan ini kerana tiga pilihan. Itu tidak
+tepat walaupun pada masa itu: tiga ketukan pada pilihan salah yang sama sampai ke dedahan (PRD
+§16 item 23).
 
 #### Atas latar hutan — dua pilihan yang DITOLAK, supaya tiada siapa mencubanya semula
 
@@ -768,7 +774,7 @@ SPEC.md §7.1 peraturan keras 2.
 | B3 | **Goncang salah** | Goncang mendatar ±9px, mereda dalam 6 pusingan | Isyarat "bukan itu" yang mesra — **tidak** merah, tidak menakutkan |
 | B4 | **Layu pilihan salah** | Pilihan yang dihapuskan pudar ke 0.35, skala 0.96 | Mengurangkan pilihan, mengurangkan beban kognitif pada percubaan 2 |
 | B5 | **Pancingan luncur** | Kad pancingan meluncur turun ke tempatnya dalam jalur **di bawah kad soalan**, legap dan bersaiz penuh sepanjang masa | Memperkenalkan bantuan tanpa menyusun semula skrin secara mendadak. **Tidak pernah pudar masuk** — pancingan ialah satu-satunya bantuan anak yang tersekat, dan bantuan yang menunggu bingkai ialah bantuan yang tiada |
-| B6 | **Dedah jawapan** | Selepas 3 percubaan, butang betul berdenyut perlahan 2× dengan cahaya `--mangga` | Menutup gelung — kanak-kanak tidak pernah dibiarkan tanpa jawapan |
+| B6 | **Dedah jawapan** | Apabila anak tidak boleh salah lagi (SPEC §4.2), butang betul berdenyut perlahan 2× dengan cahaya `--mangga` | Menutup gelung — kanak-kanak tidak pernah dibiarkan tanpa jawapan |
 
 ### Kumpulan C — Gerak isyarat seret *(modul Sains & Membaca)*
 
@@ -925,12 +931,14 @@ pertumbuhan kad **dan** 27px itu — tanpa tahu yang kedua wujud.
 melihat soalan terpotong dan pancingan penuh, bukan soalan penuh dan pancingan tersembunyi.
 Arah itu disengajakan: anak yang menjawab salah sudah membaca soalan itu.
 
-**Tidak pernah kedua-dua serentak.** Satu soalan yang boleh mencapai percubaan ketiga tidak
-boleh membawa pancingan bersama jawapan didedah — dua blok dalam satu jalur melimpahkannya
-semula. `validate:content` menguatkuasakannya dan bukan menyerahkannya kepada ingatan penulis
-pek: count-tap sentiasa boleh mencapai percubaan ketiga dan sentiasa mendedah, jadi ia tidak
-boleh berpancingan langsung; soalan berpilihan hanya boleh mencapainya dengan sekurang-kurangnya
-empat pilihan, kerana setiap jawapan salah melumpuhkan pilihan yang digunakannya.
+**Tidak pernah kedua-dua serentak — dedahan mengambil tempat pancingan.** Dua blok dalam satu
+jalur melimpahkannya semula. Dahulu peraturan kandungan yang menjaganya: soalan yang boleh mendedah
+tidak boleh membawa pancingan. Sejak jawapan didedah sebaik sahaja anak tidak boleh salah lagi
+(SPEC §4.2), setiap soalan boleh mendedah, dan q001, q004 serta q008 membawa kedua-duanya. Jadi
+skrin yang menjaganya sekarang: apabila dedahan membawa perkataan, perkataan itu **menggantikan**
+pancingan dalam jalur. Pancingan ialah bantuan untuk mencuba lagi; selepas jawapan ditunjukkan
+tiada lagi, dan penerangan ialah bantuan yang lebih baik. count-tap masih tidak boleh
+berpancingan, kerana tiada pancingan count-tap pernah diukur semasa objeknya masih diketuk.
 
 Diukur selepas perubahan, 30 keadaan setiap satu — rehat, satu salah, salah-kemudian-betul,
 tiga salah — merentas kesepuluh-puluh soalan pek:
@@ -939,6 +947,21 @@ tiga salah — merentas kesepuluh-puluh soalan pek:
 |---|---|---|
 | 390 × 740 | 0 | 1px, pada satu keadaan (count-tap tiga salah; sebelum ini 62px) |
 | 360 × 780 | 0 | 0 |
+
+**Diukur semula selepas dedahan awal** (13 September 2026), pada tiga keadaan yang baru wujud —
+dedahan q001 (kesilapan kedua), q004 (kesilapan pertama) dan q008 (kesilapan kedua) — dengan
+`safe-area-inset-bottom` 0 dan 34px (iPhone; pane melaporkan 0):
+
+| Viewport | Jalur terpotong | Limpahan kad |
+|---|---|---|
+| 360 × 780 | 0 | 0 pada ketiga-tiganya, pada 0 dan 34px |
+| 390 × 740 | 0 | q004, q008: 0. **q001: 9px, dan 27px pada 34px** |
+
+Limpahan q001 datang daripada panjang `explain`, bukan daripada dua blok: *"74 ada 7 puluh. 47 ada
+4 puluh sahaja."* dua baris, jalur 78px, sedangkan pancingannya satu baris, 51px. Kad yang mengalah,
+seperti yang direka. Yang terpotong ialah padding bawah kad (24px) sahaja: baris terakhir teks
+soalan berakhir pada Y 206, dan pada 34px tepi kad yang kelihatan juga di Y 206 — teks penuh,
+tanpa satu piksel pun berbaki. `explain` yang lebih panjang daripada itu akan memotong teks soalan.
 
 ### Apa yang **tidak** kita animasikan
 
