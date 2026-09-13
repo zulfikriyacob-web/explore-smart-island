@@ -157,7 +157,7 @@ interface QuestionBase {
   prompt: LocalizedText;         // teks arahan
   promptAudio: LocalizedAudio;   // WAJIB — kanak-kanak umur 7 tidak boleh baca ini
   hint?: LocalizedText;          // ditunjukkan selepas 1 kali salah
-  explain?: LocalizedText;       // ditunjukkan selepas 2 kali salah, bersama jawapan
+  explain?: LocalizedText;       // bersama jawapan, selepas kesilapan ketiga — tidak boleh dicapai pada mcq (PRD §16 item 23)
   tags?: string[];
 }
 
@@ -385,7 +385,7 @@ percubaan ketiga **dan** akan melukis dedahan pada percubaan itu.
 | Jenis | Boleh capai percubaan ketiga? | Melukis dedahan? | Kesan |
 |---|---|---|---|
 | `count-tap` | Sentiasa — butang hantar tidak pernah dilumpuhkan | Sentiasa — ia jatuh balik kepada `Jawapannya N.` walaupun tanpa `explain` | **Tidak boleh ada `hint` langsung** |
-| `mcq`, `mcq-image` dengan ≤ 3 pilihan | Tidak — setiap salah melumpuhkan pilihan yang digunakan, jadi pilihan terakhir semestinya betul | — | `hint` dan `explain` kedua-duanya dibenarkan |
+| `mcq`, `mcq-image` dengan ≤ 3 pilihan | Tidak — setiap salah melumpuhkan pilihan yang digunakan, jadi pilihan terakhir semestinya betul | — | `hint` dan `explain` kedua-duanya dibenarkan — tetapi `explain` tidak pernah dilukis, dan `validate:content` memberi amaran (PRD §16 item 23) |
 | `mcq-image` dengan ≥ 4 pilihan | Ya — tiga pilihan salah cukup untuk sampai ke sana | Ya, jika `explain` ditetapkan | **Tidak boleh ada kedua-dua** |
 
 `mcq` terhad kepada 3 pilihan oleh skema, jadi ia tidak akan mencapai percubaan ketiga.
@@ -488,6 +488,9 @@ membuang masanya dan mengajarnya untuk tidak mempercayai baki borang itu.
 - Percubaan 1 salah → goncang + **pancingan** muncul, pilihan yang salah dilumpuhkan.
 - Percubaan 2 salah → pancingan kekal, satu lagi pilihan salah dilumpuhkan.
 - Percubaan 3 salah → tunjukkan jawapan betul + `explain`, teruskan (0 markah, tiada hukuman lain).
+  **Tidak boleh berlaku pada soalan pilihan dengan tiga pilihan atau kurang — iaitu setiap
+  `mcq`.** Pilihan yang dipangkah tidak boleh ditekan semula, jadi pilihan terakhir semestinya
+  betul dan ditekan sebagai percubaan yang dipaksa. PRD §16 item 23.
 - **Jangan sekali-kali sekat kemajuan.** Kanak-kanak sentiasa boleh sampai ke skrin ringkasan.
 
 **Pancingan adalah automatik dan percuma.** Ia muncul sendiri selepas satu jawapan salah.
@@ -713,18 +716,27 @@ sekadar mengira.
 
 #### Ambang: 3 soalan berbeza, percubaan pertama, merentas 2 sesi
 
-**Tiga, kerana inilah kos tekaan.** `mcq` terhad kepada tiga pilihan (§3.4), jadi anak yang
-meneka membuta betul satu daripada tiga kali:
+**Tiga, kerana inilah kos tekaan.** Pada soalan tiga pilihan, anak yang meneka membuta betul
+satu daripada tiga kali. Tetapi `mcq` dan `mcq-image` dibenarkan **dua** pilihan (§3.4), dan di
+situ tekaan betul satu daripada dua:
 
-| Bukti | Kadar tersalah label seorang peneka |
-|---|---|
-| 1 soalan | **33%** |
-| 2 soalan | 11% |
-| **3 soalan** | **3.7%** |
+| Bukti | Peneka tersalah label — tiga pilihan | Dua pilihan |
+|---|---|---|
+| 1 soalan | **33%** | 50% |
+| 2 soalan | 11% | 25% |
+| **3 soalan** | **3.7%** | **12.5%** |
 
-3.7% ialah nilai pertama di bawah satu daripada dua puluh. `count-tap` dan `mcq-image` yang
-lebih luas kedua-duanya lebih sukar diteka, jadi tiga disaiz mengikut soalan **paling mudah**
-dalam pek, bukan yang purata.
+3.7% ialah nilai pertama di bawah satu daripada dua puluh — **untuk soalan tiga pilihan
+sahaja**. Julat sebenar bagi tiga soalan ialah **3.7% hingga 12.5%**, bergantung pada berapa
+banyak daripadanya dua pilihan.
+
+> **Dibetulkan 13 September 2026.** Perenggan ini pernah menyimpulkan daripada had tiga pilihan
+> bahawa tekaan betul *"satu daripada tiga kali"*, berkata `mcq-image` *"yang lebih luas"* lebih
+> sukar diteka, dan berkata tiga *"disaiz mengikut soalan paling mudah dalam pek"*. Had itu
+> maksimum, bukan minimum: skema membenarkan dua pilihan bagi kedua-dua jenis, dan pek membawa
+> dua soalan begitu — q004 (`mcq`, satu-satunya bukti `1.6.1/digit_at_tens`) dan q009
+> (`mcq-image`, tiada SP). Soalan paling mudah diteka ialah dua pilihan. Sama ada ambang berubah
+> untuknya **belum diputuskan**: PRD §16 item 22.
 
 > ### LARANGAN 1 — 3.7% bukan keyakinan
 >

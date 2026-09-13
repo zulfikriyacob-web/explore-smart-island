@@ -1070,8 +1070,8 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     | Kos | Kesan | Pada q004 hari ini |
     |---|---|---|
     | Percubaan kedua dipaksa betul | Satu-satunya butang yang tinggal. 60 markah (SPEC §5.1) untuk tekanan yang tidak menguji apa-apa; ketepatan dan bintang naik | Ya |
-    | Percubaan ketiga tidak boleh berlaku | Dedahan tidak pernah dilukis, jadi `explain` tidak pernah dipaparkan | *"63 = 6 puluh dan 3 sa."* tidak pernah dilihat anak |
-    | Peneka betul 1 daripada 2 | Tiga soalan dua-pilihan diteka betul **12.5%**, bukan 3.7%. SPEC §5.7 menyaiz ambang tiga soalan pada mcq tiga pilihan dan berkata ia disaiz mengikut soalan paling mudah dalam pek; q004 lebih mudah diteka daripada itu | `1.6.1/digit_at_tens` bergantung pada q004 sahaja |
+    | Percubaan ketiga tidak boleh berlaku | Dedahan tidak pernah dilukis, jadi `explain` tidak pernah dipaparkan. Ini benar juga bagi setiap mcq tiga pilihan (item 23) | *"63 = 6 puluh dan 3 sa."* tidak pernah dilihat anak |
+    | Peneka betul 1 daripada 2 | Tiga soalan dua-pilihan diteka betul **12.5%**, bukan 3.7%. SPEC §5.7 menyaiz ambang tiga soalan pada mcq tiga pilihan dan pernah berkata ia disaiz mengikut soalan paling mudah dalam pek (dibetulkan; item 22); q004 lebih mudah diteka daripada itu | `1.6.1/digit_at_tens` bergantung pada q004 sahaja |
 
     Penguasaan tidak dikira daripada percubaan kedua — ia percubaan pertama sahaja (SPEC §5.7) —
     jadi percubaan yang dipaksa itu tidak memalsukan status. Yang terjejas ialah markah dan
@@ -1079,3 +1079,66 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
 
     **Kos menukar mana-mana mcq kepada dua pilihan:** peraturan percubaan baharu untuk jenis itu.
     Keputusan yang sama terpakai kepada q004, yang sudah pun di situ.
+22. **Ambang tiga soalan disaiz pada soalan tiga pilihan; soalan dua pilihan lebih mudah diteka.
+    Belum diputuskan — ia menyentuh ambang yang guru luluskan.**
+
+    SPEC §5.7 pernah berkata tiga *"disaiz mengikut soalan paling mudah dalam pek"*. Salah:
+    soalan paling mudah diteka ialah dua pilihan (item 21), dan skema membenarkannya bagi `mcq`
+    dan `mcq-image`. SPEC §5.7 kini menyatakan fakta tanpa memilih.
+
+    | Bukti, semuanya diteka betul | Tiga pilihan | Dua pilihan |
+    |---|---|---|
+    | 3 soalan | 3.7% | 12.5% |
+    | 4 soalan | 1.2% | 6.25% |
+    | 5 soalan | 0.4% | 3.1% |
+
+    Hari ini satu sub-kemahiran sahaja terjejas: `1.6.1/digit_at_tens`, yang satu-satunya soalan
+    ialah q004, dua pilihan. Kalau item 21 memilih perbandingan dua nombor, `compare_greater` dan
+    `compare_smaller` menjadi dua pilihan sepenuhnya, dan 12.5% menjadi kes biasa.
+
+    | Pilihan | Apa berubah | Siapa perlu bersetuju |
+    |---|---|---|
+    | **A. Ambang naik untuk soalan dua pilihan** | Bukti dikira mengikut kos tekaan, bukan bilangan — contohnya lima soalan dua pilihan (3.1%), atau campuran yang hasil darabnya di bawah satu daripada dua puluh. `coverage.ts` perlu tahu bilangan pilihan setiap bukti | **Guru.** Ia mengubah *"3 item berbeza"* yang borang bertanda luluskan |
+    | **B. SPEC berhenti mendakwa 3.7% sebagai sifat ambang** | Ambang kekal tiga. SPEC menyatakan julat 3.7%–12.5%, dan 3.7% hanya untuk soalan tiga pilihan. Tiada kod berubah | Pemilik projek. Borang bertanda meluluskan bilangan — *"3 item berbeza, betul cubaan pertama, merentas sekurang-kurangnya 2 sesi"* — dan tidak memetik 3.7%, jadi B tidak mengubah apa yang guru luluskan |
+    | **C. Tiada soalan dua pilihan** | Skema: minimum tiga pilihan. q004 perlu pilihan ketiga. 3.7% kekal benar | Pemilik projek. Menutup item 21 ke arah bertentangan dengan kalibrasi buku teks |
+
+    **Cadangan: B sekarang; bawa A kepada guru jika item 21 memilih dua nombor.** B menjadikan
+    SPEC benar tanpa mengubah apa yang guru luluskan, dan hari ini hanya satu soalan terjejas. A
+    patut ditanya apabila bukti dua pilihan menjadi biasa, bukan sebelum.
+23. **`explain` tidak boleh dicapai pada setiap `mcq`, bukan hanya yang dua pilihan. Tiga
+    daripada tiga dalam pek. Belum diputuskan.**
+
+    `explain` dilukis hanya bersama dedahan, dan dedahan hanya pada kesilapan ketiga
+    (`session.ts`, `revealed`). Setiap salah memangkah pilihan yang digunakan, dan pilihan yang
+    dipangkah tidak boleh ditekan semula: `BlockButton` pulang awal apabila `isLocked`, pada
+    laluan penunjuk dan papan kekunci. Jadi soalan pilihan perlu **empat** pilihan untuk sampai
+    ke kesilapan ketiga, dan `mcq` dihadkan kepada tiga (SPEC §3.4).
+
+    | Soalan | Jenis | Pilihan | Kesilapan paling banyak | `explain`, tidak pernah dilihat |
+    |---|---|---|---|---|
+    | q001 | `mcq` | 3 | 2 | *"74 ada 7 puluh. 47 ada 4 puluh sahaja."* |
+    | q004 | `mcq` | 2 | 1 | *"63 = 6 puluh dan 3 sa."* |
+    | q008 | `mcq` | 3 | 2 | *"45 + 10 = 55."* |
+
+    Tiada soalan lain dalam pek membawa `explain`. count-tap boleh sampai ke dedahan dan memakai
+    *"Jawapannya N."*.
+
+    **Kenapa tiada apa menangkapnya:**
+
+    - Ujian *"reveals the answer after three misses"* dalam `session.test.ts` sampai ke dedahan
+      dengan menekan pilihan `a` **sekali lagi** selepas ia dipangkah. Reducer menerimanya; UI
+      tidak. Ujian itu lulus pada laluan yang tiada anak boleh ambil.
+    - `validate:content` sudah mengira ini (`canReachReveal`), tetapi hanya menggunakannya untuk
+      membenarkan `hint` dan `explain` bersama. Ia kini memberi amaran bagi setiap `explain` yang
+      tidak boleh dicapai.
+
+    | Pilihan | Apa berubah | Kos |
+    |---|---|---|
+    | **(i) Buang `explain`** daripada soalan yang tidak boleh mendedahkan; amaran menjadi ralat | Kandungan sahaja | Tiga penerangan hilang. q001 ialah yang menerangkan helah 47/74 — saat anak yang keliru paling memerlukannya |
+    | **(ii) Dedahkan apabila hanya jawapan betul yang tinggal.** Kesilapan yang meninggalkan satu pilihan menamatkan soalan: jawapan dan `explain` dipaparkan, 0 markah | Peraturan percubaan jenis pilihan (SPEC §4.2) dan markah (§5.1) | Tekanan dipaksa hilang — 30 markah percuma pada tiga pilihan, 60 pada dua pilihan (item 21). q001, q004 dan q008 membawa `hint` **dan** `explain`, jadi dedahan yang boleh dicapai melanggar peraturan satu jalur (SPEC §3.5, DESIGN §7) pada ketiga-tiganya: perlu diputuskan sama ada `explain` menggantikan `hint` dalam jalur semasa dedahan |
+    | **(iii) Tunjukkan `explain` bersama "Betul!"** selepas jawapan betul yang didahului kesilapan | Paparan sahaja | Tekanan dipaksa dan markah percumanya kekal. `hint` masih dipaparkan selepas jawapan betul (`showHint` bergantung pada `hintShown` sahaja), jadi pertembungan jalur yang sama berlaku |
+
+    **Cadangan: (ii).** Ia satu-satunya pilihan yang membetulkan tiga perkara dengan satu
+    peraturan: `explain` yang mati, markah untuk tekanan yang tidak menguji apa-apa, dan peraturan
+    percubaan dua pilihan yang item 21 perlukan. Tetapi ia perubahan tingkah laku dan pemarkahan
+    yang menyentuh SPEC §3.5, §4.2, §5.1 dan DESIGN §7, dan ia tidak dibina di sini.
