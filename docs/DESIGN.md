@@ -1102,6 +1102,14 @@ Ujian pantas sebelum melaras apa-apa: **hapuskan semua warna dan lihat siluet da
 bahagian sahaja.** Kalau ia masih boleh dikelirukan dengan objek lain pada peringkat itu,
 warna tidak akan menyelamatkannya.
 
+**Ujian ini tidak menangkap rambutan. Ia ditulis kerana tiada apa yang menangkapnya.** Ia masuk
+dalam `d32d53d`, tiga minit selepas lukisan semula pusingan 5 (`812944a`), jadi tiada satu pun
+pusingan pernah melaluinya. Yang bertahan melalui empat pusingan ialah **struktur yang salah**, dan
+kanak-kanak **mengenali** rambutan pada pusingan 2 dan 3. Satu permintaan pernah menyebut rambutan
+*"gagal ujian siluet empat kali"*; itu tidak berlaku, dan pemilik projek meminta pembetulan ini
+direkod. Dalam perkataannya: *"Itu bezanya antara 'ujian menangkapnya' dan 'ujian ditulis kerana ia
+tidak ditangkap'."*
+
 **Epal — struktur dipilih sebelum warna** (13 September 2026). Epal mudah tersalah jadi tomato
 atau ceri, dan bezanya susunan bahagian, bukan merah:
 
@@ -1116,6 +1124,16 @@ dan pada saiz sebenar count-tap 64px, bersebelahan siluet rambutan dan pisang. L
 daun kekal terbaca pada 64px. **Itu semakan dalam sesi pembangunan, bukan ujian kanak-kanak.**
 Mengikut peraturan di atas, epal belum siap sehingga seorang kanak-kanak umur sasaran menamakannya
 tanpa petunjuk.
+
+**Disahkan oleh kanak-kanak, bukan pengukuran — 13 September 2026.** Pemilik projek menunjukkan
+epal kepada seorang kanak-kanak berumur **9 tahun** dan bertanya *"Ini apa?"* tanpa petunjuk. Dia
+berkata *"epal"*. **Aset lulus ujian §8.** Siluet di atas ialah semakan; ini pengesahannya.
+
+Cara ia ditunjukkan: epal **berwarna**, bersaiz **160px**, pada halaman ujian siluet — halaman yang
+sama memaparkan versi siluet dan versi garis di sebelahnya. Dua perkara untuk dibaca bersama
+keputusan itu: umur 9 berada dalam julat 7–9 app (PRD §1) tetapi di hujung atasnya, sedangkan
+kandungan hari ini Tahun 1; dan saiz dalam app ialah 64px, yang belum ditunjukkan kepada
+kanak-kanak.
 
 ### Keputusan tertunda: buang garis luar sepenuhnya?
 
