@@ -457,6 +457,20 @@ beralih ke arah kelabu-kuning dan menjadi **lebih** serupa. Ini diterima kerana 
 pun membawa makna melalui keserupaan itu — warna buah hiasan subjek, dan "salah" disampaikan
 oleh ikon, goncangan dan bunyi, bukan warna sahaja (SPEC §9).
 
+**Merah epal `#BA2233` disemak dengan cara yang sama, sebelum dilukis** (13 September 2026):
+
+| | `--bunga` (salah) | Epal asas | Epal bayang | Daun epal | `--daun` (betul) |
+|---|---|---|---|---|---|
+| Hex | `#FF6B6B` | `#BA2233` | `#901A28` | `#5AA832` | `#2FBF71` |
+| Hue | 0° | 353° | 353° | 100° | 147° |
+| Ketepuan | 100% | 69% | 69% | 54% | 61% |
+| Kecerahan | 71% | 43% | 33% | 43% | 47% |
+
+Beza hue epal daripada `--bunga` hanya **7°**, kurang daripada rambutan (17°), jadi kecerahan yang
+menanggung pemisahan: **28 mata** untuk ton asas, 38 untuk bayang. Merah yang lebih cerah membaca
+lebih "epal" tetapi mendekati `--bunga`; `#BA2233` ialah titik yang dipilih. Daun epal 47° hue
+daripada `--daun`, dan ia daun kecil, bukan bidang warna. Tangkai `#6B4226`.
+
 ### 2.6 Bulu kaki jauh
 
 | Peranan | Nilai |
@@ -1088,6 +1102,21 @@ Ujian pantas sebelum melaras apa-apa: **hapuskan semua warna dan lihat siluet da
 bahagian sahaja.** Kalau ia masih boleh dikelirukan dengan objek lain pada peringkat itu,
 warna tidak akan menyelamatkannya.
 
+**Epal — struktur dipilih sebelum warna** (13 September 2026). Epal mudah tersalah jadi tomato
+atau ceri, dan bezanya susunan bahagian, bukan merah:
+
+| Objek | Struktur yang membezakan |
+|---|---|
+| **Epal** — yang dilukis | **Lekuk V di antara dua bahu** di atas; tangkai pendek dan tebal tumbuh dari lekuk itu; **satu daun** pada tangkai; badan lebih kurang setinggi lebarnya, menirus sedikit ke bawah |
+| Tomato | Leper, lebih lebar daripada tinggi; atasnya kelopak hijau berbentuk bintang, bukan lekuk dan daun tunggal |
+| Ceri | Kecil dan bulat; tangkai panjang dan nipis |
+
+Ujian siluet dijalankan sebelum aset dihantar: setiap isian dan strok dijadikan hitam, pada 160px
+dan pada saiz sebenar count-tap 64px, bersebelahan siluet rambutan dan pisang. Lekuk, tangkai dan
+daun kekal terbaca pada 64px. **Itu semakan dalam sesi pembangunan, bukan ujian kanak-kanak.**
+Mengikut peraturan di atas, epal belum siap sehingga seorang kanak-kanak umur sasaran menamakannya
+tanpa petunjuk.
+
 ### Keputusan tertunda: buang garis luar sepenuhnya?
 
 Seorang kanak-kanak menunjuk set ikon buah stok sebagai gaya yang dia suka. Dua perbezaan
@@ -1097,7 +1126,8 @@ seterusnya bermakna. "Membosankan" memetakan kepada kroma rendah, bukan kepada k
 strok; membuang garis luar menjadikan sesuatu lebih lembut tepinya, bukan lebih menarik.
 
 **Titik keputusan: sebelum kandungan Fasa 3 ditulis, bukan selepas.** Perpustakaan ilustrasi
-hari ini **lima fail** — tiga bentuk, dua buah. Selepas Fasa 3 ia berpuluh. Kalau peraturan
+hari ini **enam fail** — tiga bentuk, tiga buah; epal ialah yang keenam, ditambah 13 September
+2026 sebelum keputusan ini dibuat. Selepas Fasa 3 ia berpuluh. Kalau peraturan
 garis luar akan berubah, sekarang saat termurah ia akan jadi, dan kosnya berganda dengan
 setiap aset yang ditambah sebelum keputusan dibuat.
 
