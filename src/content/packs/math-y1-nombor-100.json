@@ -34,6 +34,51 @@
         "q009",
         "q010"
       ]
+    },
+    {
+      "activityId": "math-y1-nombor-100-a2",
+      "title": { "ms": "Membilang objek satu demi satu", "en": "Counting objects one by one" },
+      "questionCount": 3,
+      "questionIds": ["q003", "q006", "q011"]
+    },
+    {
+      "activityId": "math-y1-nombor-100-a3",
+      "title": {
+        "ms": "Menentukan nombor yang lebih besar · Menentukan nombor yang lebih kecil",
+        "en": "Deciding which number is bigger · Deciding which number is smaller"
+      },
+      "questionCount": 6,
+      "questionIds": ["q001", "q012", "q013", "q010", "q014", "q015"]
+    },
+    {
+      "activityId": "math-y1-nombor-100-a4",
+      "title": { "ms": "Menentukan nombor selepas", "en": "Finding the number after" },
+      "questionCount": 3,
+      "questionIds": ["q002", "q016", "q017"]
+    },
+    {
+      "activityId": "math-y1-nombor-100-a5",
+      "title": { "ms": "Menyusun tertib menaik", "en": "Ordering smallest to biggest" },
+      "questionCount": 3,
+      "questionIds": ["q007", "q018", "q019"]
+    },
+    {
+      "activityId": "math-y1-nombor-100-a6",
+      "title": {
+        "ms": "Mengenal digit di tempat puluh",
+        "en": "Identifying the digit in the tens place"
+      },
+      "questionCount": 3,
+      "questionIds": ["q004", "q020", "q021"]
+    },
+    {
+      "activityId": "math-y1-nombor-100-a7",
+      "title": {
+        "ms": "Dua digit tambah dua digit, tanpa melintasi puluh",
+        "en": "Two digits plus two digits, without bridging a ten"
+      },
+      "questionCount": 3,
+      "questionIds": ["q008", "q022", "q023"]
     }
   ],
   "questions": [
@@ -130,7 +175,8 @@
       "payload": {
         "options": [
           { "id": "a", "text": { "ms": "6", "en": "6" } },
-          { "id": "b", "text": { "ms": "3", "en": "3" } }
+          { "id": "b", "text": { "ms": "3", "en": "3" } },
+          { "id": "c", "text": { "ms": "63", "en": "63" } }
         ],
         "correctOptionId": "a",
         "shuffle": true
@@ -289,6 +335,356 @@
           { "id": "c", "text": { "ms": "80", "en": "80" } }
         ],
         "correctOptionId": "b",
+        "shuffle": true
+      }
+    },
+    {
+      "id": "q011",
+      "type": "count-tap",
+      "difficulty": 1,
+      "learningStandard": "1.2.1",
+      "subSkill": "1.2.1/count_objects",
+      "promptForm": "contextual",
+      "representation": "visual",
+      "responseMode": "tap",
+      "wordingVariant": "A",
+      "prompt": {
+        "ms": "Devi kutip epal. Ketuk sambil mengira. Kemudian tekan Sedia.",
+        "en": "Devi picks apples. Tap as you count, then press Sedia."
+      },
+      "promptAudio": { "ms": "/audio/ms/q011.mp3", "en": "/audio/en/q011.mp3" },
+      "explain": { "ms": "Ada 8 biji epal.", "en": "There are 8 apples." },
+      "payload": {
+        "itemImage": "/img/fruit/epal.svg",
+        "itemCount": 8,
+        "layout": "scatter",
+        "answerInput": "tap-count",
+        "correctAnswer": 8
+      }
+    },
+    {
+      "id": "q012",
+      "type": "mcq",
+      "difficulty": 1,
+      "learningStandard": "1.2.2",
+      "subSkill": "1.2.2/compare_greater",
+      "promptForm": "reverse",
+      "representation": "symbolic",
+      "responseMode": "select",
+      "wordingVariant": "A",
+      "prompt": {
+        "ms": "58 lebih kecil daripada nombor yang mana?",
+        "en": "58 is smaller than which number?"
+      },
+      "promptAudio": { "ms": "/audio/ms/q012.mp3", "en": "/audio/en/q012.mp3" },
+      "hint": { "ms": "Bandingkan puluh dahulu.", "en": "Compare the tens first." },
+      "explain": { "ms": "61 ada 6 puluh. 58 ada 5 puluh.", "en": "61 has 6 tens. 58 has 5 tens." },
+      "payload": {
+        "options": [
+          { "id": "a", "text": { "ms": "52", "en": "52" } },
+          { "id": "b", "text": { "ms": "61", "en": "61" } },
+          { "id": "c", "text": { "ms": "55", "en": "55" } }
+        ],
+        "correctOptionId": "b",
+        "shuffle": true
+      }
+    },
+    {
+      "id": "q013",
+      "type": "mcq",
+      "difficulty": 1,
+      "learningStandard": "1.2.2",
+      "subSkill": "1.2.2/compare_greater",
+      "promptForm": "contextual",
+      "representation": "symbolic",
+      "responseMode": "select",
+      "wordingVariant": "A",
+      "prompt": {
+        "ms": "Guli Ali 45. Guli Kumar 52. Siapa lebih banyak?",
+        "en": "Ali has 45 marbles. Kumar has 52. Who has more?"
+      },
+      "promptAudio": { "ms": "/audio/ms/q013.mp3", "en": "/audio/en/q013.mp3" },
+      "hint": { "ms": "Nombor mana lebih besar?", "en": "Which number is bigger?" },
+      "explain": { "ms": "52 lebih besar daripada 45.", "en": "52 is bigger than 45." },
+      "payload": {
+        "options": [
+          { "id": "a", "text": { "ms": "Ali", "en": "Ali" } },
+          { "id": "b", "text": { "ms": "Kumar", "en": "Kumar" } },
+          { "id": "c", "text": { "ms": "Sama banyak", "en": "The same" } }
+        ],
+        "correctOptionId": "b",
+        "shuffle": true
+      }
+    },
+    {
+      "id": "q014",
+      "type": "mcq",
+      "difficulty": 2,
+      "learningStandard": "1.2.2",
+      "subSkill": "1.2.2/compare_smaller",
+      "promptForm": "reverse",
+      "representation": "symbolic",
+      "responseMode": "select",
+      "wordingVariant": "A",
+      "prompt": {
+        "ms": "34 lebih besar daripada nombor yang mana?",
+        "en": "34 is bigger than which number?"
+      },
+      "promptAudio": { "ms": "/audio/ms/q014.mp3", "en": "/audio/en/q014.mp3" },
+      "hint": { "ms": "Bandingkan puluh dahulu.", "en": "Compare the tens first." },
+      "explain": { "ms": "29 ada 2 puluh. 34 ada 3 puluh.", "en": "29 has 2 tens. 34 has 3 tens." },
+      "payload": {
+        "options": [
+          { "id": "a", "text": { "ms": "41", "en": "41" } },
+          { "id": "b", "text": { "ms": "29", "en": "29" } },
+          { "id": "c", "text": { "ms": "37", "en": "37" } }
+        ],
+        "correctOptionId": "b",
+        "shuffle": true
+      }
+    },
+    {
+      "id": "q015",
+      "type": "mcq",
+      "difficulty": 2,
+      "learningStandard": "1.2.2",
+      "subSkill": "1.2.2/compare_smaller",
+      "promptForm": "contextual",
+      "representation": "symbolic",
+      "responseMode": "select",
+      "wordingVariant": "A",
+      "prompt": {
+        "ms": "Setem Muaz 17. Setem Faris 23. Siapa kurang?",
+        "en": "Muaz has 17 stamps. Faris has 23. Who has fewer?"
+      },
+      "promptAudio": { "ms": "/audio/ms/q015.mp3", "en": "/audio/en/q015.mp3" },
+      "hint": { "ms": "Nombor mana lebih kecil?", "en": "Which number is smaller?" },
+      "explain": { "ms": "17 lebih kecil daripada 23.", "en": "17 is smaller than 23." },
+      "payload": {
+        "options": [
+          { "id": "a", "text": { "ms": "Muaz", "en": "Muaz" } },
+          { "id": "b", "text": { "ms": "Faris", "en": "Faris" } },
+          { "id": "c", "text": { "ms": "Sama banyak", "en": "The same" } }
+        ],
+        "correctOptionId": "a",
+        "shuffle": true
+      }
+    },
+    {
+      "id": "q016",
+      "type": "mcq",
+      "difficulty": 1,
+      "learningStandard": "1.2.2",
+      "subSkill": "1.2.2/after",
+      "promptForm": "reverse",
+      "representation": "symbolic",
+      "responseMode": "select",
+      "wordingVariant": "A",
+      "prompt": {
+        "ms": "Nombor 30 datang selepas nombor apa?",
+        "en": "The number 30 comes after what number?"
+      },
+      "promptAudio": { "ms": "/audio/ms/q016.mp3", "en": "/audio/en/q016.mp3" },
+      "hint": { "ms": "Kira menurun satu langkah.", "en": "Count back one step." },
+      "explain": { "ms": "29, kemudian 30.", "en": "29, then 30." },
+      "payload": {
+        "options": [
+          { "id": "a", "text": { "ms": "28", "en": "28" } },
+          { "id": "b", "text": { "ms": "29", "en": "29" } },
+          { "id": "c", "text": { "ms": "31", "en": "31" } }
+        ],
+        "correctOptionId": "b",
+        "shuffle": true
+      }
+    },
+    {
+      "id": "q017",
+      "type": "mcq",
+      "difficulty": 1,
+      "learningStandard": "1.2.2",
+      "subSkill": "1.2.2/after",
+      "promptForm": "contextual",
+      "representation": "symbolic",
+      "responseMode": "select",
+      "wordingVariant": "A",
+      "prompt": {
+        "ms": "Mei Lin bilang 24, 25, 26. Apa selepasnya?",
+        "en": "Mei Lin counts 24, 25, 26. What comes next?"
+      },
+      "promptAudio": { "ms": "/audio/ms/q017.mp3", "en": "/audio/en/q017.mp3" },
+      "hint": { "ms": "Tambah satu pada nombor akhir.", "en": "Add one to the last number." },
+      "explain": { "ms": "Selepas 26 ialah 27.", "en": "After 26 comes 27." },
+      "payload": {
+        "options": [
+          { "id": "a", "text": { "ms": "27", "en": "27" } },
+          { "id": "b", "text": { "ms": "23", "en": "23" } },
+          { "id": "c", "text": { "ms": "28", "en": "28" } }
+        ],
+        "correctOptionId": "a",
+        "shuffle": true
+      }
+    },
+    {
+      "id": "q018",
+      "type": "mcq",
+      "difficulty": 2,
+      "learningStandard": "1.2.2",
+      "subSkill": "1.2.2/order_ascending",
+      "promptForm": "reverse",
+      "representation": "symbolic",
+      "responseMode": "select",
+      "wordingVariant": "A",
+      "prompt": {
+        "ms": "12, __, 18, 21. Apakah nombor yang tertinggal?",
+        "en": "12, __, 18, 21. What number is missing?"
+      },
+      "promptAudio": { "ms": "/audio/ms/q018.mp3", "en": "/audio/en/q018.mp3" },
+      "hint": { "ms": "Naik tiga-tiga.", "en": "Count up in threes." },
+      "explain": {
+        "ms": "12, 15, 18, 21. Naik tiga-tiga.",
+        "en": "12, 15, 18, 21. Up in threes."
+      },
+      "payload": {
+        "options": [
+          { "id": "a", "text": { "ms": "14", "en": "14" } },
+          { "id": "b", "text": { "ms": "15", "en": "15" } },
+          { "id": "c", "text": { "ms": "16", "en": "16" } }
+        ],
+        "correctOptionId": "b",
+        "shuffle": true
+      }
+    },
+    {
+      "id": "q019",
+      "type": "mcq",
+      "difficulty": 2,
+      "learningStandard": "1.2.2",
+      "subSkill": "1.2.2/order_ascending",
+      "promptForm": "contextual",
+      "representation": "symbolic",
+      "responseMode": "select",
+      "wordingVariant": "A",
+      "prompt": {
+        "ms": "Kad Raju: 14, 9. Susun dari kecil ke besar.",
+        "en": "Raju's cards: 14, 9. Order from small to big."
+      },
+      "promptAudio": { "ms": "/audio/ms/q019.mp3", "en": "/audio/en/q019.mp3" },
+      "hint": { "ms": "Cari nombor paling kecil dahulu.", "en": "Find the smallest number first." },
+      "explain": { "ms": "9 lebih kecil daripada 14.", "en": "9 is smaller than 14." },
+      "payload": {
+        "options": [
+          { "id": "a", "text": { "ms": "9, 14", "en": "9, 14" } },
+          { "id": "b", "text": { "ms": "14, 9", "en": "14, 9" } }
+        ],
+        "correctOptionId": "a",
+        "shuffle": true
+      }
+    },
+    {
+      "id": "q020",
+      "type": "mcq",
+      "difficulty": 2,
+      "learningStandard": "1.6.1",
+      "subSkill": "1.6.1/digit_at_tens",
+      "promptForm": "reverse",
+      "representation": "symbolic",
+      "responseMode": "select",
+      "wordingVariant": "A",
+      "prompt": {
+        "ms": "Nombor manakah ada 4 di tempat puluh?",
+        "en": "Which number has 4 in the tens place?"
+      },
+      "promptAudio": { "ms": "/audio/ms/q020.mp3", "en": "/audio/en/q020.mp3" },
+      "hint": { "ms": "Lihat digit di hadapan.", "en": "Look at the first digit." },
+      "explain": { "ms": "42 ada 4 puluh dan 2 sa.", "en": "42 has 4 tens and 2 ones." },
+      "payload": {
+        "options": [
+          { "id": "a", "text": { "ms": "24", "en": "24" } },
+          { "id": "b", "text": { "ms": "42", "en": "42" } },
+          { "id": "c", "text": { "ms": "14", "en": "14" } }
+        ],
+        "correctOptionId": "b",
+        "shuffle": true
+      }
+    },
+    {
+      "id": "q021",
+      "type": "mcq",
+      "difficulty": 2,
+      "learningStandard": "1.6.1",
+      "subSkill": "1.6.1/digit_at_tens",
+      "promptForm": "contextual",
+      "representation": "symbolic",
+      "responseMode": "select",
+      "wordingVariant": "A",
+      "prompt": {
+        "ms": "Muaz ada 17 setem. Apakah digit di tempat puluh?",
+        "en": "Muaz has 17 stamps. What digit is in the tens place?"
+      },
+      "promptAudio": { "ms": "/audio/ms/q021.mp3", "en": "/audio/en/q021.mp3" },
+      "hint": { "ms": "Lihat digit di hadapan.", "en": "Look at the first digit." },
+      "explain": { "ms": "17 ada 1 puluh dan 7 sa.", "en": "17 has 1 ten and 7 ones." },
+      "payload": {
+        "options": [
+          { "id": "a", "text": { "ms": "1", "en": "1" } },
+          { "id": "b", "text": { "ms": "7", "en": "7" } },
+          { "id": "c", "text": { "ms": "17", "en": "17" } }
+        ],
+        "correctOptionId": "a",
+        "shuffle": true
+      }
+    },
+    {
+      "id": "q022",
+      "type": "mcq",
+      "difficulty": 3,
+      "learningStandard": "2.2.2",
+      "subSkill": "2.2.2/two_digit_plus_two_digit_no_bridge",
+      "promptForm": "reverse",
+      "representation": "symbolic",
+      "responseMode": "select",
+      "wordingVariant": "A",
+      "prompt": {
+        "ms": "Saya tambah 15 jadi 38. Apakah nombor saya?",
+        "en": "I add 15 and get 38. What is my number?"
+      },
+      "promptAudio": { "ms": "/audio/ms/q022.mp3", "en": "/audio/en/q022.mp3" },
+      "hint": { "ms": "Tolak 15 daripada 38.", "en": "Take 15 away from 38." },
+      "explain": { "ms": "23 + 15 = 38.", "en": "23 + 15 = 38." },
+      "payload": {
+        "options": [
+          { "id": "a", "text": { "ms": "23", "en": "23" } },
+          { "id": "b", "text": { "ms": "28", "en": "28" } },
+          { "id": "c", "text": { "ms": "53", "en": "53" } }
+        ],
+        "correctOptionId": "a",
+        "shuffle": true
+      }
+    },
+    {
+      "id": "q023",
+      "type": "mcq",
+      "difficulty": 3,
+      "learningStandard": "2.2.2",
+      "subSkill": "2.2.2/two_digit_plus_two_digit_no_bridge",
+      "promptForm": "contextual",
+      "representation": "symbolic",
+      "responseMode": "select",
+      "wordingVariant": "A",
+      "prompt": {
+        "ms": "Devi ada 32 pensel. Dia beli 14 lagi. Berapa semua?",
+        "en": "Devi has 32 pencils. She buys 14 more. How many in all?"
+      },
+      "promptAudio": { "ms": "/audio/ms/q023.mp3", "en": "/audio/en/q023.mp3" },
+      "hint": { "ms": "Tambah dua nombor itu.", "en": "Add the two numbers." },
+      "explain": { "ms": "32 + 14 = 46.", "en": "32 + 14 = 46." },
+      "payload": {
+        "options": [
+          { "id": "a", "text": { "ms": "46", "en": "46" } },
+          { "id": "b", "text": { "ms": "36", "en": "36" } },
+          { "id": "c", "text": { "ms": "18", "en": "18" } }
+        ],
+        "correctOptionId": "a",
         "shuffle": true
       }
     }
