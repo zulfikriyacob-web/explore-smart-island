@@ -1051,3 +1051,31 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
 
     **Penyemak tidak dinamakan dalam mana-mana fail.** Ruang nama dan sekolah dalam borang
     sengaja kosong, jadi `review.by` merekod itu dan bukan satu nama.
+21. **Bandingkan dua nombor, seperti buku teks? Belum diputuskan.**
+
+    Kalibrasi pemilik projek terhadap buku teks KPM Tahun 1
+    (`docs/kssr/pemilik-kalibrasi-buku-teks-kpm-tahun-1.md`): buku teks membandingkan **dua**
+    nombor pada peringkat ini. q001 memberi tiga pilihan, dengan 47 dan 74 — helah pembalikan
+    digit yang buku teks tidak guna di sini. q010 juga membandingkan tiga.
+
+    **Tidak ditukar, atas keputusan pemilik projek:** dua pilihan memecahkan peraturan
+    tiga-percubaan (SPEC §4.2). Satu jawapan salah melumpuhkan satu pilihan, dan yang tinggal
+    ialah jawapan betul.
+
+    **Kosnya sudah dibayar pada satu soalan hari ini: q004.** Skema membenarkan `mcq` dua
+    hingga tiga pilihan (`.min(2).max(MCQ_MAX_OPTIONS)`), dan q004 mempunyai dua — `6` dan `3`.
+    Butang yang dipangkah tidak boleh ditekan semula (`BlockButton`, `isLocked`), dan `revealed`
+    hanya ditetapkan pada kesilapan ketiga (`session.ts`). Jadi, pada mana-mana mcq dua pilihan:
+
+    | Kos | Kesan | Pada q004 hari ini |
+    |---|---|---|
+    | Percubaan kedua dipaksa betul | Satu-satunya butang yang tinggal. 60 markah (SPEC §5.1) untuk tekanan yang tidak menguji apa-apa; ketepatan dan bintang naik | Ya |
+    | Percubaan ketiga tidak boleh berlaku | Dedahan tidak pernah dilukis, jadi `explain` tidak pernah dipaparkan | *"63 = 6 puluh dan 3 sa."* tidak pernah dilihat anak |
+    | Peneka betul 1 daripada 2 | Tiga soalan dua-pilihan diteka betul **12.5%**, bukan 3.7%. SPEC §5.7 menyaiz ambang tiga soalan pada mcq tiga pilihan dan berkata ia disaiz mengikut soalan paling mudah dalam pek; q004 lebih mudah diteka daripada itu | `1.6.1/digit_at_tens` bergantung pada q004 sahaja |
+
+    Penguasaan tidak dikira daripada percubaan kedua — ia percubaan pertama sahaja (SPEC §5.7) —
+    jadi percubaan yang dipaksa itu tidak memalsukan status. Yang terjejas ialah markah dan
+    bintang, `explain`, dan alasan di sebalik nombor tiga.
+
+    **Kos menukar mana-mana mcq kepada dua pilihan:** peraturan percubaan baharu untuk jenis itu.
+    Keputusan yang sama terpakai kepada q004, yang sudah pun di situ.
