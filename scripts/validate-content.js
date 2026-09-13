@@ -16,7 +16,7 @@ import { fileURLToPath } from 'node:url';
 
 import { TopicPackSchema, collectAssetRefs } from '../src/content/schema.ts';
 import { missesLeft } from '../src/features/quiz/session.ts';
-import { EVIDENCE_FOR_MASTERY } from '../src/lib/coverage.ts';
+import { EVIDENCE_FOR_MASTERY, EVIDENCE_WITH_TWO_OPTIONS } from '../src/lib/coverage.ts';
 
 /**
  * Placeholder art carries this marker. A picture that is a dashed box is not a
@@ -249,11 +249,15 @@ function subSkillCoverage(pack, skills) {
 /**
  * How far each sub-skill is from being able to reach "Dikuasai" at all.
  *
- * The mastery bar is three distinct questions, answered right on a first
- * attempt, across two sessions (SPEC §5.7). A sub-skill with fewer than three
- * questions in the item bank cannot clear that bar however well a child does,
- * so this is the number that decides whether any label can ever read
- * "Dikuasai" — and it is closed by writing ordinary questions, nothing more.
+ * The mastery bar is three distinct questions with three or more options, or
+ * four of any kind, answered right on a first attempt across two sessions
+ * (SPEC §5.7). A sub-skill whose item bank cannot supply either cannot clear
+ * the bar however well a child does, so this is the number that decides
+ * whether any label can ever read "Dikuasai" — and it is closed by writing
+ * ordinary questions, nothing more.
+ *
+ * The bank decides only whether the bar is reachable. Which bar a child meets
+ * is decided by what that child answered (`skillState`).
  */
 function questionBarGap(pack) {
   const lines = [];
@@ -261,16 +265,21 @@ function questionBarGap(pack) {
   for (const q of pack.questions) {
     if (!q.subSkill) continue;
     if (!bySkill.has(q.subSkill)) bySkill.set(q.subSkill, []);
-    bySkill.get(q.subSkill).push(q.id);
+    bySkill.get(q.subSkill).push(q);
   }
   let needed = 0;
-  for (const [skill, ids] of bySkill) {
-    const short = EVIDENCE_FOR_MASTERY - ids.length;
+  for (const [skill, qs] of bySkill) {
+    const two = qs.filter((q) => q.type !== 'count-tap' && q.payload.options.length === 2);
+    const wider = qs.length - two.length;
+    // Writing a three-option question moves both counts, so the cheaper bar wins.
+    const short = Math.min(EVIDENCE_FOR_MASTERY - wider, EVIDENCE_WITH_TWO_OPTIONS - qs.length);
     if (short <= 0) continue;
     needed += short;
+    const twoNote = two.length > 0 ? `, ${two.length} with two options (${two.map((q) => q.id).join(', ')})` : '';
     lines.push(
-      `${skill}: ${ids.length} of ${EVIDENCE_FOR_MASTERY} questions (${ids.join(', ')}) — cannot ` +
-        `reach mastery until ${short} more ${short === 1 ? 'is' : 'are'} written`,
+      `${skill}: ${qs.length} question(s) (${qs.map((q) => q.id).join(', ')})${twoNote} — cannot ` +
+        `reach mastery until ${short} more ${short === 1 ? 'is' : 'are'} written ` +
+        `(${EVIDENCE_FOR_MASTERY} with three or more options, or ${EVIDENCE_WITH_TWO_OPTIONS} of any kind)`,
     );
   }
   if (needed > 0) {

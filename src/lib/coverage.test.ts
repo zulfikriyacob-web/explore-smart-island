@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import {
   EVIDENCE_FOR_MASTERY,
+  EVIDENCE_WITH_TWO_OPTIONS,
   SESSIONS_FOR_MASTERY,
   skillState,
   standardCoverage,
@@ -10,10 +11,11 @@ import {
 } from './coverage.ts';
 
 /** n distinct questions, spread across `sessions` sittings. */
-function evidence(n: number, sessions = n): Evidence[] {
+function evidence(n: number, sessions = n, twoOptions = false, first = 1): Evidence[] {
   return Array.from({ length: n }, (_, i) => ({
-    questionId: `q${i + 1}`,
+    questionId: `q${first + i}`,
     sessionId: `s${(i % sessions) + 1}`,
+    twoOptions,
   }));
 }
 
@@ -68,11 +70,43 @@ describe('sub-skill status', () => {
   */
   it('does not count the same question three times', () => {
     const repeated: Evidence[] = [
-      { questionId: 'q1', sessionId: 's1' },
-      { questionId: 'q1', sessionId: 's2' },
-      { questionId: 'q1', sessionId: 's3' },
+      { questionId: 'q1', sessionId: 's1', twoOptions: false },
+      { questionId: 'q1', sessionId: 's2', twoOptions: false },
+      { questionId: 'q1', sessionId: 's3', twoOptions: false },
     ];
     expect(skillState({ attempted: true, evidence: repeated }).status).toBe('evaluating');
+  });
+
+  /*
+    The two-option bar. A blind guess on two options is right one time in two:
+    three such answers mislabel 12.5% of guessers, four mislabel 6.25%. The rule
+    reads the evidence the child actually gave, never the item bank.
+  */
+  it('stays evaluating on three two-option questions', () => {
+    expect(skillState({ attempted: true, evidence: evidence(3, 2, true) }).status).toBe('evaluating');
+  });
+
+  it('is mastered on four two-option questions across two sessions', () => {
+    expect(skillState({ attempted: true, evidence: evidence(4, 2, true) }).status).toBe('mastered');
+  });
+
+  it('does not let a two-option answer stand in for the third of three', () => {
+    const mixed = [...evidence(2, 2), ...evidence(1, 1, true, 3)];
+    expect(skillState({ attempted: true, evidence: mixed }).status).toBe('evaluating');
+  });
+
+  it('reaches four with a mix of two- and three-option questions', () => {
+    const mixed = [...evidence(2, 2), ...evidence(2, 2, true, 3)];
+    expect(skillState({ attempted: true, evidence: mixed }).status).toBe('mastered');
+  });
+
+  /*
+    Three three-option answers are the bar on their own; a two-option answer the
+    child also gave does not raise it.
+  */
+  it('is mastered on three three-option questions even beside a two-option one', () => {
+    const mixed = [...evidence(3, 2), ...evidence(1, 1, true, 4)];
+    expect(skillState({ attempted: true, evidence: mixed }).status).toBe('mastered');
   });
 
   it('drops back to evaluating when the most recent attempt was wrong', () => {
@@ -104,6 +138,7 @@ describe('sub-skill status', () => {
 
   it('states its own thresholds', () => {
     expect(EVIDENCE_FOR_MASTERY).toBe(3);
+    expect(EVIDENCE_WITH_TWO_OPTIONS).toBe(4);
     expect(SESSIONS_FOR_MASTERY).toBe(2);
   });
 });
