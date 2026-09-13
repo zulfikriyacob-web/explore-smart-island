@@ -302,6 +302,57 @@ function emitAxes(out, pack) {
 }
 
 /**
+ * Whether three questions are enough when the evidence has two options.
+ *
+ * The teacher approved "3 item berbeza". We sized that on three-option
+ * questions, and a two-option question is guessed right one time in two rather
+ * than three (SPEC §5.7, PRD §16 item 22). The count is the teacher's, so the
+ * teacher decides whether it holds. Asked only while the pack has such
+ * evidence, and the odds are computed here so they cannot drift from the
+ * arithmetic.
+ */
+function emitTwoOptionThreshold(out, pack) {
+  const twoOption = pack.questions.filter(
+    (q) => q.subSkill && q.type !== 'count-tap' && q.payload.options.length === 2,
+  );
+  if (twoOption.length === 0) return;
+
+  const odds = (options, n) => {
+    const oneIn = options ** n;
+    return `1 daripada ${oneIn} (${(100 / oneIn).toFixed(1)}%)`;
+  };
+
+  out.push('## Ambang untuk soalan dua pilihan');
+  out.push('');
+  out.push(
+    `App menandakan satu sub-kemahiran *Dikuasai* selepas **3 soalan berbeza** dijawab betul ` +
+      `pada cubaan pertama, merentas sekurang-kurangnya 2 sesi — ambang yang cikgu luluskan.`,
+  );
+  out.push('');
+  out.push(
+    `Kami memilih tiga kerana kos tekaan, dan mengiranya pada soalan **tiga pilihan**. Soalan ` +
+      `dua pilihan lebih mudah diteka. Jadual ini ialah peluang murid yang meneka membuta ` +
+      `mendapat kesemuanya betul — bukan peluang dia menguasai kemahiran itu:`,
+  );
+  out.push('');
+  out.push('| Soalan | Tiga pilihan | Dua pilihan |');
+  out.push('|---|---|---|');
+  for (const n of [3, 4, 5]) out.push(`| ${n} | ${odds(3, n)} | ${odds(2, n)} |`);
+  out.push('');
+  out.push('Soalan dua pilihan dalam pek ini yang memberi bukti:');
+  out.push('');
+  for (const q of twoOption) {
+    out.push(`- \`${q.id}\` — ${cell(q.prompt[LANG])} · \`${q.subSkill}\``);
+  }
+  out.push('');
+  out.push(
+    `**Adakah 3 soalan cukup apabila buktinya daripada soalan dua pilihan?** ☐ Ya, 3 cukup  ` +
+      `☐ Tidak — perlu \`____\` soalan  ☐ Tidak pasti · Catatan: \`________________________\``,
+  );
+  out.push('');
+}
+
+/**
  * Every SP the form cites, once, at the end — full text, sub-points, CATATAN,
  * and the content standard, topic and area it sits under.
  *
@@ -463,6 +514,7 @@ async function emitPack(pack, out) {
   if (skills !== null) {
     emitSubSkills(out, pack, skills);
     emitAxes(out, pack);
+    emitTwoOptionThreshold(out, pack);
   }
 
   emitReference(out, pack, catalogue);
