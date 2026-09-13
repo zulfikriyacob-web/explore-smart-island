@@ -97,7 +97,7 @@ Satu fail = satu topik. Ini yang dimuatkan dan dicache.
     "document": "DSKP KSSR (Semakan) Matematik Tahun 1, Bahagian Pembangunan Kurikulum KPM, cetakan pertama Mei 2015",
     "contentStandards": ["1.2", "1.5", "1.6"],
     "learningStandards": ["1.2.1", "1.2.2", "1.5.1", "1.6.1"],
-    "verified": false
+    "reviewStatus": "unreviewed"
   },
   "activities": [
     {
@@ -120,10 +120,28 @@ Setiap SP mesti berada di bawah salah satu SK yang diisytiharkan — 1.2.2 di ba
 dan skema menguatkuasakannya. Ini semakan bentuk, bukan semakan kewujudan; untuk yang kedua
 lihat §3.5.
 
-`kssr.verified` bermula sebagai `false`. Ia menjadi `true` hanya selepas semakan guru
-(PRD §15). Papan pemuka ibu bapa **tidak** memaparkan kod SP untuk pek yang belum disahkan.
-**Kod yang sah bukan kod yang disahkan.** Katalog §3.5 membuktikan satu kod itu wujud dalam
+**Kod yang sah bukan kod yang disemak.** Katalog §3.5 membuktikan satu kod itu wujud dalam
 dokumen; ia tidak membuktikan soalan itu mengajarnya. Hanya seorang guru boleh.
+
+`kssr.reviewStatus` merekod siapa sudah menyemaknya, dalam tiga peringkat:
+
+| Peringkat | Maksud | Perkataan kepada ibu bapa |
+|---|---|---|
+| `unreviewed` | Tiada guru menyemak pemetaan pek ini | Kod SP tidak dipaparkan |
+| `teacher-reviewed` | Seorang guru menyemak dan menanda borang `kssr:review` (§3.6). Bukan perakuan rasmi | *"disemak oleh guru"* — **bukan** *"diperakui"* |
+| `certified` | Perakuan rasmi, ditandatangani guru bertauliah | *"diperakui"* |
+
+Peringkat selain `unreviewed` wajib membawa `review` — `by`, `on`, `document` (borang yang
+dikembalikan, dalam `docs/kssr/`) dan `note` — dan skema menolak `review` pada pek
+`unreviewed`. Bila `certified` diperlukan: PRD §16 item 20.
+
+Medan ini menggantikan `verified: boolean`, yang mencampurkan *disemak* dengan *diperakui*.
+
+> **Rekod provenance, bukan gerbang.** Tiada kod membaca `reviewStatus` untuk menyembunyikan
+> atau memaparkan apa-apa, dan `verified` sebelumnya juga tidak pernah menahan apa-apa: tiada
+> papan pemuka, dan tiada kod dalam `src/` membaca `kssr` untuk paparan. Lajur ketiga di atas
+> ialah peraturan untuk skrin yang belum wujud. Jurang itu, dan kenapa penguatkuasaan tidak
+> dibina, dalam PRD §16 item 20.
 
 ### 3.3 Skema Soalan asas
 
@@ -416,7 +434,7 @@ daripada tiada salinan kerana ia kelihatan semasa.
 | Skrip | Menjana | Untuk siapa |
 |---|---|---|
 | `npm run audio:script` | Skrip rakaman audio arahan — satu baris setiap fail, dengan ayat yang perlu dibaca dan keadaan fail dalam `public/` | Pelakon suara (§8) |
-| `npm run kssr:review` | Borang semakan pemetaan KSSR — setiap soalan bersebelahan teks penuh SP yang didakwanya dan CATATAN DSKP, dengan satu soalan Ya/Tidak setiap satu | Guru yang menaikkan `kssr.verified` (§3.2, PRD §15) |
+| `npm run kssr:review` | Borang semakan pemetaan KSSR — setiap soalan bersebelahan teks penuh SP yang didakwanya dan CATATAN DSKP, dengan satu soalan Ya/Tidak setiap satu | Guru yang menyemak pemetaan; jawapannya direkod sebagai `kssr.reviewStatus` (§3.2) |
 
 ```
 npm run audio:script > skrip-rakaman.md
@@ -827,8 +845,8 @@ Dengan pek hari ini, **tiada satu pun daripada empat SP yang ia sentuh boleh men
 
 > ### LARANGAN 2 — liputan bukan penguasaan
 >
-> **"1 daripada 6 diuji" tidak boleh dipaparkan sebagai "17% dikuasai".** Lima kemahiran lain
-> **belum diuji**; anak tidak gagal lima kemahiran. Nisbah itu mengukur apa yang **app**
+> **"1 daripada 4 diuji" tidak boleh dipaparkan sebagai "25% dikuasai".** Tiga kemahiran lain
+> **belum diuji**; anak tidak gagal tiga kemahiran. Nisbah itu mengukur apa yang **app**
 > sudah tanya, bukan apa yang anak boleh buat.
 >
 > `StandardCoverage.coverage` ialah `tested / total` dan tidak pernah skor. Apa-apa yang
@@ -843,12 +861,16 @@ Dan nisbah sendirian pun tidak memadai — ia memberitahu ibu bapa terlalu sedik
 guru berikan, dan yang ini ikut:
 
 ```
-Liputan kemahiran: 1/6 diuji
-Kemahiran yang sudah diuji: Tambah gandaan 10
+Liputan kemahiran: 1/4 diuji
+Kemahiran yang sudah diuji: Dua digit tambah dua digit, tanpa melintasi puluh
 Kemahiran lain belum dinilai.
 ```
 
-**Namakan kemahiran yang sudah diuji.** "1/6" memberitahu ibu bapa bahawa ada lima perkara
+Nama itu label daripada `math-y1.skills.json`, iaitu yang dirender lapisan paparan — bukan tajuk
+dalam dokumen guru. Contoh terdahulu di sini memetik *Tambah gandaan 10*, tajuk yang tidak pernah
+menjadi label dan yang kemudian dibuang (HANDOFF §6).
+
+**Namakan kemahiran yang sudah diuji.** "1/4" memberitahu ibu bapa bahawa ada tiga perkara
 lain; namanya memberitahu mereka apa yang anak sebenarnya **ditanya**, dan itu yang boleh
 ditindaklanjuti. `standardCoverage()` memulangkan `testedIds` dan `untestedIds` dalam susunan
 fail kemahiran atas sebab ini; lapisan paparan menukar id kepada label.

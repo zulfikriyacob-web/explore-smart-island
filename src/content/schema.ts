@@ -264,19 +264,56 @@ const DskpCodeSchema = z.string().regex(/^\d+(\.\d+){1,2}$/, {
   message: 'DSKP code must look like "1.2" or "1.2.2"',
 });
 
-export const KssrSchema = z.object({
+/** The returned form a review status rests on, and what it does and does not claim. */
+const ReviewSchema = z.object({
+  /** The reviewer as the form names them — or a statement that it does not. */
+  by: z.string().min(1),
+  on: z.iso.date(),
+  /** Repo path of the returned form, under docs/kssr/. */
   document: z.string().min(1),
-  /**
-   * Plural, because a topic pack spans a DSKP *topic* and a topic holds several
-   * content standards. This was `contentStandard`, singular, holding "1.1" — and
-   * the pack it described draws on 1.2, 1.5, 1.6 and 7.2. One field could only
-   * be right by being vague.
-   */
-  contentStandards: z.array(DskpCodeSchema).min(1),
-  learningStandards: z.array(DskpCodeSchema).min(1),
-  /** Starts false; only a teacher review flips it. (SPEC 3.2, PRD 15) */
-  verified: z.boolean(),
+  note: z.string().min(1),
 });
+
+export const KssrSchema = z
+  .object({
+    document: z.string().min(1),
+    /**
+     * Plural, because a topic pack spans a DSKP *topic* and a topic holds several
+     * content standards. This was `contentStandard`, singular, holding "1.1" — and
+     * the pack it described draws on 1.2, 1.5, 1.6 and 7.2. One field could only
+     * be right by being vague.
+     */
+    contentStandards: z.array(DskpCodeSchema).min(1),
+    learningStandards: z.array(DskpCodeSchema).min(1),
+    /**
+     * Who has checked that the questions teach the codes they claim (SPEC 3.2).
+     * This replaced `verified: boolean`, which ran "reviewed" and "certified"
+     * together.
+     *
+     * A provenance record, not a gate: nothing in the app reads it to hide or
+     * show anything. PRD 16 item 20 before treating it as one.
+     */
+    reviewStatus: z.enum(['unreviewed', 'teacher-reviewed', 'certified']),
+    review: ReviewSchema.optional(),
+  })
+  .superRefine((kssr, ctx) => {
+    if (kssr.reviewStatus === 'unreviewed') {
+      if (kssr.review) {
+        ctx.addIssue({
+          code: 'custom',
+          path: ['review'],
+          message: 'an unreviewed pack carries no review record',
+        });
+      }
+    } else if (!kssr.review) {
+      // A bare "teacher-reviewed" is the old boolean with a longer name.
+      ctx.addIssue({
+        code: 'custom',
+        path: ['review'],
+        message: `reviewStatus "${kssr.reviewStatus}" needs a review record: by, on, document, note`,
+      });
+    }
+  });
 
 export const TopicPackSchema = z
   .object({

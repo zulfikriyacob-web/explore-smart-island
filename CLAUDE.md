@@ -188,7 +188,10 @@ On 12–13 September 2026, around the marked round-2 review form:
 - The same message called the form signed, and treated `kssr.verified` as able to
   rise on it. The form's own status note says the name and school are blank on
   purpose, that it is not a certified teacher's signature, and that it must not by
-  itself raise `kssr.verified`. It stays `false`.
+  itself raise `kssr.verified`. It stayed `false`. On 13 September 2026 the boolean
+  was replaced by a three-level `kssr.reviewStatus`, and on the owner's decision the
+  form now supports `teacher-reviewed` — never `certified`. The error above is still
+  an error: the form is not signed. PRD §16 item 20.
 - The record of those two errors was first written with a third: it said PR #43
   merged "the day before" the form. `git log` says the same day. That date came
   from memory, not from git.

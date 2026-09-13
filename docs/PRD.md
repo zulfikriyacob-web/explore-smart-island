@@ -177,10 +177,11 @@ DSKP Tahun 1 mempunyai **lapan tajuk** merentas **tiga bidang**. Bukan enam.
 Satu lagi yang senarai lama silap dan bukan hal tahun: **Wang (4.0) ialah Nombor dan
 Operasi**, bukan Sukatan dan Geometri.
 
-> ⚠️ **Status pengesahan.** Bahagian ini kini sepadan dengan dokumen, tetapi
-> `kssr.verified` kekal `false` di dalam pek. Membaca DSKP dengan betul dan seorang guru
-> mengesahkan bahawa satu soalan benar-benar mengajar kod yang didakwanya ialah dua perkara
-> berbeza. Hanya semakan guru menaikkan bendera itu (PRD §15).
+> ⚠️ **Status semakan.** Bahagian ini sepadan dengan dokumen. Membaca DSKP dengan betul dan
+> seorang guru menyemak bahawa satu soalan benar-benar mengajar kod yang didakwanya ialah dua
+> perkara berbeza. Pek `math-y1-nombor-100` kini `kssr.reviewStatus: teacher-reviewed` —
+> *disemak oleh guru* melalui borang bertanda pusingan 2, **bukan** diperakui (SPEC §3.2,
+> §16 item 20).
 
 ### Tahun 2 — **BELUM DISAHKAN**
 
@@ -340,16 +341,16 @@ Tiada e-mel, tiada nombor telefon, tiada foto anak dikumpul.
 
    ```
    Tambah dalam lingkungan 100                    Sedang dinilai
-   Liputan kemahiran: 1/6 diuji
-   Kemahiran yang sudah diuji: Tambah gandaan 10
+   Liputan kemahiran: 1/4 diuji
+   Kemahiran yang sudah diuji: Dua digit tambah dua digit, tanpa melintasi puluh
    Kemahiran lain belum dinilai.
    ```
 
-   Nisbah sendirian memberitahu ibu bapa terlalu sedikit. "1/6" berkata ada lima perkara lain;
+   Nisbah sendirian memberitahu ibu bapa terlalu sedikit. "1/4" berkata ada tiga perkara lain;
    **namanya** berkata apa yang anak sebenarnya ditanya, dan itu yang boleh ditindaklanjuti.
 
-   **"1 daripada 6 diuji" bukan "17% dikuasai".** Lima kemahiran lain belum diuji; anak tidak
-   gagal lima kemahiran. Larangan penuh, dan larangan kedua tentang nombor 3.7%, dalam
+   **"1 daripada 4 diuji" bukan "25% dikuasai".** Tiga kemahiran lain belum diuji; anak tidak
+   gagal tiga kemahiran. Larangan penuh, dan larangan kedua tentang nombor 3.7%, dalam
    SPEC §5.7 — kedua-duanya hidup bersama nombor yang ia kawal, dengan sengaja.
 
    Baki dilekatkan kepada kita, bukan kepada anak: *"Kemahiran lain belum dinilai."* §15
@@ -416,8 +417,9 @@ Peta pulau, satu topik Matematik, enjin kuiz, 3 jenis soalan, bintang, storan te
 
 **Fasa 2 — Matematik Tahun 1 penuh & akaun (4–6 minggu)**
 Lapan tajuk DSKP, 32 SK (§7). Auth, profil, sync awan, papan pemuka ibu bapa asas.
-*Kriteria keluar:* seorang guru menyemak pemetaan KSSR satu modul penuh dan `kssr.verified`
-menjadi `true` — buat pertama kali, pada modul yang paling murah untuk membetulkannya.
+*Kriteria keluar:* seorang guru menyemak pemetaan KSSR satu modul penuh, dan setiap pek modul itu
+menjadi `kssr.reviewStatus: teacher-reviewed` — pada modul yang paling murah untuk membetulkannya.
+`certified` bukan kriteria fasa ini (§16 item 20).
 
 **Fasa 3 — Habiskan Tahun 1 (4–6 minggu)**
 Membaca Tahun 1, kemudian Sains Tahun 1. Membaca membawa kos rakaman fonik manusia (§8);
@@ -659,9 +661,18 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
 
     Jadual yang pernah ada di bahagian ini berkata **8** daripada 9 sub-kemahiran gagal bar
     tiga-soalan. **Itu salah.** Lapan ada **satu** soalan sahaja; yang kesembilan,
-    `count_objects`, ada **dua** — dan dua masih kurang daripada tiga. **Kesemua 9** gagal bar
-    itu. "Ada satu soalan sahaja" telah dibaca sebagai "gagal bar", dan dua perkara itu tidak
-    sama. Pembetulan ini tidak mengubah arah kesimpulannya; ia menjadikan jurang itu lebih besar.
+    `count_objects`, ada **dua** — dan dua masih kurang daripada tiga. Kesemua 9 gagal bar itu,
+    **pada pek ketika jadual itu ditulis**. "Ada satu soalan sahaja" telah dibaca sebagai "gagal
+    bar", dan dua perkara itu tidak sama. Pembetulan ini tidak mengubah arah kesimpulannya; ia
+    menjadikan jurang itu lebih besar.
+
+    **Hari ini tujuh, bukan sembilan.** Perenggan di atas pernah berkata *"Kesemua 9"* dalam
+    masa kini, dan ia ditulis dalam commit yang sama (`a6f780e`) yang membuang
+    `7.2.1/name_triangle` dan `7.2.1/name_circle` daripada q005 dan q009 — jadi nombor itu tidak
+    pernah benar untuk pek selepas commit itu. `count_objects` bukan puncanya: id, label dan
+    pemetaannya kepada q003 dan q006 tidak berubah sejak `c139f23`. `validate:content` hari ini:
+    **7** sub-kemahiran — enam dengan satu soalan, `count_objects` dengan dua — dan **13** soalan
+    lagi. Rekodnya dalam `docs/HANDOFF.md` §6.
 
     Dengan bar bentuk hilang, bar soalan ialah **satu-satunya** jurang kepada *Dikuasai*. Ia
     ditutup dengan soalan biasa — tiada skema, tiada bentuk baharu, cuma nombor berbeza dan
@@ -801,6 +812,11 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     Borang itu berkata sendiri bahawa ruang nama dan sekolah sengaja tidak diisi, bahawa ia
     *"bukan tandatangan guru bertauliah"*, dan bahawa ia *"tidak patut digunakan sendiri untuk
     menaikkan `kssr.verified`"*. **`kssr.verified` kekal `false`.**
+
+    > **Kemas kini, 13 September 2026 (item 20):** `kssr.verified` diganti `kssr.reviewStatus`
+    > tiga peringkat. Atas keputusan pemilik projek, borang ini menaikkan pek kepada
+    > `teacher-reviewed`, dan tidak kepada `certified` — nota statusnya sendiri menolak yang
+    > kedua. Kesilapan di atas kekal kesilapan: borang itu tidak ditandatangani.
 
     Kedua-duanya bentuk kesilapan yang sama: membaca apa yang dijangka ada dalam dokumen, bukan
     apa yang ada. Pembetulannya juga sama — buka fail, cari rentetan, baca nota statusnya.
@@ -993,3 +1009,45 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     mengukur pembukaan kunci, kerana `Howler.autoUnlock` sudah `false` dan `_audioUnlocked`
     sudah `true` di situ — context pane bermula dalam keadaan berjalan. Peranti yang menutup
     jurang itu, seperti iPhone menutup jurang PR #33.
+20. **`kssr.reviewStatus` ialah rekod provenance, bukan gerbang. Tiada apa dalam kod
+    menguatkuasakannya.**
+
+    `kssr.verified` (boolean) diganti tiga peringkat — `unreviewed` · `teacher-reviewed` ·
+    `certified` (SPEC §3.2). Pek `math-y1-nombor-100` menjadi `teacher-reviewed`, dengan borang
+    bertanda pusingan 2 (12 September 2026) sebagai dokumennya.
+
+    **Kenapa peringkat, bukan ya/tidak — keputusan pemilik projek.** Silibus KSSR sama di
+    seluruh Malaysia, jadi perakuan bertauliah hanya perlu kalau produk dijual di luar Malaysia,
+    dan app ini belum pada tahap yang menuntutnya. Tetapi silibus sama tidak bermakna pemetaan
+    kita betul: guru membetulkan tiga daripada sepuluh pada pusingan pertama (SPEC §6), bukan
+    kerana silibus berbeza tetapi kerana kita salah membaca dokumen yang sama. Semakan masih
+    perlu; ia cuma perlu peringkat.
+
+    **`certified` diperlukan apabila:**
+
+    - app diedarkan di luar Malaysia; atau
+    - apa-apa pemasaran membuat dakwaan pematuhan kurikulum.
+
+    Sehingga itu `teacher-reviewed` memadai, dan papan pemuka boleh memaparkan kod SP pada
+    peringkat itu dengan perkataan *"disemak oleh guru"* — bukan *"diperakui"*.
+
+    **Jurang: pintu itu tidak pernah berkunci.** Diagnosis sebelum pertukaran mendapati
+    `verified` tidak pernah menahan apa-apa. Satu-satunya kod yang membaca nilainya ialah satu
+    amaran dalam `validate:content`. Tiada papan pemuka, dan tiada kod dalam `src/` membaca
+    `kssr` untuk paparan. *"Kod SP disembunyikan untuk pek yang belum disahkan"* benar hanya
+    kerana tiada skrin yang memaparkannya. Membuka papan pemuka pada `teacher-reviewed` membuka
+    pintu yang tidak pernah berkunci.
+
+    Dua akibat, untuk sesiapa yang hendak bergantung padanya:
+
+    - Peraturan perkataan dalam SPEC §3.2 ialah peraturan untuk skrin yang belum wujud.
+    - Status melekat pada **pek**; semakan melekat pada **soalan**. Guru menyemak sepuluh soalan
+      sebagaimana pada 12 September 2026. Soalan yang ditambah atau ditulis semula selepas itu
+      — q005 dan q009, dan tiga belas soalan jurang bar tiga-soalan (item 12) — akan duduk di
+      bawah `teacher-reviewed` tanpa pernah dilihat guru. `review.note` dalam pek menyatakannya.
+
+    **Kalau ia patut menjadi gerbang, itu kerja berasingan yang belum diminta.** Tiada
+    penguatkuasaan dibina bersama pertukaran ini, dengan sengaja.
+
+    **Penyemak tidak dinamakan dalam mana-mana fail.** Ruang nama dan sekolah dalam borang
+    sengaja kosong, jadi `review.by` merekod itu dan bukan satu nama.
