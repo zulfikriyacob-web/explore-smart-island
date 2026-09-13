@@ -314,4 +314,58 @@ describe('pack rules', () => {
     expect(result.success).toBe(false);
     expect(issueMessages(result)).toContain('DSKP code must look like');
   });
+
+  /*
+    reviewStatus is a provenance record, not a gate (PRD 16 item 20). These hold
+    the record together; none of them is about what a parent sees.
+  */
+  describe('reviewStatus', () => {
+    async function kssrOf(): Promise<[Record<string, unknown>, Record<string, unknown>]> {
+      const pack = await mathPack();
+      return [pack, structuredClone(pack.kssr) as Record<string, unknown>];
+    }
+
+    it('accepts an unreviewed pack with no review record', async () => {
+      const [pack, kssr] = await kssrOf();
+      kssr.reviewStatus = 'unreviewed';
+      delete kssr.review;
+      const result = TopicPackSchema.safeParse({ ...pack, kssr });
+      expect(issueMessages(result)).toBe('');
+      expect(result.success).toBe(true);
+    });
+
+    it('rejects a reviewed status with no review record', async () => {
+      const [pack, kssr] = await kssrOf();
+      kssr.reviewStatus = 'teacher-reviewed';
+      delete kssr.review;
+      const result = TopicPackSchema.safeParse({ ...pack, kssr });
+      expect(result.success).toBe(false);
+      expect(issueMessages(result)).toContain('needs a review record');
+    });
+
+    it('rejects a review record on an unreviewed pack', async () => {
+      const [pack, kssr] = await kssrOf();
+      kssr.reviewStatus = 'unreviewed';
+      const result = TopicPackSchema.safeParse({ ...pack, kssr });
+      expect(result.success).toBe(false);
+      expect(issueMessages(result)).toContain('carries no review record');
+    });
+
+    it('rejects the retired verified boolean in place of reviewStatus', async () => {
+      const [pack, kssr] = await kssrOf();
+      delete kssr.reviewStatus;
+      delete kssr.review;
+      kssr.verified = true;
+      const result = TopicPackSchema.safeParse({ ...pack, kssr });
+      expect(result.success).toBe(false);
+    });
+
+    // Date.parse rolls 30 February into March (SPEC 5.6); the record must not.
+    it('rejects a review date that is not a real date', async () => {
+      const [pack, kssr] = await kssrOf();
+      kssr.review = { ...(kssr.review as Record<string, unknown>), on: '2026-02-30' };
+      const result = TopicPackSchema.safeParse({ ...pack, kssr });
+      expect(result.success).toBe(false);
+    });
+  });
 });

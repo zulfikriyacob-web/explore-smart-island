@@ -9,7 +9,13 @@
     "document": "DSKP KSSR (Semakan) Matematik Tahun 1, Bahagian Pembangunan Kurikulum KPM, cetakan pertama Mei 2015",
     "contentStandards": ["1.2", "1.6", "2.2"],
     "learningStandards": ["1.2.1", "1.2.2", "1.6.1", "2.2.2"],
-    "verified": false
+    "reviewStatus": "teacher-reviewed",
+    "review": {
+      "by": "Guru penyemak pemetaan KSSR — tidak dinamakan; ruang nama dan sekolah dalam borang sengaja dibiarkan kosong",
+      "on": "2026-09-12",
+      "document": "docs/kssr/guru-semakan-pusingan-2-bertanda.md",
+      "note": "Semakan bertanda pusingan 2, bukan perakuan rasmi: borang itu sendiri berkata ia bukan tandatangan guru bertauliah. Meliputi sepuluh soalan pek ini sebagaimana pada 12 September 2026. Soalan yang ditambah atau ditulis semula selepas tarikh itu belum disemak, dan status ini tidak tahu tentangnya (PRD 16 item 20)."
+    }
   },
   "activities": [
     {

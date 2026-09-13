@@ -5,7 +5,8 @@
  *
  * `validate:content` membuktikan satu kod **wujud** dalam dokumen. Ia tidak
  * boleh membuktikan bahawa soalan itu **mengajar** kod tersebut — itu penilaian
- * seorang guru, dan `kssr.verified` tidak sepatutnya menjadi `true` tanpanya.
+ * seorang guru, dan `kssr.reviewStatus` tidak sepatutnya naik daripada
+ * `unreviewed` tanpanya.
  * Skrip ini menyediakan bahan penilaian itu: setiap soalan bersebelahan teks
  * penuh SP yang didakwanya, disalin daripada katalog, supaya guru tidak perlu
  * membuka repo mahupun mencari semula dalam DSKP.
@@ -372,9 +373,9 @@ function emitHeader(out, pack, catalogue) {
     `Satu soalan sahaja, bagi setiap soalan kuiz: **adakah soalan ini benar-benar mengajar ` +
       `Standard Pembelajaran yang kami dakwakan?** Mesin sudah menyemak bahawa setiap kod ` +
       `**wujud** dalam DSKP; yang ia tidak boleh putuskan ialah sama ada soalan itu mengajarnya. ` +
-      `Teks penuh setiap SP ada dalam **Rujukan** di hujung borang. Sehingga borang ini dijawab, ` +
-      `pek membawa \`verified: false\` dan papan pemuka ibu bapa tidak memaparkan satu pun kod ` +
-      `SP (PRD §15).`,
+      `Teks penuh setiap SP ada dalam **Rujukan** di hujung borang. Jawapan cikgu direkod dalam ` +
+      `pek sebagai \`kssr.reviewStatus: teacher-reviewed\` — *disemak oleh guru*, bukan perakuan ` +
+      `rasmi (SPEC §3.2).`,
   );
   out.push('');
   out.push(
@@ -477,8 +478,8 @@ async function emitPack(pack, out) {
   out.push('| Tarikh | ______________________________________ |');
   out.push('');
   out.push(
-    `Borang yang ditandatangani ialah satu-satunya perkara yang menaikkan \`kssr.verified\` ` +
-      `kepada \`true\`.`,
+    `Borang bertanda menaikkan pek kepada \`teacher-reviewed\`. Hanya perakuan rasmi yang ` +
+      `ditandatangani menaikkannya kepada \`certified\` (PRD §16).`,
   );
   out.push('');
 

@@ -515,9 +515,11 @@ async function validatePack(file) {
     }
   }
 
-  if (!pack.kssr.verified) {
+  // Provenance, not a gate: nothing reads reviewStatus to hide SP codes (PRD 16
+  // item 20), so this says what is true and promises nothing about a screen.
+  if (pack.kssr.reviewStatus === 'unreviewed') {
     warnings.push(
-      `kssr.verified is false — SP codes stay hidden from the parent dashboard (PRD 15)`,
+      `kssr.reviewStatus is unreviewed — no teacher has checked that these questions teach the SP codes they claim (SPEC 3.2)`,
     );
   }
 
