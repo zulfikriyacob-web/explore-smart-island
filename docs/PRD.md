@@ -1132,8 +1132,8 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     kali soalan yang mendakwa sub-kemahiran mempunyai dua pilihan — hari ini q004. Kebarangkalian
     dalam borang dikira oleh penjana, bukan disalin.
 
-    **DIJAWAB, 14 September 2026.** Menurut dokumen pembetulan pemilik projek
-    (`docs/kssr/pembetulan-akhir-soalan-math-y1.md` — ringkasan pemilik projek, bukan perkataan
+    **DIJAWAB, 14 September 2026.** Menurut dokumen pembetulan
+    (`docs/kssr/pembetulan-akhir-soalan-math-y1.md` — ditulis Claude, ringkasan dan bukan perkataan
     guru; item 29), guru meluluskan **empat soalan** untuk
     soalan dua pilihan, `(1/2)⁴ = 6.25%`. Peraturan dalam SPEC §5.7, dikuatkuasakan dalam
     `coverage.ts`: **(a)** ≥ 3 soalan berbeza tiga pilihan atau lebih, **atau (b)** ≥ 4 soalan
@@ -1218,8 +1218,8 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
 24. **Tiga soalan tersekat pada gambar-dalam-arahan: q005, q009 dan q019.**
 
     Item 10 merekod jurang skema ini untuk q005 dan q009: skema tiada tempat untuk imej dalam
-    arahan (SPEC §3.3). q019 kini menunggu jurang yang sama. Menurut dokumen pembetulan pemilik
-    projek, guru membenarkan tiga nombor untuk tertib **dengan sokongan visual**, dan tidak
+    arahan (SPEC §3.3). q019 kini menunggu jurang yang sama. Menurut dokumen pembetulan
+    (item 29), guru membenarkan tiga nombor untuk tertib **dengan sokongan visual**, dan tidak
     tanpanya — jadi q019 ditulis dengan dua nombor, *"Kad Raju: 14, 9."*, dan dua pilihan.
 
     | Soalan | Menunggu |
@@ -1245,7 +1245,7 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     tiga pilihan, pancingan ditulis semula ketika itu.
 25. **Kad diseret untuk tertib — `responseMode: order`, kerja Fasa 3, dengan sebab pedagogi.**
 
-    Menurut dokumen pembetulan pemilik projek, guru menyatakan bahawa menyusun kad **menghasilkan**
+    Menurut dokumen pembetulan (item 29), guru menyatakan bahawa menyusun kad **menghasilkan**
     susunan, manakala memilih daripada senarai hanya **mengecam** susunan, dan yang pertama lebih
     dekat dengan apa yang SP 1.2.2 (iv) minta: *"Menyusun kumpulan objek mengikut tertib menaik dan
     tertib menurun."* (`src/content/kssr/math-y1.json`).
@@ -1259,7 +1259,7 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
 26. **Butang Sedia mesti membawa isyaratnya sendiri sebelum "Kemudian tekan Sedia." dibuang
     daripada rakaman.**
 
-    Menurut dokumen pembetulan pemilik projek, guru mahu ayat itu dibuang daripada arahan
+    Menurut dokumen pembetulan (item 29), guru mahu ayat itu dibuang daripada arahan
     count-tap: arahan itu milik butang, bukan ayat, dan isyaratnya ialah **keadaan butang yang
     berubah bila ketukan bermula, ikon, dan bunyi pendek**.
 
@@ -1319,7 +1319,7 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     bank, dengan komposisi aras SPEC §5.5. Tanpa ia, soalan baharu hanya lulus `validate:content`.
 28. **Soalan untuk pusingan semakan guru seterusnya.**
 
-    - **q024 ditahan, dan tidak ditulis.** Dokumen pembetulan pemilik projek menulisnya dengan ayat
+    - **q024 ditahan, dan tidak ditulis.** Dokumen pembetulan menulisnya dengan ayat
       yang sama seperti q007 — *"Susunan manakah dari kecil ke besar?"* — dan nombor berbeza, dan
       menurut dokumen itu guru pernah menulis supaya tidak sekadar menambah soalan yang sama tetapi
       menukar nombor **dan** bentuk. Pemilik projek sedang bertanya guru sama ada ia memadai.
@@ -1333,8 +1333,8 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
 29. **Jawapan guru untuk tiga pusingan semakan q011–q023 datang dalam mesej, bukan borang
     bertanda. Jurang itu dinyatakan, bukan disembunyikan.**
 
-    Dua dokumen pemilik projek difailkan dalam `docs/kssr/`, kedua-duanya bertanda sebagai tulisan
-    pemilik projek yang guru semak — bukan dokumen guru:
+    Dua dokumen difailkan dalam `docs/kssr/`. Kedua-duanya **ditulis oleh Claude**, dan pemilik
+    projek menghantarnya kepada guru untuk disemak — bukan dokumen guru:
 
     | Fail | Apa |
     |---|---|
@@ -1348,7 +1348,8 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     - `pembetulan-soalan-math-y1.md`, yang dokumen pembetulan akhir katakan ia gantikan.
 
     Akibatnya, setiap *"menurut dokumen pembetulan, guru …"* — item 22, 24, 25, 26 dan 28, dan
-    SPEC §5.7 — ialah **ringkasan pemilik projek**, dan tidak boleh disemak terhadap perkataan guru.
+    SPEC §5.7 — ialah **ringkasan dalam dokumen yang ditulis Claude**, dan tidak boleh disemak
+    terhadap perkataan guru.
     `kssr.review` dalam pek masih merujuk borang pusingan 2 dan sepuluh soalan asal, dan tidak
     dinaikkan atas dokumen ini.
 
