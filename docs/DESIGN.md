@@ -1117,6 +1117,11 @@ daun kekal terbaca pada 64px. **Itu semakan dalam sesi pembangunan, bukan ujian 
 Mengikut peraturan di atas, epal belum siap sehingga seorang kanak-kanak umur sasaran menamakannya
 tanpa petunjuk.
 
+**Disahkan oleh kanak-kanak, bukan pengukuran — 13 September 2026.** Pemilik projek menunjukkan
+epal kepada seorang kanak-kanak, dan dia berkata *"epal"* tanpa petunjuk. **Aset lulus ujian §8.**
+Siluet di atas ialah semakan; ini pengesahannya. Umur kanak-kanak itu dan cara epal ditunjukkan —
+dalam app pada 64px, atau fail sahaja — tidak dilaporkan.
+
 ### Keputusan tertunda: buang garis luar sepenuhnya?
 
 Seorang kanak-kanak menunjuk set ikon buah stok sebagai gaya yang dia suka. Dua perbezaan
