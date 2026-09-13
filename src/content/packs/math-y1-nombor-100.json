@@ -121,8 +121,8 @@
       "responseMode": "select",
       "wordingVariant": "A",
       "prompt": {
-        "ms": "Nombor 63. Apakah digit di tempat puluh?",
-        "en": "The number 63. Which digit is in the tens place?"
+        "ms": "Dalam 63, apakah digit di tempat puluh?",
+        "en": "In 63, what digit is in the tens place?"
       },
       "promptAudio": { "ms": "/audio/ms/q004.mp3", "en": "/audio/en/q004.mp3" },
       "hint": { "ms": "Tempat puluh ada di sebelah kiri.", "en": "The tens place is on the left." },
@@ -279,7 +279,7 @@
       "representation": "symbolic",
       "responseMode": "select",
       "wordingVariant": "A",
-      "prompt": { "ms": "Nombor manakah paling kecil?", "en": "Which number is the smallest?" },
+      "prompt": { "ms": "Apakah nombor paling kecil?", "en": "What is the smallest number?" },
       "promptAudio": { "ms": "/audio/ms/q010.mp3", "en": "/audio/en/q010.mp3" },
       "hint": { "ms": "Banding tempat puluh dahulu.", "en": "Compare the tens place first." },
       "payload": {

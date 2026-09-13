@@ -68,11 +68,14 @@ export type SkillStatus = 'not-tested' | 'evaluating' | 'mastered';
  * Distinct questions answered right on the first attempt before a sub-skill may
  * be called mastered.
  *
- * Three, because of what a wrong guess costs. `mcq` is capped at three options
- * (SPEC §3.4), so a child guessing blindly is right one time in three: one item
- * of evidence mislabels 33% of guessers, two mislabels 11%, three mislabels
- * 3.7% — the first value under one in twenty. Sized to the easiest question in
- * the pack rather than the average one.
+ * Three, because of what a wrong guess costs. On a three-option question a
+ * child guessing blindly is right one time in three: one item of evidence
+ * mislabels 33% of guessers, two mislabels 11%, three mislabels 3.7% — the
+ * first value under one in twenty. But `mcq` and `mcq-image` allow two options
+ * (SPEC §3.4), where a guess is right one time in two and three items mislabel
+ * 12.5%. The range for three items is 3.7% to 12.5%. This comment once said the
+ * figure was sized to the easiest question in the pack; the easiest question
+ * has two options. Whether that should change the bar is open (PRD §16 item 22).
  *
  * **That 3.7% is a design figure and nothing else.** It is the chance of three
  * blind guesses all landing under one assumption about one question type. It is

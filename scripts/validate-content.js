@@ -84,6 +84,27 @@ function checkHintRevealClash(pack) {
 }
 
 /**
+ * An `explain` is drawn only with the reveal, and the reveal only comes on the
+ * third miss (SPEC 4.2). An option question with MAX_ATTEMPTS options or fewer
+ * runs out of wrong answers first — a struck-out option cannot be pressed again
+ * — so its `explain` is written, stored, and never seen. That is every `mcq`.
+ *
+ * A warning, not an error, until PRD 16 item 23 decides whether such a question
+ * loses its explain or shows it earlier.
+ */
+function checkUnreachableExplain(pack) {
+  const warnings = [];
+  for (const q of pack.questions) {
+    if (q.explain === undefined || canReachReveal(q)) continue;
+    const n = q.payload.options.length;
+    warnings.push(
+      `${q.id}: "explain" can never be shown — ${n} options leave ${n - 1} to get wrong, and the reveal needs ${MAX_ATTEMPTS} misses (PRD 16 item 23)`,
+    );
+  }
+  return warnings;
+}
+
+/**
  * The DSKP codes that actually exist, read from `src/content/kssr/<subject>-y<year>.json`.
  *
  * This exists because a pack once claimed content standard 1.1 and learning
@@ -435,6 +456,7 @@ async function validatePack(file) {
   const pack = parsed.data;
 
   errors.push(...checkHintRevealClash(pack));
+  warnings.push(...checkUnreachableExplain(pack));
 
   const catalogue = await loadCatalogue(pack.subject, pack.year);
   if (catalogue === null) {
