@@ -49,8 +49,18 @@ function withShuffledOptions(q: Question): Question {
   }
 }
 
+const byId = new Map(pack.questions.map((q) => [q.id, q]));
+
+/**
+ * A question as the pack holds it now, not as a saved session froze it.
+ * Evidence is banked under the sub-skill read from here (SPEC 6, rule 4): a
+ * frozen copy still carries whatever `subSkill` the pack had when the run began.
+ */
+export function liveQuestion(id: string): Question | undefined {
+  return byId.get(id);
+}
+
 export function loadActivityQuestions(): Question[] {
-  const byId = new Map(pack.questions.map((q) => [q.id, q]));
   return activity!.questionIds.map((id) => {
     const q = byId.get(id);
     if (!q) throw new Error(`activity ${ACTIVITY_ID} references missing question ${id}`);

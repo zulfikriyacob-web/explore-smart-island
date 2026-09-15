@@ -3,12 +3,16 @@ import { describe, expect, it } from 'vitest';
 import type { Question } from '../content/schema.ts';
 import { createSession, sessionReducer, type SessionState } from '../features/quiz/session.ts';
 import {
+  PROGRESS_KEY,
   STORAGE_KEY,
   clearSession,
+  loadProgress,
   loadSession,
+  saveProgress,
   saveSession,
   type StorageLike,
 } from './persistence.ts';
+import { emptyProgress, type Progress } from './progress.ts';
 
 function memoryStorage(seed: Record<string, string> = {}): StorageLike & { map: Map<string, string> } {
   const map = new Map(Object.entries(seed));
@@ -60,7 +64,7 @@ function midActivity(): SessionState {
     { type: 'LOADED' as const, questions: [question, { ...question, id: 'q002' }] },
     { type: 'START' as const, nowMs: 0 },
     { type: 'ANSWER' as const, response: { kind: 'option' as const, optionId: 'a' }, nowMs: 100 },
-  ].reduce(sessionReducer, createSession('math-y1-nombor-100-a1'));
+  ].reduce(sessionReducer, createSession('math-y1-nombor-100-a1', 's1'));
 }
 
 describe('saveSession / loadSession', () => {
@@ -93,7 +97,7 @@ describe('saveSession / loadSession', () => {
 
   it('ignores a session still in loading, which holds nothing worth restoring', () => {
     const storage = memoryStorage();
-    saveSession(createSession('a1'), storage);
+    saveSession(createSession('a1', 's1'), storage);
     expect(loadSession('a1', storage)).toBeNull();
   });
 
@@ -158,5 +162,76 @@ describe('clearSession', () => {
     clearSession(storage);
     expect(loadSession('math-y1-nombor-100-a1', storage)).toBeNull();
     expect(storage.map.has(STORAGE_KEY)).toBe(false);
+  });
+});
+
+describe('a session without an id', () => {
+  it('is refused, so it can never be banked as a sitting of its own', () => {
+    const { sessionId: _dropped, ...withoutId } = midActivity();
+    for (const saved of [withoutId, { ...withoutId, sessionId: '' }, { ...withoutId, sessionId: 7 }]) {
+      const storage = memoryStorage({ [STORAGE_KEY]: JSON.stringify(saved) });
+      expect(loadSession('math-y1-nombor-100-a1', storage)).toBeNull();
+    }
+  });
+});
+
+describe('loadProgress / saveProgress', () => {
+  const banked: Progress = {
+    subSkills: {
+      '1.2.2/after': {
+        evidence: [{ questionId: 'q002', sessionId: 's1', twoOptions: false }],
+        latestWasWrong: false,
+        masteredOnce: false,
+      },
+    },
+  };
+
+  it('round-trips progress under its own key, apart from the session', () => {
+    const storage = memoryStorage();
+    saveProgress(banked, storage);
+    saveSession(midActivity(), storage);
+    clearSession(storage);
+    expect(loadProgress(storage)).toEqual(banked);
+    expect(storage.map.has(PROGRESS_KEY)).toBe(true);
+  });
+
+  it('is empty when nothing was ever saved', () => {
+    expect(loadProgress(memoryStorage())).toEqual(emptyProgress());
+  });
+
+  it('reads a value that is not progress as empty, so the next write replaces it', () => {
+    for (const junk of ['not json at all', 'null', '[]', '{}', '"a string"', '{"subSkills":[]}', '{"subSkills":null}']) {
+      expect(loadProgress(memoryStorage({ [PROGRESS_KEY]: junk }))).toEqual(emptyProgress());
+    }
+  });
+
+  /*
+    SPEC 6, rule 3: an id missing from the skills file is ignored when read, not
+    deleted. Loading is not reading a sub-skill, so it hands back every entry as
+    stored, and the write after it carries them.
+  */
+  it('hands back entries as stored, including ids it does not know and entries it cannot read', () => {
+    const stored = { subSkills: { 'x/gone': banked.subSkills['1.2.2/after'], 'y/odd': 42 } };
+    const storage = memoryStorage({ [PROGRESS_KEY]: JSON.stringify(stored) });
+    expect(loadProgress(storage)).toEqual(stored);
+  });
+
+  /*
+    Null, not empty. Progress that may exist and cannot be seen must not be
+    replaced by the caller's one run.
+  */
+  it('is null, not empty, when storage throws or is missing', () => {
+    expect(loadProgress(hostileStorage)).toBeNull();
+    expect(loadProgress(null)).toBeNull();
+  });
+
+  it('survives a storage that throws on write, or no storage at all', () => {
+    expect(() => saveProgress(banked, hostileStorage)).not.toThrow();
+    expect(() => saveProgress(banked, null)).not.toThrow();
+  });
+
+  it('uses whatever localStorage the environment provides, without throwing', () => {
+    expect(() => saveProgress(emptyProgress())).not.toThrow();
+    expect(() => loadProgress()).not.toThrow();
   });
 });

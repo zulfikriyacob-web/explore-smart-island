@@ -1317,6 +1317,27 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
 
     **Keutamaan seterusnya, atas keputusan pemilik projek:** enjin yang memilih 10 soalan daripada
     bank, dengan komposisi aras SPEC §5.5. Tanpa ia, soalan baharu hanya lulus `validate:content`.
+
+    **Kemas kini, 15 September 2026: stor kemajuan dibina dahulu, bukan enjin.** Atas keputusan
+    pemilik projek: tanpa stor, enjin tidak boleh mengingati aras anak, dan *Dikuasai* perlukan dua
+    sesi — enjin tanpa stor bermula semula setiap kali. Stor itu dalam SPEC §6.
+
+    Empat jawapan pemilik projek untuk enjin, pada hari yang sama, supaya ia tidak perlu ditanya
+    semula:
+
+    1. **Aras 3 tidak boleh dipenuhi** — bank memegang tiga soalan aras 3 (q008, q022, q023). Enjin
+       merosot dengan anggun, tidak gagal: campuran SPEC §5.5 ialah sasaran, bukan jaminan. Ambil apa
+       yang ada pada aras yang diminta, isi baki daripada aras terdekat, dan laporkan jurang.
+    2. **q005 dan q009 dikecualikan.** Kedua-duanya akan berpindah ke pek 7.0 Ruang (item 10) dan
+       tidak mendakwa SP.
+    3. **Sesi tersimpan dibatalkan sekali bila enjin masuk** — perkara `packVersion` dalam item 6.
+       Pembatalan sekali lebih murah daripada memindahkan sesi yang memegang soalan yang mungkin
+       tidak lagi sah.
+    4. **Satu soalan tidak dipilih dua kali dalam satu sesi.** Bukti dikira mengikut `questionId`, jadi
+       ia tidak akan dikira dua kali — tetapi anak yang nampak soalan sama dua kali dalam sepuluh
+       merasakan app rosak.
+
+    Aras anak disimpan dalam stor kemajuan bersama enjin, bukan sebelumnya (SPEC §6, keputusan 2).
 28. **Soalan untuk pusingan semakan guru seterusnya.**
 
     - **q024 ditahan, dan tidak ditulis.** Dokumen pembetulan menulisnya dengan ayat
@@ -1367,3 +1388,17 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
 
     **Untuk menutup jurang:** failkan jawapan guru seperti yang diterima, atau semak q011–q023 melalui
     borang `kssr:review` yang dikembalikan bertanda.
+30. **Jadual SQL `mastery` dalam SPEC §6 menyimpan skor peringkat SP, bercanggah dengan peraturan 2
+    dalam bahagian yang sama. Jurang, direkod dan tidak dibaiki.**
+
+    Jadual Supabase ringkas dalam SPEC §6 membawa
+    `mastery (child_id, learning_standard, score, updated_at)` — satu nombor setiap Standard
+    Pembelajaran. Peraturan 2 stor kemajuan, beberapa baris di atasnya, melarang tepat itu: *"Simpan
+    bukti per id sub-kemahiran sahaja. Jangan sekali-kali simpan nombor peringkat SP."* Gulungan yang
+    disimpan menjadi basi saat senarai sub-kemahiran berubah.
+
+    **Tidak dibaiki, atas keputusan pemilik projek, 15 September 2026.** Skema backend itu belum wujud:
+    tiada Supabase dalam `package.json`, tiada `sync.ts`. Tetapi sesiapa yang membinanya akan membaca
+    §6 dan membina jadual yang salah. Stor tempatan `esi.progress.v1` sudah mengikut peraturan 2; jadual
+    pelayan patut mencerminkannya — bukti per sub-kemahiran, gulungan dikira semasa baca — apabila ia
+    direka.

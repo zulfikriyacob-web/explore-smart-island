@@ -24,6 +24,16 @@ export type Response =
 
 export interface SessionState {
   activityId: string;
+  /**
+   * Which run of the activity this is. Evidence from one sitting is weaker than
+   * evidence from two (SPEC 5.7), so every answer banked from this run carries it.
+   *
+   * Made once, with the session, and saved with it. A run restored after the app
+   * closed keeps its id. Minted again when evidence is banked, a run recorded
+   * twice — progress written, the app killed before the session was — would
+   * count as two sittings, and Dikuasai would be reachable in one.
+   */
+  sessionId: string;
   /** Already shuffled by the caller if the question asked for it. (SPEC 4.3) */
   questions: readonly Question[];
   index: number;
@@ -56,9 +66,14 @@ export type SessionEvent =
   | { type: 'ANSWER'; response: Response; nowMs: number }
   | { type: 'NEXT'; nowMs: number };
 
-export function createSession(activityId: string, isFirstClear = true): SessionState {
+export function createSession(
+  activityId: string,
+  sessionId: string,
+  isFirstClear = true,
+): SessionState {
   return {
     activityId,
+    sessionId,
     questions: [],
     index: 0,
     answers: [],
