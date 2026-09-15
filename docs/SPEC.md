@@ -993,12 +993,12 @@ hari ini:
 Sehingga salah satu daripadanya wujud, menukar storan menambah kerumitan tanpa menambah
 keupayaan.
 
-### Stor kemajuan — `esi.progress.v1`, bentuknya diputuskan, belum dibina
+### Stor kemajuan — `esi.progress.v1`
 
-**Tiada data penguasaan wujud hari ini pada mana-mana peranti.** `mastery.ts` tiada pemanggil
-produksi; satu-satunya kunci yang app tulis ialah `esi.session.v1`, iaitu sesi dalam terbang.
-Itu menjadikan bentuk kunci percuma untuk dipilih **sekarang**. Selepas stor kemajuan dihantar,
-perubahan yang sama berharga satu migrasi.
+Bentuknya diputuskan sebelum dibina, ketika tiada data penguasaan wujud pada mana-mana peranti dan
+bentuk kunci masih percuma untuk dipilih. **Dibina 15 September 2026**, sebelum enjin pemilih soalan:
+tanpa stor, enjin tidak boleh mengingati aras anak, dan *Dikuasai* perlukan dua sesi (PRD §16 item
+27). Mengubah bentuk ini sekarang berharga satu migrasi.
 
 Empat peraturan, diputuskan lebih awal supaya ia tidak diputuskan tergesa-gesa kemudian:
 
@@ -1017,6 +1017,51 @@ Empat peraturan, diputuskan lebih awal supaya ia tidak diputuskan tergesa-gesa k
 
 Preseden tingkah laku sudah ada: `loadSession` menolak blob rosak dan tidak pernah menghalang
 app daripada bermula. Stor kemajuan mengambil pendirian yang sama.
+
+**Yang dibina.** Peraturan dalam `lib/progress.ts`, fungsi tulen; kunci dibaca dan ditulis oleh
+`persistence.ts`; direkod oleh `store.ts`.
+
+```
+esi.progress.v1 = {
+  subSkills: {
+    "1.2.2/after": {
+      evidence: [{ questionId, sessionId, twoOptions }],  // cubaan pertama betul sahaja
+      latestWasWrong: boolean,
+      masteredOnce: boolean                               // melekat, ditulis daripada skillState()
+    }
+  }
+}
+```
+
+- **Direkod sekali, pada langkah masuk ke `summary`.** Sesi yang dipulihkan pada `summary` tidak
+  direkod semula.
+- **Kemajuan ditulis sebelum sesi.** App yang mati di antara kedua-dua tulisan kembali pada soalan
+  terakhir larian itu, dan merekodnya semula di bawah `sessionId` yang sama — tiada apa berubah.
+  Susunan terbalik meninggalkan sesi tersimpan pada `summary` yang tidak pernah direkod.
+- **`sessionId` dibuat bersama sesi dan disimpan bersamanya**, bukan dijana semasa merekod. Dijana
+  semasa merekod, larian yang direkod dua kali dikira dua sesi, dan *Dikuasai* boleh dicapai dalam
+  satu duduk. Ia datang daripada `crypto.getRandomValues`, bukan `crypto.randomUUID()`: yang kedua
+  wujud hanya dalam konteks selamat, dan telefon yang membuka pelayan pembangunan melalui LAN berada
+  pada http biasa.
+- **`subSkill` daripada pek hidup (peraturan 4); `twoOptions` daripada soalan yang anak jawab.**
+  Tekaan berharga apa yang anak nampak (§5.7). Soalan tanpa `subSkill` — q005 dan q009 — tidak
+  meninggalkan apa-apa.
+- **Kemajuan yang tidak boleh dibaca tidak ditulis.** Storan yang membaling ralat bermakna kemajuan
+  mungkin wujud, dan menulis akan menggantikannya dengan satu larian. Nilai yang bukan kemajuan —
+  bukan JSON, bentuk asing — dibaca kosong dan diganti pada tulisan seterusnya.
+
+Tiga keputusan pemilik projek, 15 September 2026:
+
+1. **"Jawapan terakhir salah" bermaksud soalan terakhir untuk sub-kemahiran itu tidak betul pada
+   cubaan pertama.** Selari dengan "cubaan pertama sahaja" yang mengawal bukti.
+2. **Aras anak belum disimpan.** Kuncinya bergantung pada reka bentuk enjin pemilih. Ia masuk
+   sebagai medan baharu dalam objek yang sama, dan pembaca v1 mengabaikan medan yang tiada.
+3. **Sesi tersimpan tanpa `sessionId` ditolak**, tidak diberi satu. App belum dilancar; kosnya satu
+   permulaan semula pada peranti ujian.
+
+**Belum ada pembaca produksi.** Tiada skrin memaparkan status sub-kemahiran; `skillInput()` menunggu
+papan pemuka dan enjin. `isFirstClear` dan bintang terbaik tidak disimpan. `masteryLabel()` (§5.7)
+ditarik balik dalam PR berasingan.
 
 ```ts
 interface SyncQueueItem {
