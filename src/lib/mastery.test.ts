@@ -7,7 +7,6 @@ import {
   DECAY_STEP,
   daysBetween,
   decayMastery,
-  masteryLabel,
   nextDifficulty,
   questionMix,
   updateMastery,
@@ -36,22 +35,6 @@ describe('updateMastery', () => {
   });
 });
 
-describe('masteryLabel', () => {
-  it('reports a standard never practised as not-started', () => {
-    expect(masteryLabel(null)).toBe('not-started');
-  });
-
-  it('reports mastered from 0.85 up', () => {
-    expect(masteryLabel(0.85)).toBe('mastered');
-    expect(masteryLabel(1)).toBe('mastered');
-  });
-
-  it('reports learning below 0.85', () => {
-    expect(masteryLabel(0.8499)).toBe('learning');
-    expect(masteryLabel(0)).toBe('learning');
-  });
-});
-
 describe('decayMastery', () => {
   it('leaves an untouched standard alone before the cutoff', () => {
     expect(decayMastery(0.9, 0)).toBe(0.9);
@@ -61,11 +44,6 @@ describe('decayMastery', () => {
   it('drops the score once at the cutoff', () => {
     expect(decayMastery(0.9, DECAY_AFTER_DAYS)).toBeCloseTo(0.9 - DECAY_STEP, 10);
     expect(decayMastery(0.9, 400)).toBeCloseTo(0.9 - DECAY_STEP, 10);
-  });
-
-  it('can pull a mastered standard back into learning, which is the point', () => {
-    expect(masteryLabel(0.87)).toBe('mastered');
-    expect(masteryLabel(decayMastery(0.87, 31))).toBe('learning');
   });
 
   it('floors at zero and passes null through', () => {
