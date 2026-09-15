@@ -640,6 +640,41 @@ Selepas satu aktiviti:
 Komposisi soalan bagi aktiviti pada aras `d`: 70% pada `d`, 20% pada `d-1`, 10% pada `d+1`
 (dengan clamp pada sempadan). Campuran ini memberikan kemenangan mudah dan sedikit regangan.
 
+#### Pemilih soalan — `lib/selection.ts`
+
+Fungsi tulen: tiada pek, tiada storan, tiada jam, dan **tiada rawak langsung**. Pemanggil
+menghulurkan bank dan apa yang anak sudah buat dengannya; input yang sama sentiasa memberi soalan
+yang sama dalam susunan yang sama.
+
+**Rawak ditolak dengan sengaja.** Pemilihan yang mengandungi syiling tidak boleh diterangkan kepada
+ibu bapa: *"kenapa ia tanya soalan itu lagi"* tiada jawapan. Satu-satunya kocokan yang tinggal dalam
+sesi ialah susunan pilihan jawapan (§4.3), kerana kedudukan jawapan yang tetap ialah corak yang
+boleh dihafal anak sebagai ganti mengira.
+
+Keutamaan dalam setiap aras, mengikut turutan:
+
+1. **Sub-kemahiran yang tergelincir** — pernah dikuasai, kini *Sedang dinilai*. Sama susunan seperti
+   "Fokus minggu ini" (§5.7): kemahiran yang tergelincir lebih dekat untuk dipulihkan daripada yang
+   belum pernah dimulakan.
+2. **Sub-kemahiran yang belum dikuasai.**
+3. **Sub-kemahiran yang sudah dikuasai** — ia tetap ditanya, sebagai latihan, dan ia yang mengisi
+   sesi apabila bank tiada apa lagi untuk dibuktikan.
+
+Dalam setiap kumpulan: soalan yang belum pernah memberi bukti cubaan pertama didahulukan, kerana
+penguasaan mengira soalan berbeza (§5.7); kemudian soalan yang paling lama tidak ditanya
+(`lastAsked`, §6); kemudian susunan dalam pek sebagai pemecah seri terakhir.
+
+**Campuran ialah sasaran, bukan jaminan.** Aras yang tidak dapat mengisi bahagiannya diisi daripada
+aras terdekat, dan kekurangan itu **dilaporkan** sebagai `gaps`, bukan disembunyikan. Hari ini bank
+hanya ada tiga soalan aras 3, jadi sesi aras 3 ialah tujuh soalan aras 2 dan tiga soalan aras 3.
+
+**Susunan sesi: aras rendah dahulu, kemudian aras semasa, kemudian aras tinggi.** Regangan diletak
+di hujung atas sebab yang sama seperti kita menolak tekanan masa — anak tujuh tahun yang gagal pada
+soalan pertama berhenti mencuba.
+
+Soalan tanpa `subSkill` tidak pernah dipilih: hari ini q005 dan q009, yang menunggu pek 7.0 Ruang
+(PRD §16 item 10).
+
 ### 5.6 Siri
 
 ```ts
@@ -1029,9 +1064,27 @@ esi.progress.v1 = {
       latestWasWrong: boolean,
       masteredOnce: boolean                               // melekat, ditulis daripada skillState()
     }
+  },
+  packs: {
+    "math-y1-nombor-100": {
+      level: 1 | 2 | 3,              // tangga §5.5, dinaikkan selepas setiap larian
+      runs: number,                  // bilangan larian yang sudah direkod
+      lastSessionId: string | null,  // larian terakhir yang direkod; penjaga rekod berganda
+      lastAsked: { "q001": 3 }       // soalan → nombor larian ia terakhir ditanya
+    }
   }
 }
 ```
+
+`packs` ditambah bersama enjin pemilih (PRD §16 item 27), dalam objek yang sama seperti yang
+keputusan 2 di bawah jangkakan. Ia dikunci pada `topicId` kerana id soalan hanya unik dalam satu
+pek, dan kerana tangga §5.5 dinaikkan atas ketepatan satu larian penuh daripada satu pek. Aras per
+sub-kemahiran tidak bermakna dalam bank ini: setiap soalan dalam satu sub-kemahiran membawa aras
+yang sama (PRD §16 item 31).
+
+`lastAsked` menanda **setiap** soalan yang dijawab, bukan hanya yang menjadi bukti. Ia menjawab
+"bila anak terakhir nampak soalan ini", iaitu yang menghalang pemilih daripada bertanya sepuluh
+soalan yang sama dalam susunan yang sama selama-lamanya.
 
 - **Direkod sekali, pada langkah masuk ke `summary`.** Sesi yang dipulihkan pada `summary` tidak
   direkod semula.
@@ -1061,8 +1114,10 @@ Tiga keputusan pemilik projek, 15 September 2026:
 
 1. **"Jawapan terakhir salah" bermaksud soalan terakhir untuk sub-kemahiran itu tidak betul pada
    cubaan pertama.** Selari dengan "cubaan pertama sahaja" yang mengawal bukti.
-2. **Aras anak belum disimpan.** Kuncinya bergantung pada reka bentuk enjin pemilih. Ia masuk
-   sebagai medan baharu dalam objek yang sama, dan pembaca v1 mengabaikan medan yang tiada.
+2. ~~**Aras anak belum disimpan.**~~ **Disimpan sejak 16 September 2026**, sebagai `packs[topicId]`
+   dalam objek yang sama — medan baharu, bukan kunci baharu, sebagaimana keputusan ini jangkakan.
+   Ia mendarat bersama enjin pemilih kerana kuncinya bergantung pada reka bentuk enjin itu
+   (PRD §16 item 27).
 3. **Sesi tersimpan tanpa `sessionId` ditolak**, tidak diberi satu. App belum dilancar; kosnya satu
    permulaan semula pada peranti ujian.
 

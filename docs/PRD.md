@@ -1338,6 +1338,25 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
        merasakan app rosak.
 
     Aras anak disimpan dalam stor kemajuan bersama enjin, bukan sebelumnya (SPEC §6, keputusan 2).
+
+    **DIBINA, 16 September 2026.** Enjin menggantikan senarai tetap sebagai sumber soalan; ia tidak
+    membuang konsep aktiviti. Yang hilang daripada kod ialah `ACTIVITY_ID`, carian aktiviti,
+    `activityTitle` (tiada pengguna) dan `loadActivityQuestions()`. Yang masuk ialah `lib/selection.ts`
+    tulen, dan `buildSession()` dalam `activity.ts` yang menyuapnya daripada stor kemajuan.
+
+    | Keputusan | Yang dibina |
+    |---|---|
+    | Skop pemilihan | Seluruh pek. Aktiviti dalam fail pek tidak disentuh: skema menuntut setiap soalan berada dalam satu aktiviti, dan a1 satu-satunya pemegang q005 dan q009 (item 10) |
+    | Aras | `packs[topicId].level`, bersama `runs`, `lastSessionId` dan `lastAsked` (SPEC §6) |
+    | Keutamaan | Tergelincir, kemudian belum dikuasai, kemudian sudah dikuasai. Dalam setiap kumpulan: soalan tanpa bukti cubaan pertama, kemudian paling lama tidak ditanya, kemudian susunan pek |
+    | Rawak | **Tiada dalam pemilihan.** Hanya susunan pilihan jawapan masih dikocok |
+    | Susunan soalan | Aras rendah dahulu, kemudian aras semasa, kemudian aras tinggi — "kemenangan mudah dahulu" §5.5 |
+    | Jurang aras | Diisi daripada aras terdekat, dan dilaporkan sebagai `gaps` oleh pemilih. Tiada skrin memaparkannya lagi |
+
+    **Pembatalan sekali datang percuma.** `SessionState.activityId` kini `topicId` pek, dan
+    `loadSession` sudah menolak sesi yang disimpan untuk aktiviti lain — jadi setiap sesi lama
+    `math-y1-nombor-100-a1` dibatalkan sekali, tanpa kod `packVersion`. Masalah item 6 untuk
+    suntingan kandungan akan datang kekal terbuka.
 28. **Soalan untuk pusingan semakan guru seterusnya.**
 
     - **q024 ditahan, dan tidak ditulis.** Dokumen pembetulan menulisnya dengan ayat
@@ -1346,6 +1365,14 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
       menukar nombor **dan** bentuk. Pemilik projek sedang bertanya guru sama ada ia memadai.
       Sehingga itu `order_ascending` kurang satu soalan tiga pilihan untuk syarat (a) SPEC §5.7.
       Item 24 menjadikan q024 tidak perlu.
+
+      **Akibat yang boleh diperhati, bukan hanya jurang ambang — 16 September 2026.** Dengan enjin
+      pemilih (item 27), sub-kemahiran yang belum dikuasai didahulukan. `order_ascending` **tidak
+      boleh** dikuasai hari ini: tiga soalannya ialah q007, q018 dan q019, dan q019 dua pilihan, jadi
+      syarat (a) perlukan satu soalan tiga pilihan lagi dan syarat (b) perlukan empat soalan. Ia
+      kekal dalam kumpulan keutamaan kedua selama-lamanya, jadi **q007, q018 dan q019 muncul dalam
+      hampir setiap sesi aras 2** — anak akan nampak tiga soalan yang sama berulang kali. Soalan
+      keempat, atau item 24, menutupnya.
     - **q018 dipetakan ke `order_ascending`.** *"12, __, 18, 21."* ialah soalan isi tempat kosong.
       Dokumen guru sendiri, dalam bahagian 1.5.1, berkata soalan begitu *"lebih hampir kepada
       kemahiran melengkapkan rangkaian nombor"* (`docs/kssr/guru-sub-kemahiran-math-y1.md`). Tidak
@@ -1402,3 +1429,45 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     §6 dan membina jadual yang salah. Stor tempatan `esi.progress.v1` sudah mengikut peraturan 2; jadual
     pelayan patut mencerminkannya — bukti per sub-kemahiran, gulungan dikira semasa baca — apabila ia
     direka.
+31. **Tangga aras SPEC §5.5 memilih kemahiran, bukan kesukaran. Jurang kandungan, bukan pepijat
+    enjin.**
+
+    Tangga itu direka untuk memilih kesukaran **dalam satu kemahiran**: 70% pada aras semasa, 20% di
+    bawah, 10% di atas. Dalam bank hari ini setiap soalan dalam satu sub-kemahiran membawa aras yang
+    sama, kerana `difficulty` disalin daripada soalan sedia ada sub-kemahiran yang sama (item 29):
+
+    | Aras | Sub-kemahiran | Soalan |
+    |---|---|---|
+    | 1 | `count_objects`, `compare_greater`, `after` | 9 |
+    | 2 | `compare_smaller`, `order_ascending`, `digit_at_tens` | 9 |
+    | 3 | `two_digit_plus_two_digit_no_bridge` | 3 |
+
+    Jadi aras ialah **gerbang kemahiran**. Akibatnya, diukur daripada `questionMix()`:
+
+    - **Aras 1** meminta sembilan soalan aras 1, dan bank ada tepat sembilan — jadi anak aras 1
+      mendapat kesembilan-sembilan soalan yang sama **setiap sesi**, ditambah satu soalan aras 2.
+      Soalan tambah tidak pernah muncul sehingga anak naik dua rung.
+    - **Aras 3** meminta lapan soalan aras 3 dan bank ada tiga.
+
+    Enjin sudah merosot dengan anggun dan melaporkan jurang (item 27). Yang tinggal ialah kerja
+    kandungan: **setiap sub-kemahiran patut membawa soalan pada lebih daripada satu aras**, atau
+    tangga itu bermakna sesuatu yang lain daripada yang §5.5 dakwa dan §5.5 patut ditulis semula.
+
+    Direkod 16 September 2026 semasa enjin dibina; tiada kerja kandungan dirancang lagi.
+32. **Model aktiviti PRD §10 ditulis sebelum enjin wujud. Direkod, belum diputuskan.**
+
+    §10 menganggap aktiviti ialah senarai soalan tetap: *"Aktiviti (10 soalan) → 0–3 ⭐"*,
+    *"Topik (4–6 aktiviti)"* membuka topik seterusnya, bintang terbaik **setiap aktiviti**, siri
+    harian dikira apabila *"satu aktiviti"* disiapkan, dan peti kejutan setiap ~5 aktiviti. Jadual
+    `activity_progress` dalam SPEC §6 menyimpan `best_stars` per `activity_id`.
+
+    Dengan enjin (item 27), satu sesi ialah sepuluh soalan yang dipilih daripada seluruh pek. Satu
+    pek ada **satu** sesi jenis itu, bukan empat hingga enam aktiviti, jadi:
+
+    - *"Topik (4–6 aktiviti) → kunci topik seterusnya pada ≥ 60% bintang tersedia"* tiada penyebut.
+    - Bintang terbaik setiap aktiviti menjadi bintang terbaik setiap **pek**.
+    - Aktiviti a1–a7 dalam fail pek kekal sebagai kumpulan penulisan yang tiada skrin mainkan.
+
+    Tiada satu pun daripadanya menyekat enjin, dan tiada satu pun diputuskan di sini. Ia perlu
+    dijawab sebelum peta pulau, kedai avatar atau papan pemuka dibina — dan bersama item 10, yang
+    akan mengeluarkan q005 dan q009 daripada a1.
