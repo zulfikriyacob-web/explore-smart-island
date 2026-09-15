@@ -14,19 +14,10 @@ export const ALPHA = 0.4;
 export const DECAY_AFTER_DAYS = 30;
 export const DECAY_STEP = 0.05;
 
-export const MASTERED_AT = 0.85;
-
-export type MasteryLabel = 'not-started' | 'learning' | 'mastered';
-
 /** Exponential moving average. One number, no tuning knobs. (SPEC 5.4) */
 export function updateMastery(prev: number | null, sessionAccuracy: number): number {
   if (prev === null) return sessionAccuracy;
   return prev + ALPHA * (sessionAccuracy - prev);
-}
-
-export function masteryLabel(m: number | null): MasteryLabel {
-  if (m === null) return 'not-started';
-  return m >= MASTERED_AT ? 'mastered' : 'learning';
 }
 
 /**

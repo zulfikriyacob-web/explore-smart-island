@@ -615,12 +615,11 @@ export function updateMastery(prev: number | null, sessionAccuracy: number): num
   if (prev === null) return sessionAccuracy;
   return prev + ALPHA * (sessionAccuracy - prev);
 }
-
-export function masteryLabel(m: number | null): 'not-started' | 'learning' | 'mastered' {
-  if (m === null) return 'not-started';
-  return m >= 0.85 ? 'mastered' : 'learning';
-}
 ```
+
+Purata ini menjawab **berapa baik** anak pada apa yang sudah ditanya, dan tiada label. Label tiga
+peringkat yang pernah duduk di sini — `masteryLabel()`, *mastered* pada 0.85 — ditarik balik: yang
+dilihat ibu bapa ialah tiga status §5.7, bukan ambang pada purata ini.
 
 **Peraturan penurunan:** jika satu SP tidak disentuh selama 30 hari, kurangkan `mastery`
 sebanyak 0.05 sekali. Ini menyebabkan topik lama muncul semula dalam "Fokus minggu ini"
@@ -945,9 +944,10 @@ situ.
 `lib/coverage.ts` tulen: tiada jam, tiada katalog, tiada storan. Pemanggil himpunkan bukti dan
 menghulurkannya, disiplin sama seperti `updateStreak(s, todayISO)`.
 
-> `mastery.ts` **tidak disentuh**. `masteryLabel()` tiga-labelnya bukan tiga status ini —
-> namanya berbeza dan peraturannya berbeza — dan ia patut ditarik balik apabila stor kemajuan
-> mendarat. Ia tidak mempunyai pemanggil produksi hari ini.
+> `mastery.ts` **tidak disentuh** oleh bahagian ini. `masteryLabel()` tiga-labelnya bukan tiga
+> status ini — namanya berbeza dan peraturannya berbeza. Ia **ditarik balik pada 15 September 2026**,
+> selepas stor kemajuan mendarat (§6), tanpa pernah mempunyai pemanggil produksi. Ujian yang
+> menegaskannya dibuang bersamanya.
 
 **Tiada skor keyakinan.** Pembezaan antara bukti penguasaan dan keyakinan semasa itu betul,
 tetapi skor yang tidak dipaparkan ialah kerja tanpa pengguna. `masteredOnce` menanggung
@@ -1043,6 +1043,13 @@ esi.progress.v1 = {
   satu duduk. Ia datang daripada `crypto.getRandomValues`, bukan `crypto.randomUUID()`: yang kedua
   wujud hanya dalam konteks selamat, dan telefon yang membuka pelayan pembangunan melalui LAN berada
   pada http biasa.
+
+  **Disahkan pada iPhone melalui http biasa, 15 September 2026 — bukan dalam Browser pane.** Pane
+  berjalan dalam konteks selamat (`isSecureContext: true`, `crypto.randomUUID` wujud), jadi ia tidak
+  boleh membuktikan apa-apa tentang laluan ini. Pada iPhone, dibuka melalui alamat LAN pelayan
+  pembangunan: skrin Mula muncul, aktiviti penuh sampai skrin bintang, "Main lagi" berjalan, dan
+  audio berbunyi pada tekanan Mula pertama. Yang disahkan ialah app berjalan tanpa konteks selamat;
+  `isSecureContext` pada telefon itu tidak dibaca.
 - **`subSkill` daripada pek hidup (peraturan 4); `twoOptions` daripada soalan yang anak jawab.**
   Tekaan berharga apa yang anak nampak (§5.7). Soalan tanpa `subSkill` — q005 dan q009 — tidak
   meninggalkan apa-apa.
@@ -1061,7 +1068,7 @@ Tiga keputusan pemilik projek, 15 September 2026:
 
 **Belum ada pembaca produksi.** Tiada skrin memaparkan status sub-kemahiran; `skillInput()` menunggu
 papan pemuka dan enjin. `isFirstClear` dan bintang terbaik tidak disimpan. `masteryLabel()` (§5.7)
-ditarik balik dalam PR berasingan.
+sudah ditarik balik.
 
 ```ts
 interface SyncQueueItem {
