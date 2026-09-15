@@ -12,9 +12,11 @@
  * corrected three of our first ten mappings.
  */
 
-import type { Question } from '../content/schema.ts';
+import type { Difficulty, Question } from '../content/schema.ts';
 import { skillState, type Evidence, type SkillInput } from './coverage.ts';
-import type { AnswerRecord } from './scoring.ts';
+import { nextDifficulty } from './mastery.ts';
+import { accuracy, type AnswerRecord } from './scoring.ts';
+import type { SkillRank } from './selection.ts';
 
 /** One sub-skill's record. */
 export interface SubSkillProgress {
@@ -45,10 +47,78 @@ export interface SubSkillProgress {
  */
 export interface Progress {
   subSkills: Record<string, unknown>;
+  /**
+   * Per pack: the child's level on the SPEC 5.5 ladder, how many runs they have
+   * finished, and when each question was last asked.
+   *
+   * Keyed by `topicId`, because a question id is only unique inside its pack,
+   * and the ladder is climbed on the accuracy of a whole run drawn from one
+   * pack. A level per sub-skill would mean nothing: in this bank every question
+   * in a sub-skill carries the same difficulty (PRD 16 item 31).
+   */
+  packs?: Record<string, unknown>;
+}
+
+/** One pack's state. `lastAsked` maps a question id to the run it was last in. */
+export interface PackProgress {
+  level: Difficulty;
+  runs: number;
+  /** The run banked most recently, so banking it again changes nothing. */
+  lastSessionId: string | null;
+  lastAsked: Record<string, number>;
 }
 
 export function emptyProgress(): Progress {
   return { subSkills: {} };
+}
+
+const FIRST_RUN: PackProgress = { level: 1, runs: 0, lastSessionId: null, lastAsked: {} };
+
+/** A pack's state, or a child's first run at it. Unreadable counts as first. */
+export function packProgress(progress: Progress, topicId: string): PackProgress {
+  const raw = progress.packs?.[topicId];
+  if (typeof raw !== 'object' || raw === null) return FIRST_RUN;
+  const p = raw as Record<string, unknown>;
+  const level = p.level;
+  const runs = p.runs;
+  if (level !== 1 && level !== 2 && level !== 3) return FIRST_RUN;
+  if (typeof runs !== 'number' || !Number.isInteger(runs) || runs < 0) return FIRST_RUN;
+  const lastAsked: Record<string, number> = {};
+  if (typeof p.lastAsked === 'object' && p.lastAsked !== null) {
+    for (const [id, run] of Object.entries(p.lastAsked as Record<string, unknown>)) {
+      if (typeof run === 'number' && Number.isInteger(run) && run >= 0) lastAsked[id] = run;
+    }
+  }
+  return {
+    level,
+    runs,
+    lastSessionId: typeof p.lastSessionId === 'string' ? p.lastSessionId : null,
+    lastAsked,
+  };
+}
+
+/**
+ * Where a sub-skill stands, for the selector's ordering. (SPEC 5.7)
+ *
+ * 0 slipped — mastered once and now evaluating again; 1 not mastered; 2
+ * mastered. Slipped first matches "Fokus minggu ini": a skill that was there
+ * and slipped is closer to being recovered than one never started.
+ */
+export function skillRank(progress: Progress, subSkillId: string): SkillRank {
+  const state = skillState(skillInput(progress, subSkillId));
+  if (state.status === 'mastered') return 2;
+  return state.masteredOnce ? 0 : 1;
+}
+
+/** Every question that has ever been answered right on a first attempt. */
+export function firstTryQuestionIds(progress: Progress): Set<string> {
+  const ids = new Set<string>();
+  for (const raw of Object.values(progress.subSkills)) {
+    const entry = readSubSkill(raw);
+    if (!entry) continue;
+    for (const e of entry.evidence) ids.add(e.questionId);
+  }
+  return ids;
 }
 
 /** A stored sub-skill entry, or null if this build cannot read it. */
@@ -96,13 +166,18 @@ function hadTwoOptions(q: Question): boolean {
  * run at its last question, and finishing it again records it again under the
  * same `sessionId`.
  */
-export function recordSession(
-  progress: Progress,
-  sessionId: string,
-  answers: readonly AnswerRecord[],
-  answered: readonly Question[],
-  liveQuestion: (id: string) => Question | undefined,
-): Progress {
+export interface RunRecord {
+  /** The pack the run was drawn from: where its level and recency are kept. */
+  topicId: string;
+  sessionId: string;
+  answers: readonly AnswerRecord[];
+  /** The questions as the child answered them, for `twoOptions`. */
+  answered: readonly Question[];
+  liveQuestion: (id: string) => Question | undefined;
+}
+
+export function recordSession(progress: Progress, run: RunRecord): Progress {
+  const { topicId, sessionId, answers, answered, liveQuestion } = run;
   const asked = new Map(answered.map((q) => [q.id, q]));
   const subSkills = { ...progress.subSkills };
 
@@ -134,7 +209,37 @@ export function recordSession(
     subSkills[subSkill] = { evidence, latestWasWrong, masteredOnce };
   }
 
-  return { ...progress, subSkills };
+  return { ...progress, subSkills, packs: packsAfter(progress, run) };
+}
+
+/**
+ * The pack's state after this run: one rung of the SPEC 5.5 ladder, one more
+ * run, and every question it asked stamped with that run number.
+ *
+ * `lastAsked` stamps every answer, not only the ones that became evidence — it
+ * answers "when did the child last see this question", which is what keeps the
+ * selector from asking the same ten in the same order for ever.
+ *
+ * Banking the same run twice changes nothing here either: `lastSessionId` says
+ * this run has already been counted, so the level does not climb twice on one
+ * set of answers.
+ */
+function packsAfter(progress: Progress, run: RunRecord): Record<string, unknown> {
+  const packs = { ...progress.packs };
+  const before = packProgress(progress, run.topicId);
+  if (before.lastSessionId === run.sessionId) return packs;
+
+  const runs = before.runs + 1;
+  const lastAsked = { ...before.lastAsked };
+  for (const a of run.answers) lastAsked[a.questionId] = runs;
+
+  packs[run.topicId] = {
+    level: nextDifficulty(before.level, accuracy(run.answers)),
+    runs,
+    lastSessionId: run.sessionId,
+    lastAsked,
+  };
+  return packs;
 }
 
 /**

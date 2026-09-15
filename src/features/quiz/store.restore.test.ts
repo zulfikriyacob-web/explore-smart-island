@@ -19,7 +19,13 @@ import { STORAGE_KEY } from '../../lib/persistence.ts';
  * which drives the already-imported one — cannot do.
  */
 
-const ACTIVITY_ID = 'math-y1-nombor-100-a1';
+/*
+  A session belongs to the pack now, not to a fixed activity: the selector draws
+  from the whole pack (PRD 16 item 27). Sessions saved under the old
+  `math-y1-nombor-100-a1` are refused by `loadSession`, which is the one-time
+  invalidation the owner asked for — the case below covers it.
+*/
+const ACTIVITY_ID = 'math-y1-nombor-100';
 
 /** A session saved mid-activity: past the intro, two questions in. */
 function savedMidActivity() {
@@ -113,6 +119,20 @@ describe('quiz store, on load', () => {
     expect(useQuizStore.getState().session.status).toBe('intro');
     useQuizStore.getState().start();
     expect(useQuizStore.getState().session.status).toBe('question');
+  });
+
+  it('refuses a session saved for the old fixed activity, once', async () => {
+    // The selector replaced `math-y1-nombor-100-a1` with the pack itself, so a
+    // run saved under the old id belongs to something this build no longer
+    // plays. `loadSession` already refuses a session saved for another
+    // activity, which is the whole of the one-time invalidation.
+    stubStorage(JSON.stringify({ ...savedMidActivity(), activityId: 'math-y1-nombor-100-a1' }));
+    const { useQuizStore } = await import('./store.ts');
+
+    const state = useQuizStore.getState();
+    expect(state.restored).toBe(false);
+    expect(state.session.status).toBe('intro');
+    expect(state.session.activityId).toBe('math-y1-nombor-100');
   });
 
   it('refuses a session saved before runs carried an id, and starts fresh', async () => {

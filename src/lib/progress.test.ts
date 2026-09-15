@@ -2,8 +2,29 @@ import { describe, expect, it } from 'vitest';
 
 import type { Question } from '../content/schema.ts';
 import { skillState } from './coverage.ts';
-import { emptyProgress, readSubSkill, recordSession, skillInput, type Progress } from './progress.ts';
+import {
+  emptyProgress,
+  packProgress,
+  readSubSkill,
+  recordSession,
+  skillInput,
+  type Progress,
+} from './progress.ts';
 import type { AnswerRecord } from './scoring.ts';
+
+const TOPIC = 'math-y1-nombor-100';
+
+/** recordSession for one pack, in the order these tests were written in. */
+function record(
+  progress: Progress,
+  sessionId: string,
+  answers: readonly AnswerRecord[],
+  answered: readonly Question[],
+  liveQuestion: (id: string) => Question | undefined,
+  topicId = TOPIC,
+): Progress {
+  return recordSession(progress, { topicId, sessionId, answers, answered, liveQuestion });
+}
 
 function mcq(id: string, options: 2 | 3, subSkill?: string): Question {
   return {
@@ -49,11 +70,21 @@ const right = (questionId: string): AnswerRecord => ({
   msSpent: 0,
 });
 
-/** Right in the end, but not on the first attempt. */
+/** Right in the end, but not on the first attempt. Scores 60 of 100 (SPEC 5.1). */
 const secondTry = (questionId: string): AnswerRecord => ({
   questionId,
   attempts: 2,
   correct: true,
+  firstTry: false,
+  hintShown: true,
+  msSpent: 0,
+});
+
+/** Never right: the answer was revealed. Scores 0. */
+const missed = (questionId: string): AnswerRecord => ({
+  questionId,
+  attempts: 2,
+  correct: false,
   firstTry: false,
   hintShown: true,
   msSpent: 0,
@@ -70,7 +101,7 @@ const AFTER = '1.2.2/after';
 describe('recordSession', () => {
   it('banks a first-attempt-correct answer under the sub-skill the pack names', () => {
     const q = mcq('q1', 3, AFTER);
-    const p = recordSession(emptyProgress(), 's1', [right('q1')], [q], pack([q]));
+    const p = record(emptyProgress(), 's1', [right('q1')], [q], pack([q]));
     expect(p.subSkills[AFTER]).toEqual({
       evidence: [{ questionId: 'q1', sessionId: 's1', twoOptions: false }],
       latestWasWrong: false,
@@ -86,7 +117,7 @@ describe('recordSession', () => {
   it('reads the sub-skill from the live pack, not from the copy the run froze', () => {
     const frozen = mcq('q1', 3, '1.2.2/before');
     const live = mcq('q1', 3, AFTER);
-    const p = recordSession(emptyProgress(), 's1', [right('q1')], [frozen], pack([live]));
+    const p = record(emptyProgress(), 's1', [right('q1')], [frozen], pack([live]));
     expect(Object.keys(p.subSkills)).toEqual([AFTER]);
   });
 
@@ -98,34 +129,34 @@ describe('recordSession', () => {
   it('reads two options from the question the child answered, not from the pack today', () => {
     const frozen = mcq('q4', 2, '1.6.1/digit_at_tens');
     const live = mcq('q4', 3, '1.6.1/digit_at_tens');
-    const p = recordSession(emptyProgress(), 's1', [right('q4')], [frozen], pack([live]));
+    const p = record(emptyProgress(), 's1', [right('q4')], [frozen], pack([live]));
     expect(readSubSkill(p.subSkills['1.6.1/digit_at_tens'])?.evidence[0]?.twoOptions).toBe(true);
   });
 
   it('counts a count-tap as having no options to guess between', () => {
     const q = countTap('q3', '1.2.1/count_objects');
-    const p = recordSession(emptyProgress(), 's1', [right('q3')], [q], pack([q]));
+    const p = record(emptyProgress(), 's1', [right('q3')], [q], pack([q]));
     expect(readSubSkill(p.subSkills['1.2.1/count_objects'])?.evidence[0]?.twoOptions).toBe(false);
   });
 
   it('leaves nothing for a question with no sub-skill, or one gone from the pack', () => {
     const shape = mcq('q5', 3);
     const gone = mcq('q9', 3, AFTER);
-    const p = recordSession(emptyProgress(), 's1', [right('q5'), right('q9')], [shape, gone], pack([shape]));
+    const p = record(emptyProgress(), 's1', [right('q5'), right('q9')], [shape, gone], pack([shape]));
     expect(p.subSkills).toEqual({});
   });
 
   it('marks a missed first attempt as asked about and wrong, without banking it', () => {
     const q = mcq('q1', 3, AFTER);
-    const p = recordSession(emptyProgress(), 's1', [secondTry('q1')], [q], pack([q]));
+    const p = record(emptyProgress(), 's1', [secondTry('q1')], [q], pack([q]));
     expect(p.subSkills[AFTER]).toEqual({ evidence: [], latestWasWrong: true, masteredOnce: false });
     expect(skillState(skillInput(p, AFTER)).status).toBe('evaluating');
   });
 
   it('takes latestWasWrong from the last question the run asked for that sub-skill', () => {
     const qs = [mcq('q1', 3, AFTER), mcq('q2', 3, AFTER)];
-    const rightLast = recordSession(emptyProgress(), 's1', [secondTry('q1'), right('q2')], qs, pack(qs));
-    const wrongLast = recordSession(emptyProgress(), 's1', [right('q2'), secondTry('q1')], qs, pack(qs));
+    const rightLast = record(emptyProgress(), 's1', [secondTry('q1'), right('q2')], qs, pack(qs));
+    const wrongLast = record(emptyProgress(), 's1', [right('q2'), secondTry('q1')], qs, pack(qs));
     expect(readSubSkill(rightLast.subSkills[AFTER])?.latestWasWrong).toBe(false);
     expect(readSubSkill(wrongLast.subSkills[AFTER])?.latestWasWrong).toBe(true);
   });
@@ -138,14 +169,14 @@ describe('recordSession', () => {
   it('changes nothing when the same run is recorded twice', () => {
     const qs = [mcq('q1', 3, AFTER), mcq('q2', 3, AFTER)];
     const answers = [right('q1'), secondTry('q2')];
-    const once = recordSession(emptyProgress(), 's1', answers, qs, pack(qs));
-    expect(recordSession(once, 's1', answers, qs, pack(qs))).toEqual(once);
+    const once = record(emptyProgress(), 's1', answers, qs, pack(qs));
+    expect(record(once, 's1', answers, qs, pack(qs))).toEqual(once);
   });
 
   it('banks the same question again from a different run', () => {
     const q = mcq('q1', 3, AFTER);
-    const s1 = recordSession(emptyProgress(), 's1', [right('q1')], [q], pack([q]));
-    const s2 = recordSession(s1, 's2', [right('q1')], [q], pack([q]));
+    const s1 = record(emptyProgress(), 's1', [right('q1')], [q], pack([q]));
+    const s2 = record(s1, 's2', [right('q1')], [q], pack([q]));
     expect(readSubSkill(s2.subSkills[AFTER])?.evidence.map((e) => e.sessionId)).toEqual(['s1', 's2']);
   });
 
@@ -163,7 +194,7 @@ describe('recordSession', () => {
     };
     const before: Progress = { subSkills: { '7.2.1/name_triangle': kept, 'x/unreadable': 'not an entry' } };
     const q = mcq('q1', 3, AFTER);
-    const p = recordSession(before, 's1', [right('q1')], [q], pack([q]));
+    const p = record(before, 's1', [right('q1')], [q], pack([q]));
     expect(p.subSkills['7.2.1/name_triangle']).toBe(kept);
     expect(p.subSkills['x/unreadable']).toBe('not an entry');
   });
@@ -171,22 +202,22 @@ describe('recordSession', () => {
   it('carries fields it does not know about, so a later one is an addition', () => {
     const before = { subSkills: {}, levels: { 'math-y1-nombor-100': 2 } } as Progress;
     const q = mcq('q1', 3, AFTER);
-    expect(recordSession(before, 's1', [right('q1')], [q], pack([q]))).toMatchObject({
+    expect(record(before, 's1', [right('q1')], [q], pack([q]))).toMatchObject({
       levels: { 'math-y1-nombor-100': 2 },
     });
   });
 
   it('replaces an unreadable entry for a sub-skill the run did touch', () => {
     const q = mcq('q1', 3, AFTER);
-    const p = recordSession({ subSkills: { [AFTER]: 42 } }, 's1', [right('q1')], [q], pack([q]));
+    const p = record({ subSkills: { [AFTER]: 42 } }, 's1', [right('q1')], [q], pack([q]));
     expect(readSubSkill(p.subSkills[AFTER])?.evidence).toHaveLength(1);
   });
 
   it('does not change the progress it was given', () => {
     const q = mcq('q1', 3, AFTER);
-    const before = recordSession(emptyProgress(), 's1', [right('q1')], [q], pack([q]));
+    const before = record(emptyProgress(), 's1', [right('q1')], [q], pack([q]));
     const snapshot = structuredClone(before);
-    recordSession(before, 's2', [secondTry('q1')], [q], pack([q]));
+    record(before, 's2', [secondTry('q1')], [q], pack([q]));
     expect(before).toEqual(snapshot);
   });
 
@@ -197,15 +228,101 @@ describe('recordSession', () => {
   */
   it('keeps masteredOnce after a later miss drops the status', () => {
     const qs = [mcq('q1', 3, AFTER), mcq('q2', 3, AFTER), mcq('q3', 3, AFTER)];
-    const s1 = recordSession(emptyProgress(), 's1', [right('q1'), right('q2')], qs, pack(qs));
+    const s1 = record(emptyProgress(), 's1', [right('q1'), right('q2')], qs, pack(qs));
     expect(skillState(skillInput(s1, AFTER))).toEqual({ status: 'evaluating', masteredOnce: false });
 
-    const s2 = recordSession(s1, 's2', [right('q3')], qs, pack(qs));
+    const s2 = record(s1, 's2', [right('q3')], qs, pack(qs));
     expect(skillState(skillInput(s2, AFTER))).toEqual({ status: 'mastered', masteredOnce: true });
 
-    const s3 = recordSession(s2, 's3', [secondTry('q1')], qs, pack(qs));
+    const s3 = record(s2, 's3', [secondTry('q1')], qs, pack(qs));
     expect(skillState(skillInput(s3, AFTER))).toEqual({ status: 'evaluating', masteredOnce: true });
     expect(readSubSkill(s3.subSkills[AFTER])?.masteredOnce).toBe(true);
+  });
+});
+
+describe('pack state', () => {
+  const q = mcq('q1', 3, AFTER);
+  const live = pack([q]);
+
+  it('reads a pack never played as a first run at level 1', () => {
+    expect(packProgress(emptyProgress(), TOPIC)).toEqual({
+      level: 1,
+      runs: 0,
+      lastSessionId: null,
+      lastAsked: {},
+    });
+  });
+
+  it('climbs a rung on a run of 0.90 or better, and counts the run', () => {
+    const p = record(emptyProgress(), 's1', [right('q1')], [q], live);
+    expect(packProgress(p, TOPIC)).toEqual({
+      level: 2,
+      runs: 1,
+      lastSessionId: 's1',
+      lastAsked: { q1: 1 },
+    });
+  });
+
+  const atLevelTwo: Progress = {
+    subSkills: {},
+    packs: { [TOPIC]: { level: 2, runs: 3, lastSessionId: 's0', lastAsked: {} } },
+  };
+
+  it('drops a rung below 0.55, which a run of missed questions is', () => {
+    const p = record(atLevelTwo, 's1', [missed('q1')], [q], live);
+    expect(packProgress(p, TOPIC).level).toBe(1);
+  });
+
+  /*
+    A second-attempt answer scores 60 of 100 (SPEC 5.1), so a run of them is
+    0.60 accuracy: above the 0.55 floor and below the 0.90 step, which is the
+    hold band. It is neither a promotion nor a demotion, and it should not be
+    mistaken for one.
+  */
+  it('holds the rung on a run of second-attempt answers', () => {
+    const p = record(atLevelTwo, 's1', [secondTry('q1')], [q], live);
+    expect(packProgress(p, TOPIC).level).toBe(2);
+  });
+
+  it('never drops below the first rung', () => {
+    const p = record(emptyProgress(), 's1', [missed('q1')], [q], live);
+    expect(packProgress(p, TOPIC).level).toBe(1);
+  });
+
+  /*
+    lastAsked stamps every answer, not only the ones that became evidence: it
+    answers "when did the child last see this", which is what stops the selector
+    asking the same ten in the same order for ever.
+  */
+  it('stamps every question the run asked, evidence or not', () => {
+    const missed = mcq('q2', 3, AFTER);
+    const p = record(emptyProgress(), 's1', [right('q1'), secondTry('q2')], [q, missed], pack([q, missed]));
+    expect(packProgress(p, TOPIC).lastAsked).toEqual({ q1: 1, q2: 1 });
+  });
+
+  it('does not climb twice when the same run is banked twice', () => {
+    const once = record(emptyProgress(), 's1', [right('q1')], [q], live);
+    expect(record(once, 's1', [right('q1')], [q], live)).toEqual(once);
+  });
+
+  it('keeps each pack apart', () => {
+    const first = record(emptyProgress(), 's1', [right('q1')], [q], live);
+    const both = record(first, 's2', [right('q1')], [q], live, 'math-y1-ruang');
+    expect(packProgress(both, TOPIC).runs).toBe(1);
+    expect(packProgress(both, 'math-y1-ruang').runs).toBe(1);
+  });
+
+  it('reads a pack entry it cannot understand as a first run', () => {
+    for (const entry of [null, 42, 'x', {}, { level: 4, runs: 1 }, { level: 2, runs: -1 }]) {
+      expect(packProgress({ subSkills: {}, packs: { [TOPIC]: entry } }, TOPIC).level).toBe(1);
+    }
+  });
+
+  it('keeps the readable half of a lastAsked map', () => {
+    const stored = { level: 2, runs: 2, lastSessionId: 's0', lastAsked: { q1: 2, q2: 'soon' } };
+    expect(packProgress({ subSkills: {}, packs: { [TOPIC]: stored } }, TOPIC).lastAsked).toEqual({
+      q1: 2,
+    });
   });
 });
 
