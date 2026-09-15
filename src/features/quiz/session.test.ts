@@ -77,7 +77,7 @@ function run(state: SessionState, events: readonly SessionEvent[]): SessionState
 
 /** A session parked on the first question, ready to answer. */
 function started(questions: readonly Question[] = [mcq, mcqImage]): SessionState {
-  return run(createSession('math-y1-nombor-100-a1'), [
+  return run(createSession('math-y1-nombor-100-a1', 's1'), [
     { type: 'LOADED', questions },
     { type: 'START', nowMs: 1_000 },
   ]);
@@ -104,14 +104,14 @@ describe('checkAnswer', () => {
 
 describe('session lifecycle', () => {
   it('starts in loading with nothing answered', () => {
-    const s = createSession('a1');
+    const s = createSession('a1', 's1');
     expect(s.status).toBe('loading');
     expect(s.answers).toEqual([]);
     expect(currentQuestion(s)).toBeNull();
   });
 
   it('moves loading -> intro -> question', () => {
-    const loaded = sessionReducer(createSession('a1'), { type: 'LOADED', questions: [mcq] });
+    const loaded = sessionReducer(createSession('a1', 's1'), { type: 'LOADED', questions: [mcq] });
     expect(loaded.status).toBe('intro');
     const playing = sessionReducer(loaded, { type: 'START', nowMs: 500 });
     expect(playing.status).toBe('question');
@@ -120,12 +120,12 @@ describe('session lifecycle', () => {
   });
 
   it('refuses to load an empty question list', () => {
-    const s = createSession('a1');
+    const s = createSession('a1', 's1');
     expect(sessionReducer(s, { type: 'LOADED', questions: [] })).toBe(s);
   });
 
   it('ignores events that arrive out of order instead of crashing', () => {
-    const s = createSession('a1');
+    const s = createSession('a1', 's1');
     expect(sessionReducer(s, { type: 'START', nowMs: 1 })).toBe(s);
     expect(sessionReducer(s, { type: 'ANSWER', response: pick('b'), nowMs: 1 })).toBe(s);
     expect(sessionReducer(s, { type: 'NEXT', nowMs: 1 })).toBe(s);
@@ -388,14 +388,14 @@ describe('progression', () => {
       { type: 'LOADED', questions: [mcq, mcqImage] },
       { type: 'START', nowMs: 1_000 },
     ];
-    const first = run(createSession('a1', true), [...load, ...events]);
-    const replay = run(createSession('a1', false), [...load, ...events]);
+    const first = run(createSession('a1', 's1', true), [...load, ...events]);
+    const replay = run(createSession('a1', 's2', false), [...load, ...events]);
     expect(first.result?.stars).toBe(replay.result?.stars);
     expect(replay.result?.gems).toBeLessThan(first.result?.gems ?? 0);
   });
 
   it('runs every in-scope question type end to end', () => {
-    const s = run(createSession('mixed'), [
+    const s = run(createSession('mixed', 's1'), [
       { type: 'LOADED', questions: [mcq, mcqImage, countTap] },
       { type: 'START', nowMs: 0 },
       { type: 'ANSWER', response: pick('b'), nowMs: 10 },

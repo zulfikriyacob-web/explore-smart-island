@@ -8,9 +8,16 @@
 
 import { create } from 'zustand';
 
-import { clearSession, loadSession, saveSession } from '../../lib/persistence.ts';
+import {
+  clearSession,
+  loadProgress,
+  loadSession,
+  saveProgress,
+  saveSession,
+} from '../../lib/persistence.ts';
 import { promptPlayer } from '../../lib/player.ts';
-import { ACTIVITY_ID, loadActivityQuestions } from './activity.ts';
+import { recordSession } from '../../lib/progress.ts';
+import { ACTIVITY_ID, liveQuestion, loadActivityQuestions } from './activity.ts';
 import {
   createSession,
   sessionReducer,
@@ -35,7 +42,7 @@ import {
  * autoplay silently refused for the whole run.
  */
 function freshSession(isFirstClear: boolean): SessionState {
-  return sessionReducer(createSession(ACTIVITY_ID, isFirstClear), {
+  return sessionReducer(createSession(ACTIVITY_ID, newSessionId(), isFirstClear), {
     type: 'LOADED',
     questions: loadActivityQuestions(),
   });
@@ -57,6 +64,39 @@ function now(): number {
   return Date.now();
 }
 
+/**
+ * 32 hex characters from `crypto.getRandomValues`.
+ *
+ * Not `crypto.randomUUID()`, which exists only in a secure context. A phone
+ * reaching the dev server over the LAN is on plain http, so the call would be
+ * undefined there and the store would throw as it loads — on the one device the
+ * app is tested on, and never in the Browser pane, which runs on localhost.
+ */
+function newSessionId(): string {
+  return Array.from(crypto.getRandomValues(new Uint8Array(16)), (b) =>
+    b.toString(16).padStart(2, '0'),
+  ).join('');
+}
+
+/**
+ * Bank a finished run's evidence. (SPEC 6)
+ *
+ * Before the session is saved, not after. Killed between the two, the app
+ * restores the run on its last question, and finishing it banks it again under
+ * the same `sessionId`, which changes nothing. The other order would leave a
+ * run saved at its summary that was never banked, and nothing would bank it.
+ *
+ * Progress that cannot be read is not written: that would replace it with this
+ * one run.
+ */
+function bankProgress(session: SessionState): void {
+  const progress = loadProgress();
+  if (progress === null) return;
+  saveProgress(
+    recordSession(progress, session.sessionId, session.answers, session.questions, liveQuestion),
+  );
+}
+
 interface QuizStore {
   session: SessionState;
   /** True when this session came back from storage rather than starting fresh. */
@@ -71,8 +111,8 @@ interface QuizStore {
 
 export const useQuizStore = create<QuizStore>((set, get) => {
   const saved = loadSession(ACTIVITY_ID);
-  // Opening the app is treated as a first clear. Nothing records past clears
-  // yet — that arrives with the progress store in Phase 2 — so "first" here
+  // Opening the app is treated as a first clear. The progress store keeps
+  // sub-skill evidence only (SPEC 6), not past clears, so "first" here still
   // means "not a replay within this run", which is as much as this build knows.
   const session = saved ?? freshSession(true);
   // Persist immediately, not just on the first answer: the option order is
@@ -85,8 +125,12 @@ export const useQuizStore = create<QuizStore>((set, get) => {
     restored: saved !== null,
 
     dispatch: (event) => {
-      const session = sessionReducer(get().session, event);
-      if (session === get().session) return;
+      const before = get().session;
+      const session = sessionReducer(before, event);
+      if (session === before) return;
+      // On the step into the summary and only then: a run restored at its
+      // summary was banked when it first got there.
+      if (session.status === 'summary' && before.status !== 'summary') bankProgress(session);
       saveSession(session);
       set({ session });
     },

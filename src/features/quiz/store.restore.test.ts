@@ -25,6 +25,7 @@ const ACTIVITY_ID = 'math-y1-nombor-100-a1';
 function savedMidActivity() {
   return {
     activityId: ACTIVITY_ID,
+    sessionId: 'saved-run',
     questions: [
       {
         id: 'q001',
@@ -112,5 +113,18 @@ describe('quiz store, on load', () => {
     expect(useQuizStore.getState().session.status).toBe('intro');
     useQuizStore.getState().start();
     expect(useQuizStore.getState().session.status).toBe('question');
+  });
+
+  it('refuses a session saved before runs carried an id, and starts fresh', async () => {
+    // Refused rather than given an id: the app has not launched, so this costs a
+    // test device one restart (SPEC 6).
+    const { sessionId: _dropped, ...withoutId } = savedMidActivity();
+    stubStorage(JSON.stringify(withoutId));
+    const { useQuizStore } = await import('./store.ts');
+
+    const state = useQuizStore.getState();
+    expect(state.restored).toBe(false);
+    expect(state.session.status).toBe('intro');
+    expect(state.session.sessionId).toMatch(/^[0-9a-f]{32}$/);
   });
 });
