@@ -16,8 +16,8 @@ import {
   saveSession,
 } from '../../lib/persistence.ts';
 import { promptPlayer } from '../../lib/player.ts';
-import { recordSession } from '../../lib/progress.ts';
-import { ACTIVITY_ID, liveQuestion, loadActivityQuestions } from './activity.ts';
+import { emptyProgress, recordSession } from '../../lib/progress.ts';
+import { PRACTICE_ID, buildSession, liveQuestion } from './activity.ts';
 import {
   createSession,
   sessionReducer,
@@ -42,9 +42,14 @@ import {
  * autoplay silently refused for the whole run.
  */
 function freshSession(isFirstClear: boolean): SessionState {
-  return sessionReducer(createSession(ACTIVITY_ID, newSessionId(), isFirstClear), {
+  // The selector needs the progress store: the child's level, where each
+  // sub-skill stands, and when each question was last asked (SPEC 5.5). Progress
+  // that cannot be read means a first run, which is the safe reading — it never
+  // writes anything back on its own.
+  const progress = loadProgress() ?? emptyProgress();
+  return sessionReducer(createSession(PRACTICE_ID, newSessionId(), isFirstClear), {
     type: 'LOADED',
-    questions: loadActivityQuestions(),
+    questions: buildSession(progress).questions,
   });
 }
 
@@ -93,7 +98,13 @@ function bankProgress(session: SessionState): void {
   const progress = loadProgress();
   if (progress === null) return;
   saveProgress(
-    recordSession(progress, session.sessionId, session.answers, session.questions, liveQuestion),
+    recordSession(progress, {
+      topicId: PRACTICE_ID,
+      sessionId: session.sessionId,
+      answers: session.answers,
+      answered: session.questions,
+      liveQuestion,
+    }),
   );
 }
 
@@ -110,7 +121,7 @@ interface QuizStore {
 }
 
 export const useQuizStore = create<QuizStore>((set, get) => {
-  const saved = loadSession(ACTIVITY_ID);
+  const saved = loadSession(PRACTICE_ID);
   // Opening the app is treated as a first clear. The progress store keeps
   // sub-skill evidence only (SPEC 6), not past clears, so "first" here still
   // means "not a replay within this run", which is as much as this build knows.
