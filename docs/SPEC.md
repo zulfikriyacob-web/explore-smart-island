@@ -432,6 +432,11 @@ dalam `content/packs/` dan **gagal dalam CI** jika ada aset hilang, `correctOpti
 tidak sepadan dengan mana-mana pilihan, atau satu kod DSKP tidak wujud. Ini menangkap ralat
 kandungan sebelum sampai ke kanak-kanak.
 
+> **Jurang, 16 September 2026: repo ini tiada CI.** "Gagal CI" di atas ialah niat, bukan keadaan
+> sebenar. `vite build` tidak menjalankan skrip ini, jadi ralatnya tidak menyekat apa-apa. Jalankan
+> skrip dengan tangan sebelum menggabungkan perubahan kandungan. Direkod, belum dibaiki: PRD §16
+> item 34.
+
 ### 3.6 Skrip yang menjana kerja untuk orang di luar repo
 
 Dua skrip mengubah pek menjadi dokumen yang dipegang seseorang yang tidak akan membuka repo

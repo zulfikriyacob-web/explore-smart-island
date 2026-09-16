@@ -1585,13 +1585,54 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     kandungan terendah kad, jadi teks jalur dua baris memotong butang ulang tayang. **Kekangan itu
     datang bersama susun atur ini.**
 
-    **Dua teks ditulis semula oleh pemilik projek:** pancingan q002 dan `explain` q001. Kedua-duanya
-    tidak dirakam, jadi tiada rakaman semula.
+    **Dua teks ditulis semula:** pancingan q002 dan `explain` q001. Kedua-duanya tidak dirakam —
+    `audio:script` hanya membaca `promptAudio` — jadi tiada rakaman semula.
 
-    > **Jangan salin pancingan q016 ke q002.** Pancingan q002 ialah *"Bilang: dua puluh sembilan,
+    > **Jangan salin pancingan q016 ke q002.** Pancingan asal q002 ialah *"Bilang: dua puluh sembilan,
     > kemudian?"*. *"Kira menurun satu langkah."* ialah pancingan q016 — sub-kemahiran sama, `after` —
     > dan ia salah arah untuk q002: q002 bertanya nombor *selepas* 29, iaitu membilang naik. Kedua-duanya
     > pernah dikelirukan semasa soalan ini dibincangkan.
+
+    **Ditulis semula dalam versi guru, 16 September 2026** (`fix/band-text`):
+
+    | Teks | Dahulu | Kini | Aksara | Lebar, Lexend 18px |
+    |---|---|---|---|---|
+    | pancingan q002, BM | *"Bilang: dua puluh sembilan, kemudian?"* | *"Kira satu lagi selepas 29."* | 37 → 26 | 340.8 → 216.2px |
+    | `explain` q001, BM | *"74 ada 7 puluh. 47 ada 4 puluh sahaja."* | *"74: 7 puluh. 47: 4 puluh."* | 38 → 25 | 333.7 → 200.1px |
+    | pancingan q002, EN | *"Count on: twenty-nine, then?"* | *"Count one more after 29."* | 28 → 24 | 216.4px |
+    | `explain` q001, EN | *"74 has 7 tens. 47 has only 4 tens."* | *"74: 7 tens. 47: 4 tens."* | 34 → 23 | 177.0px |
+
+    Pemilik projek mencadangkan *"Bilang naik dari 29."* dan *"74 ada 7 puluh, 47 ada 4."*.
+    **Menurut pemilik projek**, guru menyemak kedua-duanya:
+
+    - Guru lebih suka *"Kira satu lagi selepas 29."*, kerana ia lebih natural untuk murid Tahun 1.
+    - Guru **menolak** *"74 ada 7 puluh, 47 ada 4."*. Alasannya: *"47 ada 4"* boleh dibaca sebagai
+      digit 4, bukan 4 puluh, dan maksudnya hilang. Perkataan *puluh* mesti kekal pada kedua-dua
+      nombor, kerana itulah titik pengajarannya.
+
+    **Jawapan guru ini datang dalam mesej pemilik projek, bukan dokumen yang difailkan** — jurang
+    yang sama seperti item 29.
+
+    Borang pusingan 2 (`docs/kssr/guru-semakan-pusingan-2-bertanda.md`) menyemak **teks lama**,
+    iaitu kedua-dua baris "Dahulu" di atas, perkataan demi perkataan. Nota `kssr.review` pek sudah
+    berkata soalan yang ditulis semula selepas 12 September 2026 tidak diliputi oleh borang itu, dan
+    `reviewStatus` tidak diubah. Petikan teks lama dalam DESIGN §7 (pengukuran 13 September) dan item
+    23 kekal sebagai rekod bertarikh.
+
+    **EN ditulis oleh Claude** supaya setara dengan versi BM guru, dan dikekalkan pendek walaupun EN
+    belum dihantar. Guru tidak menyemaknya.
+
+    Diukur di pane pada sesi baharu (storan dikosongkan), selepas butang audio dipasang. Keadaan
+    yang diukur: pancingan dan dedahan q001, dan pancingan dan dedahan q002 (q002 tiada `explain`):
+
+    | Viewport | Jalur | Butang audio terpotong, inset 0 / 34 | Teks soalan terpotong | Kad menatal, inset 0 / 34 |
+    |---|---|---|---|---|
+    | 390×740 | satu baris, 51px, keempat-empat keadaan | 0 / 0 | 0 | 7 / 25px — padding sahaja, kelas q013 |
+    | 360×780 | satu baris, 51px, keempat-empat keadaan | 0 / 0 | 0 | 0 / 0 |
+
+    `aria-live` membacakan *"Belum betul. 74: 7 puluh. 47: 4 puluh."* dan *"Belum betul. Kira satu
+    lagi selepas 29."*. Bagaimana pembaca skrin sebenar menyebut titik bertindih tidak disemak dari
+    sini.
 
     **Peraturan, dikuatkuasakan dalam `validate:content`:**
 
@@ -1607,10 +1648,47 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
 
     Amaran dan bukan ralat untuk had 28, **atas keputusan pemilik projek**: lapan teks BM lain yang
     melebihi 28 aksara (30–33) muat satu baris pada 390×740 hari ini, dan menulis semula ayat yang
-    berfungsi untuk memuaskan had adalah kerja tanpa faedah. Amaran ialah maklumat untuk penulis. Hari
-    ini `validate:content` memberi dua ralat — dua teks di atas, sehingga ditulis semula — dan lapan
-    amaran jalur: pancingan q001, q004, q007, q008, q017, dan `explain` q012, q014, q018.
+    berfungsi untuk memuaskan had adalah kerja tanpa faedah. Amaran ialah maklumat untuk penulis.
+
+    Peraturan ini digabung ke `main` bersama PR #63 dengan **dua ralat** — dua teks di atas — dan
+    `main` gagal `validate:content` sehingga `fix/band-text`. Tiada apa yang menyekatnya: repo ini
+    tiada CI (item 34). Selepas `fix/band-text`: **0 ralat**, dan lapan amaran jalur — pancingan
+    q001, q004, q007, q008, q017, dan `explain` q012, q014, q018.
 
     **BM sahaja buat masa ini.** EN belum dihantar: `LANG` dikodkan `'ms'` dan audio EN masih 0 bait.
-    **Had yang sama terpakai kepada EN bila suis bahasa mendarat.** Hari ini tujuh teks EN melebihi 28
-    aksara: pancingan q004, q007, q010, dan `explain` q001, q012, q014, q018.
+    **Had yang sama terpakai kepada EN bila suis bahasa mendarat.** Selepas `fix/band-text`, enam teks
+    EN melebihi 28 aksara, semuanya di bawah 37: pancingan q004 (30), q007 (29), q010 (29), dan
+    `explain` q012, q014, q018 (29 setiap satu).
+34. **SPEC berkata `validate:content` "gagal dalam CI". Repo ini tiada CI. Direkod, belum dibaiki.**
+
+    Dakwaan itu muncul di tiga tempat:
+
+    | Tempat | Dakwaan |
+    |---|---|
+    | SPEC §3.5, jadual katalog DSKP | *"Kod tiada dalam katalog — Ralat — gagal CI"* |
+    | SPEC §3.5, perenggan skrip masa bina | *"… gagal dalam CI jika ada aset hilang …"* |
+    | `scripts/validate-content.js`, komen kepala | *"Fails CI on the first category of problem it finds, so a broken pack cannot reach a child."* |
+
+    `src/features/quiz/activity.ts` pula berkata pek *"Validated at build time by validate:content"*,
+    dan menyebut *"A pack that survived CI"*.
+
+    **Disemak 16 September 2026:**
+
+    - Tiada `.github/`, tiada fail aliran kerja, dan tiada konfigurasi CI lain dalam repo.
+    - Tiada git hook selain fail `.sample`.
+    - `npm run build` ialah `vite build` sahaja, dan tidak menjalankan pengesah.
+    - `npm test` juga tidak menjalankannya.
+    - Hos luar yang membina dari repo, jika ada, tidak kelihatan dari sini. Kalaupun ada, ia
+      menjalankan `build`, dan `build` tidak memanggil pengesah.
+
+    **Akibatnya, ralat `validate:content` tidak menyekat apa-apa.** Ia sudah berlaku: PR #63
+    menggabungkan peraturan jalur (item 33) bersama dua ralat, dan `main` gagal sehingga
+    `fix/band-text`. Ralat itu dijumpai hanya kerana skrip dijalankan dengan tangan.
+
+    Pek juga dihurai dengan Zod semasa masa jalan (`activity.ts`), jadi pek yang rosak skemanya tetap
+    ditolak. Pemeriksaan yang hanya wujud dalam skrip tidak berlaku semasa masa jalan: aset hilang,
+    katalog DSKP, fail kemahiran, dan had jalur.
+
+    **Sehingga dibaiki:** jalankan `npm run validate:content` dengan tangan sebelum menggabungkan
+    perubahan kandungan. Kod keluarnya ialah satu-satunya gerbang. Tidak dibaiki di sini, atas arahan
+    pemilik projek.
