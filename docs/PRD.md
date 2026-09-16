@@ -1281,6 +1281,25 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
 
     **Urutan kerja:** bina isyarat butang, ukur pada bingkai 0 (CLAUDE.md prinsip 5) dan uji pada
     kanak-kanak; kemudian buang ayat daripada ketiga-tiga arahan, dan rakam semula tiga klip.
+
+    **Sebab kedua untuk kerja yang sama — teks arahan membalut tidak sekata, 16 September 2026.**
+    Dilihat buat kali pertama pada iPhone, pada q011. Diukur di pane pada 390×740:
+
+    - Dua float dalam perenggan arahan — butang audio 62px + margin 16px di kiri, slot kancil 85px +
+      margin 16px di kanan — meninggalkan **jalur sempit 121px daripada 299px**, iaitu 40%. Dari
+      baris keempat ke bawah teks mendapat 299px penuh: **lompatan 2.47 kali ganda**.
+    - **q003 dan q006 sudah begitu sejak sepuluh soalan pertama.** Kedua-duanya berakhir dengan baris
+      penuh 281px selepas tiga baris 61–103px. Ini mendahului enjin pemilih dan bukan regresi
+      daripadanya.
+    - **Pencetusnya baris keempat, bukan bilangan ayat.** Arahan tiga baris tidak pernah
+      menunjukkannya. Diukur merentas kesemua 23 arahan: **21 mencapai empat baris atau lebih**, dan
+      10 daripadanya membawa baris penuh ≥200px.
+    - **Membuang *"Kemudian tekan Sedia."* mengecilkan kontras, tidak membuangnya.** q003, q006 dan
+      q011 turun daripada lima baris kepada empat, dan baris penuh daripada 291px kepada 174px. Trio
+      sempit diikuti satu baris penuh masih kekal. Geometri itu sendiri direkod sebagai item 33.
+    - **Perangkap ukuran:** `AudioButton` memulangkan `null` sehingga probe `isAudioAvailable`
+      selesai, jadi ukuran yang diambil terlalu awal menunjukkan satu float sahaja dan jalur
+      terbaca 199px. Tunggu butang audio muncul sebelum mengukur perenggan ini.
 27. **Tiga belas soalan baharu wujud dalam fail, tetapi tiada anak boleh melihatnya. Enjin pemilih
     soalan ialah keutamaan seterusnya.**
 
@@ -1471,3 +1490,40 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     Tiada satu pun daripadanya menyekat enjin, dan tiada satu pun diputuskan di sini. Ia perlu
     dijawab sebelum peta pulau, kedai avatar atau papan pemuka dibina — dan bersama item 10, yang
     akan mengeluarkan q005 dan q009 daripada a1.
+33. **Dua float menyempitkan 40% arahan dalam pek. Jurang geometri, berasingan daripada item 26.**
+
+    Item 26 tentang butang Sedia membawa arahannya sendiri. Ini tentang perenggan arahan itu sendiri:
+    butang audio (62px + margin 16px, kiri) dan slot kancil (85px + margin 16px, kanan) meninggalkan
+    **jalur 121px daripada 299px** untuk tiga baris pertama, kemudian 299px penuh untuk baris keempat
+    ke bawah. Kesannya merentas 21 arahan yang boleh dipilih, diukur pada 390×740: purata 4.1 baris,
+    **16 arahan membawa baris lebar selepas baris sempit**, dan 10 daripadanya baris penuh ≥200px.
+
+    Memendekkan teks tidak menyelesaikannya (item 26): ia menukar 5 baris kepada 4, dan baris penuh
+    291px kepada 174px.
+
+    **Calon, diukur dengan klon perenggan pada font dan lebar yang sama:**
+
+    | Geometri | Jalur sempit | Purata baris | Arahan berjela | Baris penuh ≥200px |
+    |---|---|---|---|---|
+    | Sekarang | 121px | 4.1 | **16 / 21** | 10 |
+    | Butang audio keluar daripada perenggan | 198px | 3.0 | 3 / 21 | 3 |
+    | Butang audio keluar + slot kancil 64px | 219px | 2.9 | **0 / 21** | 0 |
+    | Slot kancil keluar daripada aliran | 299px | 2.2 | 0 / 21 | 0 |
+    | Butang audio sebaris dengan teks | 198px | 3.1 | 12 / 21 | 12 |
+    | Lajur sempit seragam 121px | 121px | 5.4 | 0 / 21 | 0 |
+
+    **Dua jalan buntu, diukur supaya tidak dicuba semula:**
+
+    - **Meletakkan kedua-dua float supaya tamat pada baris yang sama tidak mengubah apa-apa.** Slot
+      kancil dipendekkan kepada 62px memberi nombor yang **sama persis** seperti sekarang. Sebabnya
+      halus: tinggi baris 30.8px, jadi dua baris ialah 61.6px, dan float 62px menjulur 0.4px ke baris
+      ketiga — cukup untuk menyempitkannya. Lantai sasaran sentuh SPEC §9 ialah 64px, iaitu **di atas**
+      61.6px, jadi butang yang mematuhi lantai itu sentiasa menyempitkan tiga baris, bukan dua.
+    - **Lajur sempit seragam memberi q011 lapan baris** pada 121px. Itu lajur akhbar, bukan arahan.
+
+    Belum diputuskan. Kos setiap calon belum diukur: butang audio yang mengambil baris sendiri pernah
+    berharga 80px tinggi kad, dan itu yang menolak jalur pancingan ke bawah lipatan — walaupun calon
+    itu juga memulangkan kira-kira satu baris arahan (34px). Satu calon kelima belum diukur langsung:
+    butang audio duduk **di dalam** slot kancil 88px yang sudah ditempah, dan maskot menggantikannya
+    pada maklum balas — satu float sahaja, tanpa kos tinggi, dengan harga butang ulang tayang hilang
+    semasa maklum balas.
