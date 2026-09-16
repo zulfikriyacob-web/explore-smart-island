@@ -1734,3 +1734,56 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     **Sehingga dibaiki:** jalankan `npm run validate:content` dengan tangan sebelum menggabungkan
     perubahan kandungan. Kod keluarnya ialah satu-satunya gerbang. Tidak dibaiki di sini, atas arahan
     pemilik projek.
+35. **Enam jurang dalam dokumen, dijumpai semasa membaca semula dokumen projek, 16 September 2026.
+    Direkod, belum dibaiki.**
+
+    Dijumpai dengan membaca HANDOFF, CLAUDE.md, SPEC, §16 ini dan `docs/kssr/` satu demi satu.
+    Pemilik projek mengesahkan nombor 1 dan nombor 6.
+
+    **1. Ujian ayat pada ibu bapa sudah berlaku, tetapi SPEC dan item 13 masih berkata ia akan
+    berlaku.** SPEC §5.7 dan item 13 berkata ayat sokongan yang diluluskan *"akan diuji pada seorang
+    ibu bapa sebenar"*. Nota itu ditulis dalam `a24126e` (12 September 2026, 17:55). Jawapan seorang
+    ibu bapa difailkan sebagai `docs/kssr/ibu-bapa-ayat-status.md` dalam `fb599a6`, 19 minit
+    kemudian (18:14). Tiada fail lain merujuknya.
+
+    Yang ibu bapa itu kata, dan yang belum diputuskan:
+
+    - Ayat kita difahami, tetapi tidak menjawab kenapa app menyemak semula.
+    - Ia memisahkan satu keadaan kepada dua, dan memberi yang kedua — pernah menguasai, jawapan
+      terbaru salah — tajuk *"Sedang dinilai semula"*. Itu berbunyi seperti nama status, dan SPEC
+      §5.7 menetapkan tiga status tanpa label keempat.
+    - Ia menamakan tiga perkara yang ibu bapa mahu tahu: sama ada anak pernah boleh, kenapa statusnya
+      "sedang dinilai", dan apa yang perlu berlaku sebelum app boleh kata dikuasai.
+
+    Ayat itu kekal belum dikunci. Keputusannya milik pemilik projek.
+
+    **2. Siapa yang menanda borang pusingan 2 tidak direkod.** Nota status borang itu berkata:
+    *"Salinan bertanda berdasarkan semakan pedagogi dalam perbualan ini."* `teacher-reviewed`
+    bersandar pada borang ini (item 20), tetapi tiada fail berkata perbualan yang mana, atau siapa
+    yang menanda salinan itu. Rekod guru yang dibina semula
+    (`docs/kssr/guru-rekod-jawapan-subkemahiran-dan-semakan-soalan.md`) berkata keputusan semakan
+    itu *"pernah diberi dalam chat"*. Ia tidak berkata siapa yang menanda borang.
+
+    **3. CLAUDE.md menerangkan `docs/kssr/` sebagai apa yang guru dan ibu bapa hantar.** Bahagian
+    *"Received documents"* berkata folder itu memegang *"what teachers and a parent actually sent"*.
+    Tiga daripada lapan fail bukan begitu: `soalan-baharu-math-y1.md` dan
+    `pembetulan-akhir-soalan-math-y1.md` ditulis Claude, dan
+    `pemilik-kalibrasi-buku-teks-kpm-tahun-1.md` ialah nota pemilik projek. Pengepala setiap satu
+    menyatakannya dengan betul; penerangan folder itu yang tidak.
+
+    **4. HANDOFF.md bertajuk *"Handoff — 12 September 2026"*,** dan kali terakhir diubah dalam
+    `e079ef8` (13 September 2026). Stor kemajuan, enjin pemilih, float bertindan dan had jalur
+    (14–16 September) direkod dalam SPEC dan §16 ini sahaja. Pembaca yang bermula di HANDOFF, seperti
+    yang disuruh, mendapat gambaran 13 September dahulu.
+
+    **5. Nombor item §16 tidak berturutan dalam fail:** 1–13, kemudian 19, 18, 17, 16, 14, 15, dan
+    20 ke atas. Spesifikasi CommonMark hanya memakai nombor item pertama dalam senarai bernombor, dan
+    yang lain dinomborkan mengikut susunan. Pemapar yang mengikutnya memaparkan item yang ditaip 19
+    sebagai 14, dan rujukan seperti *"item 18"* menunjuk kepada nombor yang tidak kelihatan di skrin.
+    **Tidak dilihat dirender:** tiada pemapar Markdown dalam `node_modules`, dan tiada pratonton
+    GitHub dari sini.
+
+    **6. Item 27 berkata susun atur q011–q023 *"belum diukur"*. Ia sudah diukur.** Item 33 menyapu
+    kesemua 21 soalan yang boleh dipilih, dalam keadaan pancingan dan dedahan, pada 390×740, dan
+    melaporkan tiada potongan pada 360×780 bagi semua soalan, dengan inset 0 dan 34. Ayat item 27
+    ditulis ketika tiada skrin memaparkan soalan itu, dan tidak dikemas kini.
