@@ -268,6 +268,15 @@ note. When a summary and a file disagree, the file is right.
   the tally in `QuestionVisual.tsx` is one, so `document.querySelector('[aria-live]')`
   can return the tally instead of the feedback region. Select the feedback region
   as `p.sr-only[aria-live]` (`QuizScreen.tsx`).
+- **The prompt's audio button mounts only after an async probe, and measuring
+  before it lands measures a layout no child sees.** `AudioButton` returns `null`
+  until `isAudioAvailable(src)` resolves, so a measurement taken the moment a
+  question renders finds one float in the prompt instead of two: the narrow band
+  reads 199px where the settled value is 121px, and the wrap is a different
+  shape. Wait for `button[aria-label="Main audio soalan"]` inside the paragraph
+  before measuring anything about it. This cost a whole finding in one session —
+  the numbers were wrong, and a comment in `QuizScreen.tsx` that was right was
+  reported as wrong on the strength of them. (PRD §16 item 26.)
 
 ### Controls that unmount themselves
 
