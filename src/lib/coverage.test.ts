@@ -2,8 +2,9 @@ import { describe, expect, it } from 'vitest';
 
 import {
   EVIDENCE_FOR_MASTERY,
-  EVIDENCE_WITH_TWO_OPTIONS,
+  GUESS_ODDS_FOR_MASTERY,
   SESSIONS_FOR_MASTERY,
+  guessOdds,
   skillState,
   standardCoverage,
   type Evidence,
@@ -78,26 +79,65 @@ describe('sub-skill status', () => {
   });
 
   /*
-    The two-option bar. A blind guess on two options is right one time in two:
-    three such answers mislabel 12.5% of guessers, four mislabel 6.25%. The rule
-    reads the evidence the child actually gave, never the item bank.
+    The guess ceiling, from the teacher's record: blind guessing every distinct
+    question right must happen at most 4% of the time. A two-option guess is
+    right one time in two. There is no "four two-option questions" rule; four
+    of them are 1/16, 6.25%, and stay under the bar. The rule reads the evidence
+    the child actually gave, never the item bank.
   */
-  it('stays evaluating on three two-option questions', () => {
+  it('stays evaluating on three two-option questions (1/8)', () => {
     expect(skillState({ attempted: true, evidence: evidence(3, 2, true) }).status).toBe('evaluating');
   });
 
-  it('is mastered on four two-option questions across two sessions', () => {
-    expect(skillState({ attempted: true, evidence: evidence(4, 2, true) }).status).toBe('mastered');
+  it('stays evaluating on four two-option questions (1/16)', () => {
+    expect(skillState({ attempted: true, evidence: evidence(4, 2, true) }).status).toBe('evaluating');
   });
 
-  it('does not let a two-option answer stand in for the third of three', () => {
+  it('is mastered on five two-option questions across two sessions (1/32)', () => {
+    expect(skillState({ attempted: true, evidence: evidence(5, 2, true) }).status).toBe('mastered');
+  });
+
+  it('does not let a two-option answer stand in for the third of three (1/18)', () => {
     const mixed = [...evidence(2, 2), ...evidence(1, 1, true, 3)];
     expect(skillState({ attempted: true, evidence: mixed }).status).toBe('evaluating');
   });
 
-  it('reaches four with a mix of two- and three-option questions', () => {
+  it('stays evaluating on three two-option and one three-option question (1/24)', () => {
+    const mixed = [...evidence(1, 1), ...evidence(3, 2, true, 2)];
+    expect(skillState({ attempted: true, evidence: mixed }).status).toBe('evaluating');
+  });
+
+  it('is mastered on two two-option and two three-option questions (1/36)', () => {
     const mixed = [...evidence(2, 2), ...evidence(2, 2, true, 3)];
     expect(skillState({ attempted: true, evidence: mixed }).status).toBe('mastered');
+  });
+
+  /*
+    Odds are per question. The same three-option question answered right in two
+    sittings is one guess, not two: counted twice, q1 would lift 1/12 to 1/36.
+  */
+  it('takes the odds of a repeated question once', () => {
+    const repeated: Evidence[] = [
+      { questionId: 'q1', sessionId: 's1', twoOptions: false },
+      { questionId: 'q1', sessionId: 's2', twoOptions: false },
+      { questionId: 'q2', sessionId: 's1', twoOptions: true },
+      { questionId: 'q3', sessionId: 's2', twoOptions: true },
+    ];
+    expect(skillState({ attempted: true, evidence: repeated }).status).toBe('evaluating');
+  });
+
+  /*
+    A question recorded once with two options and once with three is costed as
+    two. Costed as three, this would be 1/27 and mastered.
+  */
+  it('costs a question as two options if any of its evidence says so', () => {
+    const conflicting: Evidence[] = [
+      { questionId: 'q1', sessionId: 's1', twoOptions: true },
+      { questionId: 'q1', sessionId: 's2', twoOptions: false },
+      { questionId: 'q2', sessionId: 's1', twoOptions: false },
+      { questionId: 'q3', sessionId: 's2', twoOptions: false },
+    ];
+    expect(skillState({ attempted: true, evidence: conflicting }).status).toBe('evaluating');
   });
 
   /*
@@ -138,8 +178,17 @@ describe('sub-skill status', () => {
 
   it('states its own thresholds', () => {
     expect(EVIDENCE_FOR_MASTERY).toBe(3);
-    expect(EVIDENCE_WITH_TWO_OPTIONS).toBe(4);
+    expect(GUESS_ODDS_FOR_MASTERY).toBe(25);
     expect(SESSIONS_FOR_MASTERY).toBe(2);
+  });
+});
+
+describe('guess odds', () => {
+  it('multiplies two for a two-option question and three otherwise', () => {
+    expect(guessOdds([])).toBe(1);
+    expect(guessOdds([false, false, false])).toBe(27);
+    expect(guessOdds([true, true, true, true])).toBe(16);
+    expect(guessOdds([false, false, true])).toBe(18);
   });
 });
 

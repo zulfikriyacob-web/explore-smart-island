@@ -1098,8 +1098,9 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     item 23.
 22. ~~**Ambang tiga soalan disaiz pada soalan tiga pilihan; soalan dua pilihan lebih mudah diteka.
     Belum diputuskan — ia menyentuh ambang yang guru luluskan.**~~ ~~**DIPUTUSKAN — SPEC menyatakan
-    julat; soalan dibawa ke pusingan semakan guru seterusnya.**~~ **DIJAWAB — empat soalan untuk
-    bukti dua pilihan, dikira daripada jawapan anak.**
+    julat; soalan dibawa ke pusingan semakan guru seterusnya.**~~ ~~**DIJAWAB — empat soalan untuk
+    bukti dua pilihan, dikira daripada jawapan anak.**~~ **DIBETULKAN — siling tekaan gabungan 4%,
+    daripada rekod guru.**
 
     SPEC §5.7 pernah berkata tiga *"disaiz mengikut soalan paling mudah dalam pek"*. Salah:
     soalan paling mudah diteka ialah dua pilihan (item 21), dan skema membenarkannya bagi `mcq`
@@ -1145,6 +1146,34 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     jawab, dan mengira mengikut bank *"menghukum anak untuk komposisi bank soalan"*.
 
     `kssr:review` berhenti bertanya soalan ini, kerana ia sudah dijawab.
+
+    **DIBETULKAN, 17 September 2026 — "empat soalan" bukan peraturan guru.** Rekod guru yang dibina
+    semula (`docs/kssr/guru-rekod-jawapan-subkemahiran-dan-semakan-soalan.md`) berkata guru *"tidak
+    menetapkan"* `dua pilihan = mesti empat soalan` *"secara mutlak"*. Peraturannya:
+
+    > *"Minimum 3 item berbeza + minimum 2 sesi + kebarangkalian tekaan gabungan ≤ 4%."*
+
+    Empat soalan datang daripada dokumen pembetulan yang ditulis Claude, dan disalin ke
+    `coverage.ts` dalam `952dc77` bersama komen *"Approved in teacher review"*. Komen itu atribusi
+    palsu, dan dibuang. Kelas kesilapan yang sama seperti item 18: ringkasan dibaca sebagai perkataan
+    guru.
+
+    | Bukti yang anak beri | Tekaan | Peraturan lama, syarat (b) | Siling 4% |
+    |---|---|---|---|
+    | 4 dua pilihan | 6.25% | Dikuasai | Tidak |
+    | 3 dua pilihan + 1 tiga pilihan | 4.2% | Dikuasai | Tidak |
+
+    Hanya dua gabungan itu berubah; setiap gabungan lain memberi keputusan yang sama. Kedua-duanya
+    perlukan tiga soalan dua pilihan dalam satu sub-kemahiran. Sejak stor kemajuan wujud (`993acdd`,
+    15 September 2026), q019 ialah satu-satunya soalan dua pilihan yang membawa sub-kemahiran, jadi
+    tiada peranti boleh memegang bukti begitu dan tiada `masteredOnce` tersimpan yang salah kerana
+    ini. Kesimpulan daripada sejarah pek, bukan bacaan storan peranti. Kecacatan itu akan menjadi
+    nyata jika item 21 memilih perbandingan dua nombor.
+
+    **Dibina, atas keputusan pemilik projek:** siling dalam `skillState()`, melalui `guessOdds()`,
+    yang `validate:content` turut panggil. Dua andaian kita, bukan peraturan guru, direkod dalam
+    SPEC §5.7: count-tap dikira tiga pilihan, dan soalan yang buktinya bercanggah tentang bilangan
+    pilihan dikira dua pilihan.
 23. ~~**`explain` tidak boleh dicapai pada setiap `mcq`, bukan hanya yang dua pilihan. Tiga
     daripada tiga dalam pek. Belum diputuskan.**~~ **DISELESAIKAN — jawapan didedah apabila anak
     tidak boleh salah lagi.**
@@ -1230,7 +1259,7 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
 
     **Menyelesaikan jurang itu menyelesaikan ketiga-tiganya, dan menjadikan q024 tidak perlu.**
     Dengan q019 tiga pilihan, `order_ascending` ada tiga soalan tiga pilihan — q007, q018, q019 —
-    dan syarat (a) SPEC §5.7 boleh dicapai tanpa soalan keempat. Hari ini ia ada dua, jadi ia
+    dan ambang SPEC §5.7 boleh dicapai tanpa soalan keempat. Hari ini ia ada dua, jadi ia
     perlukan q024 (item 28).
 
     **Kosnya belum diukur.** Jadual lapisan item 10 terpakai kepada ketiga-tiganya: `schema.ts`,
@@ -1382,13 +1411,13 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
       yang sama seperti q007 — *"Susunan manakah dari kecil ke besar?"* — dan nombor berbeza, dan
       menurut dokumen itu guru pernah menulis supaya tidak sekadar menambah soalan yang sama tetapi
       menukar nombor **dan** bentuk. Pemilik projek sedang bertanya guru sama ada ia memadai.
-      Sehingga itu `order_ascending` kurang satu soalan tiga pilihan untuk syarat (a) SPEC §5.7.
+      Sehingga itu `order_ascending` kurang satu soalan untuk ambang SPEC §5.7.
       Item 24 menjadikan q024 tidak perlu.
 
       **Akibat yang boleh diperhati, bukan hanya jurang ambang — 16 September 2026.** Dengan enjin
       pemilih (item 27), sub-kemahiran yang belum dikuasai didahulukan. `order_ascending` **tidak
       boleh** dikuasai hari ini: tiga soalannya ialah q007, q018 dan q019, dan q019 dua pilihan, jadi
-      syarat (a) perlukan satu soalan tiga pilihan lagi dan syarat (b) perlukan empat soalan. Ia
+      tekaan gabungannya 1/18, di atas siling 4% SPEC §5.7, dan ia perlukan satu soalan lagi. Ia
       kekal dalam kumpulan keutamaan kedua selama-lamanya, jadi **q007, q018 dan q019 muncul dalam
       hampir setiap sesi aras 2** — anak akan nampak tiga soalan yang sama berulang kali. Soalan
       keempat, atau item 24, menutupnya.

@@ -19,8 +19,9 @@
 
     - Ambang. Guru tidak menetapkan "dua pilihan = mesti empat soalan" secara
       mutlak. Peraturannya: minimum 3 item berbeza, minimum 2 sesi, cubaan
-      pertama betul, kebarangkalian tekaan gabungan <= 4%. coverage.ts hari
-      ini melabel empat item dua pilihan (6.25%) sebagai Dikuasai.
+      pertama betul, kebarangkalian tekaan gabungan <= 4%. Semasa difailkan,
+      coverage.ts melabel empat item dua pilihan (6.25%) sebagai Dikuasai.
+      Dibetulkan 17 September 2026 (PRD 16 item 22).
     - q022. Bahasanya boleh, sebagai teka-teki atau latihan hubungan nombor.
       Ia bukan bukti mastery two_digit_plus_two_digit_no_bridge. Sub-kemahiran
       itu perlukan satu lagi soalan penambahan terus.

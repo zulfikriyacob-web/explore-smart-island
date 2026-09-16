@@ -781,7 +781,7 @@ menolaknya: sistem status mudah sudah memadai, dan kerja yang label keempat itu 
 dilakukan dengan lebih baik oleh baris liputan di bawah — yang **menamakan** kemahiran, bukan
 sekadar mengira.
 
-#### Ambang: 3 soalan berbeza (4 jika ada bukti dua pilihan), percubaan pertama, merentas 2 sesi
+#### Ambang: 3 soalan berbeza, percubaan pertama, merentas 2 sesi, tekaan gabungan ≤ 4%
 
 **Tiga, kerana inilah kos tekaan.** Pada soalan tiga pilihan, anak yang meneka membuta betul
 satu daripada tiga kali. Tetapi `mcq` dan `mcq-image` dibenarkan **dua** pilihan (§3.4), dan di
@@ -804,29 +804,56 @@ banyak daripadanya dua pilihan.
 > dua soalan begitu — q004 (`mcq`, satu-satunya bukti `1.6.1/digit_at_tens`) dan q009
 > (`mcq-image`, tiada SP). Soalan paling mudah diteka ialah dua pilihan.
 
-**Ambang untuk bukti dua pilihan: empat soalan** — 14 September 2026, PRD §16 item 22. Empat
-soalan dua pilihan diteka betul **6.25%**, `(1/2)⁴`. Menurut dokumen pembetulan,
-guru meluluskan empat untuk soalan dua pilihan — ringkasan yang ditulis Claude, bukan perkataan guru
-(`docs/kssr/pembetulan-akhir-soalan-math-y1.md`, PRD §16 item 29). Peraturannya, dikuatkuasakan dalam `skillState()`
-(`coverage.ts`):
+**Siling tekaan: 4%.** Daripada rekod guru yang dibina semula
+(`docs/kssr/guru-rekod-jawapan-subkemahiran-dan-semakan-soalan.md`):
 
-> Dikuasai jika **(a)** ≥ 3 soalan berbeza **tiga pilihan atau lebih** dijawab betul pada
-> percubaan pertama merentas ≥ 2 sesi; **atau (b)** ≥ 4 soalan berbeza dijawab begitu, apa pun
-> bilangan pilihannya. count-tap tidak dikira sebagai dua pilihan.
+> *"Minimum 3 item berbeza + minimum 2 sesi + kebarangkalian tekaan gabungan ≤ 4%."*
+
+Rekod itu menyebutnya keputusan reka bentuk app, bukan peraturan rasmi DSKP. Peraturannya,
+dikuatkuasakan dalam `skillState()` (`coverage.ts`):
+
+> Dikuasai jika ≥ 3 soalan berbeza dijawab betul pada percubaan pertama, merentas ≥ 2 sesi, dan
+> peluang meneka **kesemuanya** betul secara membuta tidak melebihi 4% — iaitu hasil darab
+> bilangan pilihan soalan-soalan itu sekurang-kurangnya 25. Setiap soalan dikira sekali, walaupun
+> ia dijawab betul dalam lebih daripada satu sesi.
+
+`validate:content` memanggil fungsi yang sama, `guessOdds()`, untuk bertanya sama ada bank boleh
+mencapainya.
+
+Dua andaian **kita**, bukan peraturan guru:
+
+- **count-tap dikira sebagai tiga pilihan.** Rekod guru tidak menyebut count-tap. Itu yang kod
+  lakukan sebelum siling ini masuk, dan menukarnya tanpa sebab menukar keputusan yang sudah
+  berjalan. Keputusan pemilik projek, 17 September 2026.
+- **Soalan yang direkod dua pilihan dalam satu bukti dan tiga dalam yang lain dikira dua
+  pilihan.** Kalau mesti tersilap, tersilap ke arah ambang yang lebih tinggi.
+
+> **Dibetulkan 17 September 2026.** Bahagian ini pernah menetapkan **empat soalan** untuk bukti
+> dua pilihan: Dikuasai pada (a) tiga soalan tiga pilihan, atau (b) empat soalan apa pun bilangan
+> pilihannya. Asalnya dokumen pembetulan yang ditulis Claude, bukan guru. Rekod guru berkata dia
+> *"tidak menetapkan"* `dua pilihan = mesti empat soalan` *"secara mutlak"*.
+>
+> Syarat (b) meluluskan dua gabungan yang siling 4% tolak: empat dua pilihan (6.25%), dan tiga dua
+> pilihan bersama satu tiga pilihan (4.2%). Tiada gabungan lain berubah. Kedua-duanya memerlukan
+> tiga soalan dua pilihan dalam satu sub-kemahiran, dan sejak stor kemajuan wujud q019 ialah
+> satu-satunya soalan dua pilihan yang membawa sub-kemahiran — jadi tiada peranti memegang bukti
+> begitu. Kesimpulan daripada sejarah pek, bukan bacaan storan peranti. PRD §16 item 22.
 
 **Dikira daripada apa yang anak jawab, bukan apa yang bank soalan pegang.** Tiga jawapan tiga
-pilihan mencapai ambang pada tiga walaupun bank sub-kemahiran itu ada soalan dua pilihan. Mengira
-mengikut bank — menaikkan seluruh sub-kemahiran kepada empat sebaik sahaja satu soalan dua pilihan
-wujud — ditolak pemilik projek kerana ia *"menghukum anak untuk komposisi bank soalan"*: kesilapan
-yang sama yang borang bertanda batalkan untuk bentuk soalan.
+pilihan mencapai ambang walaupun bank sub-kemahiran itu ada soalan dua pilihan. Mengira mengikut
+bank — menaikkan ambang seluruh sub-kemahiran sebaik sahaja satu soalan dua pilihan wujud — ditolak
+pemilik projek kerana ia *"menghukum anak untuk komposisi bank soalan"*: kesilapan yang sama yang
+borang bertanda batalkan untuk bentuk soalan.
 
 | Bukti yang anak beri | Peneka tersalah label | Dikuasai? |
 |---|---|---|
-| 3 soalan tiga pilihan | 3.7% | Ya — (a) |
+| 3 soalan tiga pilihan | 3.7% | Ya |
 | 2 tiga pilihan + 1 dua pilihan | 5.6% | Tidak |
 | 3 dua pilihan | 12.5% | Tidak |
-| 2 tiga pilihan + 2 dua pilihan | 2.8% | Ya — (b) |
-| 4 dua pilihan | 6.25% | Ya — (b) |
+| 1 tiga pilihan + 3 dua pilihan | 4.2% | Tidak |
+| 4 dua pilihan | 6.25% | Tidak |
+| 2 tiga pilihan + 2 dua pilihan | 2.8% | Ya |
+| 5 dua pilihan | 3.1% | Ya |
 
 `validate:content` membaca bank hanya untuk bertanya sama ada ambang **boleh** dicapai, dan
 mencetak sub-kemahiran yang tidak boleh.
@@ -835,7 +862,7 @@ mencetak sub-kemahiran yang tidak boleh.
 >
 > **Jangan sekali-kali memaparkan 3.7% sebagai keyakinan.** Ayat *"97% pasti anak menguasai
 > kemahiran ini"* tidak boleh ditulis, di mana-mana, kepada sesiapa. Setiap nombor dalam jadual
-> di atas — 6.25% termasuk — tertakluk kepada larangan yang sama.
+> di atas — 6.25% dan siling 4% termasuk — tertakluk kepada larangan yang sama.
 >
 > 3.7% ialah peluang **tiga tekaan rawak semuanya betul**, di bawah satu andaian tentang satu
 > jenis soalan. Ia bukan kebarangkalian bahawa seorang anak menguasai sesuatu. Kedua-duanya

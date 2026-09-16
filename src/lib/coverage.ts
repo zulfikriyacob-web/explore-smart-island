@@ -42,9 +42,12 @@ export interface Evidence {
   sessionId: string;
   /**
    * Did the question have exactly two options? A blind guess on it is right one
-   * time in two, not one in three, so it counts toward the four-question bar
-   * only (`EVIDENCE_WITH_TWO_OPTIONS`). A count-tap is `false`: it has no
-   * options to guess between.
+   * time in two, not one in three, which is what `guessOdds` multiplies.
+   *
+   * A count-tap is `false`, so it is costed as three options. **That is our
+   * assumption, not the teacher's rule** — the teacher's record does not
+   * mention count-tap, and costing it differently would change results that
+   * are already running.
    */
   twoOptions: boolean;
   /*
@@ -72,39 +75,54 @@ export interface Evidence {
 export type SkillStatus = 'not-tested' | 'evaluating' | 'mastered';
 
 /**
- * Distinct questions **with three or more options** answered right on the first
- * attempt before a sub-skill may be called mastered.
+ * The bar, as the teacher's record states it: *"Minimum 3 item berbeza + minimum
+ * 2 sesi + kebarangkalian tekaan gabungan ≤ 4%."*
+ * (docs/kssr/guru-rekod-jawapan-subkemahiran-dan-semakan-soalan.md). The record
+ * calls it an app design decision, not a DSKP rule.
  *
- * Three, because of what a wrong guess costs. On a three-option question a
- * child guessing blindly is right one time in three: one item of evidence
- * mislabels 33% of guessers, two mislabels 11%, three mislabels 3.7% — the
- * first value under one in twenty. `mcq` and `mcq-image` also allow two
- * options (SPEC §3.4), where three items mislabel 12.5%, so two-option evidence
- * does not count toward this bar: `EVIDENCE_WITH_TWO_OPTIONS`.
+ * This is the minimum number of distinct questions answered right on the first
+ * attempt. Three three-option answers are guessed right 1/27 of the time, 3.7%,
+ * which is under the ceiling on its own; three two-option answers are 12.5%,
+ * which is not. `GUESS_ODDS_FOR_MASTERY` decides between them.
  *
- * **That 3.7% is a design figure and nothing else.** It is the chance of three
- * blind guesses all landing under one assumption about one question type. It is
- * **not** a probability that a child has learned anything, and it must never
- * reach a screen as "97% sure". SPEC §5.7 carries the prohibition next to the
+ * **3.7% and 4% are design figures and nothing else.** They are chances of blind
+ * guesses all landing, under one assumption about the questions. They are
+ * **not** a probability that a child has learned anything, and must never reach
+ * a screen as "97% sure". SPEC §5.7 carries the prohibition next to the
  * arithmetic, deliberately, because a number left alone finds its way onto a
  * dashboard.
  */
 export const EVIDENCE_FOR_MASTERY = 3;
 
 /**
- * Or this many distinct questions of any kind.
+ * The 4% ceiling, as odds: blind guessing every distinct question right must
+ * happen at most one time in this many.
  *
- * Four two-option questions guessed right is (1/2)^4 = 6.25%. Approved in
- * teacher review for two-option questions (PRD §16 item 22).
+ * Kept as an integer so the check is exact. The odds are a product of 2s and 3s,
+ * which never equals 25, so no evidence sits on the boundary.
  *
- * **Counted from what the child answered, not from what the pack holds.** Three
- * three-option answers reach the bar at three whatever else the item bank
- * contains; a two-option answer only matters to the child who gave it. Raising
- * the bar for a whole sub-skill because one question in the bank has two
+ * There is no "two options means four questions" rule. That figure came from a
+ * summary of the teacher's answers, not from the teacher, and it let four
+ * two-option answers — 1/16, 6.25% — through (PRD §16 item 22).
+ *
+ * **Counted from what the child answered, not from what the pack holds.** A
+ * two-option question only raises the bar for the child who answered it.
+ * Raising it for a whole sub-skill because one question in the bank has two
  * options would hold a child back for how the bank is written — the mistake the
  * teacher's marked review undid for question form.
  */
-export const EVIDENCE_WITH_TWO_OPTIONS = 4;
+export const GUESS_ODDS_FOR_MASTERY = 25;
+
+/**
+ * One in how many blind guessers would get all of these questions right: the
+ * product of their option counts, one flag per distinct question.
+ *
+ * `validate:content` asks the same function whether a bank can reach the bar,
+ * so the script and the app cannot disagree about it.
+ */
+export function guessOdds(twoOptions: readonly boolean[]): number {
+  return twoOptions.reduce((odds, two) => odds * (two ? 2 : 3), 1);
+}
 
 /**
  * And from at least two sittings.
@@ -147,22 +165,31 @@ export interface SkillInput {
   masteredOnce?: boolean;
 }
 
-/** Enough distinct questions, from enough distinct sittings, within one set of evidence. */
-function meetsBar(evidence: readonly Evidence[], questions: number): boolean {
+/**
+ * Enough distinct questions, from enough distinct sittings, and hard enough to
+ * guess all together.
+ *
+ * Odds are taken once per question: answering the same one again is not a
+ * second guess to multiply. A question recorded with two options in one entry
+ * and three in another counts as two — if we must be wrong, be wrong towards
+ * the higher bar.
+ */
+function meetsBar(evidence: readonly Evidence[]): boolean {
+  const twoOptions = new Map<string, boolean>();
+  for (const e of evidence) {
+    twoOptions.set(e.questionId, (twoOptions.get(e.questionId) ?? false) || e.twoOptions);
+  }
   return (
-    new Set(evidence.map((e) => e.questionId)).size >= questions &&
-    new Set(evidence.map((e) => e.sessionId)).size >= SESSIONS_FOR_MASTERY
+    twoOptions.size >= EVIDENCE_FOR_MASTERY &&
+    new Set(evidence.map((e) => e.sessionId)).size >= SESSIONS_FOR_MASTERY &&
+    guessOdds([...twoOptions.values()]) >= GUESS_ODDS_FOR_MASTERY
   );
 }
 
 export function skillState(input: SkillInput): SkillState {
   const { attempted, evidence, latestWasWrong = false, masteredOnce = false } = input;
 
-  const barMet =
-    meetsBar(
-      evidence.filter((e) => !e.twoOptions),
-      EVIDENCE_FOR_MASTERY,
-    ) || meetsBar(evidence, EVIDENCE_WITH_TWO_OPTIONS);
+  const barMet = meetsBar(evidence);
 
   const banked = masteredOnce || barMet;
 
