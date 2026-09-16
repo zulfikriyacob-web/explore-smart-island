@@ -44,7 +44,12 @@ export function AudioButton({
    * it is an interruption.
    */
   autoPlay?: boolean;
-  /** Lets the caller place the button — it floats inside the prompt (DESIGN 5.2). */
+  /**
+   * Lets the caller place the button. It floats inside the prompt, under the
+   * kancil slot rather than opposite it (DESIGN 5.2): two reservations on
+   * opposite sides narrowed the first three lines to 121px of 299 and left the
+   * fourth full width, which reads as broken text.
+   */
   className?: string;
 }) {
   const reduce = useReducedMotion();

@@ -1521,9 +1521,96 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
       61.6px, jadi butang yang mematuhi lantai itu sentiasa menyempitkan tiga baris, bukan dua.
     - **Lajur sempit seragam memberi q011 lapan baris** pada 121px. Itu lajur akhbar, bukan arahan.
 
-    Belum diputuskan. Kos setiap calon belum diukur: butang audio yang mengambil baris sendiri pernah
-    berharga 80px tinggi kad, dan itu yang menolak jalur pancingan ke bawah lipatan — walaupun calon
-    itu juga memulangkan kira-kira satu baris arahan (34px). Satu calon kelima belum diukur langsung:
-    butang audio duduk **di dalam** slot kancil 88px yang sudah ditempah, dan maskot menggantikannya
-    pada maklum balas — satu float sahaja, tanpa kos tinggi, dengan harga butang ulang tayang hilang
-    semasa maklum balas.
+    **DIPUTUSKAN dan DIBINA, 16 September 2026: kedua-dua float dalam satu lajur di kanan.** Slot
+    kancil kekal di penjuru kanan atas, butang audio `clear` di bawahnya. Pemilik projek memilih sisi
+    itu kerana kancil mempunyai sebab kedudukan dan butang audio tidak: penjuru kanan ditempah supaya
+    tiada apa berganjak apabila maskot muncul (DESIGN §7, disahkan pada telefon), manakala butang
+    audio hanya perlu berdekatan teks yang dibacanya — dan turun satu baris tidak memutuskan itu.
+    DESIGN §5.2 dipinda dengan sebabnya.
+
+    | | Sebelum | Selepas |
+    |---|---|---|
+    | Arahan melompat lebar | 12 / 21 | **0 / 21** |
+    | Purata baris | 4.1 | 3.2 |
+    | Teks di bawah mana-mana float | — | **tiada** |
+    | 360×780, semua soalan, inset 0 dan 34 | — | **tiada potongan** |
+    | 390×740, tanpa pancingan | tiada potongan | tiada potongan |
+
+    **Dua jalan buntu, diukur dan direkod supaya tidak dicuba semula:**
+
+    - **Mutlak dengan `text-indent` tidak boleh.** `text-indent` menempah baris pertama sahaja;
+      butang 64px merangkumi 2.08 baris pada tinggi baris 30.8px, jadi baris kedua dan ketiga
+      berjalan di belakang butang. Diukur: butang x45–107 y89–151, baris 2 pada x45 y119, baris 3
+      pada x45 y149. Float menempah setiap baris yang dilindunginya; itu sebab ia float.
+    - **Butang pada baris sendiri, atau di bawah kad**, memotong kad 31–35px pada inset 0 dan
+      49–53px pada inset 34.
+
+    **Tarikan −4px, bukan −8px.** Titik terendah lukisan kancil berada kira-kira 4.7px di atas dasar
+    slot 88px. Pada −8px butang audio menutup 3px maskot semasa maklum balas; pada −24px, 19px. −4px
+    meninggalkan 0.8px antara keduanya, dan ia tarikan terbesar yang tidak menindih. Maskot tidak
+    dikecilkan, atas arahan pemilik projek.
+
+    **Potongan kad pada q013 diterima.** Pada 390×740, soalan pilihan dengan jalur pancingan, inset
+    34px: kad menatal kira-kira 25px, tetapi yang menatal hanyalah padding bawah kad. Baris terakhir
+    teks kekal 56px dari tepi yang kelihatan, dan tepi bawah butang audio mendarat tepat pada tepi itu.
+    Ini kelas yang sama yang DESIGN §5.2 sudah terima dan yang iPhone sudah sahkan pada dedahan awal
+    q001. Pemilik projek pernah menolak "terima potongan" atas andaian bahawa soalan terpotong;
+    pengukuran menunjukkan ia tidak.
+
+    **Yang tinggal terbuka: q002.** Arahan dua baris dengan pancingan panjang. Float bertindan memberi
+    perenggannya 143px untuk teks 61px, dan dengan pancingan dipaparkan, yang terpotong ialah butang
+    audio, bukan teks: **9px pada inset 0, 26px pada inset 34**, pada 390×740. 360×780 bersih. Padding
+    kad 16px bersama tarikan −4px masih meninggalkan 1px dan 18px.
+
+    Susunan bersyarat — hanya arahan panjang mendapat lajur bertindan — **ditolak**. Mengukur teks
+    semasa render menjadikan susun atur bergantung pada bila fon Lexend selesai dimuat, dan anak akan
+    melihatnya beralih di depan matanya: kelas yang sama seperti pepijat bingkai-tidak-tiba, dengan
+    punca berbeza. Ambang panjang teks pula rapuh.
+
+    **Diagnosis q002 — masalah kandungan, bukan geometri.** Kesemua 21 soalan disapu, dalam keadaan
+    pancingan dan dedahan, pada 390×740. Butang audio terpotong dalam **tiga keadaan sahaja**: pancingan
+    q002, dedahan q002 (tiada `explain`, jadi pancingan kekal dalam jalur), dan **dedahan q001**.
+    Ketiga-tiganya ialah satu-satunya teks jalur yang membalut kepada dua baris, menjadikan jalur 78px.
+    Setiap teks satu baris (51px) hanya menatalkan padding. Puncanya bukan arahan pendek: setiap arahan
+    dua atau tiga baris mendapat perenggan 143px yang sama daripada float bertindan, dan arahan q001
+    bukan pendek.
+
+    Kapasiti satu baris jalur, Lexend 18px: **326px pada 390×740, 296px pada 360×780**. Pancingan q002
+    341px dan `explain` q001 334px — dua sahaja daripada 33 teks BM yang melebihinya. Pada 360×780
+    kedua-duanya juga membalut, tetapi skrin itu ada ruang tinggi dan tiada apa terpotong. Tiga pancingan
+    berada 3–6px daripada had 360px: q007 (293px), q001 (292px), q008 (290px).
+
+    Sebelum float bertindan, dedahan q001 yang sama memotong kad 9px pada 390×740 dan 27px dengan
+    inset iPhone — padding sahaja, teks penuh (dedahan awal, di atas). Kini butang audio ialah
+    kandungan terendah kad, jadi teks jalur dua baris memotong butang ulang tayang. **Kekangan itu
+    datang bersama susun atur ini.**
+
+    **Dua teks ditulis semula oleh pemilik projek:** pancingan q002 dan `explain` q001. Kedua-duanya
+    tidak dirakam, jadi tiada rakaman semula.
+
+    > **Jangan salin pancingan q016 ke q002.** Pancingan q002 ialah *"Bilang: dua puluh sembilan,
+    > kemudian?"*. *"Kira menurun satu langkah."* ialah pancingan q016 — sub-kemahiran sama, `after` —
+    > dan ia salah arah untuk q002: q002 bertanya nombor *selepas* 29, iaitu membilang naik. Kedua-duanya
+    > pernah dikelirukan semasa soalan ini dibincangkan.
+
+    **Peraturan, dikuatkuasakan dalam `validate:content`:**
+
+    | Teks jalur BM (`hint`, `explain`) | Kesan | Asas |
+    |---|---|---|
+    | Lebih 28 aksara | Amaran | 28 aksara muat 296px dengan margin 12.9px dalam kes terlebar |
+    | 37 aksara atau lebih | Ralat | Pada 390px, 64% ayat 37 aksara membalut, dan setiap satu dari 41. Anggaran |
+
+    Diukur dalam pelayar terhadap 12,000 ayat yang dibina daripada 192 perkataan pek sendiri, supaya
+    had itu meliputi teks yang belum ditulis. Aksara, bukan piksel, kerana Node tiada fon. 41 aksara
+    ialah titik "pasti membalut", tetapi ia tidak menangkap kedua-dua teks yang memang membalut (37 dan
+    38); 37 menangkapnya tanpa menanda sebarang teks yang muat hari ini — yang terpanjang ialah 33.
+
+    Amaran dan bukan ralat untuk had 28, **atas keputusan pemilik projek**: lapan teks BM lain yang
+    melebihi 28 aksara (30–33) muat satu baris pada 390×740 hari ini, dan menulis semula ayat yang
+    berfungsi untuk memuaskan had adalah kerja tanpa faedah. Amaran ialah maklumat untuk penulis. Hari
+    ini `validate:content` memberi dua ralat — dua teks di atas, sehingga ditulis semula — dan lapan
+    amaran jalur: pancingan q001, q004, q007, q008, q017, dan `explain` q012, q014, q018.
+
+    **BM sahaja buat masa ini.** EN belum dihantar: `LANG` dikodkan `'ms'` dan audio EN masih 0 bait.
+    **Had yang sama terpakai kepada EN bila suis bahasa mendarat.** Hari ini tujuh teks EN melebihi 28
+    aksara: pancingan q004, q007, q010, dan `explain` q001, q012, q014, q018.

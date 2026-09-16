@@ -641,6 +641,28 @@ Susun atur sebenar:
   > Kedua-dua kali nombor itu betul apabila ditulis dan salah selepas satu perubahan yang
   > munasabah. Sebab itu peraturannya ialah sebaran, bukan nilai mutlak.
 
+  **Butang audio duduk di bawah slot kancil, bukan bertentangan dengannya — 16 September 2026.**
+
+  Dua tempahan pada sisi bertentangan meninggalkan jalur **121px daripada 299px** untuk tiga
+  baris pertama, dan dari baris keempat teks mendapat 299px penuh. Diukur pada 390×740 merentas
+  21 arahan pek: **12 melompat**, yang paling teruk 272px. Anak membacanya sebagai teks rosak,
+  bukan perenggan. Disusun pada satu sisi, dengan butang audio `clear` di bawah slot kancil:
+  **tiada satu pun melompat**, dan purata arahan turun daripada 4.1 baris kepada 3.2.
+
+  **Kenapa butang audio yang berganjak, bukan slot kancil.** Penjuru kanan atas ditempah supaya
+  **tiada elemen berganjak** apabila maskot muncul pada maklum balas (§7) — kekangan yang diukur
+  dan disahkan pada telefon. Butang audio tiada tuntutan setara pada kedudukannya: turun satu
+  baris tidak memutuskan kaitannya dengan teks yang dibacanya, dan itu sahaja sebab ia berada
+  dalam perenggan ini.
+
+  Dua susunan diukur dan memberi nombor balut yang **serupa** — audio di kiri dengan kancil di
+  bawahnya memberi hasil sama. Yang memutuskan bukan balutan, tetapi tempahan penjuru itu.
+
+  > **Jangan letak butang itu di luar aliran teks.** Mutlak dengan `text-indent` dicuba dan
+  > diukur: `text-indent` menempah **baris pertama sahaja**, sedangkan butang 64px merangkumi
+  > 2.08 baris pada tinggi baris 30.8px. Baris kedua dan ketiga berjalan di belakang butang.
+  > Float menempah setiap baris yang dilindunginya; itu sebabnya ia float.
+
   `flex-shrink` kekal pada nilai lalainya, jadi kad yang terlalu tinggi untuk skrin tetap
   mengalah, dan `overflow-y-auto` menangkap bakinya. Kanak-kanak boleh menatal untuk membaca;
   mereka tidak boleh menatal untuk mencari butang yang tiada.
@@ -729,7 +751,8 @@ dan bunyi tersendiri. Seorang kanak-kanak buta warna mesti masih tahu apa yang b
 
 ### Kad soalan
 Putih, jejari `lg` 28px, padding 24px, `--shadow-float`. Lebar penuh tolak margin 16px.
-Mengandungi: butang main audio (kiri atas), teks soalan, kandungan pilihan.
+Mengandungi: teks soalan, slot kancil (kanan atas), butang main audio (lajur kanan, di bawah
+slot kancil — §5.2), kandungan pilihan.
 
 ### Bar kemajuan
 Trek tinggi 12px, jejari penuh, latar `--garis`. Isi menggunakan warna modul.
@@ -839,7 +862,7 @@ Dua elemen datang dan pergi semasa sesi. Ruang untuk kedua-duanya ditempah sejak
 | Slot | Saiz | Tempat | Semasa rehat |
 |---|---|---|---|
 | **Kancil** | 88 × 88 | Penjuru kanan atas kad soalan | Kosong, penjuru kekal lapang |
-| **Butang audio** | 64 × 64 | Penjuru kiri atas kad soalan | Kosong bila bahasa itu belum ada rakaman |
+| **Butang audio** | 64 × 64 | Lajur kanan kad soalan, terus di bawah slot kancil | Kosong bila bahasa itu belum ada rakaman |
 | **Seterusnya** | tinggi 72 | Dasar timbunan jawapan | Kosong, atau butang hantar soalan itu |
 
 **Seterusnya ialah 72, bukan 88.** §5.1 meletakkan "seterusnya" antara tindakan sekunder pada
@@ -850,9 +873,17 @@ atau butang ke hadapan berpindah antara keadaan soalan dan maklum balas pada cou
 jauh di atas lantai mutlak 64px.
 
 **Butang audio terapung, bukan satu baris sendiri.** Sebagai baris ia kos kad 80px — 64 butang
-campur jurang 16 — dan itu yang menolak kad melepasi ruang yang ada pada telefon. Terapung ia
-kos 45px kurang. Kedua-dua float duduk dalam perenggan yang sama, audio di kiri dan kancil di
-kanan, dan teks membalut antara mereka sebelum mengalir semula selebar penuh.
+campur jurang 16 — dan itu yang menolak kad melepasi ruang yang ada pada telefon. Diukur semula
+16 September 2026, pada soalan yang memaparkan jalur pancingan: sebagai baris sendiri kad
+menatal dalam dirinya, memotong **31px** pada 390×740 dan **49px** dengan inset 34px iPhone.
+Soalan itu sendiri jatuh di bawah lipatan kadnya sendiri, tepat pada saat anak tersekat.
+
+**Kedua-dua float duduk dalam satu lajur, di kanan: slot kancil di atas, butang audio `clear`
+di bawahnya.** Bertentangan — audio kiri, kancil kanan — ia menyempitkan tiga baris pertama
+kepada 121px daripada 299px dan membiarkan baris keempat selebar penuh; 12 daripada 21 arahan
+pek melompat begitu. Dalam satu lajur, tiada satu pun melompat. Sebab kancil yang kekal di
+penjuru itu, dan bukan sebaliknya: penjuru kanan ditempah supaya tiada apa berganjak apabila
+maskot muncul (§5.2 membawa hujah penuh).
 
 > Satu kesan sampingan yang diukur, dan ia mengejutkan: **float yang lebih tinggi daripada
 > perenggannya menjulur ke blok seterusnya.** Kancil 88px dan audio 64px kedua-duanya lebih

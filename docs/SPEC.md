@@ -389,6 +389,13 @@ Yang tinggal:
 |---|---|---|
 | `count-tap` membawa `hint` | **Ralat** | Tiada pancingan count-tap pernah diukur semasa objeknya masih diketuk. Jalur tidak mengecut; kad yang memegang objek itu yang mengalah. Ukur dahulu sebelum menarik balik |
 | Soalan pilihan yang kesilapan pertamanya sudah mendedah membawa `hint` — hari ini, dua pilihan | **Amaran** | Pancingan itu tidak pernah dilihat. Teks mati, bukan skrin rosak |
+| Teks jalur BM (`hint`, `explain`) melebihi **28 aksara** | **Amaran** | Mungkin membalut kepada dua baris pada skrin 360px. 28 aksara muat jalur 296px dengan margin 12.9px |
+| Teks jalur BM **37 aksara atau lebih** | **Ralat** | Hampir pasti membalut pada 390×740, dan jalur dua baris memotong butang audio di situ. Anggaran daripada kiraan aksara |
+
+Had jalur dikira dalam **aksara, bukan piksel**, kerana Node tiada fon. Kedua-duanya diukur dalam
+pelayar, Lexend 18px, terhadap ayat yang dibina daripada perbendaharaan kata pek sendiri. BM sahaja
+buat masa ini; had yang sama terpakai kepada EN bila suis bahasa mendarat. Asal-usul dan nombor
+penuh: PRD §16 item 33.
 
 Amaran itu bertanya kepada `missesLeft()` (§4.2), fungsi yang sama yang enjin gunakan.
 
