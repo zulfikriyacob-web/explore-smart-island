@@ -1545,12 +1545,27 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     - **Butang pada baris sendiri, atau di bawah kad**, memotong kad 31–35px pada inset 0 dan
       49–53px pada inset 34.
 
-    **Yang tinggal terbuka: satu skrin, 21px.** Pada 390×740, pada soalan pilihan yang memaparkan
-    jalur pancingan, dengan inset iPhone 34px digantikan, kad menatal dalam dirinya sebanyak **21px**
-    (3px pada inset 0). Sebabnya dua float bertindan menjadikan perenggan setinggi kedua-duanya —
-    139px berbanding 89px teks sahaja. Jurang −8px sudah dipakai; ia tidak mencukupi, dan −24px masih
-    meninggalkan 5px. Maskot tidak dikecilkan, atas arahan pemilik projek.
+    **Tarikan −4px, bukan −8px.** Titik terendah lukisan kancil berada kira-kira 4.7px di atas dasar
+    slot 88px. Pada −8px butang audio menutup 3px maskot semasa maklum balas; pada −24px, 19px. −4px
+    meninggalkan 0.8px antara keduanya, dan ia tarikan terbesar yang tidak menindih. Maskot tidak
+    dikecilkan, atas arahan pemilik projek.
 
-    Pilihan yang tinggal, belum diputuskan: terima potongan itu pada satu skrin; kurangkan padding kad
-    daripada 24px (16px dipulangkan); atau benarkan timbunan jawapan mengalah, yang bercanggah dengan
-    DESIGN §5.2 bahawa kad yang mengalah dahulu.
+    **Potongan kad pada q013 diterima.** Pada 390×740, soalan pilihan dengan jalur pancingan, inset
+    34px: kad menatal kira-kira 25px, tetapi yang menatal hanyalah padding bawah kad. Baris terakhir
+    teks kekal 56px dari tepi yang kelihatan, dan tepi bawah butang audio mendarat tepat pada tepi itu.
+    Ini kelas yang sama yang DESIGN §5.2 sudah terima dan yang iPhone sudah sahkan pada dedahan awal
+    q001. Pemilik projek pernah menolak "terima potongan" atas andaian bahawa soalan terpotong;
+    pengukuran menunjukkan ia tidak.
+
+    **Yang tinggal terbuka: q002.** Arahan dua baris dengan pancingan panjang. Float bertindan memberi
+    perenggannya 143px untuk teks 61px, dan dengan pancingan dipaparkan, yang terpotong ialah butang
+    audio, bukan teks: **9px pada inset 0, 26px pada inset 34**, pada 390×740. 360×780 bersih. Padding
+    kad 16px bersama tarikan −4px masih meninggalkan 1px dan 18px.
+
+    Susunan bersyarat — hanya arahan panjang mendapat lajur bertindan — **ditolak**. Mengukur teks
+    semasa render menjadikan susun atur bergantung pada bila fon Lexend selesai dimuat, dan anak akan
+    melihatnya beralih di depan matanya: kelas yang sama seperti pepijat bingkai-tidak-tiba, dengan
+    punca berbeza. Ambang panjang teks pula rapuh.
+
+    Menunggu diagnosis: berapa soalan lain berbentuk sama, dan sama ada teks pancingannya boleh
+    menyelesaikannya.

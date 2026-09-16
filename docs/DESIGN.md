@@ -751,7 +751,8 @@ dan bunyi tersendiri. Seorang kanak-kanak buta warna mesti masih tahu apa yang b
 
 ### Kad soalan
 Putih, jejari `lg` 28px, padding 24px, `--shadow-float`. Lebar penuh tolak margin 16px.
-Mengandungi: butang main audio (kiri atas), teks soalan, kandungan pilihan.
+Mengandungi: teks soalan, slot kancil (kanan atas), butang main audio (lajur kanan, di bawah
+slot kancil — §5.2), kandungan pilihan.
 
 ### Bar kemajuan
 Trek tinggi 12px, jejari penuh, latar `--garis`. Isi menggunakan warna modul.
