@@ -277,6 +277,16 @@ note. When a summary and a file disagree, the file is right.
   before measuring anything about it. This cost a whole finding in one session —
   the numbers were wrong, and a comment in `QuizScreen.tsx` that was right was
   reported as wrong on the strength of them. (PRD §16 item 26.)
+- **Measuring how wide the lines are is not measuring where they are.** A
+  proposed layout put the audio button out of the text flow and reserved its
+  space with `text-indent`. Every check passed: the card did not scroll, the
+  button was pressable, the focus ring was right, frame 0 was legible, the line
+  widths were even. The text ran straight through the button, because
+  `text-indent` reserves the **first line only** and a 64px button covers 2.08
+  lines at a 30.8px line-height. Whenever an element is out of flow — absolute,
+  fixed, a negative margin — take each line's `x` and compare it against that
+  element's box, not just the line's width. Ranges give both:
+  `range.getClientRects()` per text node. (PRD §16 item 33.)
 
 ### Controls that unmount themselves
 

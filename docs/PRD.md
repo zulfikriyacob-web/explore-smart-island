@@ -1521,9 +1521,36 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
       61.6px, jadi butang yang mematuhi lantai itu sentiasa menyempitkan tiga baris, bukan dua.
     - **Lajur sempit seragam memberi q011 lapan baris** pada 121px. Itu lajur akhbar, bukan arahan.
 
-    Belum diputuskan. Kos setiap calon belum diukur: butang audio yang mengambil baris sendiri pernah
-    berharga 80px tinggi kad, dan itu yang menolak jalur pancingan ke bawah lipatan — walaupun calon
-    itu juga memulangkan kira-kira satu baris arahan (34px). Satu calon kelima belum diukur langsung:
-    butang audio duduk **di dalam** slot kancil 88px yang sudah ditempah, dan maskot menggantikannya
-    pada maklum balas — satu float sahaja, tanpa kos tinggi, dengan harga butang ulang tayang hilang
-    semasa maklum balas.
+    **DIPUTUSKAN dan DIBINA, 16 September 2026: kedua-dua float dalam satu lajur di kanan.** Slot
+    kancil kekal di penjuru kanan atas, butang audio `clear` di bawahnya. Pemilik projek memilih sisi
+    itu kerana kancil mempunyai sebab kedudukan dan butang audio tidak: penjuru kanan ditempah supaya
+    tiada apa berganjak apabila maskot muncul (DESIGN §7, disahkan pada telefon), manakala butang
+    audio hanya perlu berdekatan teks yang dibacanya — dan turun satu baris tidak memutuskan itu.
+    DESIGN §5.2 dipinda dengan sebabnya.
+
+    | | Sebelum | Selepas |
+    |---|---|---|
+    | Arahan melompat lebar | 12 / 21 | **0 / 21** |
+    | Purata baris | 4.1 | 3.2 |
+    | Teks di bawah mana-mana float | — | **tiada** |
+    | 360×780, semua soalan, inset 0 dan 34 | — | **tiada potongan** |
+    | 390×740, tanpa pancingan | tiada potongan | tiada potongan |
+
+    **Dua jalan buntu, diukur dan direkod supaya tidak dicuba semula:**
+
+    - **Mutlak dengan `text-indent` tidak boleh.** `text-indent` menempah baris pertama sahaja;
+      butang 64px merangkumi 2.08 baris pada tinggi baris 30.8px, jadi baris kedua dan ketiga
+      berjalan di belakang butang. Diukur: butang x45–107 y89–151, baris 2 pada x45 y119, baris 3
+      pada x45 y149. Float menempah setiap baris yang dilindunginya; itu sebab ia float.
+    - **Butang pada baris sendiri, atau di bawah kad**, memotong kad 31–35px pada inset 0 dan
+      49–53px pada inset 34.
+
+    **Yang tinggal terbuka: satu skrin, 21px.** Pada 390×740, pada soalan pilihan yang memaparkan
+    jalur pancingan, dengan inset iPhone 34px digantikan, kad menatal dalam dirinya sebanyak **21px**
+    (3px pada inset 0). Sebabnya dua float bertindan menjadikan perenggan setinggi kedua-duanya —
+    139px berbanding 89px teks sahaja. Jurang −8px sudah dipakai; ia tidak mencukupi, dan −24px masih
+    meninggalkan 5px. Maskot tidak dikecilkan, atas arahan pemilik projek.
+
+    Pilihan yang tinggal, belum diputuskan: terima potongan itu pada satu skrin; kurangkan padding kad
+    daripada 24px (16px dipulangkan); atau benarkan timbunan jawapan mengalah, yang bercanggah dengan
+    DESIGN §5.2 bahawa kad yang mengalah dahulu.
