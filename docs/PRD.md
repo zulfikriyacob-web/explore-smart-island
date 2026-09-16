@@ -1639,12 +1639,54 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     | Teks jalur BM (`hint`, `explain`) | Kesan | Asas |
     |---|---|---|
     | Lebih 28 aksara | Amaran | 28 aksara muat 296px dengan margin 12.9px dalam kes terlebar |
-    | 37 aksara atau lebih | Ralat | Pada 390px, 64% ayat 37 aksara membalut, dan setiap satu dari 41. Anggaran |
+    | 37 aksara atau lebih | Ralat | Pada 390px, 64% ayat 37 aksara membalut, dan 98% pada 40. Anggaran |
 
-    Diukur dalam pelayar terhadap 12,000 ayat yang dibina daripada 192 perkataan pek sendiri, supaya
-    had itu meliputi teks yang belum ditulis. Aksara, bukan piksel, kerana Node tiada fon. 41 aksara
-    ialah titik "pasti membalut", tetapi ia tidak menangkap kedua-dua teks yang memang membalut (37 dan
-    38); 37 menangkapnya tanpa menanda sebarang teks yang muat hari ini — yang terpanjang ialah 33.
+    Dua ukuran dalam pelayar, Lexend 400 18px, kedua-duanya terhadap ayat yang dibina daripada 192
+    perkataan BM pek sendiri, supaya had itu meliputi teks yang belum ditulis. Aksara, bukan piksel,
+    kerana Node tiada fon.
+
+    - **Had 28 — 6,000 ayat, 20–39 aksara, terhadap 296px.** Ayat terlebar sehingga 28 aksara ialah
+      283.1px (margin 12.9px). Sehingga 29 aksara 294.2px (margin 1.8px); sehingga 30, 302.5px,
+      melimpah. Teks sebenar terlebar sehingga 28 aksara: 264px.
+    - **Had 37 — 12,000 ayat dijana, 8,896 yang panjangnya 30–42 aksara diukur terhadap 326px:**
+
+    | Aksara | Sampel | Membalut pada 326px | Tersempit | Terlebar |
+    |---|---|---|---|---|
+    | 30 | 424 | 0% | 241px | 302px |
+    | 31 | 486 | 0% | 246px | 310px |
+    | 32 | 581 | 0% | 253px | 330px |
+    | 33 | 690 | 3% | 250px | 336px |
+    | 34 | 743 | 8% | 276px | 344px |
+    | 35 | 754 | 24% | 264px | 352px |
+    | 36 | 786 | 30% | 279px | 365px |
+    | 37 | 801 | 64% | 297px | 362px |
+    | 38 | 782 | 79% | 303px | 388px |
+    | 39 | 736 | 92% | 308px | 393px |
+    | 40 | 803 | 98% | 318px | 397px |
+    | 41 | 726 | 100%, dibundarkan | **321px — muat** | 406px |
+    | 42 | 584 | 100% | 338px | 411px |
+
+    **Tiada titik "pasti membalut" di bawah 42 aksara**, dan panjang melebihi 42 tidak diukur. 37
+    dipilih kerana ia menangkap kedua-dua teks yang memang membalut (37 dan 38) tanpa menanda sebarang
+    teks yang muat hari ini — yang terpanjang ialah 33.
+
+    **Pembetulan, 16 September 2026.** Rekod ini, komen `checkBandText` dalam
+    `scripts/validate-content.js`, mesej commit `7642bd7` dan badan PR #63 berkata kedua-dua had diukur
+    terhadap 12,000 ayat, dan bahawa setiap ayat dari 41 aksara membalut. **Kedua-duanya tidak
+    tepat.** Had 28 diukur dalam larian berasingan terhadap 6,000 ayat. Dan 100% pada 41 aksara ialah
+    angka dibundarkan: output yang sama melaporkan ayat 41 aksara tersempit pada 321px, yang muat.
+    Kesilapan itu dibuat semasa hasil asal pertama kali dibaca, dan ringkasan compaction membawanya ke
+    hadapan. Ia dijumpai dengan membaca semula hasil asal dalam transkrip sesi. Rekod ini dan komen
+    skrip dibetulkan; mesej commit dan badan PR tidak boleh diubah. **Peraturan tidak berubah:** 28 dan
+    37 kekal, kerana tiada satu pun bersandar pada titik 41.
+
+    Mesej ralat validator dahulu berkata jalur *"almost always wraps"* dari 37 aksara, sedangkan
+    kadarnya 64% pada 37. **Dibetulkan atas arahan pemilik projek**, kerana penulis kandungan
+    membaca mesej itu dan mempercayainya. Mesej kini memetik kadar yang diukur bagi panjang teks itu
+    sendiri daripada jadual di atas: 64%, 79%, 92%, 98%, *"over 99%"* pada 41, dan 100% pada 42.
+    Melebihi 42 aksara, mesej berkata setiap ayat 42 aksara membalut dan yang lebih panjang tidak
+    diukur. Mesej juga berkata ia anggaran daripada kiraan aksara, bukan ukuran piksel teks itu,
+    kerana Node tiada fon.
 
     Amaran dan bukan ralat untuk had 28, **atas keputusan pemilik projek**: lapan teks BM lain yang
     melebihi 28 aksara (30–33) muat satu baris pada 390×740 hari ini, dan menulis semula ayat yang

@@ -92,14 +92,15 @@ function checkCountTapHint(pack) {
  * cut off, at the moment a stuck child is most likely to want the question again.
  *
  * Characters, not pixels: Node has no fonts. Both limits were measured in the
- * browser, in Lexend 18px, against 12,000 sentences built from the pack's own
- * vocabulary so that they cover text not yet written:
+ * browser, in Lexend 18px, against sentences built from the pack's own vocabulary
+ * so that they cover text not yet written:
  *
  * - 28 characters fit the 296px band of a 360px screen with 12.9px to spare in the
- *   widest case. Above that a line may wrap on a narrow phone. A warning: most such
- *   text fits today, and the number is for the writer.
- * - 37 characters wrap at 390px in 64% of sentences, and from 41 in every one
- *   measured. 37 is where both texts that did wrap sit, and nothing that fits comes
+ *   widest of 6,000 sentences. Above that a line may wrap on a narrow phone. A
+ *   warning: most such text fits today, and the number is for the writer.
+ * - 37 characters wrap the 326px band at 390px in 64% of sentences, and 40 in 98%.
+ *   No length below 42 wrapped every time: the narrowest 41-character sentence was
+ *   321px. 37 is where both texts that did wrap sit, and nothing that fits comes
  *   close. An error — but an estimate: a 37-character line can still fit.
  *
  * Malay only for now. The app is built in Malay and English has no recordings;
@@ -107,6 +108,16 @@ function checkCountTapHint(pack) {
  */
 const BAND_WARN_CHARS = 28;
 const BAND_ERROR_CHARS = 37;
+
+// The share of measured sentences of each length that wrapped the 326px band at
+// 390x740 (PRD 16 item 33). 41 rounds to 100%, but its narrowest sentence fitted.
+const BAND_WRAP_SHARE = { 37: '64%', 38: '79%', 39: '92%', 40: '98%', 41: 'over 99%', 42: '100%' };
+
+function bandWrapShare(chars) {
+  return chars in BAND_WRAP_SHARE
+    ? `${BAND_WRAP_SHARE[chars]} of ${chars}-character sentences`
+    : 'every 42-character sentence (longer ones were not measured)';
+}
 
 function checkBandText(pack) {
   const errors = [];
@@ -118,9 +129,10 @@ function checkBandText(pack) {
       const chars = [...text].length;
       if (chars >= BAND_ERROR_CHARS) {
         errors.push(
-          `questions.${i} ("${q.id}"): "${kind}" is ${chars} characters — from ${BAND_ERROR_CHARS} the help band ` +
-            `almost always wraps to two lines at 390x740, and a two-line band cuts off the audio button there ` +
-            `(PRD 16 item 33; an estimate from character count)`,
+          `questions.${i} ("${q.id}"): "${kind}" is ${chars} characters. In the browser, ${bandWrapShare(chars)} ` +
+            `wrapped the help band to two lines at 390x740, and a two-line band cuts off the audio button there. ` +
+            `An estimate from character count, not a pixel measurement of this text: Node has no fonts ` +
+            `(PRD 16 item 33)`,
         );
       } else if (chars > BAND_WARN_CHARS) {
         warnings.push(
