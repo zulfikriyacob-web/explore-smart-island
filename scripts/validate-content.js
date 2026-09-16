@@ -109,6 +109,16 @@ function checkCountTapHint(pack) {
 const BAND_WARN_CHARS = 28;
 const BAND_ERROR_CHARS = 37;
 
+// The share of measured sentences of each length that wrapped the 326px band at
+// 390x740 (PRD 16 item 33). 41 rounds to 100%, but its narrowest sentence fitted.
+const BAND_WRAP_SHARE = { 37: '64%', 38: '79%', 39: '92%', 40: '98%', 41: 'over 99%', 42: '100%' };
+
+function bandWrapShare(chars) {
+  return chars in BAND_WRAP_SHARE
+    ? `${BAND_WRAP_SHARE[chars]} of ${chars}-character sentences`
+    : 'every 42-character sentence (longer ones were not measured)';
+}
+
 function checkBandText(pack) {
   const errors = [];
   const warnings = [];
@@ -119,9 +129,10 @@ function checkBandText(pack) {
       const chars = [...text].length;
       if (chars >= BAND_ERROR_CHARS) {
         errors.push(
-          `questions.${i} ("${q.id}"): "${kind}" is ${chars} characters — from ${BAND_ERROR_CHARS} the help band ` +
-            `almost always wraps to two lines at 390x740, and a two-line band cuts off the audio button there ` +
-            `(PRD 16 item 33; an estimate from character count)`,
+          `questions.${i} ("${q.id}"): "${kind}" is ${chars} characters. In the browser, ${bandWrapShare(chars)} ` +
+            `wrapped the help band to two lines at 390x740, and a two-line band cuts off the audio button there. ` +
+            `An estimate from character count, not a pixel measurement of this text: Node has no fonts ` +
+            `(PRD 16 item 33)`,
         );
       } else if (chars > BAND_WARN_CHARS) {
         warnings.push(

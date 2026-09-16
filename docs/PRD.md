@@ -1680,8 +1680,13 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     skrip dibetulkan; mesej commit dan badan PR tidak boleh diubah. **Peraturan tidak berubah:** 28 dan
     37 kekal, kerana tiada satu pun bersandar pada titik 41.
 
-    Mesej ralat validator masih berkata jalur *"almost always wraps"* dari 37 aksara. Pada 37 aksara
-    angkanya 64%. Mesej itu tidak diubah dalam pembetulan ini.
+    Mesej ralat validator dahulu berkata jalur *"almost always wraps"* dari 37 aksara, sedangkan
+    kadarnya 64% pada 37. **Dibetulkan atas arahan pemilik projek**, kerana penulis kandungan
+    membaca mesej itu dan mempercayainya. Mesej kini memetik kadar yang diukur bagi panjang teks itu
+    sendiri daripada jadual di atas: 64%, 79%, 92%, 98%, *"over 99%"* pada 41, dan 100% pada 42.
+    Melebihi 42 aksara, mesej berkata setiap ayat 42 aksara membalut dan yang lebih panjang tidak
+    diukur. Mesej juga berkata ia anggaran daripada kiraan aksara, bukan ukuran piksel teks itu,
+    kerana Node tiada fon.
 
     Amaran dan bukan ralat untuk had 28, **atas keputusan pemilik projek**: lapan teks BM lain yang
     melebihi 28 aksara (30–33) muat satu baris pada 390×740 hari ini, dan menulis semula ayat yang
