@@ -158,6 +158,19 @@ work, and it burns through usage limits fast.
   that worked yesterday may belong to another device today. Re-read the IP before
   handing a URL to a phone, and start the server with `--host` or the phone gets
   nothing.
+- **A new LAN address is a new origin.** Whatever the phone stored under the old
+  address — a saved session, progress — is not there under the new one, so a
+  device test that needs existing storage has to seed it first. The `-a1` saved-
+  session rejection was tested that way: a temporary seeding page in `public/`,
+  opened on the phone, then deleted. Do not commit a seeding page.
+- **Port 5173 can belong to another project.** On 16 September 2026 it was held by
+  the Vite server of `C:\dev\aap-mes-project-Claude`, so the `quiz` configuration
+  in `.claude/launch.json` could not start (`autoPort` is false). Check the owner
+  with `Get-NetTCPConnection -LocalPort 5173 -State Listen` before assuming this
+  project's server is running. The workaround used: a temporary `quiz-5174` entry
+  (`npm run dev -- --host --port 5174 --strictPort`), added before `preview_start`
+  and removed right after, so `launch.json` is never committed with it. Do not stop
+  the other project's server.
 - **The permission classifier refuses history rewrites.** `git commit --amend`
   followed by `git push --force-with-lease`, to drop a stray file from a pushed
   commit, was refused. Undo with a follow-up commit instead (`git rm --cached`,
@@ -264,6 +277,20 @@ note. When a summary and a file disagree, the file is right.
   this pane is about the pane. One thing the pane does share with an iPhone: its
   AudioContext `sampleRate` is 48000, so Howler's `Howler.unload()` branch for a
   rate other than 44100 is live in both.
+- **The pane draws about 3% small.** The 88px kancil slot measured 85px and the
+  64px audio button 62px. Pixel figures taken here are good to about ±3px; a
+  margin smaller than that is not a margin you have measured.
+- **`focus()` from a script does not trigger `:focus-visible` in the pane.**
+  `outline-style` reads `none` on a focused button, so the keyboard focus ring
+  cannot be verified from here. Check that the element is focusable and first in
+  order, and say the ring itself was not seen.
+- **Importing the pack's JSON from the pane is safe.** The second-module-instance
+  trap in principle 5 applies to modules with state, such as the player. The pack
+  is read-only data, so a second copy holds the same text as the app's.
+- **Floats sit side by side unless one is given `clear`.** Two floats on the same
+  side stack only with `clear`; without it the second floats next to the first,
+  and the text band is as narrow as it was with one on each side. That is why
+  "both on one side" first measured the same as the original layout.
 - **The quiz screen can carry two `aria-live` regions.** On a count-tap question
   the tally in `QuestionVisual.tsx` is one, so `document.querySelector('[aria-live]')`
   can return the tally instead of the feedback region. Select the feedback region
