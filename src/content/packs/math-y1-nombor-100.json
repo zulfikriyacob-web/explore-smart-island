@@ -95,10 +95,7 @@
       "prompt": { "ms": "Nombor manakah yang lebih besar?", "en": "Which number is bigger?" },
       "promptAudio": { "ms": "/audio/ms/q001.mp3", "en": "/audio/en/q001.mp3" },
       "hint": { "ms": "Lihat nombor di hadapan dahulu.", "en": "Look at the first digit." },
-      "explain": {
-        "ms": "74 ada 7 puluh. 47 ada 4 puluh sahaja.",
-        "en": "74 has 7 tens. 47 has only 4 tens."
-      },
+      "explain": { "ms": "74: 7 puluh. 47: 4 puluh.", "en": "74: 7 tens. 47: 4 tens." },
       "payload": {
         "options": [
           { "id": "a", "text": { "ms": "47", "en": "47" } },
@@ -121,7 +118,7 @@
       "wordingVariant": "A",
       "prompt": { "ms": "Apakah nombor selepas 29?", "en": "What is the number after 29?" },
       "promptAudio": { "ms": "/audio/ms/q002.mp3", "en": "/audio/en/q002.mp3" },
-      "hint": { "ms": "Bilang: dua puluh sembilan, kemudian?", "en": "Count on: twenty-nine, then?" },
+      "hint": { "ms": "Kira satu lagi selepas 29.", "en": "Count one more after 29." },
       "payload": {
         "options": [
           { "id": "a", "text": { "ms": "28", "en": "28" } },
