@@ -82,6 +82,58 @@ function checkCountTapHint(pack) {
 }
 
 /**
+ * The help band — the hint, or the revealed answer's `explain` — must stay on one
+ * line (DESIGN 7, PRD 16 item 33).
+ *
+ * The audio button sits under the kancil slot, and on the tightest screen — 390x740,
+ * a choice question showing its band, an iPhone's 34px bottom inset — the card
+ * scrolls. When the band is one line, what scrolls is the card's bottom padding.
+ * When it wraps to two, the band grows from 51px to 78px and the audio button is
+ * cut off, at the moment a stuck child is most likely to want the question again.
+ *
+ * Characters, not pixels: Node has no fonts. Both limits were measured in the
+ * browser, in Lexend 18px, against 12,000 sentences built from the pack's own
+ * vocabulary so that they cover text not yet written:
+ *
+ * - 28 characters fit the 296px band of a 360px screen with 12.9px to spare in the
+ *   widest case. Above that a line may wrap on a narrow phone. A warning: most such
+ *   text fits today, and the number is for the writer.
+ * - 37 characters wrap at 390px in 64% of sentences, and from 41 in every one
+ *   measured. 37 is where both texts that did wrap sit, and nothing that fits comes
+ *   close. An error — but an estimate: a 37-character line can still fit.
+ *
+ * Malay only for now. The app is built in Malay and English has no recordings;
+ * the same limits apply to English when the language switch lands.
+ */
+const BAND_WARN_CHARS = 28;
+const BAND_ERROR_CHARS = 37;
+
+function checkBandText(pack) {
+  const errors = [];
+  const warnings = [];
+  for (const [i, q] of pack.questions.entries()) {
+    for (const kind of ['hint', 'explain']) {
+      const text = q[kind]?.ms;
+      if (text === undefined) continue;
+      const chars = [...text].length;
+      if (chars >= BAND_ERROR_CHARS) {
+        errors.push(
+          `questions.${i} ("${q.id}"): "${kind}" is ${chars} characters — from ${BAND_ERROR_CHARS} the help band ` +
+            `almost always wraps to two lines at 390x740, and a two-line band cuts off the audio button there ` +
+            `(PRD 16 item 33; an estimate from character count)`,
+        );
+      } else if (chars > BAND_WARN_CHARS) {
+        warnings.push(
+          `${q.id}: "${kind}" is ${chars} characters, over the ${BAND_WARN_CHARS} that keep the help band ` +
+            `to one line on a 360px screen with room to spare (PRD 16 item 33)`,
+        );
+      }
+    }
+  }
+  return { errors, warnings };
+}
+
+/**
  * The DSKP codes that actually exist, read from `src/content/kssr/<subject>-y<year>.json`.
  *
  * This exists because a pack once claimed content standard 1.1 and learning
@@ -443,6 +495,9 @@ async function validatePack(file) {
 
   errors.push(...checkCountTapHint(pack));
   warnings.push(...checkUnreachableHint(pack));
+  const band = checkBandText(pack);
+  errors.push(...band.errors);
+  warnings.push(...band.warnings);
 
   const catalogue = await loadCatalogue(pack.subject, pack.year);
   if (catalogue === null) {
