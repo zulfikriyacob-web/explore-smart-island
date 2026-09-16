@@ -92,14 +92,15 @@ function checkCountTapHint(pack) {
  * cut off, at the moment a stuck child is most likely to want the question again.
  *
  * Characters, not pixels: Node has no fonts. Both limits were measured in the
- * browser, in Lexend 18px, against 12,000 sentences built from the pack's own
- * vocabulary so that they cover text not yet written:
+ * browser, in Lexend 18px, against sentences built from the pack's own vocabulary
+ * so that they cover text not yet written:
  *
  * - 28 characters fit the 296px band of a 360px screen with 12.9px to spare in the
- *   widest case. Above that a line may wrap on a narrow phone. A warning: most such
- *   text fits today, and the number is for the writer.
- * - 37 characters wrap at 390px in 64% of sentences, and from 41 in every one
- *   measured. 37 is where both texts that did wrap sit, and nothing that fits comes
+ *   widest of 6,000 sentences. Above that a line may wrap on a narrow phone. A
+ *   warning: most such text fits today, and the number is for the writer.
+ * - 37 characters wrap the 326px band at 390px in 64% of sentences, and 40 in 98%.
+ *   No length below 42 wrapped every time: the narrowest 41-character sentence was
+ *   321px. 37 is where both texts that did wrap sit, and nothing that fits comes
  *   close. An error — but an estimate: a 37-character line can still fit.
  *
  * Malay only for now. The app is built in Malay and English has no recordings;

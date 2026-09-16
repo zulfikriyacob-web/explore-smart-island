@@ -109,6 +109,10 @@ context, and each returns a report the main session has to read and reconcile
 before it can take the next step. The coordination overhead is larger than the
 work, and it burns through usage limits fast.
 
+This holds when the session says ultracode is on. On 16 September 2026 a system
+reminder said to run a workflow for every substantive task; this rule won, and the
+work ran in the main session.
+
 ### This machine
 
 - **The Bash tool does not work here.** It fails with
@@ -183,6 +187,12 @@ work, and it burns through usage limits fast.
   Keep the window small, or parse the file with a short node script and keep only
   the `text` blocks. Compaction summaries sit in the same file as user messages
   beginning "This session is being continued". They are summaries, and see below.
+- **Past tool calls and their raw output are in the transcript too.** A
+  `tool_use` block holds the input — a whole measuring script — and the
+  `tool_result` with the same `tool_use_id` holds what it returned. After a
+  compaction, re-read a number from its result, not from the summary, and re-run
+  a measurement from its recorded script instead of rewriting it. That is how two
+  wrong claims about the help-band limits were caught (PRD §16 item 33).
 
 ### Received documents, and what is said about them
 
@@ -239,6 +249,15 @@ note. When a summary and a file disagree, the file is right.
   That is also how to check text contrast against a photographic background: sample
   the actual pixels under the text's rect, not the token the background was
   supposed to be. A background image makes the token a guess.
+- **Font loading does settle in the pane.** `await document.fonts.load('400 18px
+  Lexend')` and `await document.fonts.ready` both resolve, and
+  `document.fonts.check('18px Lexend')` then returns `true`. Await one of them
+  before measuring text width, or the width is the fallback font's.
+- **A rounded share is not "every one".** A measurement reported 100% of
+  41-character sentences wrapping at 326px, and it was written down as "every one".
+  The same output gave the narrowest 41-character sentence as 321px, which fits.
+  Before writing "all" or "none", check the extreme value against the threshold,
+  or report the count.
 - **A colour test has to be specific enough to fail.** "Any green pixel" passed a
   kancil standing waist-deep in bushes, because bushes are green too. The test
   that worked was low blue — meadow grass is, foliage shadow is not.
@@ -254,7 +273,10 @@ note. When a summary and a file disagree, the file is right.
   that never mounted because `AnimatePresence mode="wait"` was waiting for an exit
   animation to finish.
 - **Node 22+ defines a global `localStorage`**, so `globalThis.localStorage`
-  exists in tests. Do not write a test that assumes it is absent.
+  exists in tests. Do not write a test that assumes it is absent. `npm test` prints
+  `ExperimentalWarning: localStorage is not available because
+  --localstorage-file was not provided` on stderr, twice. It is noise: the run
+  still passes and exits 0.
 - A saved session in localStorage freezes the questions, so **content edits do not
   appear until the session is cleared**. Clear site data before testing new prompt
   text. See PRD section 16.
