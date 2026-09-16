@@ -287,18 +287,28 @@ export function QuizScreen() {
               )}
             </span>
             {/*
-              The audio button floats in the prompt's left corner rather than
-              sitting on a row of its own above it. As a row it cost the card 80px
-              — 64 of button and a 16 gap — and that is what pushed the card past
-              the space the answer stack leaves on a phone: a hint arriving after
-              a wrong answer overflowed by 66px at 390x740, and the help a stuck
-              child needs was the thing below the fold.
+              Floated right and cleared, so it sits directly under the kancil
+              slot rather than opposite it. Both reservations are now on one
+              side, in one column.
 
-              Floated it costs 45px less. The kancil slot opposite it already
-              proved the pattern (DESIGN 7): the text wraps around it for the
-              first lines and then reflows full width. Two floats narrow those
-              first lines further, and that wrapping is already counted in the
-              45 — it was measured on this arrangement, not estimated from it.
+              Opposite each other they left a 121px band of 299px for the first
+              three lines, and from the fourth line the text took all 299 — a
+              2.47x jump that a child reads as broken text. Measured at 390x740
+              across the pack's 21 selectable prompts: 12 of them jumped, the
+              worst by 272px. Stacked on one side: none of them do, and the
+              average prompt drops from 4.1 lines to 3.2.
+
+              -mt-2 pulls the button 8px into the slot's margin. Without it the
+              paragraph is tall enough to make the card scroll by 3px at 390x740
+              once an iPhone's 34px bottom inset is taken, on a question showing
+              its hint band.
+
+              Two arrangements measured identically, and the right-hand one was
+              chosen for a reason that is not about wrapping: the top-right
+              corner is reserved so that nothing shifts when the mascot arrives
+              on feedback (DESIGN 7), which was measured and confirmed on a
+              phone. The audio button has no such claim on its position — moving
+              it one row down keeps it beside the text it reads (DESIGN 5.2).
 
               It disappears entirely when a language has no recordings, and the
               prompt reflows to full width, which is the same behaviour as before.
@@ -323,7 +333,7 @@ export function QuizScreen() {
             <AudioButton
               src={question.promptAudio[LANG]}
               autoPlay={session.status === 'question' && session.attempts === 0}
-              className="float-left mr-4"
+              className="float-right clear-right -mt-2 ml-4"
             />
             {question.prompt[LANG]}
           </motion.p>
