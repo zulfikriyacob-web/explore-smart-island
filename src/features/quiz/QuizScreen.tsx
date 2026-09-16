@@ -298,10 +298,18 @@ export function QuizScreen() {
               worst by 272px. Stacked on one side: none of them do, and the
               average prompt drops from 4.1 lines to 3.2.
 
-              -mt-2 pulls the button 8px into the slot's margin. Without it the
-              paragraph is tall enough to make the card scroll by 3px at 390x740
-              once an iPhone's 34px bottom inset is taken, on a question showing
-              its hint band.
+              -mt-1 pulls the button 4px up, and 4px is the most it may take. The
+              mascot is drawn inside the 88px slot and its lowest painted pixel
+              sits about 4.7px above the slot's bottom edge, so a 4px pull leaves
+              0.8px between them. At 8px the button covered 3px of the mascot on
+              feedback; at 24px, 19px.
+
+              On the tightest screens — 390x740, a choice question showing its
+              hint band, with an iPhone's 34px bottom inset — the card still
+              scrolls, and on q013 what scrolls is the card's bottom padding and
+              nothing else: the last line of text stays 56px clear of the visible
+              edge. That is the case DESIGN 5.2 already allows: the card gives
+              way. q002 is the exception, and is recorded in PRD 16 item 33.
 
               Two arrangements measured identically, and the right-hand one was
               chosen for a reason that is not about wrapping: the top-right
@@ -333,7 +341,7 @@ export function QuizScreen() {
             <AudioButton
               src={question.promptAudio[LANG]}
               autoPlay={session.status === 'question' && session.attempts === 0}
-              className="float-right clear-right -mt-2 ml-4"
+              className="float-right clear-right -mt-1 ml-4"
             />
             {question.prompt[LANG]}
           </motion.p>
