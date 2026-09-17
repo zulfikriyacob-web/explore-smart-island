@@ -88,16 +88,27 @@ export interface SessionResult {
   stars: Stars;
   gems: number;
   points: number;
+  /** Scored questions answered right on the first attempt. */
   firstTryCount: number;
+  /**
+   * How many questions were scored: the "daripada" beside `firstTryCount`.
+   *
+   * Optional because a result saved before it existed has none, and its
+   * `firstTryCount` counted every answer. The screen falls back to the question
+   * count for those, which is what they were measured against.
+   */
+  scoredCount?: number;
   /** Analytics only: how many questions ended up showing their hint. */
   hintShownCount: number;
 }
 
 /**
  * `scored` says which answers count. A practice question is played and not
- * scored (SPEC 3.3), so accuracy, stars, gems and points are taken over the
- * rest: a session with three practice questions is scored out of seven. The two
- * counts are facts about the whole session and include every answer.
+ * scored (SPEC 3.3), so accuracy, stars, gems, points and the first-try count
+ * are taken over the rest: a session with three practice questions is scored
+ * out of seven, and says so. A parent reads "9 daripada 9" and three stars as
+ * one statement; "9 daripada 10" beside three stars reads as a contradiction.
+ * The hint count is analytics about the whole session and includes every answer.
  */
 export function summarise(
   answers: readonly AnswerRecord[],
@@ -112,7 +123,8 @@ export function summarise(
     stars,
     gems: gemsFor(stars, isFirstClear),
     points: counted.reduce((sum, a) => sum + scoreQuestion(a), 0),
-    firstTryCount: answers.filter((a) => a.firstTry).length,
+    firstTryCount: counted.filter((a) => a.firstTry).length,
+    scoredCount: counted.length,
     hintShownCount: answers.filter((a) => a.hintShown).length,
   };
 }

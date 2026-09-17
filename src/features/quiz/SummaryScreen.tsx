@@ -121,7 +121,9 @@ function Star({ filled, index }: { filled: boolean; index: number }) {
 export function SummaryScreen({ result }: { result: SessionResult }) {
   const restart = useQuizStore((s) => s.restart);
   const session = useQuizStore((s) => s.session);
-  const total = session.questions.length;
+  // Scored questions only, like the stars beside it (SPEC 5.2). A result saved
+  // before scoredCount existed counted every question, so it falls back to that.
+  const total = result.scoredCount ?? session.questions.length;
   const [kancil, setKancil] = useState<KancilState>('happy');
 
   return (
@@ -188,9 +190,16 @@ export function SummaryScreen({ result }: { result: SessionResult }) {
         <div className="font-display text-h2 font-semibold text-arang">
           {result.stars} daripada 3 bintang
         </div>
-        <div className="text-center font-sans text-label text-arang-soft">
-          {result.firstTryCount} daripada {total} betul pada cubaan pertama
-        </div>
+        {/*
+          A session with nothing scored would read "0 daripada 0". No pack can
+          produce one today — at most one practice question in ten — so the line
+          is left out rather than shown broken if content ever allows it.
+        */}
+        {total > 0 && (
+          <div className="text-center font-sans text-label text-arang-soft">
+            {result.firstTryCount} daripada {total} betul pada cubaan pertama
+          </div>
+        )}
         <div className="mt-1 flex items-center gap-2.5 rounded-full border-2 border-garis bg-white px-[18px] py-1 font-sans font-semibold text-arang">
           <i aria-hidden className="h-3.5 w-3.5 rotate-45 rounded-[4px] bg-pirus" />+
           <CountUp to={result.gems} /> permata

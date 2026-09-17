@@ -160,9 +160,33 @@ function emitQuestion(out, q, index, catalogue) {
 
   out.push(`### ${index}. \`${q.id}\` — ${q.prompt[LANG]}`);
   out.push('');
+
+  // Parked: not played, so nothing here for a teacher to judge.
+  if (q.noEvidence === 'parked') {
+    out.push(`- **Diparkir — tidak dimainkan dalam pek ini.** Menunggu pek lain; tiada soalan untuk cikgu di sini.`);
+    out.push('');
+    return { unmapped: false, unknown: false };
+  }
+
   out.push(`- ${answerLine(q)}`);
   if (q.hint) out.push(`- Pancingan (selepas satu kali salah): ${q.hint[LANG]}`);
   if (q.explain) out.push(`- Penerangan (bersama jawapan didedah): ${q.explain[LANG]}`);
+
+  /*
+    Practice: no SP on purpose. Asking for a code here would get one written,
+    and the form built to prevent false attributions would produce one. So the
+    question asked is the one that applies: is it good practice?
+  */
+  if (q.noEvidence === 'practice') {
+    out.push(
+      `- **Latihan, bukan bukti.** Soalan ini dimainkan, tetapi tidak dikira dalam markah dan ` +
+        `tidak menjadi bukti penguasaan. Kami tidak mendakwa SP untuknya, dengan sengaja.`,
+    );
+    out.push('');
+    out.push(`Sesuai sebagai latihan? ☐ Ya ☐ Tidak · Catatan: \`______________________\``);
+    out.push('');
+    return { unmapped: false, unknown: false };
+  }
 
   if (!q.learningStandard) {
     out.push(`- **Kami tidak mendakwa apa-apa SP untuk soalan ini.** Kalau ia sepatutnya`);
@@ -277,9 +301,14 @@ function emitAxes(out, pack) {
 
   out.push('## Bentuk soalan — adakah penandaan kami betul?');
   out.push('');
+  // Counted from the pack, not written down: "kesepuluh-sepuluh" stayed in this
+  // sentence after the pack grew to 23.
+  const total = pack.questions.length;
+  const which =
+    tagged.length === total ? `kesemua ${total} soalan pek ini` : `${tagged.length} daripada ${total} soalan pek ini`;
   out.push(
     `Cikgu memecahkan variasi soalan kepada tiga paksi, dan kami menerimanya bulat-bulat. ` +
-      `Kami kemudian menanda kesepuluh-sepuluh soalan pek ini dengannya. Yang kami minta di ` +
+      `Kami kemudian menanda ${which} dengannya. Yang kami minta di ` +
       `sini ialah sama ada penandaan itu betul — bukan sama ada paksinya betul.`,
   );
   out.push('');
@@ -392,14 +421,21 @@ function emitSummary(out, pack, catalogue) {
   out.push('|---|---|---|---|---|');
   pack.questions.forEach((q, i) => {
     const entry = q.learningStandard ? catalogue.learning.get(q.learningStandard) : undefined;
-    const claim = q.learningStandard
-      ? entry
-        ? `\`${q.learningStandard}\``
-        : `\`${q.learningStandard}\` **(tiada dalam DSKP)**`
-      : '**tiada**';
+    const claim =
+      q.noEvidence === 'practice'
+        ? 'latihan — tiada SP'
+        : q.noEvidence === 'parked'
+          ? 'diparkir — tidak dimainkan'
+          : q.learningStandard
+            ? entry
+              ? `\`${q.learningStandard}\``
+              : `\`${q.learningStandard}\` **(tiada dalam DSKP)**`
+            : '**tiada**';
+    // Ya/Tidak here answers "does it teach the SP claimed"; nothing is claimed for these.
+    const boxes = q.noEvidence ? '— | —' : '☐ | ☐';
     const prompt = q.prompt[LANG];
     const short = prompt.length > 52 ? `${prompt.slice(0, 51)}…` : prompt;
-    out.push(`| ${i + 1} | ${cell(short)} | ${claim} | ☐ | ☐ |`);
+    out.push(`| ${i + 1} | ${cell(short)} | ${claim} | ${boxes} |`);
   });
   out.push('');
 }
