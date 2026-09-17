@@ -46,6 +46,17 @@
     bermula pada Y 168". Salah: DESIGN §5.2 menetapkan Y 89. Y 168 pernah
     menjadi nilainya dan dibalikkan di situ.
 
+  KESILAPAN KETIGA, DIJUMPAI 17 SEPTEMBER 2026:
+
+  - Baris "Ambang dua-pilihan | Empat soalan, bukan tiga" dalam jadual
+    "Yang guru luluskan" bukan peraturan guru. Rekod guru yang dibina semula
+    (guru-rekod-jawapan-subkemahiran-dan-semakan-soalan.md) berkata guru
+    "tidak menetapkan" dua pilihan = mesti empat soalan "secara mutlak".
+    Peraturan guru: minimum 3 item berbeza, minimum 2 sesi, kebarangkalian
+    tekaan gabungan <= 4%. Empat soalan dua pilihan (6.25%) tidak lulus.
+    Baris itu disalin ke coverage.ts dan dibetulkan pada 17 September 2026
+    (PRD §16 item 22, SPEC §5.7).
+
   Apa yang pek bawa, dan dari mana setiap butiran datang: PRD §16 item 29.
 
   Segala-galanya di bawah garis di bawah ini ialah teksnya, tidak disunting.
