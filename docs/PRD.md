@@ -1878,9 +1878,14 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     18px, bukan diukur pada telefon. Pancingan pada 360×780 tidak dipandu: 245px di bawah kapasiti
     satu baris 296px.
 
-    **Rakaman.** Arahan berubah, jadi `/audio/ms/q019.mp3` perlu dirakam semula. Fail semasa masih
-    menyebut dua nombor. Cawangan ini tidak digabung sebelum rakaman baharu masuk, atas arahan
-    pemilik projek: anak yang mendengar dua nombor sambil melihat tiga diberitahu perkara yang salah.
+    **Rakaman.** Arahan berubah, jadi `/audio/ms/q019.mp3` perlu dirakam semula. Cawangan ini tidak
+    digabung sebelum rakaman baharu masuk, atas arahan pemilik projek: anak yang mendengar dua nombor
+    sambil melihat tiga diberitahu perkara yang salah.
+
+    **Rakaman masuk, 17 September 2026.** Pemilik projek mendengar klip itu sebelum menyimpannya:
+    *"Kad Raju: 14, 9, 18. Susun dari kecil ke besar."* Tag ID3 16,648 bait dibuang (SPEC §8).
+    Sebelum dan selepas: 237 bingkai, 6.191 s, tiada bait ekor, dan penyahkod pelayar melaporkan
+    6.191 s. Kandungan pertuturan disahkan oleh telinga pemilik projek, bukan dari sini.
 
     **Peranti ujian.** Bukti q019 lama tersimpan dengan `twoOptions: true`. Di bawah SPEC §5.7,
     soalan yang buktinya bercanggah dikira dua pilihan, jadi q019 kekal dua pilihan pada peranti itu
