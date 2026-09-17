@@ -1890,3 +1890,97 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     **Peranti ujian.** Bukti q019 lama tersimpan dengan `twoOptions: true`. Di bawah SPEC §5.7,
     soalan yang buktinya bercanggah dikira dua pilihan, jadi q019 kekal dua pilihan pada peranti itu
     sehingga storan dikosongkan.
+37. **q022 dimainkan sebagai latihan, tanpa bukti dan tanpa markah. `noEvidence` membezakan latihan
+    daripada diparkir. Dibina 17 September 2026.**
+
+    Rekod guru yang dibina semula (`docs/kssr/guru-rekod-jawapan-subkemahiran-dan-semakan-soalan.md`)
+    meluluskan bahasa q022 sebagai teka-teki atau latihan hubungan nombor, dan menolaknya sebagai
+    bukti `two_digit_plus_two_digit_no_bridge`: *"? + 15 = 38"* mendorong `38 - 15`, bukan
+    penambahan.
+
+    **Diagnosis sebelum bina: membuang syarat `subSkill` daripada penapis enjin memulangkan q005 dan
+    q009 juga.** Diukur dengan `selectSession` sebenar atas pek sebenar, lima larian anak yang belum
+    mengumpul bukti: bank aras 1 naik daripada 9 kepada 11, dan q005 serta q009 muncul dalam
+    kelima-lima sesi aras 1. Kedua-duanya latihan pengecaman yang sah menurut borang bertanda —
+    *"kedua-duanya ialah latihan pengecaman"* — tetapi bukan 7.2.1, dan milik pek 7.0 Ruang (item
+    10). Jadi yang perlu dibezakan ialah "latihan" daripada "menunggu pek lain", bukan daripada
+    "rosak".
+
+    **Keputusan pemilik projek:**
+
+    - Medan tertutup `noEvidence: "practice" | "parked"` (SPEC §3.3). Setiap soalan membawa tepat
+      satu daripada `subSkill` atau `noEvidence`. `tags` ditolak: teks bebas tanpa skema, jadi satu
+      salah eja memaparkan atau menyembunyikan soalan tanpa amaran.
+    - `learningStandard` q022 dibuang. Membiarkannya bermakna pek mendakwa q022 mengajar 2.2.2, dan
+      guru kata ia tidak.
+    - Jawapan `practice` tidak dikira dalam ketepatan, bintang, permata, markah atau tangga aras
+      (SPEC §5.2, §5.5).
+    - Soalan tambah terus yang baharu untuk `two_digit_plus_two_digit_no_bridge` masuk dalam
+      cawangan berasingan, kerana ia kandungan yang perlu semakan guru. Pemilik projek belum
+      menulisnya.
+
+    **Yang dibina:** medan dan peraturan dalam `schema.ts`; `isScored()`; penapis dan keutamaan
+    dalam `selection.ts` (latihan disusun bersama sub-kemahiran yang dikuasai); `summarise()` dan
+    `finish()` mengira soalan yang dikira sahaja; tangga aras dalam `progress.ts` sama; amaran
+    `parked` dalam `validate:content`. Pek: q005 dan q009 `parked`, q022 `practice`.
+
+    **Bank aras 3, dengan q022 dimainkan semula:**
+
+    | | Soalan aras 3 | Sesi aras 3: diminta / dapat |
+    |---|---|---|
+    | Sebelum perubahan ini | q008, q022, q023 | 8 / 3 |
+    | Kalau q022 disembunyikan | q008, q023 | 8 / 2 |
+    | **Selepas perubahan ini** | q008, q023, q022 (latihan, terakhir) | **8 / 3** |
+
+    Item 31 kekal seteruk yang direkod, tidak lebih teruk.
+
+    **Diukur di pane, UI sebenar,** kemajuan di-seed pada aras 3: sesi memilih q022 sebagai soalan
+    kesepuluh, dengan `noEvidence: "practice"` dalam salinan beku. Sembilan jawapan betul dan q022
+    salah memberi ketepatan 1.0, *"3 daripada 3 bintang"*, 30 permata, dan tiada bukti q022 dalam
+    `esi.progress.v1`. Tanpa perubahan ini larian yang sama ialah 0.9 dan dua bintang.
+
+    **Yang belum diputuskan:**
+
+    - **Baris *"9 daripada 10 betul pada cubaan pertama"*** dipaparkan bersebelahan tiga bintang.
+      `firstTryCount` masih mengira setiap jawapan; hanya skor yang tidak mengira latihan. Kedua-dua
+      nombor benar, tetapi ibu bapa mungkin bertanya kenapa sembilan daripada sepuluh ialah tiga
+      bintang.
+    - **Borang `kssr:review`.** q022 tidak hilang daripadanya: borang merender setiap soalan pek,
+      termasuk yang tiada SP. Tetapi ia merender soalan tanpa SP dengan *"Kami tidak mendakwa apa-apa
+      SP untuk soalan ini. Kalau ia sepatutnya membawa satu, tulis kodnya di sini"* — soalan yang
+      salah bagi soalan latihan yang sengaja tiada SP, dan bagi q005 dan q009 yang diparkir.
+    - **`two_digit_plus_two_digit_no_bridge` tinggal q008 dan q023.** `validate:content` melaporkan
+      kurang satu soalan (tekaan gabungan 1/9).
+
+    **Dua jurang, direkod dan tidak dibaiki:**
+
+    - Peraturan 3 SPEC §6 tidak meliputi soalan yang dipetakan semula. Bukti q022 yang sudah
+      tersimpan di bawah `two_digit_plus_two_digit_no_bridge` masih dikira. Hanya pada peranti ujian
+      pemilik projek, yang boleh dikosongkan; dibiarkan atas keputusannya.
+    - q022 masih bertanda `promptForm: reverse`. Laporan kepelbagaian bentuk dalam
+      `validate:content` mengumpul mengikut `subSkill`, jadi tanda itu tidak dibaca di situ lagi.
+      Borang `kssr:review` masih memaparkannya dalam jadual paksi, sebagai *Terbalik*, bersama
+      pengenalan yang masih berkata *"kesepuluh-sepuluh soalan pek ini"* — pek ada 23.
+38. **Putaran soalan terlalu perlahan walaupun bank mencukupi. Jurang, berasingan daripada item 31.
+    Direkod 17 September 2026, belum dibaiki.**
+
+    Item 31 ialah bank yang terlalu kecil. Ini masalah lain: aras 2 ada sembilan soalan dan sesi
+    meminta tujuh, jadi putaran sepatutnya mungkin — tetapi lima soalan yang sama kembali setiap
+    kali.
+
+    Diukur dengan `selectSession` sebenar atas pek, aras 2, lima larian berturut-turut, semua
+    sub-kemahiran pada keutamaan yang sama:
+
+    | Anak | Soalan aras 2 dalam kelima-lima larian |
+    |---|---|
+    | Tidak mengumpul bukti | 5 daripada 9: q004, q007, q010, q014, q015 |
+    | Mengumpul bukti bagi setiap jawapan | 5 daripada 9: sama |
+
+    **Sebabnya.** Setiap soalan yang ditanya dalam satu larian mendapat nombor `lastAsked` yang sama.
+    Larian seterusnya mengambil dua soalan yang tidak ditanya dahulu (nombornya lebih lama), kemudian
+    baki lima dipilih oleh pemecah seri terakhir, iaitu susunan pek — lima yang sama setiap kali. Hanya
+    dua daripada tujuh tempat berputar. Mengumpul bukti tidak membantu: selepas larian kedua setiap
+    soalan sudah memberi bukti, dan seri kembali kepada susunan pek.
+
+    Yang tidak diukur: keutamaan sub-kemahiran yang berbeza-beza (dikuasai, tergelincir), yang
+    mengubah susunan bagi anak sebenar. Tiada kerja dirancang.

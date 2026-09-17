@@ -12,7 +12,7 @@
  * corrected three of our first ten mappings.
  */
 
-import type { Difficulty, Question } from '../content/schema.ts';
+import { isScored, type Difficulty, type Question } from '../content/schema.ts';
 import { skillState, type Evidence, type SkillInput } from './coverage.ts';
 import { nextDifficulty } from './mastery.ts';
 import { accuracy, type AnswerRecord } from './scoring.ts';
@@ -223,6 +223,10 @@ export function recordSession(progress: Progress, run: RunRecord): Progress {
  * Banking the same run twice changes nothing here either: `lastSessionId` says
  * this run has already been counted, so the level does not climb twice on one
  * set of answers.
+ *
+ * The ladder moves on scored answers only, judged by the question as the child
+ * answered it. A practice question is not part of the ladder, and a run with
+ * nothing scored leaves the level where it was.
  */
 function packsAfter(progress: Progress, run: RunRecord): Record<string, unknown> {
   const packs = { ...progress.packs };
@@ -233,8 +237,14 @@ function packsAfter(progress: Progress, run: RunRecord): Record<string, unknown>
   const lastAsked = { ...before.lastAsked };
   for (const a of run.answers) lastAsked[a.questionId] = runs;
 
+  const asked = new Map(run.answered.map((q) => [q.id, q]));
+  const scored = run.answers.filter((a) => {
+    const q = asked.get(a.questionId);
+    return q === undefined || isScored(q);
+  });
+
   packs[run.topicId] = {
-    level: nextDifficulty(before.level, accuracy(run.answers)),
+    level: scored.length === 0 ? before.level : nextDifficulty(before.level, accuracy(scored)),
     runs,
     lastSessionId: run.sessionId,
     lastAsked,

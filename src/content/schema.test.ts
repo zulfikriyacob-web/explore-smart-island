@@ -297,6 +297,43 @@ describe('pack rules', () => {
     expect(issueMessages(result)).toContain('cites no learningStandard');
   });
 
+  /*
+    "No sub-skill" used to mean two things — practice, or waiting for another
+    pack — and the engine had to guess which. Now the pack says.
+  */
+  it('rejects a question with neither a subSkill nor a noEvidence reason', async () => {
+    const pack = await mathPack();
+    const questions = structuredClone(pack.questions) as Array<{
+      subSkill?: string;
+      learningStandard?: string;
+    }>;
+    delete questions[0]!.subSkill;
+    delete questions[0]!.learningStandard;
+    const result = TopicPackSchema.safeParse({ ...pack, questions });
+    expect(result.success).toBe(false);
+    expect(issueMessages(result)).toContain('has no subSkill and does not say why');
+  });
+
+  it('rejects a question with both a subSkill and a noEvidence reason', async () => {
+    const pack = await mathPack();
+    const questions = structuredClone(pack.questions) as Array<{ noEvidence?: string }>;
+    questions[0]!.noEvidence = 'practice';
+    const result = TopicPackSchema.safeParse({ ...pack, questions });
+    expect(result.success).toBe(false);
+    expect(issueMessages(result)).toContain('it is one or the other');
+  });
+
+  it('rejects a noEvidence reason outside the two it knows', async () => {
+    const pack = await mathPack();
+    const questions = structuredClone(pack.questions) as Array<{
+      id: string;
+      noEvidence?: string;
+    }>;
+    questions.find((q) => q.id === 'q022')!.noEvidence = 'pratice';
+    const result = TopicPackSchema.safeParse({ ...pack, questions });
+    expect(result.success).toBe(false);
+  });
+
   it('rejects a subSkill that is not shaped like one', async () => {
     const pack = await mathPack();
     const questions = structuredClone(pack.questions) as Array<{ subSkill?: string }>;

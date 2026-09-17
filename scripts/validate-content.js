@@ -513,6 +513,14 @@ async function validatePack(file) {
 
   errors.push(...checkCountTapHint(pack));
   warnings.push(...checkUnreachableHint(pack));
+  // Parked questions are valid items no child can reach. Say so every run, so
+  // "waiting for another pack" does not quietly become "forgotten".
+  const parked = pack.questions.filter((q) => q.noEvidence === 'parked');
+  if (parked.length > 0) {
+    warnings.push(
+      `${parked.length} parked question(s), never played: ${parked.map((q) => q.id).join(', ')} (noEvidence, SPEC 3.3)`,
+    );
+  }
   const band = checkBandText(pack);
   errors.push(...band.errors);
   warnings.push(...band.warnings);
