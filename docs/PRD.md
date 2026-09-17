@@ -679,6 +679,9 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     `1.2.2/order_ascending`: q007, q018 dan q019, satu daripadanya dua pilihan — dan **1** soalan
     lagi, di bawah ambang SPEC §5.7 (item 22). Soalan itu ialah q024, yang ditahan (item 28).
 
+    **Kemas kini, 17 September 2026: sifar.** q019 menjadi tiga pilihan (item 36), dan
+    `validate:content` tidak lagi mencetak sebarang sub-kemahiran di bawah bar soalan.
+
     Dengan bar bentuk hilang, bar soalan ialah **satu-satunya** jurang kepada *Dikuasai*. Ia
     ditutup dengan soalan biasa — tiada skema, tiada bentuk baharu, cuma nombor berbeza dan
     rakaman. `validate:content` kini mencetak berapa soalan lagi setiap sub-kemahiran perlukan,
@@ -1244,7 +1247,8 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     Dibaiki dalam enjin, bukan butang: `sessionReducer` kini mengabaikan jawapan pada pilihan yang
     sudah dipangkah. Keadaan `wrong` tidak boleh dikunci dalam `BlockButton`, kerana butang Sedia
     count-tap memakai keadaan yang sama dan mesti boleh ditekan semula.
-24. **Tiga soalan tersekat pada gambar-dalam-arahan: q005, q009 dan q019.**
+24. ~~**Tiga soalan tersekat pada gambar-dalam-arahan: q005, q009 dan q019.**~~ **Dua sahaja: q005
+    dan q009. q019 tidak pernah memerlukannya — item 36.**
 
     Item 10 merekod jurang skema ini untuk q005 dan q009: skema tiada tempat untuk imej dalam
     arahan (SPEC §3.3). q019 kini menunggu jurang yang sama. Menurut dokumen pembetulan
@@ -1272,6 +1276,12 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     keputusan pemilik projek. Dua pilihan mendedah pada kesilapan pertama (SPEC §4.2), jadi ia tidak
     pernah dilihat: masalah yang sama seperti `explain` yang mati dalam item 23. Kalau q019 menjadi
     tiga pilihan, pancingan ditulis semula ketika itu.
+
+    **Kemas kini, 17 September 2026.** Rekod guru yang dibina semula membetulkan bacaan di atas:
+    "sokongan visual" *"tidak semestinya bermaksud perlu gambar atau animasi"*, tetapi *"paparan
+    yang bersih dan mudah dilihat"*. q019 kini tiga nombor dan tiga pilihan, dalam teks arahan
+    biasa, tanpa perubahan skema (item 36). Jadual di atas tinggal q005 dan q009, dan item 10
+    kekal jalannya.
 25. **Kad diseret untuk tertib — `responseMode: order`, kerja Fasa 3, dengan sebab pedagogi.**
 
     Menurut dokumen pembetulan (item 29), guru menyatakan bahawa menyusun kad **menghasilkan**
@@ -1413,6 +1423,13 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
       menukar nombor **dan** bentuk. Pemilik projek sedang bertanya guru sama ada ia memadai.
       Sehingga itu `order_ascending` kurang satu soalan untuk ambang SPEC §5.7.
       Item 24 menjadikan q024 tidak perlu.
+
+      **Kemas kini, 17 September 2026: q024 tidak diperlukan.** q019 kini tiga pilihan (item 36),
+      jadi q007, q018 dan q019 memberi tekaan gabungan 1/27, di bawah siling 4%, dan
+      `validate:content` tidak lagi mencetak jurang untuk `order_ascending`. Akibat yang boleh
+      diperhati di bawah — tiga soalan yang sama dalam hampir setiap sesi aras 2 — berakhir apabila
+      anak mencapai Dikuasai, kerana ia kini boleh dicapai. Satu kaveat kekal: kalau q018 dipetakan
+      semula (bullet seterusnya), `order_ascending` kembali kepada dua soalan.
 
       **Akibat yang boleh diperhati, bukan hanya jurang ambang — 16 September 2026.** Dengan enjin
       pemilih (item 27), sub-kemahiran yang belum dikuasai didahulukan. `order_ascending` **tidak
@@ -1816,3 +1833,55 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     kesemua 21 soalan yang boleh dipilih, dalam keadaan pancingan dan dedahan, pada 390×740, dan
     melaporkan tiada potongan pada 360×780 bagi semua soalan, dengan inset 0 dan 34. Ayat item 27
     ditulis ketika tiada skrin memaparkan soalan itu, dan tidak dikemas kini.
+36. **q019: tiga nombor, tiga pilihan, dan pengganggu yang tiada dalam arahan. Dibina 17 September
+    2026; digabung hanya selepas rakaman BM baharu masuk.**
+
+    Rekod guru yang dibina semula membetulkan nasihat awal guru: tiga nombor munasabah untuk Tahun 1,
+    dan dua nombor *"terlalu hampir kepada `compare_smaller`"*. "Sokongan visual" bermaksud paparan
+    yang bersih, tidak semestinya gambar (item 24).
+
+    | | Dahulu | Kini |
+    |---|---|---|
+    | Arahan BM | *Kad Raju: 14, 9. Susun dari kecil ke besar.* | *Kad Raju: 14, 9, 18. Susun dari kecil ke besar.* |
+    | Pilihan | `9, 14` · `14, 9` | `9, 14, 18` · `18, 14, 9` · `14, 18, 9` |
+    | Pancingan BM | tiada — dua pilihan tidak pernah memaparkannya | *Nombor paling kecil dahulu.* (27 aksara) |
+    | `explain` BM | *9 lebih kecil daripada 14.* | *9 paling kecil, kemudian 14.* (28 aksara) |
+
+    **Keputusan pemilik projek:**
+
+    - **Teks arahan biasa sudah memadai.** Guru memberi *"kad yang jelas"* sebagai contoh, bukan
+      syarat. Pemilik projek akan mengesahkan dengan guru; kalau guru mahu kad, itu perubahan UI
+      kemudian.
+    - **Pengganggu ketiga ialah `14, 18, 9`, bukan `14, 9, 18` yang guru senaraikan.** `14, 9, 18`
+      ialah susunan dalam arahan, jadi ia boleh dibuang dengan memadankan rentetan: bagi anak yang
+      menyedarinya, soalan itu dua pilihan, dan siling 4% mengiranya tiga. Peraturan umumnya dalam
+      SPEC §3.4, *Pengganggu*. `14, 18, 9` ialah susunan anak yang membanding digit pertama atau
+      digit sa sahaja, dan menganggap 9 lebih besar daripada 14 dan 18.
+
+    Guru sendiri menyenaraikan `14, 9, 18`, dalam dokumen yang sama yang menetapkan prinsip
+    pengganggu. Pemilik projek akan menyebutnya kepada guru — dalam perkataannya, bukan untuk
+    menangkap guru, tetapi kerana ia menunjukkan prinsip itu sukar dipatuhi walaupun oleh orang yang
+    menulisnya. Sebab itu ia ditulis sebagai peraturan.
+
+    **Diukur di pane,** q019 dipandu melalui UI sebenar selepas kemajuan di-seed, dengan pilihan
+    `14, 9, 18` — aksara yang sama seperti `14, 18, 9`, jadi susun aturnya sama:
+
+    | Keadaan | Viewport | Jalur | Kad menatal, inset 0 / 34 | Butang audio terpotong |
+    |---|---|---|---|---|
+    | Sebelum menjawab | 390×740 | — | 0 / 18px | 0 / 0 |
+    | Pancingan | 390×740 | satu baris, 245px | 7 / 25px | 0 / 0 |
+    | Dedahan | 390×740 | satu baris, 240px | 7 / 25px | 0 / 0 |
+    | Dedahan | 360×780 | satu baris, 240px | 0 / 18px | 0 / 0 |
+
+    Arahan tiga baris pada kedua-dua viewport, dan tiada baris di bawah float. Setiap tatalan ialah
+    padding kad sahaja — kelas q013 (item 33). Nilai inset 34 dikira dengan menganggap kad mengecil
+    18px, bukan diukur pada telefon. Pancingan pada 360×780 tidak dipandu: 245px di bawah kapasiti
+    satu baris 296px.
+
+    **Rakaman.** Arahan berubah, jadi `/audio/ms/q019.mp3` perlu dirakam semula. Fail semasa masih
+    menyebut dua nombor. Cawangan ini tidak digabung sebelum rakaman baharu masuk, atas arahan
+    pemilik projek: anak yang mendengar dua nombor sambil melihat tiga diberitahu perkara yang salah.
+
+    **Peranti ujian.** Bukti q019 lama tersimpan dengan `twoOptions: true`. Di bawah SPEC §5.7,
+    soalan yang buktinya bercanggah dikira dua pilihan, jadi q019 kekal dua pilihan pada peranti itu
+    sehingga storan dikosongkan.

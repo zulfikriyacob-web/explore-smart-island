@@ -562,15 +562,17 @@
       "responseMode": "select",
       "wordingVariant": "A",
       "prompt": {
-        "ms": "Kad Raju: 14, 9. Susun dari kecil ke besar.",
-        "en": "Raju's cards: 14, 9. Order from small to big."
+        "ms": "Kad Raju: 14, 9, 18. Susun dari kecil ke besar.",
+        "en": "Raju's cards: 14, 9, 18. Order from small to big."
       },
       "promptAudio": { "ms": "/audio/ms/q019.mp3", "en": "/audio/en/q019.mp3" },
-      "explain": { "ms": "9 lebih kecil daripada 14.", "en": "9 is smaller than 14." },
+      "hint": { "ms": "Nombor paling kecil dahulu.", "en": "Smallest number first." },
+      "explain": { "ms": "9 paling kecil, kemudian 14.", "en": "9 is smallest, then 14." },
       "payload": {
         "options": [
-          { "id": "a", "text": { "ms": "9, 14", "en": "9, 14" } },
-          { "id": "b", "text": { "ms": "14, 9", "en": "14, 9" } }
+          { "id": "a", "text": { "ms": "9, 14, 18", "en": "9, 14, 18" } },
+          { "id": "b", "text": { "ms": "18, 14, 9", "en": "18, 14, 9" } },
+          { "id": "c", "text": { "ms": "14, 18, 9", "en": "14, 18, 9" } }
         ],
         "correctOptionId": "a",
         "shuffle": true
