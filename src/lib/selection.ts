@@ -85,6 +85,18 @@ export function selectSession(input: SelectionInput): Selection {
     q.subSkill === undefined ? 2 : input.rank(q.subSkill);
 
   /**
+   * For the next tiebreak, a practice question counts as already banked.
+   *
+   * That tiebreak exists to collect distinct questions for mastery, and a
+   * practice question can never be evidence — so there is nothing to put it
+   * first for. Without this it wins the tiebreak against every mastered
+   * question for ever and takes the same place in every session, which is what
+   * it did: measured, q022 took the one level-3 place in six of eight runs
+   * (PRD 16 item 39).
+   */
+  const banked = (q: Question): boolean => q.subSkill === undefined || input.banked(q.id);
+
+  /**
    * Slipped sub-skills first, then ones not mastered, then mastered and
    * practice. Inside a group: questions that have never been answered right on
    * a first attempt first, because mastery counts distinct questions (SPEC 5.7)
@@ -93,7 +105,7 @@ export function selectSession(input: SelectionInput): Selection {
    */
   const compare = (a: Question, b: Question): number =>
     rank(a) - rank(b) ||
-    Number(input.banked(a.id)) - Number(input.banked(b.id)) ||
+    Number(banked(a)) - Number(banked(b)) ||
     input.lastAsked(a.id) - input.lastAsked(b.id) ||
     (order.get(a.id) as number) - (order.get(b.id) as number);
 

@@ -150,6 +150,33 @@ describe('selectSession', () => {
   });
 
   /*
+    A practice question never produces evidence, so the "no evidence yet"
+    tiebreak must not hand it a permanent place ahead of mastered questions.
+    Measured before the fix: q022 took the one level-3 place in six of eight
+    runs (PRD 16 item 39). It still takes its turn by lastAsked.
+  */
+  it('does not put a practice question ahead of a mastered question already answered', () => {
+    const mastered = '1.2.1/count_objects';
+    const small = [
+      mcq('q001', 1, mastered),
+      mcq('q002', 1, mastered),
+      { ...mcq('q900', 1), noEvidence: 'practice' as const },
+    ];
+    const settings = {
+      bank: small,
+      level: 1 as Difficulty,
+      total: 2,
+      rank: () => 2 as SkillRank,
+      banked: (id: string) => id !== 'q900',
+    };
+
+    expect(ids(selectSession(input(settings)).questions)).toEqual(['q001', 'q002']);
+
+    const lastAsked = (id: string) => (id === 'q900' ? 1 : 2);
+    expect(ids(selectSession(input({ ...settings, lastAsked })).questions)).toContain('q900');
+  });
+
+  /*
     Mastery counts distinct questions (SPEC 5.7), so a question that has never
     produced first-attempt evidence is worth more than one that has.
   */
