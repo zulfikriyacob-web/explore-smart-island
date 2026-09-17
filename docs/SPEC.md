@@ -511,6 +511,12 @@ daripada pek yang rosak. `kssr:review` pergi lebih jauh dan **enggan** menjana b
 memetik kod DSKP yang tiada dalam katalog — bertanya kepada guru tentang kod yang kita reka
 membuang masanya dan mengajarnya untuk tidak mempercayai baki borang itu.
 
+**Borang tidak meminta kod SP untuk soalan yang sengaja tiada SP** (§3.3). Soalan `practice`
+ditanya *"Sesuai sebagai latihan?"*, dan soalan `parked` disebut sebagai tidak dimainkan tanpa
+soalan untuk guru; dalam ringkasan kedua-duanya tidak membawa kotak Ya/Tidak. Meminta kod di situ
+akan membuat guru menulis satu, dan borang yang direka untuk menghalang atribusi palsu akan
+menghasilkannya. Kiraan soalan dalam teks borang diambil daripada pek, bukan ditulis.
+
 ---
 
 ## 4. Enjin sesi kuiz
@@ -658,12 +664,26 @@ export function starsFor(acc: number): 0 | 1 | 2 | 3 {
 
 **Bintang yang disimpan** = `Math.max(bintangSediaAda, bintangBaharu)` (PRD §10).
 
-**Soalan `practice` tidak dikira** (§3.3). Ketepatan, bintang, permata dan markah diambil atas
-soalan yang dikira sahaja: sesi dengan tiga soalan latihan dimarkah daripada tujuh. `summarise()`
-menerima penapis itu; `firstTryCount` dan `hintShownCount` masih mengira setiap jawapan, kerana
-kedua-duanya fakta tentang sesi, bukan skor. Diukur di pane: sesi aras 3, sembilan jawapan betul
-dan q022 salah, memaparkan *"3 daripada 3 bintang"* bersama *"9 daripada 10 betul pada cubaan
-pertama"* (PRD §16 item 37).
+**Soalan `practice` tidak dikira** (§3.3). Ketepatan, bintang, permata, markah dan kiraan cubaan
+pertama diambil atas soalan yang dikira sahaja: sesi dengan tiga soalan latihan dimarkah daripada
+tujuh, dan skrin berkata *"… daripada 7"*. `summarise()` menerima penapis itu dan memulangkan
+`scoredCount`. Hanya `hintShownCount`, analitik, mengira setiap jawapan.
+
+Sebabnya keputusan pemilik projek, 17 September 2026: ibu bapa membaca dua nombor pada skrin yang
+sama dan menganggap ia bercakap tentang perkara yang sama. *"9 daripada 10"* di sebelah tiga
+bintang kelihatan bercanggah.
+
+- **Hasil yang disimpan sebelum `scoredCount` wujud** dipaparkan terhadap bilangan soalan sesi,
+  kerana `firstTryCount`nya dikira begitu. Diukur di pane: *"9 daripada 10"*, bukan *"9 daripada
+  undefined"*.
+- **Sesi tanpa satu pun soalan dikira** tidak memaparkan baris itu langsung, bukan *"0 daripada 0"*.
+  Tiada pek hari ini boleh menghasilkannya — paling banyak satu soalan latihan dalam sepuluh —
+  dan ia diperiksa di pane dengan memaksa `scoredCount: 0` dalam storan. Tangga aras sudah
+  membiarkan aras di tempatnya dalam keadaan itu (§5.5). Bintang akan menjadi sifar; ia tidak
+  diubah, kerana keadaan itu tidak wujud.
+
+Diukur di pane, UI sebenar: sesi aras 3, sembilan jawapan betul dan q022 salah, memaparkan *"3
+daripada 3 bintang"* bersama *"9 daripada 9 betul pada cubaan pertama"* (PRD §16 item 37).
 
 ### 5.3 Permata
 
@@ -734,6 +754,11 @@ Keutamaan dalam setiap aras, mengikut turutan:
 3. **Sub-kemahiran yang sudah dikuasai, dan soalan `practice`** — ia tetap ditanya, sebagai latihan,
    dan ia yang mengisi sesi apabila bank tiada apa lagi untuk dibuktikan. Soalan `practice` tidak
    boleh menjadi bukti, jadi ia menunggu di belakang setiap soalan yang masih boleh.
+
+   > **Kecacatan diketahui, 17 September 2026 — PRD §16 item 39.** Dalam kumpulan ini, soalan
+   > `practice` sentiasa mendahului soalan yang sudah dikuasai, kerana pemecah seri di bawah
+   > menganggapnya "belum pernah memberi bukti". Ia tidak akan pernah memberi bukti, jadi tiada
+   > apa untuk didahulukan.
 
 Dalam setiap kumpulan: soalan yang belum pernah memberi bukti cubaan pertama didahulukan, kerana
 penguasaan mengira soalan berbeza (§5.7); kemudian soalan yang paling lama tidak ditanya

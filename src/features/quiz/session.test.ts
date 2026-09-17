@@ -350,6 +350,7 @@ describe('progression', () => {
       gems: 30,
       points: 200,
       firstTryCount: 2,
+      scoredCount: 2,
       hintShownCount: 0,
     });
   });
@@ -371,6 +372,7 @@ describe('progression', () => {
       gems: 10,
       points: 0,
       firstTryCount: 0,
+      scoredCount: 2,
       // The mcq showed its hint after its first miss; the two-option question
       // revealed on its first miss and never showed one.
       hintShownCount: 1,
@@ -378,27 +380,37 @@ describe('progression', () => {
   });
 
   /*
-    q022 is played and not scored. A missed practice question beside a right
-    answer is a perfect session: stars are counted over the scored questions.
+    q022 is played and not scored. A practice question beside a right answer is
+    a perfect session of one: three stars, and "1 daripada 1" beside them —
+    whether the practice question was missed or answered right.
   */
-  it('leaves a practice question out of the score, and in the counts', () => {
+  it('leaves a practice question out of the score and the first-try count', () => {
     const practice: Question = { ...mcqImage, noEvidence: 'practice' };
-    const s = run(started([mcq, practice]), [
+    const missed = run(started([mcq, practice]), [
       { type: 'ANSWER', response: pick('b'), nowMs: 2_000 },
       { type: 'NEXT', nowMs: 2_100 },
       { type: 'ANSWER', response: pick('a'), nowMs: 3_000 },
       { type: 'NEXT', nowMs: 3_500 },
     ]);
-    expect(s.status).toBe('summary');
-    expect(s.answers).toHaveLength(2);
-    expect(s.result).toEqual({
+    expect(missed.status).toBe('summary');
+    expect(missed.answers).toHaveLength(2);
+    expect(missed.result).toEqual({
       accuracy: 1,
       stars: 3,
       gems: 30,
       points: 100,
       firstTryCount: 1,
+      scoredCount: 1,
       hintShownCount: 0,
     });
+
+    const right = run(started([mcq, practice]), [
+      { type: 'ANSWER', response: pick('b'), nowMs: 2_000 },
+      { type: 'NEXT', nowMs: 2_100 },
+      { type: 'ANSWER', response: pick('b'), nowMs: 3_000 },
+      { type: 'NEXT', nowMs: 3_500 },
+    ]);
+    expect(right.result).toMatchObject({ firstTryCount: 1, scoredCount: 1 });
   });
 
   it('pays a replay less than a first clear for the same performance', () => {

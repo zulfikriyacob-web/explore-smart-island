@@ -164,30 +164,36 @@ describe('summarise', () => {
       gems: 20,
       points: 260,
       firstTryCount: 2,
+      scoredCount: 3,
       hintShownCount: 1,
     });
   });
 
   /*
-    A practice question is played and not scored. Three right answers and one
-    wrong practice answer is three out of three: three stars, not one.
+    A practice question is played and not scored. Three right answers, one
+    practice missed and one practice right is three out of three: three stars
+    and "3 daripada 3", not "4 daripada 5" beside them. Hints are analytics and
+    count every answer.
   */
-  it('scores only the answers it is told count, and counts every answer', () => {
+  it('scores and counts only the answers it is told count; hints count them all', () => {
+    const practice = ['p1', 'p2'];
     const answers = [
       answer({ questionId: 'q1' }),
       answer({ questionId: 'q2' }),
       answer({ questionId: 'q3' }),
       answer({ questionId: 'p1', attempts: 2, correct: false, firstTry: false, hintShown: true }),
+      answer({ questionId: 'p2' }),
     ];
-    expect(summarise(answers, false, (a) => a.questionId !== 'p1')).toEqual({
+    expect(summarise(answers, false, (a) => !practice.includes(a.questionId))).toEqual({
       accuracy: 1,
       stars: 3,
       gems: 20,
       points: 300,
       firstTryCount: 3,
+      scoredCount: 3,
       hintShownCount: 1,
     });
-    expect(summarise(answers, false).stars).toBe(1);
+    expect(summarise(answers, false)).toMatchObject({ stars: 2, firstTryCount: 4, scoredCount: 5 });
   });
 
   it('handles a session with no answers', () => {
@@ -197,6 +203,7 @@ describe('summarise', () => {
       gems: 0,
       points: 0,
       firstTryCount: 0,
+      scoredCount: 0,
       hintShownCount: 0,
     });
   });

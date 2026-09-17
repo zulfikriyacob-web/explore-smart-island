@@ -1941,14 +1941,22 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
 
     **Yang belum diputuskan:**
 
-    - **Baris *"9 daripada 10 betul pada cubaan pertama"*** dipaparkan bersebelahan tiga bintang.
+    - ~~**Baris *"9 daripada 10 betul pada cubaan pertama"*** dipaparkan bersebelahan tiga bintang.
       `firstTryCount` masih mengira setiap jawapan; hanya skor yang tidak mengira latihan. Kedua-dua
       nombor benar, tetapi ibu bapa mungkin bertanya kenapa sembilan daripada sepuluh ialah tiga
-      bintang.
-    - **Borang `kssr:review`.** q022 tidak hilang daripadanya: borang merender setiap soalan pek,
+      bintang.~~ **Diputuskan dan dibina, 17 September 2026: *"9 daripada 9"*.** Kiraan cubaan
+      pertama diambil atas soalan yang dikira, seperti bintang, kerana ibu bapa membaca dua nombor
+      pada skrin yang sama sebagai satu kenyataan. Sesi tanpa soalan dikira tidak boleh berlaku
+      dengan pek hari ini; kalau berlaku, baris itu disembunyikan. SPEC §5.2.
+    - ~~**Borang `kssr:review`.** q022 tidak hilang daripadanya: borang merender setiap soalan pek,
       termasuk yang tiada SP. Tetapi ia merender soalan tanpa SP dengan *"Kami tidak mendakwa apa-apa
       SP untuk soalan ini. Kalau ia sepatutnya membawa satu, tulis kodnya di sini"* — soalan yang
-      salah bagi soalan latihan yang sengaja tiada SP, dan bagi q005 dan q009 yang diparkir.
+      salah bagi soalan latihan yang sengaja tiada SP, dan bagi q005 dan q009 yang diparkir.~~
+      **Dibina, 17 September 2026.** Soalan `practice` ditanya *"Sesuai sebagai latihan?"*; soalan
+      `parked` disebut tidak dimainkan, tanpa soalan untuk guru; ringkasan menulis *latihan* dan
+      *diparkir* tanpa kotak Ya/Tidak; dan kiraan *"kesepuluh-sepuluh"* kini *"kesemua 23"*, diambil
+      daripada pek. Dalam perkataan pemilik projek, sebab yang paling penting: meminta kod SP untuk
+      soalan yang sengaja tiada SP akan membuat guru menulis satu. SPEC §3.6.
     - **`two_digit_plus_two_digit_no_bridge` tinggal q008 dan q023.** `validate:content` melaporkan
       kurang satu soalan (tekaan gabungan 1/9).
 
@@ -1960,7 +1968,8 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     - q022 masih bertanda `promptForm: reverse`. Laporan kepelbagaian bentuk dalam
       `validate:content` mengumpul mengikut `subSkill`, jadi tanda itu tidak dibaca di situ lagi.
       Borang `kssr:review` masih memaparkannya dalam jadual paksi, sebagai *Terbalik*, bersama
-      pengenalan yang masih berkata *"kesepuluh-sepuluh soalan pek ini"* — pek ada 23.
+      pengenalan yang masih berkata *"kesepuluh-sepuluh soalan pek ini"* — pek ada 23. Pengenalan
+      itu dibetulkan pada hari yang sama; tanda *Terbalik* kekal, untuk guru semak.
 38. **Putaran soalan terlalu perlahan walaupun bank mencukupi. Jurang, berasingan daripada item 31.
     Direkod 17 September 2026, belum dibaiki.**
 
@@ -1984,3 +1993,28 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
 
     Yang tidak diukur: keutamaan sub-kemahiran yang berbeza-beza (dikuasai, tergelincir), yang
     mengubah susunan bagi anak sebenar. Tiada kerja dirancang.
+39. **Soalan `practice` mendahului soalan yang sudah dikuasai, selama-lamanya. Kecacatan dalam item
+    37, dijumpai 17 September 2026. Belum dibaiki.**
+
+    Item 37 meletakkan soalan latihan dalam kumpulan keutamaan yang sama seperti sub-kemahiran yang
+    sudah dikuasai. Dalam kumpulan itu, pemecah seri seterusnya ialah *"soalan yang belum pernah
+    memberi bukti cubaan pertama didahulukan"* (SPEC §5.5). Soalan latihan tidak pernah memberi
+    bukti, jadi ia sentiasa menang — walaupun sebab pemecah seri itu, iaitu mengumpul soalan berbeza
+    untuk penguasaan, tidak terpakai kepadanya.
+
+    **Dengan pek hari ini ia belum kelihatan.** `two_digit_plus_two_digit_no_bridge` ada dua soalan
+    sahaja dan tidak boleh dikuasai, jadi q008 dan q023 kekal dalam kumpulan "belum dikuasai", di
+    depan q022. Kecacatan itu muncul sebaik sub-kemahiran aras 3 itu boleh dikuasai — iaitu apabila
+    soalan tambah keempat masuk.
+
+    **Kesannya diukur dengan soalan keempat hipotetikal**, disalin daripada q023, melalui pemilih dan
+    peraturan kemajuan sebenar: anak yang menjawab semua betul dan kekal pada aras 2, lapan larian.
+    Aras 2 ada satu tempat untuk soalan aras 3. Selepas sub-kemahiran itu dikuasai, q022 mengambil
+    tempat itu dalam **enam** daripada lapan larian (soalan keempat pada aras 2) atau **lima** (pada
+    aras 3); q008 dan q023 muncul sekali setiap satu.
+
+    **Pembetulan yang diukur, tidak dibina:** anggap soalan latihan sebagai "sudah memberi bukti"
+    untuk pemecah seri itu sahaja. Dalam simulasi yang sama, tempat aras 3 berputar: q008 tiga kali,
+    q023 tiga kali, q022 dua kali (soalan keempat pada aras 2), atau dua kali setiap satu (pada aras
+    3). Satu baris dalam `selection.ts`. Menunggu keputusan pemilik projek, kerana ia menukar kod yang
+    sedang berjalan — dan ia patut masuk sebelum soalan tambah keempat.
