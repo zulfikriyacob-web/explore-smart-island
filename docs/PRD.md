@@ -1519,6 +1519,42 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     tangga itu bermakna sesuatu yang lain daripada yang §5.5 dakwa dan §5.5 patut ditulis semula.
 
     Direkod 16 September 2026 semasa enjin dibina; tiada kerja kandungan dirancang lagi.
+
+    **Diagnosis, 18 September 2026: satu sub-kemahiran boleh membawa dua aras dengan selamat — dan
+    itu tidak menyelesaikan bahagian item ini yang paling dirasai anak.**
+
+    Ditanya sebelum soalan tambah keempat ditulis. Diukur dengan pemilih dan peraturan kemajuan
+    sebenar, soalan keempat hipotetikal disalin daripada q023, anak yang menjawab semua betul dengan
+    arasnya dikekalkan, lapan larian:
+
+    | | Soalan baharu di aras 2 | Soalan baharu di aras 3 |
+    |---|---|---|
+    | Soalan boleh dimain, aras 1 / 2 / 3 | 9 / 10 / 3 | 9 / 9 / **4** |
+    | Anak aras 1: soalan tambah dalam 8 larian | **0** | **0** |
+    | Anak aras 2: tambah dikuasai pada larian ke- | 2 | 3 |
+    | Anak aras 3: soalan aras 3 setiap sesi | 3 | **4** |
+    | Aras 2: soalan yang muncul dalam setiap larian | 4 | 5 |
+
+    - **Enjin selamat.** `questionMix()` dan tangga §5.5 hanya melihat aras; soalan satu sub-kemahiran
+      cuma jatuh ke dalam dua kumpulan aras.
+    - **Penguasaan selamat.** Bukti tidak merekod aras, dan peraturan guru tidak menyebutnya, jadi
+      bukti dari aras berbeza dikira sama. Dengan hanya satu soalan di aras rendah, anak tetap perlu
+      menjawab dua soalan aras 3 untuk mencapai Dikuasai.
+    - **Tiada kod mengandaikan satu aras setiap sub-kemahiran.** Yang mengandaikannya ialah satu komen
+      dalam `progress.ts`, satu ayat dalam SPEC §6, dan konvensyen item 29. Ketiga-tiganya perlu
+      dikemas kini apabila soalan dua aras yang pertama mendarat.
+    - **Aras 1 tidak berubah dalam kedua-dua penempatan.** Bank aras 1 kekal sembilan, jadi anak aras 1
+      masih mendapat kesembilan-sembilan soalan yang sama setiap sesi, dan masih tidak pernah melihat
+      soalan tambah dalam lapan larian. **Itu bahagian item ini yang paling dirasai anak, dan dua aras
+      tidak menyentuhnya.** Ia ditutup hanya dengan menulis soalan aras 1 baharu.
+
+    **Keputusan pemilik projek: soalan tambah keempat ditulis pada aras 3**, kerana ia sepadan dengan
+    penilaian kesukarannya dan ia satu-satunya penempatan yang menambah bank aras 3.
+
+    **Jurang yang dibiarkan: q008 mungkin salah aras.** *45 + 10* ialah menambah puluh bulat, dan
+    pemilik projek menilainya lebih mudah daripada *34 + 25* dan *32 + 14* yang berkongsi aras 3
+    dengannya. Memindahkannya ke aras 2 akan menukar apa yang anak lihat hari ini, pada soalan yang
+    guru sudah semak, untuk faedah yang belum diukur. Tidak dibuat, atas keputusan pemilik projek.
 32. **Model aktiviti PRD §10 ditulis sebelum enjin wujud. Direkod, belum diputuskan.**
 
     §10 menganggap aktiviti ialah senarai soalan tetap: *"Aktiviti (10 soalan) → 0–3 ⭐"*,
@@ -1993,8 +2029,9 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
 
     Yang tidak diukur: keutamaan sub-kemahiran yang berbeza-beza (dikuasai, tergelincir), yang
     mengubah susunan bagi anak sebenar. Tiada kerja dirancang.
-39. **Soalan `practice` mendahului soalan yang sudah dikuasai, selama-lamanya. Kecacatan dalam item
-    37, dijumpai 17 September 2026. Belum dibaiki.**
+39. ~~**Soalan `practice` mendahului soalan yang sudah dikuasai, selama-lamanya. Kecacatan dalam item
+    37, dijumpai 17 September 2026. Belum dibaiki.**~~ **DIBAIKI 18 September 2026, sebelum soalan
+    tambah keempat dihantar.**
 
     Item 37 meletakkan soalan latihan dalam kumpulan keutamaan yang sama seperti sub-kemahiran yang
     sudah dikuasai. Dalam kumpulan itu, pemecah seri seterusnya ialah *"soalan yang belum pernah
@@ -2013,8 +2050,11 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     tempat itu dalam **enam** daripada lapan larian (soalan keempat pada aras 2) atau **lima** (pada
     aras 3); q008 dan q023 muncul sekali setiap satu.
 
-    **Pembetulan yang diukur, tidak dibina:** anggap soalan latihan sebagai "sudah memberi bukti"
-    untuk pemecah seri itu sahaja. Dalam simulasi yang sama, tempat aras 3 berputar: q008 tiga kali,
-    q023 tiga kali, q022 dua kali (soalan keempat pada aras 2), atau dua kali setiap satu (pada aras
-    3). Satu baris dalam `selection.ts`. Menunggu keputusan pemilik projek, kerana ia menukar kod yang
-    sedang berjalan — dan ia patut masuk sebelum soalan tambah keempat.
+    **Dibina, atas keputusan pemilik projek:** soalan latihan dikira "sudah memberi bukti" untuk
+    pemecah seri itu sahaja — satu baris dalam `selection.ts`. Ia mendarat sebelum soalan tambah
+    keempat dihantar, supaya soalan baharu tidak masuk ke dalam pemilih yang sudah diketahui rosak.
+
+    Diukur semula dengan pemilih yang dibaiki, simulasi yang sama: tempat aras 3 bagi anak aras 2
+    berputar — q008 tiga kali, q023 tiga kali, q022 dua kali (soalan keempat pada aras 2), atau dua
+    kali setiap satu (pada aras 3). Soalan latihan masih mengambil gilirannya melalui `lastAsked`;
+    ia hanya tidak lagi mendahului soalan yang sudah dikuasai secara kekal.

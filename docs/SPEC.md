@@ -755,10 +755,11 @@ Keutamaan dalam setiap aras, mengikut turutan:
    dan ia yang mengisi sesi apabila bank tiada apa lagi untuk dibuktikan. Soalan `practice` tidak
    boleh menjadi bukti, jadi ia menunggu di belakang setiap soalan yang masih boleh.
 
-   > **Kecacatan diketahui, 17 September 2026 — PRD §16 item 39.** Dalam kumpulan ini, soalan
-   > `practice` sentiasa mendahului soalan yang sudah dikuasai, kerana pemecah seri di bawah
-   > menganggapnya "belum pernah memberi bukti". Ia tidak akan pernah memberi bukti, jadi tiada
-   > apa untuk didahulukan.
+   > Dalam kumpulan ini, soalan `practice` dikira **sudah** memberi bukti untuk pemecah seri
+   > seterusnya, kerana ia tidak akan pernah memberi bukti dan tiada apa untuk didahulukan.
+   > Tanpa itu ia menang pemecah seri itu selama-lamanya dan mengambil tempat yang sama dalam
+   > setiap sesi — diukur, enam daripada lapan larian (PRD §16 item 39, dibaiki 18 September 2026).
+   > Ia tetap mengambil gilirannya melalui `lastAsked`.
 
 Dalam setiap kumpulan: soalan yang belum pernah memberi bukti cubaan pertama didahulukan, kerana
 penguasaan mengira soalan berbeza (§5.7); kemudian soalan yang paling lama tidak ditanya
