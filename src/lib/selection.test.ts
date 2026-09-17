@@ -98,11 +98,38 @@ describe('selectSession', () => {
     expect(gaps.length).toBeGreaterThan(0);
   });
 
-  it('never picks a question that claims no sub-skill', () => {
-    const withShapes = [...bank(), mcq('q900', 1), mcq('q901', 1)];
-    const picked = selectSession(input({ bank: withShapes, level: 1 })).questions;
+  /*
+    q005 and q009 are shape recognition, parked until a 7.0 Ruang pack exists.
+    Placed first in the bank, where pack order would otherwise pick them.
+  */
+  it('never picks a parked question', () => {
+    const parked = ['q900', 'q901'].map((id) => ({ ...mcq(id, 1), noEvidence: 'parked' as const }));
+    const picked = selectSession(input({ bank: [...parked, ...bank()], level: 1 })).questions;
     expect(ids(picked)).not.toContain('q900');
     expect(ids(picked)).not.toContain('q901');
+  });
+
+  it('never picks a question with no sub-skill and no reason', () => {
+    const withShapes = [mcq('q900', 1), ...bank()];
+    const picked = selectSession(input({ bank: withShapes, level: 1 })).questions;
+    expect(ids(picked)).not.toContain('q900');
+  });
+
+  /*
+    q022: played, never evidence. It ranks with the mastered sub-skills, so it
+    only takes a place no evidence-giving question wants.
+  */
+  it('picks a practice question, after every question that can still be evidence', () => {
+    const practice = { ...mcq('q900', 3), noEvidence: 'practice' as const };
+    const withPractice = [practice, ...bank()];
+
+    const all = selectSession(input({ bank: withPractice, level: 3 })).questions;
+    expect(ids(all)).toContain('q900');
+    const levelThree = all.filter((q) => q.difficulty === 3);
+    expect(ids(levelThree).at(-1)).toBe('q900');
+
+    const short = selectSession(input({ bank: withPractice, level: 3, total: 3 })).questions;
+    expect(ids(short)).not.toContain('q900');
   });
 
   /*

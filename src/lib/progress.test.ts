@@ -290,6 +290,30 @@ describe('pack state', () => {
   });
 
   /*
+    A practice question is not part of the ladder. A missed practice puzzle
+    beside a right answer is a run of 1.0, not 0.5: the child climbs, and is not
+    pushed down for something the ladder was never calibrated on.
+  */
+  const practice: Question = { ...mcq('p1', 3), noEvidence: 'practice' };
+
+  it('moves the rung on scored answers only', () => {
+    const p = record(emptyProgress(), 's1', [right('q1'), missed('p1')], [q, practice], pack([q, practice]));
+    expect(packProgress(p, TOPIC).level).toBe(2);
+    expect(packProgress(p, TOPIC).lastAsked).toEqual({ q1: 1, p1: 1 });
+  });
+
+  it('holds the rung on a run with nothing scored', () => {
+    const p = record(atLevelTwo, 's1', [missed('p1')], [practice], pack([practice]));
+    expect(packProgress(p, TOPIC).level).toBe(2);
+    expect(packProgress(p, TOPIC).runs).toBe(4);
+  });
+
+  it('banks no evidence from a practice question', () => {
+    const p = record(emptyProgress(), 's1', [right('p1')], [practice], pack([practice]));
+    expect(p.subSkills).toEqual({});
+  });
+
+  /*
     lastAsked stamps every answer, not only the ones that became evidence: it
     answers "when did the child last see this", which is what stops the selector
     asking the same ten in the same order for ever.

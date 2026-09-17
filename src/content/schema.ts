@@ -68,6 +68,20 @@ const questionBaseShape = {
     })
     .optional(),
 
+  /**
+   * Why a question has no `subSkill`. A question carries exactly one of the two
+   * (checked on the pack below), so "no sub-skill" is never left to be guessed.
+   *
+   * - `practice` — played, but it is not evidence of anything and does not
+   *   count toward accuracy, stars or the level ladder. q022 is one: the teacher
+   *   approved its wording as a number-relation puzzle, and said it is not
+   *   mastery evidence for addition.
+   * - `parked` — never played. A valid item waiting for somewhere else to go:
+   *   q005 and q009 are shape recognition, which belongs to a 7.0 Ruang pack,
+   *   not to this one (PRD §16 item 10).
+   */
+  noEvidence: z.enum(['practice', 'parked']).optional(),
+
   /*
     Three axes, not one list. (docs/kssr/guru-struktur-variasi-soalan.md)
 
@@ -246,6 +260,16 @@ export const QuestionSchema = z.discriminatedUnion('type', [
 export type Question = z.infer<typeof QuestionSchema>;
 export type QuestionType = Question['type'];
 
+/**
+ * Does an answer to this question count toward accuracy, stars and the level
+ * ladder? Not for a `practice` question: if it is not evidence of mastery, it
+ * is not evidence of how the session went either, and a hard practice puzzle
+ * must not push a child down a ladder calibrated on other skills.
+ */
+export function isScored(q: Question): boolean {
+  return q.noEvidence === undefined;
+}
+
 export const ActivitySchema = z.object({
   activityId: z.string().min(1),
   title: LocalizedTextSchema,
@@ -420,7 +444,23 @@ export const TopicPackSchema = z
       reach a dashboard.
     */
     for (const [i, q] of pack.questions.entries()) {
-      if (!q.subSkill) continue;
+      if (!q.subSkill) {
+        if (!q.noEvidence) {
+          ctx.addIssue({
+            code: 'custom',
+            path: ['questions', i, 'noEvidence'],
+            message: `question "${q.id}" has no subSkill and does not say why: give it a subSkill, or noEvidence "practice" or "parked"`,
+          });
+        }
+        continue;
+      }
+      if (q.noEvidence) {
+        ctx.addIssue({
+          code: 'custom',
+          path: ['questions', i, 'noEvidence'],
+          message: `question "${q.id}" names subSkill "${q.subSkill}" and also noEvidence "${q.noEvidence}"; it is one or the other`,
+        });
+      }
       if (!q.learningStandard) {
         ctx.addIssue({
           code: 'custom',

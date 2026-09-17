@@ -30,7 +30,10 @@ const LEVELS: readonly Difficulty[] = [1, 2, 3];
 export type SkillRank = 0 | 1 | 2;
 
 export interface SelectionInput {
-  /** The bank, in pack order. A question with no `subSkill` is never picked. */
+  /**
+   * The bank, in pack order. A question with a `subSkill` or `noEvidence:
+   * "practice"` can be picked; a `parked` one never is (SPEC 3.3).
+   */
   bank: readonly Question[];
   /** The child's level in this pack. */
   level: Difficulty;
@@ -69,17 +72,27 @@ function byLevelThenPriority(a: Question, b: Question): number {
 }
 
 export function selectSession(input: SelectionInput): Selection {
-  const eligible = input.bank.filter((q) => q.subSkill !== undefined);
+  const eligible = input.bank.filter(
+    (q) => q.subSkill !== undefined || q.noEvidence === 'practice',
+  );
   const order = new Map(eligible.map((q, i) => [q.id, i]));
 
   /**
-   * Slipped sub-skills first, then ones not mastered, then mastered. Inside a
-   * sub-skill: questions that have never been answered right on a first attempt
-   * first, because mastery counts distinct questions (SPEC 5.7) — then whatever
-   * the child has not seen for longest, then pack order as the last tiebreak.
+   * A practice question ranks with the mastered ones. It can never become
+   * evidence, so it waits behind every question that still can.
+   */
+  const rank = (q: Question): SkillRank =>
+    q.subSkill === undefined ? 2 : input.rank(q.subSkill);
+
+  /**
+   * Slipped sub-skills first, then ones not mastered, then mastered and
+   * practice. Inside a group: questions that have never been answered right on
+   * a first attempt first, because mastery counts distinct questions (SPEC 5.7)
+   * — then whatever the child has not seen for longest, then pack order as the
+   * last tiebreak.
    */
   const compare = (a: Question, b: Question): number =>
-    input.rank(a.subSkill as string) - input.rank(b.subSkill as string) ||
+    rank(a) - rank(b) ||
     Number(input.banked(a.id)) - Number(input.banked(b.id)) ||
     input.lastAsked(a.id) - input.lastAsked(b.id) ||
     (order.get(a.id) as number) - (order.get(b.id) as number);

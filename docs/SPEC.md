@@ -154,6 +154,7 @@ interface QuestionBase {
   difficulty: Difficulty;
   learningStandard?: string;     // cth "1.2.2"
   subSkill?: string;             // cth "1.2.2/after" — §5.7
+  noEvidence?: 'practice' | 'parked';  // kenapa tiada subSkill — di bawah
   prompt: LocalizedText;         // teks arahan
   promptAudio: LocalizedAudio;   // WAJIB — kanak-kanak umur 7 tidak boleh baca ini
   hint?: LocalizedText;          // selepas salah, selagi soalan masih terbuka (§4.2)
@@ -171,6 +172,28 @@ type QuestionType =
   | 'sequence'       // susun mengikut urutan
   | 'build-word';    // ketuk suku kata untuk membina perkataan
 ```
+
+**Setiap soalan membawa tepat satu daripada `subSkill` atau `noEvidence`** — dikuatkuasakan pada
+pek dalam Zod, jadi semasa bina dan semasa jalan. "Tiada `subSkill`" dahulu bermaksud dua perkara,
+dan enjin terpaksa meneka yang mana. Kini pek menyatakannya:
+
+| `noEvidence` | Dimainkan? | Bukti penguasaan | Ketepatan, bintang, tangga aras | Hari ini |
+|---|---|---|---|---|
+| `practice` | Ya, selepas setiap soalan yang masih boleh menjadi bukti (§5.5) | Tidak | **Tidak dikira** | q022 |
+| `parked` | **Tidak pernah** | Tidak | — | q005, q009 |
+
+- **`practice`** — soalan yang sah sebagai latihan tetapi bukan bukti. q022 (*"Saya tambah 15 jadi
+  38."*): guru meluluskan bahasanya sebagai teka-teki hubungan nombor, dan berkata ia bukan bukti
+  penguasaan `two_digit_plus_two_digit_no_bridge` — ia mendorong `38 - 15`, bukan penambahan
+  (`docs/kssr/guru-rekod-jawapan-subkemahiran-dan-semakan-soalan.md`). Ia tidak mendakwa SP.
+- **`parked`** — item yang sah, menunggu tempat lain. q005 dan q009 ialah latihan pengecaman bentuk
+  menurut borang bertanda, bukan 7.2.1, dan milik pek 7.0 Ruang (PRD §16 item 10). Bukan "rosak".
+  `validate:content` menyenaraikannya setiap larian supaya "menunggu" tidak menjadi "terlupa".
+
+Soalan `practice` tidak masuk ke skor kerana, kalau ia bukan bukti penguasaan, ia bukan bukti
+prestasi sesi juga — dan soalan songsang yang sukar tidak boleh menolak anak turun tangga yang
+dikalibrasi pada kemahiran lain. Keputusan pemilik projek, 17 September 2026. Dinilai daripada
+salinan soalan yang anak jawab (salinan beku sesi), sama seperti `twoOptions` (§6).
 
 **Subset MVP:** `mcq`, `mcq-image`, `count-tap`. Tiga jenis, satu pek contoh.
 
@@ -635,6 +658,13 @@ export function starsFor(acc: number): 0 | 1 | 2 | 3 {
 
 **Bintang yang disimpan** = `Math.max(bintangSediaAda, bintangBaharu)` (PRD §10).
 
+**Soalan `practice` tidak dikira** (§3.3). Ketepatan, bintang, permata dan markah diambil atas
+soalan yang dikira sahaja: sesi dengan tiga soalan latihan dimarkah daripada tujuh. `summarise()`
+menerima penapis itu; `firstTryCount` dan `hintShownCount` masih mengira setiap jawapan, kerana
+kedua-duanya fakta tentang sesi, bukan skor. Diukur di pane: sesi aras 3, sembilan jawapan betul
+dan q022 salah, memaparkan *"3 daripada 3 bintang"* bersama *"9 daripada 10 betul pada cubaan
+pertama"* (PRD §16 item 37).
+
 ### 5.3 Permata
 
 ```ts
@@ -678,6 +708,9 @@ Selepas satu aktiviti:
   jika tidak        →  kekal
 ```
 
+Ketepatan di sini diambil atas soalan yang dikira sahaja (§3.3, §5.2). Larian tanpa satu pun
+soalan dikira membiarkan aras di tempatnya.
+
 Komposisi soalan bagi aktiviti pada aras `d`: 70% pada `d`, 20% pada `d-1`, 10% pada `d+1`
 (dengan clamp pada sempadan). Campuran ini memberikan kemenangan mudah dan sedikit regangan.
 
@@ -698,8 +731,9 @@ Keutamaan dalam setiap aras, mengikut turutan:
    "Fokus minggu ini" (§5.7): kemahiran yang tergelincir lebih dekat untuk dipulihkan daripada yang
    belum pernah dimulakan.
 2. **Sub-kemahiran yang belum dikuasai.**
-3. **Sub-kemahiran yang sudah dikuasai** — ia tetap ditanya, sebagai latihan, dan ia yang mengisi
-   sesi apabila bank tiada apa lagi untuk dibuktikan.
+3. **Sub-kemahiran yang sudah dikuasai, dan soalan `practice`** — ia tetap ditanya, sebagai latihan,
+   dan ia yang mengisi sesi apabila bank tiada apa lagi untuk dibuktikan. Soalan `practice` tidak
+   boleh menjadi bukti, jadi ia menunggu di belakang setiap soalan yang masih boleh.
 
 Dalam setiap kumpulan: soalan yang belum pernah memberi bukti cubaan pertama didahulukan, kerana
 penguasaan mengira soalan berbeza (§5.7); kemudian soalan yang paling lama tidak ditanya
@@ -713,8 +747,11 @@ hanya ada tiga soalan aras 3, jadi sesi aras 3 ialah tujuh soalan aras 2 dan tig
 di hujung atas sebab yang sama seperti kita menolak tekanan masa — anak tujuh tahun yang gagal pada
 soalan pertama berhenti mencuba.
 
-Soalan tanpa `subSkill` tidak pernah dipilih: hari ini q005 dan q009, yang menunggu pek 7.0 Ruang
-(PRD §16 item 10).
+Soalan `parked` tidak pernah dipilih: hari ini q005 dan q009, yang menunggu pek 7.0 Ruang (PRD §16
+item 10). Soalan `practice` dipilih (§3.3): hari ini q022, pada aras 3.
+
+**Jurang: putaran terlalu perlahan walaupun bank mencukupi** — PRD §16 item 38, berasingan daripada
+item 31.
 
 ### 5.6 Siri
 
@@ -1118,6 +1155,17 @@ Empat peraturan, diputuskan lebih awal supaya ia tidak diputuskan tergesa-gesa k
    Sesi tersimpan membekukan soalan (PRD §16 soalan 6), jadi salinan beku membawa `subSkill`
    lama kalau pek berubah di tengah sesi.
 
+> **Jurang, 17 September 2026: peraturan 3 tidak meliputi soalan yang dipetakan semula.** Ia
+> mengabaikan **id sub-kemahiran** yang hilang daripada senarai. Ia tidak berkata apa-apa tentang
+> **soalan** yang dipindahkan keluar daripada sub-kemahiran yang masih wujud. q022 ialah kesnya:
+> ia bukan lagi bukti `two_digit_plus_two_digit_no_bridge`, tetapi bukti q022 yang sudah tersimpan
+> di bawah id itu masih dibaca dan masih dikira — `skillInput()` tidak menapis bukti mengikut
+> pemetaan pek semasa. Peraturan 4 menghalang bukti **baharu**, bukan yang lama.
+>
+> Tidak dibaiki, atas keputusan pemilik projek: bukti itu hanya ada pada peranti ujiannya, dan
+> storan boleh dikosongkan. Apabila app dilancar, pemetaan semula yang sama memerlukan keputusan:
+> tapis bukti mengikut pek hidup semasa baca, atau terima bahawa bukti lama kekal. PRD §16 item 37.
+
 Preseden tingkah laku sudah ada: `loadSession` menolak blob rosak dan tidak pernah menghalang
 app daripada bermula. Stor kemajuan mengambil pendirian yang sama.
 
@@ -1172,8 +1220,11 @@ soalan yang sama dalam susunan yang sama selama-lamanya.
   audio berbunyi pada tekanan Mula pertama. Yang disahkan ialah app berjalan tanpa konteks selamat;
   `isSecureContext` pada telefon itu tidak dibaca.
 - **`subSkill` daripada pek hidup (peraturan 4); `twoOptions` daripada soalan yang anak jawab.**
-  Tekaan berharga apa yang anak nampak (§5.7). Soalan tanpa `subSkill` — q005 dan q009 — tidak
-  meninggalkan apa-apa.
+  Tekaan berharga apa yang anak nampak (§5.7). Soalan tanpa `subSkill` — q022 `practice` hari ini,
+  dan q005 dan q009 `parked` yang tidak pernah dimainkan — tidak meninggalkan bukti. Ia tetap
+  ditanda dalam `lastAsked`.
+- **Tangga aras bergerak atas jawapan yang dikira sahaja** (§5.5), dinilai daripada soalan yang anak
+  jawab.
 - **Kemajuan yang tidak boleh dibaca tidak ditulis.** Storan yang membaling ralat bermakna kemajuan
   mungkin wujud, dan menulis akan menggantikannya dengan satu larian. Nilai yang bukan kemajuan —
   bukan JSON, bentuk asing — dibaca kosong dan diganti pada tulisan seterusnya.

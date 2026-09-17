@@ -93,17 +93,25 @@ export interface SessionResult {
   hintShownCount: number;
 }
 
+/**
+ * `scored` says which answers count. A practice question is played and not
+ * scored (SPEC 3.3), so accuracy, stars, gems and points are taken over the
+ * rest: a session with three practice questions is scored out of seven. The two
+ * counts are facts about the whole session and include every answer.
+ */
 export function summarise(
   answers: readonly AnswerRecord[],
   isFirstClear: boolean,
+  scored: (a: AnswerRecord) => boolean = () => true,
 ): SessionResult {
-  const acc = accuracy(answers);
+  const counted = answers.filter(scored);
+  const acc = accuracy(counted);
   const stars = starsFor(acc);
   return {
     accuracy: acc,
     stars,
     gems: gemsFor(stars, isFirstClear),
-    points: answers.reduce((sum, a) => sum + scoreQuestion(a), 0),
+    points: counted.reduce((sum, a) => sum + scoreQuestion(a), 0),
     firstTryCount: answers.filter((a) => a.firstTry).length,
     hintShownCount: answers.filter((a) => a.hintShown).length,
   };

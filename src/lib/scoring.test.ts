@@ -168,6 +168,28 @@ describe('summarise', () => {
     });
   });
 
+  /*
+    A practice question is played and not scored. Three right answers and one
+    wrong practice answer is three out of three: three stars, not one.
+  */
+  it('scores only the answers it is told count, and counts every answer', () => {
+    const answers = [
+      answer({ questionId: 'q1' }),
+      answer({ questionId: 'q2' }),
+      answer({ questionId: 'q3' }),
+      answer({ questionId: 'p1', attempts: 2, correct: false, firstTry: false, hintShown: true }),
+    ];
+    expect(summarise(answers, false, (a) => a.questionId !== 'p1')).toEqual({
+      accuracy: 1,
+      stars: 3,
+      gems: 20,
+      points: 300,
+      firstTryCount: 3,
+      hintShownCount: 1,
+    });
+    expect(summarise(answers, false).stars).toBe(1);
+  });
+
   it('handles a session with no answers', () => {
     expect(summarise([], false)).toEqual({
       accuracy: 0,

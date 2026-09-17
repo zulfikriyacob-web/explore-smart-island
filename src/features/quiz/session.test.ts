@@ -377,6 +377,30 @@ describe('progression', () => {
     });
   });
 
+  /*
+    q022 is played and not scored. A missed practice question beside a right
+    answer is a perfect session: stars are counted over the scored questions.
+  */
+  it('leaves a practice question out of the score, and in the counts', () => {
+    const practice: Question = { ...mcqImage, noEvidence: 'practice' };
+    const s = run(started([mcq, practice]), [
+      { type: 'ANSWER', response: pick('b'), nowMs: 2_000 },
+      { type: 'NEXT', nowMs: 2_100 },
+      { type: 'ANSWER', response: pick('a'), nowMs: 3_000 },
+      { type: 'NEXT', nowMs: 3_500 },
+    ]);
+    expect(s.status).toBe('summary');
+    expect(s.answers).toHaveLength(2);
+    expect(s.result).toEqual({
+      accuracy: 1,
+      stars: 3,
+      gems: 30,
+      points: 100,
+      firstTryCount: 1,
+      hintShownCount: 0,
+    });
+  });
+
   it('pays a replay less than a first clear for the same performance', () => {
     const events: SessionEvent[] = [
       { type: 'ANSWER', response: pick('b'), nowMs: 2_000 },

@@ -7,7 +7,7 @@
  * scoring formula.
  */
 
-import type { Question } from '../../content/schema.ts';
+import { isScored, type Question } from '../../content/schema.ts';
 import {
   MAX_ATTEMPTS,
   summarise,
@@ -152,11 +152,20 @@ function beginQuestion(s: SessionState, nowMs: number): SessionState {
   };
 }
 
+/**
+ * A practice question's answer is left out of the score, judged by the question
+ * as the child answered it — the frozen copy this session holds.
+ */
 function finish(s: SessionState): SessionState {
+  const asked = new Map(s.questions.map((q) => [q.id, q]));
+  const scored = (a: AnswerRecord) => {
+    const q = asked.get(a.questionId);
+    return q === undefined || isScored(q);
+  };
   return {
     ...s,
     status: 'summary',
-    result: summarise(s.answers, s.isFirstClear),
+    result: summarise(s.answers, s.isFirstClear, scored),
     questionStartedMs: null,
   };
 }
