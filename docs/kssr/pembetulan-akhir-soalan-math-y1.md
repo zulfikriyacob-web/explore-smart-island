@@ -57,6 +57,13 @@
     Baris itu disalin ke coverage.ts dan dibetulkan pada 17 September 2026
     (PRD §16 item 22, SPEC §5.7).
 
+  DIGANTIKAN OLEH REKOD GURU, 17 SEPTEMBER 2026:
+
+  - Bahagian "q019 — kekal dua pilihan" dan "q024". Guru membetulkan
+    nasihat awalnya: tiga nombor munasabah, dan "sokongan visual" tidak
+    semestinya gambar. q019 kini tiga nombor dan tiga pilihan, dan q024
+    tidak diperlukan (PRD §16 item 36).
+
   Apa yang pek bawa, dan dari mana setiap butiran datang: PRD §16 item 29.
 
   Segala-galanya di bawah garis di bawah ini ialah teksnya, tidak disunting.

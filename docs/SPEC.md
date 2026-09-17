@@ -245,6 +245,35 @@ tetapi melimpah dalam BM tetap gagal validasi — pek tidak boleh lulus separuh.
 142px adalah tinggi jubin yang **dilukis**, bukan saiz semula jadi imej sumber. SVG diskala
 untuk muat; had ini menentukan kotak susun atur.
 
+#### Pengganggu — `mcq` dan `mcq-image`
+
+Prinsip guru (`docs/kssr/guru-rekod-jawapan-subkemahiran-dan-semakan-soalan.md`):
+
+> *"Setiap pengganggu mesti mewakili kesilapan yang munasabah, bukan sekadar menjadi pilihan
+> tambahan untuk mencukupkan UI."*
+
+Penulis soalan mesti boleh menamakan salah faham yang diwakili setiap pengganggu. Kalau tidak
+boleh, pengganggu itu tidak patut ada.
+
+**Pengganggu yang sama dengan teks arahan melemahkan siling tekaan — peraturan projek, 17
+September 2026.** Pengganggu begitu boleh dibuang dengan memadankan rentetan, tanpa kemahiran yang
+diuji. Anak yang menyedarinya hanya meneka antara pilihan yang tinggal, jadi kebarangkalian tekaan
+sebenar lebih tinggi daripada yang bilangan pilihan cadangkan. `guessOdds()` (§5.7) mengira
+bilangan pilihan, jadi soalan tiga pilihan dengan pengganggu begitu ialah soalan dua pilihan yang
+dikira 1/3 — ia memecahkan siling 4% dari dalam, bukan hanya mengajar kurang.
+
+Contohnya q019. Arahannya menyenaraikan *"14, 9, 18"*, dan pengganggu *"14, 9, 18"* — susunan
+asal, tidak diisih — boleh ditolak oleh anak yang hanya tahu jawapan mesti berbeza daripada
+soalan. Atas keputusan pemilik projek ia diganti *"14, 18, 9"*: susunan anak yang membanding digit
+pertama sahaja, atau digit sa sahaja, dan menganggap 9 lebih besar daripada 14 dan 18. Itu salah
+faham nilai tempat yang boleh dinamakan, dan ia tiada dalam arahan.
+
+Peraturan ini terpakai apabila tugas meminta anak **mengubah** apa yang arahan tunjukkan —
+menyusun, membilang terus, mengira. Ia tidak terpakai apabila jawapan memang salah satu benda yang
+arahan namakan: q013 menamakan Ali dan Kumar, kedua-duanya pilihan, jadi memadankan rentetan tidak
+membuang apa-apa. Sebab itu ia **tidak disemak mesin** — semakan "pilihan ada dalam arahan" akan
+menanda q013 tanpa memahami bezanya. Tempatnya ialah mata penulis dan borang `kssr:review`.
+
 #### `listen-choose` — Dengar & pilih (teras modul Membaca)
 ```json
 {
