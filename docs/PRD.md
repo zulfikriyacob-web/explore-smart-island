@@ -2120,3 +2120,19 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     **Rakaman menahan merge.** Ayat: `34 tambah 25 jadi berapa?` Klip BM dan EN kini fail 0 bait,
     jadi butang audio menyembunyikan diri dan soalan masih boleh dijawab (SPEC §3.5). Bila klip BM
     masuk, tag ID3 dibuang dan disahkan mengikut SPEC §8.
+
+    **Rakaman masuk, 19 September 2026**, selepas PR #72 sudah digabung — jadi `main` membawa q025
+    dengan klip kosong untuk seketika, dan butang audionya tersembunyi. Pemilik projek mendengar
+    klip itu sebelum memasangnya: *"34 tambah 25 jadi berapa?"*
+
+    | Semakan | Sebelum | Selepas |
+    |---|---|---|
+    | Saiz | 70,982 bait | 54,334 bait |
+    | Tag | ID3v2.4, 16,638 bait diisytiharkan, tiada footer — 16,648 dibuang, berakhir tepat pada `ff fb` | tiada; bait pertama `ff fb` |
+    | Bingkai / tempoh, dikira daripada bingkai | 130 / 3.396 s | 130 / 3.396 s |
+    | Bait ekor | 0 | 0 |
+    | Penyahkod pelayar | 3.396 s, 163,004 sampel | 3.396 s, 163,004 sampel; puncak 0.908 |
+
+    Dalam UI sebenar, butang audio q025 kini dipasang (legap penuh), dan `Howler._howls` app sendiri
+    memuatkan `/audio/ms/q025.mp3`. Kandungan pertuturan disahkan oleh telinga pemilik projek, bukan
+    dari sini.
