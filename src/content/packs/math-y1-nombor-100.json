@@ -77,8 +77,8 @@
         "ms": "Dua digit tambah dua digit, tanpa melintasi puluh",
         "en": "Two digits plus two digits, without bridging a ten"
       },
-      "questionCount": 3,
-      "questionIds": ["q008", "q022", "q023"]
+      "questionCount": 4,
+      "questionIds": ["q008", "q022", "q023", "q025"]
     }
   ],
   "questions": [
@@ -682,6 +682,33 @@
           { "id": "a", "text": { "ms": "46", "en": "46" } },
           { "id": "b", "text": { "ms": "36", "en": "36" } },
           { "id": "c", "text": { "ms": "18", "en": "18" } }
+        ],
+        "correctOptionId": "a",
+        "shuffle": true
+      }
+    },
+    {
+      "id": "q025",
+      "type": "mcq",
+      "difficulty": 3,
+      "learningStandard": "2.2.2",
+      "subSkill": "2.2.2/two_digit_plus_two_digit_no_bridge",
+      "promptForm": "direct",
+      "representation": "symbolic",
+      "responseMode": "select",
+      "wordingVariant": "A",
+      "prompt": {
+        "ms": "34 tambah 25 jadi berapa?",
+        "en": "What is 34 plus 25?"
+      },
+      "promptAudio": { "ms": "/audio/ms/q025.mp3", "en": "/audio/en/q025.mp3" },
+      "hint": { "ms": "Tambah sa, kemudian puluh.", "en": "Add the ones, then the tens." },
+      "explain": { "ms": "4 + 5 = 9. 30 + 20 = 50.", "en": "4 + 5 = 9. 30 + 20 = 50." },
+      "payload": {
+        "options": [
+          { "id": "a", "text": { "ms": "59", "en": "59" } },
+          { "id": "b", "text": { "ms": "69", "en": "69" } },
+          { "id": "c", "text": { "ms": "95", "en": "95" } }
         ],
         "correctOptionId": "a",
         "shuffle": true

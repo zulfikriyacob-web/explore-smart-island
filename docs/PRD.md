@@ -682,6 +682,9 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     **Kemas kini, 17 September 2026: sifar.** q019 menjadi tiga pilihan (item 36), dan
     `validate:content` tidak lagi mencetak sebarang sub-kemahiran di bawah bar soalan.
 
+    **Kemas kini, 18 September 2026: sifar semula.** q022 menjadi soalan latihan (item 37), yang
+    meninggalkan `two_digit_plus_two_digit_no_bridge` dengan dua soalan; q025 menutupnya (item 40).
+
     Dengan bar bentuk hilang, bar soalan ialah **satu-satunya** jurang kepada *Dikuasai*. Ia
     ditutup dengan soalan biasa — tiada skema, tiada bentuk baharu, cuma nombor berbeza dan
     rakaman. `validate:content` kini mencetak berapa soalan lagi setiap sub-kemahiran perlukan,
@@ -1551,6 +1554,10 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     **Keputusan pemilik projek: soalan tambah keempat ditulis pada aras 3**, kerana ia sepadan dengan
     penilaian kesukarannya dan ia satu-satunya penempatan yang menambah bank aras 3.
 
+    **Dilaksana, 18 September 2026:** q025 ditulis pada aras 3 (item 40). Bank aras 3 kini empat
+    soalan boleh dimain — q008, q023 dan q025 sebagai bukti, dan q022 sebagai latihan — berbanding
+    lapan yang sesi aras 3 minta. Aras 1 kekal sembilan soalan yang sama, seperti di atas.
+
     **Jurang yang dibiarkan: q008 mungkin salah aras.** *45 + 10* ialah menambah puluh bulat, dan
     pemilik projek menilainya lebih mudah daripada *34 + 25* dan *32 + 14* yang berkongsi aras 3
     dengannya. Memindahkannya ke aras 2 akan menukar apa yang anak lihat hari ini, pada soalan yang
@@ -1993,8 +2000,8 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
       *diparkir* tanpa kotak Ya/Tidak; dan kiraan *"kesepuluh-sepuluh"* kini *"kesemua 23"*, diambil
       daripada pek. Dalam perkataan pemilik projek, sebab yang paling penting: meminta kod SP untuk
       soalan yang sengaja tiada SP akan membuat guru menulis satu. SPEC §3.6.
-    - **`two_digit_plus_two_digit_no_bridge` tinggal q008 dan q023.** `validate:content` melaporkan
-      kurang satu soalan (tekaan gabungan 1/9).
+    - ~~**`two_digit_plus_two_digit_no_bridge` tinggal q008 dan q023.** `validate:content` melaporkan
+      kurang satu soalan (tekaan gabungan 1/9).~~ **Ditutup oleh q025, 18 September 2026 (item 40).**
 
     **Dua jurang, direkod dan tidak dibaiki:**
 
@@ -2058,3 +2065,58 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     berputar — q008 tiga kali, q023 tiga kali, q022 dua kali (soalan keempat pada aras 2), atau dua
     kali setiap satu (pada aras 3). Soalan latihan masih mengambil gilirannya melalui `lastAsked`;
     ia hanya tidak lagi mendahului soalan yang sudah dikuasai secara kekal.
+40. **q025 — soalan tambah keempat, ditulis pemilik projek. Ditambah 18 September 2026; tidak
+    digabung sebelum rakaman BM masuk.**
+
+    Ia menutup jurang yang dibuka apabila q022 menjadi latihan (item 37): sub-kemahiran
+    `2.2.2/two_digit_plus_two_digit_no_bridge` kembali kepada tiga soalan bukti.
+
+    | | |
+    |---|---|
+    | Arahan BM | *34 tambah 25 jadi berapa?* — 25 aksara |
+    | Arahan EN | *What is 34 plus 25?* |
+    | Pilihan | **59** · 69 · 95 |
+    | Pancingan | *Tambah sa, kemudian puluh.* — 26 aksara BM, 28 EN |
+    | Penerangan | *4 + 5 = 9. 30 + 20 = 50.* — 24 aksara |
+    | Aras | 3 (item 31) |
+    | Paksi | `direct` · `symbolic` · `select` |
+
+    **Pengganggu, dengan sebabnya** — perkataan pemilik projek:
+
+    - **69** — anak membawa satu puluh sedangkan tiada bawaan diperlukan. 4 + 5 tidak melintasi
+      puluh, tetapi anak yang baru belajar mengumpul semula kadang membawa secara automatik.
+    - **95** — digit betul, tempat terbalik. Keluarga yang sama seperti helah 47/74 dalam q001.
+
+    Kedua-duanya dua digit, jadi tiada satu pun boleh dibuang kerana ia "nampak pelik", dan tiada
+    satu pun sepadan dengan nombor dalam arahan — peraturan pengganggu SPEC §3.4.
+
+    **Disahkan:**
+
+    - Aksara seperti dikira di atas, dan kesemuanya di bawah had 28 aksara jalur.
+    - Tiada pilihan muncul dalam teks arahan (34, 25).
+    - 34 + 25 memang tanpa melintasi puluh: 4 + 5 = 9, di bawah sepuluh; jawapan 59.
+    - `validate:content`: 0 ralat, dan jurang ambang bagi sub-kemahiran itu hilang. Bank penguasaan
+      kini q008, q023 dan q025, ketiga-tiganya tiga pilihan — tekaan gabungan 1/27, di bawah siling
+      4% (SPEC §5.7).
+
+    **Susun atur, diukur dalam pane pada UI sebenar.** Kemajuan di-seed pada aras 3, dan q025 tiba
+    sebagai soalan ketujuh.
+
+    | Viewport | Arahan | Jalur | Kad menatal, inset 0 / 34 | Butang audio terpotong |
+    |---|---|---|---|---|
+    | 390×740, tiba | 2 baris, tiada tindih float | — | 0 / 18px | 0 / 0 |
+    | 390×740, pancingan | sama | 1 baris, 249px | 7 / 25px | 0 / 0 |
+    | 390×740, dedahan | sama | 1 baris, 189px | 7 / 25px | 0 / 0 |
+    | 360×780, dedahan | 2 baris, tiada tindih float | 1 baris, 189px | 0 / 18px | 0 / 0 |
+
+    - Pancingan pada 360×780 tidak dipandu; 249px di bawah kapasiti satu baris 296px.
+    - `aria-live` membaca *"Belum betul. Cuba sekali lagi. Tambah sa, kemudian puluh."* dan
+      *"Belum betul. 4 + 5 = 9. 30 + 20 = 50."*
+    - **Butang audio dipaksa hadir untuk ukuran itu.** Dengan klip BM masih kosong, `AudioButton`
+      menyembunyikan diri, jadi susun atur hari ini hanya membawa satu float. Ukuran di atas
+      diambil selepas klip beku sesi ditukar kepada klip sebenar q008, iaitu susun atur yang anak
+      akan lihat selepas rakaman mendarat. Perangkap yang sama direkod dalam item 26.
+
+    **Rakaman menahan merge.** Ayat: `34 tambah 25 jadi berapa?` Klip BM dan EN kini fail 0 bait,
+    jadi butang audio menyembunyikan diri dan soalan masih boleh dijawab (SPEC §3.5). Bila klip BM
+    masuk, tag ID3 dibuang dan disahkan mengikut SPEC §8.
