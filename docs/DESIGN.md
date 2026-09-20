@@ -772,8 +772,30 @@ atas langit pucat tidak kelihatan. Garis `--arang` yang membentuknya. Nombor dal
 ### Mascot
 Satu haiwan — cadangan: **anak kancil** (rusa kecil Malaysia, muncul dalam cerita rakyat
 sebagai watak yang pintar, bukan kuat — sesuai untuk aplikasi tentang berfikir).
-Muncul: skrin melahu, semasa maklum balas, pada skrin ganjaran. **Tidak pernah semasa
-kanak-kanak sedang berfikir tentang soalan.**
+Muncul: skrin melahu dan **skrin ganjaran**. **Tidak pernah semasa kanak-kanak sedang
+berfikir tentang soalan.**
+
+**Dipinda 20 September 2026: kancil tidak lagi muncul pada kad soalan.** Dahulu ia muncul
+semasa maklum balas, dalam slot 88×88 yang ditempah di penjuru kanan atas kad.
+
+Sebabnya, mengikut susunan beratnya — keputusan pemilik projek:
+
+- **Saluran maklum balas tidak bergantung padanya.** Ikon ✓/✕ dilukis dalam butang jawapan
+  (`BlockButton`), perkataan ada dalam jalur bantuan di bawah kad, dan verdict dibacakan oleh
+  kawasan `aria-live` (SPEC §9). Tiada satu pun daripada tiga saluran itu ialah maskot.
+- **Slot itu berharga 88px pada setiap soalan**, untuk reaksi yang muncul **selepas** anak
+  sudah tahu jawapannya betul atau salah. Pada telefon, kad hanya ada kira-kira 143px
+  (393×695), dan 88 daripadanya ditempah untuk sesuatu yang tiada di situ ketika anak
+  membaca soalan.
+- **Kemeriahan dibelanjakan pada momen ganjaran** (§1). Di skrin ganjaran kancil tidak
+  bersaing dengan teks soalan, butang audio atau jalur bantuan.
+
+**Apa yang hilang, ditulis supaya ia tidak dijumpai sebagai kejutan:** reaksi `happy` dan
+`sympathy` **tiada pemanggil pada kad soalan** lagi. Kontrak komponen (SPEC §11) mengekalkan
+kedua-duanya, dan skrin ganjaran masih merender `happy`. Maklum balas salah pada kad soalan
+kini ikon + goncangan + warna + jalur + `aria-live`, tanpa maskot.
+
+Sebab geometri dan nombornya: PRD §16 item 44 dan 45.
 
 ### Nod peta pulau
 Bulatan 96px pada laluan melengkung. Terkunci = kelabu + ikon mangga. Dibuka = warna modul.
@@ -861,9 +883,25 @@ Dua elemen datang dan pergi semasa sesi. Ruang untuk kedua-duanya ditempah sejak
 
 | Slot | Saiz | Tempat | Semasa rehat |
 |---|---|---|---|
-| **Kancil** | 88 × 88 | Penjuru kanan atas kad soalan | Kosong, penjuru kekal lapang |
-| **Butang audio** | 64 × 64 | Lajur kanan kad soalan, terus di bawah slot kancil | Kosong bila bahasa itu belum ada rakaman |
+| ~~**Kancil**~~ | ~~88 × 88~~ | **Dibuang 20 September 2026** — kancil tidak lagi muncul pada kad soalan (§6) | — |
+| **Butang audio** | 64 × 64 | Terapung di kanan blok teks soalan | Kosong bila bahasa itu belum ada rakaman |
 | **Seterusnya** | tinggi 72 | Dasar timbunan jawapan | Kosong, atau butang hantar soalan itu |
+
+> **Pindaan 20 September 2026 — slot kancil dibuang.** Telefon memberi kad kira-kira 143px
+> pada 393×695 dalam keadaan jalur, dan kandungan kad ialah 196px: slot 88px, butang audio
+> 62px, padding 48px. Butang audio — benda yang anak tekan untuk mendengar soalan — terpotong
+> 26–28px pada setiap soalan, dan menatal kad untuk mencapainya mengangkat baris pertama
+> soalan keluar dari atas kad (PRD §16 item 44).
+>
+> Diukur pada 25 arahan pek: dengan slot dibuang, kandungan kad turun daripada 194 kepada
+> **110–140**, dan tiada satu pun keadaan dalam larian sepuluh soalan memotong butang audio.
+> Kad mcq tidak menatal langsung. Yang tinggal ialah count-tap dalam keadaan dedahan: kad
+> menatal 22px, dan yang di luar tepi ialah **padding bawah kad sahaja** — objek terakhir 44px
+> di dalam, tali kiraan 8px di dalam.
+>
+> Peraturan yang dipatuhi di sini, dan pada skrin ganjaran (PRD §16 item 46): **kotak yang
+> menyerap kekurangan ruang tidak boleh memegang kawalan.** Kad soalan memegang butang audio,
+> jadi ia bukan kotak itu.
 
 **Seterusnya ialah 72, bukan 88.** §5.1 meletakkan "seterusnya" antara tindakan sekunder pada
 72; lantai 88 itu untuk butang yang anak *pilih antaranya*. Slot ini ditempah sama ada ia
@@ -878,12 +916,21 @@ campur jurang 16 — dan itu yang menolak kad melepasi ruang yang ada pada telef
 menatal dalam dirinya, memotong **31px** pada 390×740 dan **49px** dengan inset 34px iPhone.
 Soalan itu sendiri jatuh di bawah lipatan kadnya sendiri, tepat pada saat anak tersekat.
 
-**Kedua-dua float duduk dalam satu lajur, di kanan: slot kancil di atas, butang audio `clear`
-di bawahnya.** Bertentangan — audio kiri, kancil kanan — ia menyempitkan tiga baris pertama
-kepada 121px daripada 299px dan membiarkan baris keempat selebar penuh; 12 daripada 21 arahan
-pek melompat begitu. Dalam satu lajur, tiada satu pun melompat. Sebab kancil yang kekal di
-penjuru itu, dan bukan sebaliknya: penjuru kanan ditempah supaya tiada apa berganjak apabila
-maskot muncul (§5.2 membawa hujah penuh).
+~~**Kedua-dua float duduk dalam satu lajur, di kanan: slot kancil di atas, butang audio
+`clear` di bawahnya.**~~ **Satu float sahaja sejak 20 September 2026** — butang audio, di
+kanan blok teks soalan. Tiada lajur untuk ditimbun dan tiada apa untuk di-`clear`.
+
+Rekod kenapa ia pernah menjadi lajur: bertentangan — audio kiri, kancil kanan — ia
+menyempitkan tiga baris pertama kepada 121px daripada 299px dan membiarkan baris keempat
+selebar penuh; 12 daripada 21 arahan pek melompat begitu. Dalam satu lajur, tiada satu pun
+melompat.
+
+**Harga yang dibayar apabila slot itu dibuang, diukur pada 25 arahan, 393×695:** tujuh arahan
+turun satu baris, dan **dua** — q003 dan q011, dua arahan count-tap terpanjang — mendapat
+semula lompatan itu, kerana butang audio masih menyempitkan baris pertama sementara baris di
+bawahnya kini selebar penuh. Diterima sebagai harga oleh pemilik projek. Kedua-dua arahan itu
+membawa ayat *"Kemudian tekan Sedia."* yang PRD §16 item 26 akan buang; lompatan itu mungkin
+hilang bersamanya.
 
 > Satu kesan sampingan yang diukur, dan ia mengejutkan: **float yang lebih tinggi daripada
 > perenggannya menjulur ke blok seterusnya.** Kancil 88px dan audio 64px kedua-duanya lebih
@@ -891,8 +938,13 @@ maskot muncul (§5.2 membawa hujah penuh).
 > pancingan membalut kepada dua baris. Pancingan yang sama, dilukis selebar penuh, ialah satu
 > baris — 78px berbanding 51px. Float itu bukan sahaja kos ruang di tempatnya sendiri.
 
-Kancil masuk dan keluar dalam slotnya sendiri. Kad soalan tidak berubah tinggi, butang
-jawapan tidak bergerak, dan kedudukan Seterusnya tepat sama pada setiap soalan.
+~~Kancil masuk dan keluar dalam slotnya sendiri.~~ Kad soalan tetap tidak berubah tinggi
+semasa maklum balas, butang jawapan tidak bergerak, dan kedudukan Seterusnya tepat sama pada
+setiap soalan — kini kerana tiada apa yang tiba ke dalam kad, bukan kerana sesuatu ditempah
+untuknya.
+
+Selebihnya bahagian ini ialah **rekod slot yang dibuang**, dikekalkan kerana ia menerangkan
+apa yang tempahan itu beli dan berapa harganya. Ia tidak lagi menerangkan kod.
 
 **"Ditempah" bermaksud penjuru, bukan baris.** Slot kancil ialah kotak terapung di dalam
 blok teks soalan: teks membalut mengelilinginya untuk 88px pertama, kemudian mengalir
