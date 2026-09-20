@@ -2401,8 +2401,29 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     kata ia tidak terpotong diambil pada viewport yang tidak wujud pada telefon. Didiagnos 20
     September 2026; belum dibaiki.**~~ **DIBAIKI 20 September 2026: slot kancil keluar daripada
     kad soalan** (item 45 membawa keputusan, alternatif yang ditolak, dan ukuran selepasnya).
-    **Belum dilihat pada telefon.** Diagnosis dikekalkan di bawah kerana ia yang menerangkan
-    kenapa setiap ukuran lama tidak bermakna.
+    **DISAHKAN PADA TELEFON 21 September 2026.** Diagnosis dikekalkan di bawah kerana ia yang
+    menerangkan kenapa setiap ukuran lama tidak bermakna.
+
+    **Apa yang pemilik projek lihat pada iPhone, 21 September 2026** — tiga keadaan, ketiga-tiganya
+    lulus:
+
+    | Ujian | Hasil pada peranti |
+    |---|---|
+    | Butang audio dalam keadaan jalur, termasuk arahan tiga baris (q028) | **Penuh**, tidak terpotong |
+    | Skrin ganjaran, kancil 104px (item 46) | Seterusnya penuh; kaki kancil tidak terpotong |
+    | Count-tap dedahan | 22px padding, seperti diukur |
+
+    Pemerhatian tambahan, dalam perkataannya: kad soalan tanpa kancil *"nampak lebih tenang, dan
+    teks tidak lagi membalut pelik"*.
+
+    > **Satu percanggahan kecil, direkod supaya ia tidak menjadi kekeliruan nanti.** Pemilik projek
+    > melaporkan **q028 sebagai tiga baris** pada telefon; pane mengukurnya **dua baris** pada
+    > 393×695 (*"Apakah nombor sebelum 71?"*, 25 aksara, kad 110px). Pane melukis kira-kira 3%
+    > kecil (CLAUDE.md), jadi arahan yang duduk dekat sempadan balutan boleh jatuh ke sebelah lain
+    > pada peranti. Kalau q028 memang tiga baris di situ, kadnya ialah kes 140px — iaitu kes baki
+    > 4px — dan butang audio **tetap penuh**, yang menjadikan ujian itu lebih kuat, bukan lebih
+    > lemah. Tidak diselesaikan dari sini; kiraan baris pane tidak boleh mengatasi mata pada
+    > peranti.
 
     Dilihat pada telefon: bahagian bawah bulatan audio hilang di bawah tepi kad putih, dalam
     keadaan tiba dan juga selepas menjawab.
@@ -2736,4 +2757,55 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     | Kancil | 150 | 104, kaki masih di atas padang |
 
     Baki 7px duduk dalam pelapik `flex-1`, iaitu kotak yang memang direka untuk memegangnya.
-    Belum dilihat pada telefon.
+
+    **DISAHKAN PADA TELEFON, 21 September 2026.** Pemilik projek membuka skrin ganjaran pada
+    iPhone: butang **Seterusnya** penuh, dan kaki kancil tidak terpotong pada 104px. Item ditutup
+    pada peranti, bukan hanya di pane.
+47. **Ruang kosong antara kad soalan dan timbunan jawapan, selepas kad mengecil kepada
+    kandungannya. Diukur 21 September 2026; tiada pembaikan dirancang.**
+
+    Dilihat pada telefon selepas item 44: pada soalan dua baris tanpa jalur, ruang antara kad dan
+    butang jawapan *"nampaknya kira-kira 200px"*. Pemilik projek meminta nombornya sebelum
+    memutuskan sama ada ia perlu disentuh.
+
+    **Ia bukan ruang baharu. Ia ruang yang berpindah.** Bahagian soalan ialah `flex-1`, jadi
+    tingginya tetap — 279px pada soalan pilihan, 591px pada count-tap — dan kad tidak lagi
+    mengisinya. Apa yang dahulu putih di dalam kad (88px slot kancil) kini latar padang di
+    bawahnya.
+
+    Diukur pada 393×695, keadaan tiba, tanpa jalur. Jurang diukur dari tepi bawah kad ke **butang
+    pertama yang anak tekan**:
+
+    | Bentuk arahan | Bilangan | Tinggi kad | Jurang ke timbunan | Jurang ke butang pertama |
+    |---|---|---|---|---|
+    | Pilihan, 2 baris | 10 / 22 | 110 | 104 | **120** |
+    | Pilihan, 3 baris | 12 / 22 | 140 | 76 | **92** |
+    | count-tap q003, q011 | 2 | 464 | 62 | 78 |
+    | count-tap q006 | 1 | 378 | 149 | **165** |
+
+    **Jurang terbesar dalam pek ialah 165px (q006), dan bagi soalan pilihan 120px** — bukan 200.
+    Sepuluh soalan dipandu hidup melalui UI sebenar; lima belas yang lain dikira daripada klon
+    perenggan yang disahkan terhadap sepuluh itu (sisihan 0–7px, kecuali satu bacaan yang
+    diterangkan di bawah).
+
+    Berbanding sebelum slot kancil dibuang, apabila setiap kad pilihan ialah 194–196px:
+
+    | Bentuk | Jurang dahulu | Jurang kini | Perubahan |
+    |---|---|---|---|
+    | Pilihan, 2 baris | 37 | 120 | **+83** |
+    | Pilihan, 3 baris | 37 | 92 | **+55** |
+
+    **Dalam keadaan jalur ruang itu hampir hilang**, kerana jalur duduk di dalamnya. Diukur hidup
+    pada q027: kad 110, jalur 51 pada y 188–239, dan yang tinggal di bawah jalur ialah **40px**.
+    Pada arahan tiga baris ia 10px. Jadi ruang besar itu hanya wujud sebelum anak menjawab.
+
+    **Perangkap ukuran, dan ia menggigit lagi.** Satu bacaan hidup memberi q017 sebagai dua baris
+    (kad 110) sedangkan ia tiga baris (kad 138–140): `AudioButton` soalan sebelumnya masih
+    terpasang ketika gelung menyemak, jadi ukuran diambil sebelum float soalan semasa mendarat.
+    CLAUDE.md sudah merekod perangkap ini (PRD §16 item 26); tunggu butang **di dalam perenggan
+    kad semasa**, bukan mana-mana butang audio pada halaman.
+
+    **Tidak dibaiki, atas arahan pemilik projek** — nombor dahulu, keputusan kemudian. Kalau ia
+    disentuh nanti, perkara yang perlu diputuskan ialah ke mana ruang itu pergi: kad yang lebih
+    besar daripada kandungannya, timbunan yang naik, atau sesuatu yang mengisi padang. Ketiga-tiga
+    pilihan menyentuh DESIGN §5.2 (zon ibu jari) dan kedudukan butang yang anak sudah biasa.
