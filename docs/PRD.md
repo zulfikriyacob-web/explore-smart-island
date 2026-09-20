@@ -1617,6 +1617,14 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     audio hanya perlu berdekatan teks yang dibacanya — dan turun satu baris tidak memutuskan itu.
     DESIGN §5.2 dipinda dengan sebabnya.
 
+    > **Berundur sebahagian, 20 September 2026.** Slot kancil dibuang daripada kad (item 45), jadi
+    > lajur dua float menjadi satu float. Diukur pada 25 arahan pada 393×695: tujuh arahan turun
+    > satu baris, dan **dua berundur** — q003 dan q011, dua arahan count-tap terpanjang, mendapat
+    > semula lompatan lebar-selepas-sempit kerana butang audio masih menyempitkan baris pertama
+    > sementara baris di bawahnya kini selebar penuh. **Diterima sebagai harga** oleh pemilik
+    > projek: kedua-duanya membawa ayat *"Kemudian tekan Sedia."* yang item 26 akan buang, dan
+    > lompatan itu mungkin hilang bersamanya. Angka di bawah ialah keadaan sebelum pembuangan itu.
+
     | | Sebelum | Selepas |
     |---|---|---|
     | Arahan melompat lebar | 12 / 21 | **0 / 21** |
@@ -2389,9 +2397,12 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
 
     `aria-live` membaca *"Belum betul. Cuba sekali lagi. Kira satu lagi selepas 39."* dan *"Belum
     betul. 39, kemudian 40."*
-44. **Butang audio terpotong separuh pada iPhone, pada setiap soalan — dan setiap ukuran yang kata
-    ia tidak terpotong diambil pada viewport yang tidak wujud pada telefon. Didiagnos 20 September
-    2026; belum dibaiki.**
+44. ~~**Butang audio terpotong separuh pada iPhone, pada setiap soalan — dan setiap ukuran yang
+    kata ia tidak terpotong diambil pada viewport yang tidak wujud pada telefon. Didiagnos 20
+    September 2026; belum dibaiki.**~~ **DIBAIKI 20 September 2026: slot kancil keluar daripada
+    kad soalan** (item 45 membawa keputusan, alternatif yang ditolak, dan ukuran selepasnya).
+    **Belum dilihat pada telefon.** Diagnosis dikekalkan di bawah kerana ia yang menerangkan
+    kenapa setiap ukuran lama tidak bermakna.
 
     Dilihat pada telefon: bahagian bawah bulatan audio hilang di bawah tepi kad putih, dalam
     keadaan tiba dan juga selepas menjawab.
@@ -2602,6 +2613,57 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     skrin ganjaran kotak itu ialah kancil — satu-satunya blok tanpa kawalan, dan item 46 sudah
     dibaiki begitu. Pada skrin soalan kotak itu hari ini ialah **kad**, yang memegang butang audio,
     dan itulah pepijatnya. Dua tuas di atas ialah dua cara menamakan kotak lain.
+
+    #### Kesilapan yang sama, dua kali, dan namanya
+
+    Cadangan B datang daripada Claude, dan pemilik projek memilihnya. Kedua-duanya mengira
+    **ruang yang dibebaskan** (60px, lebih besar daripada defisit 52) dan tidak mengira **ruang
+    yang elemen itu perlukan** (62px, yang mesti datang dari suatu tempat). Nombor pertama betul
+    dan tidak mencukupi untuk membuat keputusan.
+
+    Ujiannya, untuk kali seterusnya: selepas mengira apa yang sesuatu perubahan bebaskan, tanya
+    di mana benda yang dipindahkan itu akan berdiri, dan ukur kotak itu juga. Kelas yang sama
+    seperti `text-indent` yang menempah baris pertama sahaja — jawapan yang betul kepada soalan
+    yang salah.
+
+    #### DIPUTUSKAN dan DIBINA, 20 September 2026: slot kancil keluar daripada kad
+
+    Keputusan pemilik projek, atas peraturan di atas: **kotak yang menyerap tidak boleh memegang
+    kawalan.** Slot kancil hiasan; butang jawapan 88px ialah benda yang anak tekan pada setiap
+    soalan, dan 88 dipilih untuk motor kasar umur tujuh. Jadi slot itu yang keluar, bukan butang
+    yang mengecil.
+
+    Tiga kedudukan lain untuk maskot ditolak oleh ukuran, bukan oleh citarasa:
+
+    | Kedudukan | Kenapa tidak |
+    |---|---|
+    | Mutlak atas penjuru kad | Teks berlanggar dengan kotak 88×88 itu pada **5 daripada 25** arahan — q003, q006, q011, q022, q027 |
+    | Latar antara kad dan jalur | Latar bebas dalam keadaan jalur ialah 4–34px. Ia muat hanya bila maskot tiada |
+    | Berhampiran bar kemajuan | Baris itu 20px; maskot menambah 68px. Menukar defisit dengan defisit |
+
+    Yang dipilih ialah keempat: **kancil hidup pada skrin ganjaran, tidak pada kad soalan.**
+    Saluran maklum balas tidak bergantung padanya — ikon ✓/✕ dalam butang jawapan, perkataan
+    dalam jalur, verdict dalam `aria-live` — dan slot itu berharga 88px pada setiap soalan untuk
+    reaksi yang tiba selepas anak sudah tahu keputusannya. DESIGN §6 dan §7 dipinda dengan
+    sebabnya dan dengan apa yang hilang: `happy` dan `sympathy` tiada pemanggil pada kad soalan.
+
+    **Diukur selepas perubahan, pane 393×695, UI sebenar, satu larian penuh sepuluh soalan:**
+
+    | | Sebelum | Selepas |
+    |---|---|---|
+    | Kandungan kad, mcq | 194–196 | **110–140** |
+    | Butang audio melepasi tepi kad | 26–28px | **tiada, pada mana-mana keadaan** (terdekat 25px di dalam) |
+    | Kad mcq menatal | ya | **tidak** (julat tatal 0) |
+    | Halaman menatal | tidak | tidak |
+    | Count-tap, dedahan | terpotong ~46px (dikira) | **22px — padding bawah kad sahaja** |
+
+    Count-tap dedahan diukur hidup kali ini, dengan kemajuan dikosongkan supaya larian membawa
+    q003: objek terakhir 44px di dalam tepi kad, tali kiraan *"Dibilang: N"* 8px di dalam, dan
+    yang di luar ialah padding. Itu kelas q013 (item 33), bukan kawalan terpotong.
+
+    **Baki 4px pada kes terburuk.** Arahan tiga baris (q019, q021, q023) memberi kad 140 daripada
+    142 yang ada. Jalur dua baris menambah 27 dan defisit kembali — jadi had 28/37 aksara
+    `validate:content` kini menahan susun atur, bukan hanya bacaan. Dicatat dalam SPEC §3.5.
 
     ~~Satu bacaan masih terbuka dan ia menyentuh arah A dan D: sama ada `dvh` naik kepada 735
     apabila bar Safari menyorot.~~ **Ditutup, 20 September 2026: satu tinggi.** `dvh` memang naik

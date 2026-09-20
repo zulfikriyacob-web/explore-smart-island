@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 
 import { AudioButton } from '../../components/ui/AudioButton.tsx';
 import { BlockButton } from '../../components/ui/BlockButton.tsx';
-import { Kancil, type KancilState } from '../../components/ui/Kancil.tsx';
 import { ProgressBar } from '../../components/ui/ProgressBar.tsx';
 import type { Question } from '../../content/schema.ts';
 import { promptPlayer } from '../../lib/player.ts';
@@ -113,27 +112,6 @@ export function QuizScreen() {
       img.src = url;
     }
   }, [nextQuestion]);
-
-  /*
-    The kancil appears during feedback and at no other time. DESIGN 6 is
-    explicit that it is never on screen while a child is thinking about the
-    question, so it is not rendered at all outside the feedback state — the
-    88x88 slot stays reserved and empty, which is what the slot is for.
-
-    Consequence worth knowing: the reducer reaches `feedback` on a correct
-    answer, or once the child can no longer be wrong — the third miss on a
-    count-tap, the second on three options, the first on two — and `sympathy`
-    shows then. It used to need a third miss, which an mcq reached only by
-    tapping the same wrong option again.
-  */
-  const [kancil, setKancil] = useState<KancilState | null>(null);
-  useEffect(() => {
-    if (session.status !== 'feedback') {
-      setKancil(null);
-      return;
-    }
-    setKancil(session.lastAnswerCorrect === true ? 'happy' : 'sympathy');
-  }, [session.status, session.lastAnswerCorrect, session.index]);
 
   if (!question) return null;
 
@@ -269,54 +247,43 @@ export function QuizScreen() {
             className="m-0 text-left font-sans text-prompt font-medium"
           >
             {/*
-              Reserved kancil slot, 88x88, in the card's top-right corner. It
-              floats, so the prompt wraps around it for the first 88px and then
-              reflows to full width — the corner stays clear without the slot
-              costing the card a whole 88px row of its own. Nothing moves when
-              the mascot arrives. (DESIGN 7)
+              The kancil is not on this card at all. It lives on the reward
+              screen, and the 88x88 slot that used to be reserved here is gone.
 
-              No min-height here. This paragraph is a flex item, and a flex item
-              is a block formatting context, so it already contains its own
-              float — measured: with the float present and min-height forced to
-              0, the paragraph is still 88px. The rule that used to sit here did
-              nothing, and its comment claimed otherwise.
+              It cost 88px on every question, in a card the phone gives about
+              143px at 393x695 — and it bought a reaction that arrives after the
+              child already knows whether they were right. The feedback channels
+              do not depend on it: the tick and cross are drawn in the answer
+              buttons (BlockButton), the words are in the band below, and the
+              verdict is in the aria-live region. DESIGN 1 spends the liveliness
+              on the reward moment, and that is where the mascot now is.
+
+              What this costs, written down because the states outlive it:
+              `happy` and `sympathy` have no caller on the question card any
+              more. DESIGN 6 and 7 carry the amendment; SPEC 11 keeps the
+              contract, because the reward screen still renders the component.
+              (PRD 16 items 44 and 45.)
             */}
-            <span aria-hidden data-slot="kancil" className="float-right ml-4 block h-[88px] w-[88px]">
-              {kancil !== null && (
-                <Kancil state={kancil} size={88} onDone={() => setKancil('idle')} />
-              )}
-            </span>
             {/*
-              Floated right and cleared, so it sits directly under the kancil
-              slot rather than opposite it. Both reservations are now on one
-              side, in one column.
+              The only float in this paragraph now, so there is no column to
+              stack and nothing to clear. `-mt-1` went with the mascot: the 4px
+              pull existed to tuck this button under the slot above it, and with
+              the slot gone it would only hang the button over the paragraph's
+              top edge.
 
-              Opposite each other they left a 121px band of 299px for the first
-              three lines, and from the fourth line the text took all 299 — a
-              2.47x jump that a child reads as broken text. Measured at 390x740
-              across the pack's 21 selectable prompts: 12 of them jumped, the
-              worst by 272px. Stacked on one side: none of them do, and the
-              average prompt drops from 4.1 lines to 3.2.
+              Still a float rather than an out-of-flow box, because a float
+              reserves space on every line it covers. Absolute positioning does
+              not, and `text-indent` reserves the first line only — measured, the
+              text then runs straight through the button (PRD 16 item 33).
 
-              -mt-1 pulls the button 4px up, and 4px is the most it may take. The
-              mascot is drawn inside the 88px slot and its lowest painted pixel
-              sits about 4.7px above the slot's bottom edge, so a 4px pull leaves
-              0.8px between them. At 8px the button covered 3px of the mascot on
-              feedback; at 24px, 19px.
-
-              On the tightest screens — 390x740, a choice question showing its
-              hint band, with an iPhone's 34px bottom inset — the card still
-              scrolls, and on q013 what scrolls is the card's bottom padding and
-              nothing else: the last line of text stays 56px clear of the visible
-              edge. That is the case DESIGN 5.2 already allows: the card gives
-              way. q002 is the exception, and is recorded in PRD 16 item 33.
-
-              Two arrangements measured identically, and the right-hand one was
-              chosen for a reason that is not about wrapping: the top-right
-              corner is reserved so that nothing shifts when the mascot arrives
-              on feedback (DESIGN 7), which was measured and confirmed on a
-              phone. The audio button has no such claim on its position — moving
-              it one row down keeps it beside the text it reads (DESIGN 5.2).
+              What the mascot's removal costs here, measured at 393x695 across
+              the pack's 25 selectable prompts: two of them — q003 and q011, the
+              two longest count-tap prompts — regain the wide-line-after-narrow-
+              line jump that stacking the floats had removed, because this button
+              still narrows the first lines while the text below it is now full
+              width. Seven prompts lose a line. Accepted as the price, and both
+              jumping prompts carry the "Kemudian tekan Sedia." sentence that
+              item 26 will take out, which may end the jump on its own.
 
               It disappears entirely when a language has no recordings, and the
               prompt reflows to full width, which is the same behaviour as before.
@@ -341,7 +308,7 @@ export function QuizScreen() {
             <AudioButton
               src={question.promptAudio[LANG]}
               autoPlay={session.status === 'question' && session.attempts === 0}
-              className="float-right clear-right -mt-1 ml-4"
+              className="float-right ml-4"
             />
             {question.prompt[LANG]}
           </motion.p>

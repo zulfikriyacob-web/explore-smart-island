@@ -444,6 +444,13 @@ Yang tinggal:
 | Teks jalur BM (`hint`, `explain`) melebihi **28 aksara** | **Amaran** | Mungkin membalut kepada dua baris pada skrin 360px. 28 aksara muat jalur 296px dengan margin 12.9px |
 | Teks jalur BM **37 aksara atau lebih** | **Ralat** | Berkemungkinan besar membalut pada 390×740 (64% ayat pada 37 aksara, 98% pada 40), dan jalur dua baris memotong butang audio di situ. Anggaran daripada kiraan aksara |
 
+> **Had ini kini menanggung beban susun atur, bukan hanya beban bacaan — 20 September 2026.**
+> Pada 393×695, lajur skrin soalan dalam keadaan jalur muat dengan **4px baki** pada arahan
+> terpanjang (PRD §16 item 45). Satu jalur dua baris menambah **27px**, jadi ia memulangkan
+> defisit yang pembuangan slot kancil baru sahaja tutup. Sebelum ini had 28/37 aksara
+> menghalang jalur daripada memotong butang audio; kini ia juga satu-satunya sebab kad muat.
+> Melonggarkannya bermakna mengukur semula keseluruhan lajur, bukan hanya jalur itu.
+
 Had jalur dikira dalam **aksara, bukan piksel**, kerana Node tiada fon. Kedua-duanya diukur dalam
 pelayar, Lexend 18px, terhadap ayat yang dibina daripada perbendaharaan kata pek sendiri. BM sahaja
 buat masa ini; had yang sama terpakai kepada EN bila suis bahasa mendarat. Asal-usul dan nombor
@@ -1779,11 +1786,18 @@ disentuh olehnya, sama seperti campuran aditif dalam spesifikasi handoff.
 **Tiada baris gilir.** Satu trigger baharu ialah pertukaran prop `state`, bukan tolakan ke
 dalam timbunan. Reaksi yang sedang bermain dipotong terus.
 
-**`thinking` tidak dipapar oleh mana-mana skrin hari ini.** DESIGN §6 melarang maskot
-muncul semasa kanak-kanak sedang berfikir tentang soalan, jadi kad soalan membiarkan slot
-88×88 kosong sehingga maklum balas tiba, dan skrin ringkasan tidak pernah berfikir. Keadaan
-itu kekal dalam kontrak kerana ia poz yang sah dan sudah dilaksana; di mana — dan sama ada —
-ia dipapar ialah keputusan skrin, bukan keputusan komponen.
+**Tiga daripada empat keadaan tiada pemanggil hari ini.** DESIGN §6 melarang maskot muncul
+semasa kanak-kanak sedang berfikir tentang soalan, jadi `thinking` tidak pernah dipapar. Dan
+sejak **20 September 2026** kancil dibuang sepenuhnya daripada kad soalan — slot 88×88 di
+penjuru kad tidak lagi wujud — jadi `happy` dan `sympathy` juga tiada pemanggil. Satu-satunya
+pemanggil produksi ialah skrin ganjaran, yang merender `happy` pada `size={104}` dan
+`idle` selepas reaksi itu tamat.
+
+Ketiga-tiga keadaan kekal dalam kontrak kerana ia poz yang sah dan sudah dilaksana; di mana —
+dan sama ada — ia dipapar ialah keputusan skrin, bukan keputusan komponen. Sebab kad soalan
+melepaskannya: butang audio terpotong pada setiap soalan pada 393×695, dan slot itu 88px
+daripada kira-kira 143px yang telefon beri kepada kad (DESIGN §6 dan §7, PRD §16 item 44
+dan 45).
 
 ### 11.3 `onDone` dan siapa yang memiliki keadaan
 
