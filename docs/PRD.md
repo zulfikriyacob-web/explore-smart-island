@@ -1431,6 +1431,16 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     Lompatan item 33 jatuh 2/25 → **0/25**, dan potongan count-tap dedahan hilang. Tetapi jurang
     kad-ke-butang item 47 pada q006 menjadi **219px**, jurang terbesar dalam pek — pada skrin
     dengan objek paling sedikit. Itu bukan sebab untuk tidak memendekkan; ia sebahagian harga.
+
+    #### DISAHKAN PADA PERANTI, DAN OLEH SEORANG ANAK — 21 September 2026
+
+    Ketiga-tiga keadaan betul pada iPhone: putih tanpa ikon, teal dengan anak panah selepas
+    ketukan pertama, merah dengan ✕ selepas hantar salah.
+
+    Dan ujian yang sebenarnya: **anak tujuh tahun pemilik projek menekan Sedia sendiri selepas
+    mengetuk, tanpa diberitahu apa-apa.** Itu satu anak, satu kali, dan ia bukan bukti statistik —
+    tetapi ia jenis bukti yang peraturan guru minta sebelum ayat *"Kemudian tekan Sedia."* boleh
+    dibuang daripada teks. Keputusan memendekkan teks masih milik pemilik projek.
 27. **Tiga belas soalan baharu wujud dalam fail, tetapi tiada anak boleh melihatnya. Enjin pemilih
     soalan ialah keutamaan seterusnya.**
 
@@ -2898,3 +2908,66 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     disentuh nanti, perkara yang perlu diputuskan ialah ke mana ruang itu pergi: kad yang lebih
     besar daripada kandungannya, timbunan yang naik, atau sesuatu yang mengisi padang. Ketiga-tiga
     pilihan menyentuh DESIGN §5.2 (zon ibu jari) dan kedudukan butang yang anak sudah biasa.
+48. **Dua perkara yang ujian anak tunjukkan, 21 September 2026. Satu didiagnos, satu direkod.
+    Tiada satu pun dibaiki.**
+
+    Kedua-duanya dilihat dalam tangkapan skrin telefon semasa anak tujuh tahun pemilik projek
+    bermain count-tap sendiri (item 26). Kedua-duanya **bukan regresi** — keduanya sudah begitu
+    sebelum isyarat butang dibina.
+
+    #### 1. *"Dibilang: 0"* muncul sebelum anak mengetuk apa-apa
+
+    Nombor sifar tidak bermakna kepada anak yang belum mula, dan ia menduduki ruang yang sama
+    seperti kiraan sebenar. Tali itu juga kawasan `aria-live`, jadi apa-apa pembaikan menyentuh
+    dua perkara sekali.
+
+    **Apa yang pembaca skrin dapat hari ini.** Kawasan `aria-live` mengumumkan **perubahan**,
+    bukan kandungan awal — jadi *"Dibilang: 0"* pada kedatangan tidak diumumkan kepada sesiapa.
+    Ia kos visual tanpa faedah audio. Diukur dengan `MutationObserver` pada tali itu: ketukan
+    pertama menghasilkan **1** mutasi (*"Dibilang: 1"*), ketukan kedua **2** — jadi setiap ketukan
+    memang diumumkan, kerana kawasan itu sudah wujud sebelum teksnya berubah.
+
+    **Empat layanan, diukur pada 393×695 melalui UI sebenar** (q006, 5 objek; q011, 8 objek):
+
+    | Layanan | Kad q006 | Jurang ke Sedia, q006 | Kad q011 | Jurang, q011 | Anjakan bila tali muncul |
+    |---|---|---|---|---|---|
+    | **A. Sekarang** — *"Dibilang: 0"* | 378 | 165 | 464 | 78 | — |
+    | **B. Tali dibuang sehingga ketukan pertama** | 342 | 201 | 429 | 114 | **36px** |
+    | **C. Teks kosong, elemen kekal** | 358 | 185 | 444 | 98 | **20px** |
+    | **D. Teks kosong + tinggi 20px ditempah** | 377 | 165 | 464 | 79 | **tiada** |
+
+    - **B dan C menganjak susun atur tepat pada ketukan pertama** — saat jari anak berada di
+      skrin. Kad membesar ke bawah dan jurang mengecut; objek tidak bergerak, kerana tali berada
+      di bawahnya.
+    - **B juga mencipta kawasan `aria-live` pada ketukan pertama, bukan pada muat.** Kawasan yang
+      baru dimasukkan ke DOM tidak boleh diharap mengumumkan perubahan yang memasukkannya. Itu
+      tingkah laku AT yang didokumenkan, **bukan sesuatu yang boleh diukur dari sini** — tiada
+      pembaca skrin pada mesin ini.
+    - **B tidak menamatkan potongan kad count-tap.** q011 kekal terpotong 6px berbanding 7px: yang
+      terpotong ialah padding bawah kad, dan objek terakhir berada 24–60px di dalam tepi dalam
+      setiap layanan.
+    - **D ialah satu-satunya yang tidak menganjak apa-apa** dan tetap membuang sifar itu: kawasan
+      kekal dalam DOM sejak muat, teksnya kosong, dan ketukan pertama menukar teks dalam kawasan
+      yang sudah ada — mekanisme pengumuman yang sama seperti hari ini.
+
+    **Cadangan: D.** Tali 20px diukur, jadi tinggi yang ditempah ialah 20px. Kalau ruang kad itu
+    yang dikehendaki, B memberi 36px — tetapi ia membelinya dengan anjakan pada ketukan pertama
+    dan dengan pengumuman yang tidak boleh disahkan dari sini.
+
+    **Tidak dibina.** Diagnosis sahaja, atas arahan pemilik projek.
+
+    #### 2. Merah selepas mengetuk tujuh daripada lapan
+
+    Dalam tangkapan skrin ketiga, anak mengetuk tujuh epal daripada lapan, tali berkata
+    *"Dibilang: 7"*, dia menekan Sedia, dan butang menjadi merah dengan ✕.
+
+    **Itu betul.** Jawapannya 8 dan dia menghantar 7; peraturan percubaan SPEC §4.2 tidak berubah.
+
+    Yang direkod ialah bacaan, bukan pepijat: selepas anak berjaya mengetuk tujuh objek satu demi
+    satu — kerja yang dia buat betul — merah mungkin terbaca sebagai hukuman untuk kerja itu, dan
+    bukan untuk nombor akhir. Tiada saluran hari ini yang memisahkan *"kiraan kamu tersasar satu"*
+    daripada *"kamu salah"*.
+
+    **Direkod, tidak dibaiki, atas arahan pemilik projek:** dia mahu melihat sama ada anak itu
+    mencuba lagi atau berhenti sebelum memutuskan sama ada ia perlu disentuh. Tingkah laku anak
+    itu ialah datanya, bukan pendapat kita tentang warna.
