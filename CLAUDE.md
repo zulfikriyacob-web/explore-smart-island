@@ -244,13 +244,32 @@ Why the pane cannot find this on its own: it has no status bar, no browser chrom
 no safe-area insets, so the height we type in is the height the layout gets. On the
 phone the same page starts 58px lower and ends above Safari's toolbar.
 
+**The test viewport is 393 × 695**, measured on the project owner's iPhone on 20
+September 2026 (iOS 18.7, Safari 26.6.1), with the address bar on screen:
+
+| | |
+|---|---|
+| `innerWidth × innerHeight` | **393 × 695** — use this |
+| `100dvh` and `100svh` | 695px |
+| `100lvh` and `100vh` | 735px — the bars take 40px |
+| `screen` | 414 × 896 at dpr 3, which does not match the 393 width and is not explained |
+
+Test both heights, and let the short one decide: 695 is what the child sees while the
+bars are up, 735 only after they scroll. 390×740 is 45px taller than the real thing and
+3px narrower.
+
 - **Take the real numbers from the device once, and use them everywhere after that.**
   `public/viewport.html` in this repo's history prints `innerHeight`, `innerWidth`,
   `visualViewport`, `100dvh/svh/lvh/vh` read back from real elements, and
   `env(safe-area-inset-*)` read back from padding. It is a throwaway page: untracked,
   deleted once the numbers are written down.
-- **Record the measured viewport here** when it arrives, and treat any figure taken at a
-  different height as void rather than approximate.
+- **Treat any figure taken at a different height as void rather than approximate.**
+- **`env(safe-area-inset-*)` read 0 on that phone** while Safari's bars were on screen —
+  every side, from a static element and a fixed one. That is consistent with the page
+  never reaching the home indicator while the toolbar covers it, but it is not confirmed:
+  the insets have to be read again in the bars-hidden state, which a page can only reach
+  if it is tall enough to scroll. Until that reading exists, do not assume 34px at the
+  bottom, and do not assume 0 either.
 - **A card that shrinks is the thing to watch.** The question card is `flex: 0 1 auto`
   with `min-h-0` and `overflow-y: auto`, so it is sized by leftover space, not by its
   content, and it clips from the bottom. Its content — the kancil slot above the audio

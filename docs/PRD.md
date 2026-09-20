@@ -2455,11 +2455,33 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
 
     #### Langkah seterusnya, mengikut susunan
 
-    1. **Ukur viewport sebenar telefon**, dengan halaman sementara `public/viewport.html`:
-       `innerHeight`, `innerWidth`, `visualViewport`, 100dvh/svh/lvh/vh yang dibaca daripada
-       elemen sebenar, dan `env(safe-area-inset-*)` yang dibaca daripada padding. Halaman itu tidak
-       dijejak dan dipadam selepas nombornya diambil.
+    1. ~~**Ukur viewport sebenar telefon**~~ **Diukur, 20 September 2026.**
+
+       | | Telefon | Viewport ujian lama |
+       |---|---|---|
+       | `innerWidth × innerHeight` | **393 × 695** | 390 × 740 |
+       | `100dvh`, `100svh` | 695px | — |
+       | `100lvh`, `100vh` | 735px | — |
+       | `screen` | 414 × 896, dpr 3 | — |
+       | UA | iOS 18.7, Safari 26.6.1 | — |
+
+       Viewport ujian kita **45px lebih tinggi dan 3px lebih sempit** daripada telefon. Bar Safari
+       mengambil 40px: 695 bila ia kelihatan, 735 bila ia menyorot. **Yang pendek menentukan**,
+       kerana itu yang anak lihat sebelum menatal.
+
+       `screen` melaporkan 414 × 896 pada dpr 3, yang tidak sepadan dengan lebar 393. Tidak
+       diterangkan, dan tidak digunakan: `innerHeight` dan `dvh` yang dipakai.
+
+       **`env(safe-area-inset-*)` membaca 0 pada setiap sisi**, daripada elemen statik dan elemen
+       `fixed`. Syak pertama pemilik projek ialah halaman itu tiada `viewport-fit=cover`; disemak,
+       dan ia **ada** — sama seperti `index.html`, termasuk dalam salinan yang pelayan hantar.
+       Penjelasan yang munasabah, belum disahkan: Safari melaporkan 0 selagi barnya menutup
+       kawasan home indicator, dan inset hanya muncul dalam keadaan bar tersorot — keadaan yang
+       halaman pertama itu tidak pernah capai, kerana ia terlalu pendek untuk ditatal. Halaman kini
+       ditinggikan, merekod setiap keadaan yang dilihatnya, dan membaca inset daripada dua jenis
+       elemen. **Sehingga bacaan bar-tersorot ada, jangan andaikan 34px dan jangan andaikan 0.**
     2. **Jadikan nombor itu angka ujian** dalam CLAUDE.md, menggantikan 390×740 dan 360×780.
+       Dibuat; CLAUDE.md, *"The test viewport has to come from the phone"*.
     3. **Baru kemudian pembaikan.** Tiga arah yang munasabah, belum diukur dan belum dipilih:
        tinggi minimum untuk kad yang memuatkan timbunan float; mengeluarkan butang audio daripada
        aliran kad; atau mengecilkan slot kancil. Tiada satu pun boleh diukur dengan betul sebelum
