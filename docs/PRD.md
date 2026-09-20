@@ -1715,6 +1715,9 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     **EN ditulis oleh Claude** supaya setara dengan versi BM guru, dan dikekalkan pendek walaupun EN
     belum dihantar. Guru tidak menyemaknya.
 
+    > **Nombor potongan di bawah tidak sah — item 44.** Ia diukur pada 390×740 dan 360×780, dua
+    > viewport yang tidak pernah wujud pada telefon. Lebar dan teks jalur kekal sah; potongan tidak.
+
     Diukur di pane pada sesi baharu (storan dikosongkan), selepas butang audio dipasang. Keadaan
     yang diukur: pancingan dan dedahan q001, dan pancingan dan dedahan q002 (q002 tiada `explain`):
 
@@ -1910,6 +1913,9 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     menangkap guru, tetapi kerana ia menunjukkan prinsip itu sukar dipatuhi walaupun oleh orang yang
     menulisnya. Sebab itu ia ditulis sebagai peraturan.
 
+    > **Nombor potongan di bawah tidak sah — item 44.** Viewport ujiannya lebih tinggi daripada
+    > telefon, jadi "0 / 0" di situ tidak berkata apa-apa tentang peranti.
+
     **Diukur di pane,** q019 dipandu melalui UI sebenar selepas kemajuan di-seed, dengan pilihan
     `14, 9, 18` — aksara yang sama seperti `14, 18, 9`, jadi susun aturnya sama:
 
@@ -2102,6 +2108,9 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     - `validate:content`: 0 ralat, dan jurang ambang bagi sub-kemahiran itu hilang. Bank penguasaan
       kini q008, q023 dan q025, ketiga-tiganya tiga pilihan — tekaan gabungan 1/27, di bawah siling
       4% (SPEC §5.7).
+
+    > **Nombor potongan di bawah tidak sah — item 44.** Viewport ujiannya lebih tinggi daripada
+    > telefon.
 
     **Susun atur, diukur dalam pane pada UI sebenar.** Kemajuan di-seed pada aras 3, dan q025 tiba
     sebagai soalan ketujuh.
@@ -2309,6 +2318,9 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     sesi — dan ia ditutup dengan cara yang item 31 sendiri namakan: menulis soalan aras 1 baharu,
     bukan memindahkan aras.
 
+    > **Nombor potongan di bawah tidak sah — item 44,** termasuk angka 1–5px itu. Pada telefon
+    > potongannya kira-kira 28px, separuh butang, dan ia berlaku pada setiap soalan.
+
     **Susun atur, diukur dalam pane dengan klip beku ditunjukkan kepada rakaman sebenar** supaya
     butang audio dipasang:
 
@@ -2362,6 +2374,9 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
       peraturan 3 SPEC §6 tidak menapis bukti mengikut pemetaan pek semasa (item 37). Pemilik
       projek akan mengosongkannya.
 
+    > **Nombor potongan di bawah tidak sah — item 44.** Viewport ujiannya lebih tinggi daripada
+    > telefon.
+
     **Diukur dalam pane, UI sebenar,** dengan kemajuan di-seed supaya q016 tiba dahulu. Klip beku
     ditunjukkan kepada rakaman sebenar supaya butang audio dipasang, seperti item 40.
 
@@ -2374,3 +2389,81 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
 
     `aria-live` membaca *"Belum betul. Cuba sekali lagi. Kira satu lagi selepas 39."* dan *"Belum
     betul. 39, kemudian 40."*
+44. **Butang audio terpotong separuh pada iPhone, pada setiap soalan — dan setiap ukuran yang kata
+    ia tidak terpotong diambil pada viewport yang tidak wujud pada telefon. Didiagnos 20 September
+    2026; belum dibaiki.**
+
+    Dilihat pada telefon: bahagian bawah bulatan audio hilang di bawah tepi kad putih, dalam
+    keadaan tiba dan juga selepas menjawab.
+
+    **Diukur daripada piksel tangkapan skrin telefon** (590×1280 bagi viewport 390 lebar, skala
+    1.513):
+
+    | | Piksel imej | CSS |
+    |---|---|---|
+    | Tepi atas kad | 185 | 122 |
+    | Tepi bawah kad | 401 | 265 |
+    | Tinggi kad | 216 | **143** |
+    | Tepi atas bulatan audio | 347 | 229 |
+
+    Butang itu 64px tinggi, jadi **36px kelihatan dan kira-kira 28px terpotong — 44%**. Di bawah
+    baris 401 warnanya latar mint, bukan cincin: bulatan benar-benar dipotong oleh tepi kad.
+
+    **Mekanismenya, diukur dalam pane.** Kad ialah `flex: 0 1 auto` dengan `min-h-0` dan
+    `overflow-y: auto`, jadi tingginya ditentukan ruang yang tinggal, bukan kandungan. Apabila
+    ruang berkurang, kad mengecut di bawah kandungannya dan memotong bahagian bawah — dan
+    kandungan paling bawah ialah butang audio.
+
+    | Viewport | Tinggi kad | Limpahan kad | Butang vs tepi kad |
+    |---|---|---|---|
+    | 390×740 — viewport ujian kita | 193 | 0 | 25px di atas tepi |
+    | 390×700 | 196 | 0 | 24px di atas |
+    | 390×660 | 180 | 16 | 8px di atas |
+    | 390×640 | 160 | 36 | 12px di bawah |
+    | **390×620** | **140** | 56 | **32px di bawah — separuh** |
+
+    Pada 390×620 pane menghasilkan gambar telefon: kad 140 berbanding 143 yang diukur pada
+    telefon. Tepi atas kad pada telefon ialah 122 CSS berbanding 64 dalam pane — **58px hilang di
+    atas**, iaitu jalur status dan safe-area yang pane tidak tiru, dan bakinya diambil bar Safari.
+
+    **Tiga hipotesis yang diperiksa dan ditolak:**
+
+    - *Kad menghadkan tingginya kepada teks, dan float melepasi tanpa menolak.* Tidak: perenggan
+      arahan ialah flex item, jadi ia membentuk konteks pemformatannya sendiri dan **mengandungi**
+      floatnya. Bawah perenggan 232 sama dengan bawah butang, dan `scrollHeight` kad 196 termasuk
+      timbunan float.
+    - *Float tidak menyumbang tinggi melainkan induk membentuk BFC; mungkin Safari berbeza.* Tidak
+      diperlukan untuk menerangkan gejala ini: menurunkan tinggi viewport sahaja menghasilkannya.
+      Tingkah laku float Safari tidak boleh diuji dari sini, dan tidak perlu diuji untuk kes ini.
+    - *Ia kesan inset 34 yang dikira.* Bukan. Inset itu bernilai 18px; yang hilang di sini 53px
+      tinggi kad.
+
+    #### Satu angka salah, disalin ke hadapan lima kali
+
+    Viewport 390×740 dan 360×780 ialah nombor kita sendiri, daripada dokumen kita, dan tidak pernah
+    disahkan terhadap telefon. Setiap dakwaan *"tiada potongan"* dalam **item 33, 36, 40, 42 dan
+    43** diambil pada viewport itu. **Tiada satu pun daripadanya berkata apa-apa tentang peranti**,
+    dan kelima-limanya kini ditanda begitu.
+
+    Ini bukan lima kesilapan berasingan. Ia satu angka salah yang disalin ke hadapan lima kali —
+    kelas yang sama seperti *"1/6 diuji"* dengan `count_objects` dan *"kesepuluh-sepuluh soalan"*
+    (HANDOFF §6): sesuatu yang kedengaran betul, dibawa ke hadapan, dan tidak pernah disemak
+    terhadap sumbernya. Bezanya kali ini sumbernya bukan fail; ia peranti.
+
+    Akibatnya kecacatan ini **bukan khusus kepada tiga soalan `before`**. Ia berlaku pada setiap
+    soalan, dan ujian kita tidak pernah boleh menangkapnya.
+
+    #### Langkah seterusnya, mengikut susunan
+
+    1. **Ukur viewport sebenar telefon**, dengan halaman sementara `public/viewport.html`:
+       `innerHeight`, `innerWidth`, `visualViewport`, 100dvh/svh/lvh/vh yang dibaca daripada
+       elemen sebenar, dan `env(safe-area-inset-*)` yang dibaca daripada padding. Halaman itu tidak
+       dijejak dan dipadam selepas nombornya diambil.
+    2. **Jadikan nombor itu angka ujian** dalam CLAUDE.md, menggantikan 390×740 dan 360×780.
+    3. **Baru kemudian pembaikan.** Tiga arah yang munasabah, belum diukur dan belum dipilih:
+       tinggi minimum untuk kad yang memuatkan timbunan float; mengeluarkan butang audio daripada
+       aliran kad; atau mengecilkan slot kancil. Tiada satu pun boleh diukur dengan betul sebelum
+       langkah 1.
+
+    Sementara itu kad masih boleh ditatal, jadi butang itu boleh dicapai — tetapi semasa rehat anak
+    nampak separuh bulatan, dan yang kelihatan jauh di bawah lantai sasaran sentuh 64px SPEC §9.
