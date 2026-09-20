@@ -194,6 +194,43 @@ work ran in the main session.
   a measurement from its recorded script instead of rewriting it. That is how two
   wrong claims about the help-band limits were caught (PRD §16 item 33).
 
+### Localhost is a secure context; the phone on the LAN is not
+
+**A test that passes on `localhost` has not tested the path the phone takes.** Browsers
+treat `http://localhost` as a potentially trustworthy origin and `http://192.168.x.x` as
+not, and a surprising amount of behaviour is gated on exactly that. The Browser pane runs
+on localhost, so it cannot fail any of it. This is the same shape as "the pane is not the
+device", one layer down: not a different browser, a different **origin**.
+
+Twice so far, and the second one cost a phone test:
+
+- **`crypto.randomUUID()` exists only in a secure context.** The store generates session
+  ids from `crypto.getRandomValues` for this reason (SPEC §6). The pane proves nothing
+  about that path; the iPhone over plain http did.
+- **Vite's dev server serves `.json` as an ES module only when the request carries
+  `Sec-Fetch-Dest: script`,** and browsers attach `Sec-Fetch-*` headers only to trustworthy
+  origins. A temporary page that imported a JSON module worked on localhost and hung for
+  ever on the phone. Measured on the same URL: `application/json` without the header,
+  `text/javascript` with it. `.ts` modules are served as JavaScript either way, so only the
+  JSON import broke. (PRD §16 item 41.)
+
+Behind the same gate, so the list is not learned one at a time: `navigator.clipboard`,
+service workers, `crypto.subtle`, camera and geolocation permissions, and fetch metadata
+headers.
+
+**Before claiming a device path verified, ask which origin the test ran on.** If the code
+touches anything above, open the LAN address from the phone, or say plainly that only
+localhost was checked.
+
+Two lessons came with it, both cheap:
+
+- **A failed static import takes the whole script with it.** Nothing runs, nothing is
+  logged on screen, and a page sits on its placeholder text for ever. In a throwaway page,
+  import dynamically inside `try/catch` and render every failure — including from `error`
+  and `unhandledrejection` handlers.
+- **Print the raw data too.** The page's job was to read `esi.progress.v1`; dumping the raw
+  string at the end means even a half-broken page returns something worth pasting.
+
 ### Received documents, and what is said about them
 
 **A description of a document is not the document.** `docs/kssr/` holds what
