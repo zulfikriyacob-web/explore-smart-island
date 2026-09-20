@@ -2396,6 +2396,10 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     Dilihat pada telefon: bahagian bawah bulatan audio hilang di bawah tepi kad putih, dalam
     keadaan tiba dan juga selepas menjawab.
 
+    > **Keadaan tiba belum disahkan semula.** Pada 393×695 dalam pane, potongan itu muncul dalam
+    > keadaan pancingan dan dedahan sahaja (27–28px); pada keadaan tiba kad 193px dan butang
+    > penuh. Jadual dan apa yang ia ubah: item 45.
+
     **Diukur daripada piksel tangkapan skrin telefon** (590×1280 bagi viewport 390 lebar, skala
     1.513):
 
@@ -2472,8 +2476,33 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
        dan menyimpulkan hanya satu tinggi yang penting. Kesimpulan itu berkemungkinan besar betul,
        tetapi medannya bukan yang menentukan: skrin app disaiz dengan `h-[100dvh]`, jadi yang
        memutuskan ialah **dvh setiap keadaan**, bukan `innerHeight` dan bukan `clientHeight`.
-       Halaman kini merekod keempat-empat medan itu setiap keadaan; bacaan ketiga akan menutupnya.
-       Sehingga itu, ukur pada 695 dan jangan andaikan 735 sampai ke susun atur.
+
+       **Bacaan ketiga, 20 September 2026 — `dvh` memang naik.** Halaman ditatal sehingga bar
+       Safari menyorot, dan setiap keadaan direkod:
+
+       | Keadaan | `innerH` | `clientH` | `dvh` | `svh` | `lvh` | inset bawah |
+       |---|---|---|---|---|---|---|
+       | bar kelihatan | 695 | 695 | **695** | 695 | 735 | 0 |
+       | bar tersorot | 735 | 695 | **735** | 695 | 735 | 0 |
+
+       `innerHeight` dan `dvh` bergerak bersama; `clientHeight` tidak. Tekaan bahawa
+       `clientHeight` ialah satu-satunya tinggi yang penting ditolak oleh bacaan ini —
+       medannya bukan yang menentukan susun atur kita.
+
+       **Tetapi app tidak boleh menyebabkannya naik pada skrin soalan.** Bar hanya menyorot bila
+       **halaman** menatal. `main` ialah tepat `100dvh`, dan yang mengalah ialah kad (`min-h-0`,
+       `overflow-y-auto`) — tatalan dalam kad bukan tatalan halaman. Diukur dalam pane pada
+       393×695, memandu UI sebenar: `scrollHeight === clientHeight === 695` pada keadaan tiba,
+       dengan jalur pancingan, dengan dedahan, dan pada setiap count-tap termasuk lapan objek
+       q011. Skrin mula muat tepat juga. **Jadi skrin soalan ada satu tinggi, 695**, dan 735
+       tidak sampai ke susun aturnya. Skrin ganjaran lain — ia menatal, dan di situ 735 boleh
+       dicapai: item 46.
+
+       **Ekor bacaan itu menunjukkan `innerHeight` turun ke 598 kemudian naik ke 694, dengan
+       `dvh` dan `clientHeight` terpaku pada 695.** Itu bukan keadaan susun atur: apa sahaja
+       lapisan UA yang menutup 97px itu — syak pemilik projek, callout pilihan teks daripada
+       tekan-lama untuk menyalin — tidak menyentuh unit yang app gunakan. Puncanya tidak
+       ditentukan daripada nombor sahaja, dan tidak perlu ditentukan: `dvh` tidak bergerak.
 
        `screen` melaporkan 414 × 896 pada dpr 3, yang tidak sepadan dengan lebar 393. Tidak
        diterangkan, dan tidak digunakan: `innerHeight` dan `dvh` yang dipakai.
@@ -2519,6 +2548,55 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     digantikan tidak pernah wujud pada peranti (item 44). Ukuran pertama yang bermakna bagi
     mana-mana arah ialah pada **393×695 dengan inset 0**.
 
-    Satu bacaan masih terbuka dan ia menyentuh arah A dan D: sama ada `dvh` naik kepada 735 apabila
-    bar Safari menyorot. Kalau ya, kad mendapat 40px lagi dalam keadaan itu, dan pembaikan perlu
-    bekerja pada kedua-dua tinggi; kalau tidak, 695 satu-satunya kes.
+    ~~Satu bacaan masih terbuka dan ia menyentuh arah A dan D: sama ada `dvh` naik kepada 735
+    apabila bar Safari menyorot.~~ **Ditutup, 20 September 2026: satu tinggi.** `dvh` memang naik
+    kepada 735 apabila bar menyorot (item 44), tetapi bar hanya menyorot bila halaman menatal, dan
+    skrin soalan tidak pernah menatal — `scrollHeight === clientHeight === 695` dalam setiap
+    keadaan yang dipandu. Jadi keempat-empat arah diukur pada **393×695 sahaja**, dan tiada satu
+    pun perlu bekerja pada dua tinggi.
+
+    **Dan jurang 53px itu hanya wujud dalam keadaan jalur.** Diukur dalam pane pada 393×695,
+    soalan tiga pilihan:
+
+    | Keadaan | Tinggi kad | Kandungan kad | Butang audio vs tepi kad |
+    |---|---|---|---|
+    | Tiba | 193 | 196 | **0** — 25px di atas tepi |
+    | Pancingan | 143 | 196 | **27px di bawah** |
+    | Dedahan | 144 | 196 | **28px di bawah** |
+
+    Kad 143 dan potongan 28px sepadan dengan tangkapan skrin telefon (143 dan ~28px), tetapi
+    **hanya dalam keadaan jalur** — pada keadaan tiba pane memberi kad 193 dan butang penuh. Jalur
+    satu baris ialah 51px, dan 193 − 143 = 50. Jadi sama ada tangkapan skrin itu diambil selepas
+    satu jawapan salah, atau telefon mempunyai ~50px kurang daripada 695 pada keadaan tiba. **Tidak
+    diselesaikan dari sini**; ia diselesaikan dengan satu pandangan pada telefon sebelum menjawab.
+    Ia mengubah saiz pembaikan: kalau potongan hanya dalam keadaan jalur, yang perlu dicari ialah
+    51px untuk jalur, bukan 53px pada setiap soalan.
+46. **Skrin ganjaran melimpah 39px pada 393×695, dan butang kedua 23px di bawah tepi skrin.
+    Diukur 20 September 2026; belum dibaiki.**
+
+    Dijumpai semasa menyemak sama ada halaman app boleh menatal langsung (item 44). Skrin soalan
+    tidak boleh; skrin ganjaran boleh, kerana blok butangnya `shrink-0`:
+
+    | | |
+    |---|---|
+    | `documentElement.scrollHeight` | 734 |
+    | `clientHeight` | 695 |
+    | Limpahan | **39px** |
+    | Blok butang (`flex w-full shrink-0 flex-col gap-4`) | atas 542, bawah **734** |
+    | Butang **Seterusnya** (72px) | atas 646, bawah **718** — 23px di bawah tepi, 49px kelihatan |
+
+    `main` ialah `h-[100dvh]` dan `overflow` kekal `visible`, jadi blok yang tidak boleh mengecut
+    tumpah keluar daripadanya dan halaman itu sendiri yang menatal.
+
+    Dua akibat:
+
+    - **Anak nampak butang Seterusnya terpotong** selepas menyiapkan satu aktiviti — pada skrin
+      yang sepatutnya ganjaran. Lantai sasaran sentuh SPEC §9 ialah 64px; yang kelihatan 49px.
+    - **Ini satu-satunya skrin di mana `dvh` boleh mencapai 735**, kerana ia satu-satunya yang
+      menatal. Kalau bar menyorot, `main` menjadi 735 dan kandungan 734 muat — jadi keadaan itu
+      membetulkan dirinya sendiri, dan berkemungkinan berayun. Sama ada 39px cukup untuk Safari
+      menyorotkan barnya **belum disemak pada telefon**.
+
+    Komen dalam `SummaryScreen.tsx` merekod limpahan yang diukur pada 390×740 dan lantai yang
+    dipilih untuk menghapuskannya. Nombor itu diambil pada viewport yang tidak pernah wujud (item
+    44), jadi lantai itu disaiz untuk skrin 45px lebih tinggi daripada telefon.
