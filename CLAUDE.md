@@ -256,11 +256,29 @@ September 2026 (iOS 18.7, Safari 26.6.1), with the address bar on screen:
 
 **Measure at 695.** 390×740 is 45px taller than the real thing and 3px narrower.
 
-When Safari's bars hide, that phone reports `innerHeight` 735 while
-`documentElement.clientHeight` stays 695. Our screens are sized with `h-[100dvh]`, so the
-field that decides is **dvh per state**, not `innerHeight` — and that reading is still
-being taken. Until it lands, 695 is the number to measure at, and 735 is not assumed to
-reach the layout.
+**`dvh` does move — and the question screen cannot make it move.** Third reading, 20
+September 2026, the page scrolled until Safari's bars hid:
+
+| | `innerH` | `clientH` | `dvh` | `svh` | `lvh` |
+|---|---|---|---|---|---|
+| bars on screen | 695 | 695 | **695** | 695 | 735 |
+| bars hidden | 735 | 695 | **735** | 695 | 735 |
+
+`clientHeight` is 695 in both, and every inset is 0 in both. So `innerHeight` and `dvh`
+move together and `clientHeight` does not — which is why `dvh` is the field to read: our
+screens are `h-[100dvh]`.
+
+**But the bars only hide when the _page_ scrolls, and on the question screen it never
+does.** `main` is exactly `100dvh`, the card is the part that gives way (`min-h-0`,
+`overflow-y-auto`), and the card's own scrolling is not the page's. Measured in the pane
+at 393×695, driving the real UI: `scrollHeight === clientHeight === 695` on arrival, with
+the hint band, with the reveal, and on every count-tap including q011's eight objects. The
+start screen fits exactly too. **One height on the question screen, 695, and that is where
+a fix is measured.**
+
+**The reward screen is the exception** — its button block is `shrink-0` and runs 39px past
+the fold, so that screen is scrollable and `dvh` can reach 735 there. PRD §16 item 46.
+Whether 39px is enough to make Safari retract has not been checked on the phone.
 
 - **Take the real numbers from the device once, and use them everywhere after that.**
   `public/viewport.html` in this repo's history prints `innerHeight`, `innerWidth`,
