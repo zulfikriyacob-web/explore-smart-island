@@ -273,6 +273,18 @@ reach the layout.
   every side reads 0px. **The 34px this repo assumed for the home indicator never existed
   here.** Drop it from measurements rather than carrying it as an estimate; it was a
   number we wrote down, not one the device ever reported.
+- **How to measure a viewport on the phone, so the reading is worth having.** A page that
+  cannot scroll can only ever report one state, and the insets — if a device has any —
+  appear only once the browser's bars hide. So: make the page taller than the screen,
+  record **every state it sees** rather than a snapshot, read `env()` back from the
+  padding of both a static and a fixed element, and print `innerHeight`, `clientHeight`,
+  `dvh`, `svh` and `lvh` side by side in each row. The first version of ours did none of
+  that and reported a confident set of zeros.
+- **A screenshot from the phone is measurable.** `System.Drawing` is available here, so a
+  screenshot can be scanned column by column for the edge of a card or a control:
+  `scale = image width / CSS width`, then divide. That is how the clipped audio button was
+  turned into numbers — card bottom at image row 401, CSS 265 — without guessing from the
+  picture.
 - **A card that shrinks is the thing to watch.** The question card is `flex: 0 1 auto`
   with `min-h-0` and `overflow-y: auto`, so it is sized by leftover space, not by its
   content, and it clips from the bottom. Its content — the kancil slot above the audio
@@ -388,6 +400,11 @@ note. When a summary and a file disagree, the file is right.
   this pane is about the pane. One thing the pane does share with an iPhone: its
   AudioContext `sampleRate` is 48000, so Howler's `Howler.unload()` branch for a
   rate other than 44100 is live in both.
+- **A hidden pane reports `innerHeight` and `clientHeight` as `0`.** When the Browser pane
+  is not on screen — the tab exists, the page is loaded — the viewport numbers come back
+  zero, and anything derived from them is silently zero too. A measuring page recorded a
+  state of all zeros this way. Set a viewport with `resize_window` before measuring, and
+  treat a zero height as "not laid out", not as a measurement.
 - **The pane draws about 3% small.** The 88px kancil slot measured 85px and the
   64px audio button 62px. Pixel figures taken here are good to about ±3px; a
   margin smaller than that is not a margin you have measured.
