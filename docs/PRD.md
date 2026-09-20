@@ -2465,21 +2465,31 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
        | `screen` | 414 × 896, dpr 3 | — |
        | UA | iOS 18.7, Safari 26.6.1 | — |
 
-       Viewport ujian kita **45px lebih tinggi dan 3px lebih sempit** daripada telefon. Bar Safari
-       mengambil 40px: 695 bila ia kelihatan, 735 bila ia menyorot. **Yang pendek menentukan**,
-       kerana itu yang anak lihat sebelum menatal.
+       Viewport ujian kita **45px lebih tinggi dan 3px lebih sempit** daripada telefon.
+
+       **Bila bar menyorot, telefon melaporkan `innerHeight` 735 tetapi
+       `documentElement.clientHeight` kekal 695.** Pemilik projek membacanya daripada satu medan
+       dan menyimpulkan hanya satu tinggi yang penting. Kesimpulan itu berkemungkinan besar betul,
+       tetapi medannya bukan yang menentukan: skrin app disaiz dengan `h-[100dvh]`, jadi yang
+       memutuskan ialah **dvh setiap keadaan**, bukan `innerHeight` dan bukan `clientHeight`.
+       Halaman kini merekod keempat-empat medan itu setiap keadaan; bacaan ketiga akan menutupnya.
+       Sehingga itu, ukur pada 695 dan jangan andaikan 735 sampai ke susun atur.
 
        `screen` melaporkan 414 × 896 pada dpr 3, yang tidak sepadan dengan lebar 393. Tidak
        diterangkan, dan tidak digunakan: `innerHeight` dan `dvh` yang dipakai.
 
-       **`env(safe-area-inset-*)` membaca 0 pada setiap sisi**, daripada elemen statik dan elemen
-       `fixed`. Syak pertama pemilik projek ialah halaman itu tiada `viewport-fit=cover`; disemak,
-       dan ia **ada** — sama seperti `index.html`, termasuk dalam salinan yang pelayan hantar.
-       Penjelasan yang munasabah, belum disahkan: Safari melaporkan 0 selagi barnya menutup
-       kawasan home indicator, dan inset hanya muncul dalam keadaan bar tersorot — keadaan yang
-       halaman pertama itu tidak pernah capai, kerana ia terlalu pendek untuk ditatal. Halaman kini
-       ditinggikan, merekod setiap keadaan yang dilihatnya, dan membaca inset daripada dua jenis
-       elemen. **Sehingga bacaan bar-tersorot ada, jangan andaikan 34px dan jangan andaikan 0.**
+       **`env(safe-area-inset-*)` ialah 0 pada telefon ini, dalam setiap keadaan.** Bacaan kedua,
+       selepas halaman ditinggikan supaya bar boleh menyorot: **36 keadaan berbeza**, bar kelihatan
+       dan bar tersorot, daripada elemen statik dan elemen `fixed` — setiap sisi 0px.
+
+       Syak pertama pemilik projek ialah halaman itu tiada `viewport-fit=cover`; disemak, dan ia
+       **ada**, sama seperti `index.html`, termasuk dalam salinan yang pelayan hantar. Halaman itu
+       memang cacat, tetapi atas sebab lain: ia terlalu pendek untuk ditatal, jadi bar tidak pernah
+       menyorot dan hanya satu keadaan boleh dilihat.
+
+       **34px tidak pernah wujud di sini.** Ia nombor kita, bukan nombor peranti, dan ia masuk ke
+       dalam lajur *"inset 34"* dalam item 33, 36, 40, 42 dan 43 — angka hantu di sebelah viewport
+       yang salah. Jangan gantikan apa-apa; ukur pada 393×695.
     2. **Jadikan nombor itu angka ujian** dalam CLAUDE.md, menggantikan 390×740 dan 360×780.
        Dibuat; CLAUDE.md, *"The test viewport has to come from the phone"*.
     3. **Baru kemudian pembaikan.** Tiga arah yang munasabah, belum diukur dan belum dipilih:

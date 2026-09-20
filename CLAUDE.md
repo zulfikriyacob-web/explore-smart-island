@@ -254,9 +254,13 @@ September 2026 (iOS 18.7, Safari 26.6.1), with the address bar on screen:
 | `100lvh` and `100vh` | 735px — the bars take 40px |
 | `screen` | 414 × 896 at dpr 3, which does not match the 393 width and is not explained |
 
-Test both heights, and let the short one decide: 695 is what the child sees while the
-bars are up, 735 only after they scroll. 390×740 is 45px taller than the real thing and
-3px narrower.
+**Measure at 695.** 390×740 is 45px taller than the real thing and 3px narrower.
+
+When Safari's bars hide, that phone reports `innerHeight` 735 while
+`documentElement.clientHeight` stays 695. Our screens are sized with `h-[100dvh]`, so the
+field that decides is **dvh per state**, not `innerHeight` — and that reading is still
+being taken. Until it lands, 695 is the number to measure at, and 735 is not assumed to
+reach the layout.
 
 - **Take the real numbers from the device once, and use them everywhere after that.**
   `public/viewport.html` in this repo's history prints `innerHeight`, `innerWidth`,
@@ -264,12 +268,11 @@ bars are up, 735 only after they scroll. 390×740 is 45px taller than the real t
   `env(safe-area-inset-*)` read back from padding. It is a throwaway page: untracked,
   deleted once the numbers are written down.
 - **Treat any figure taken at a different height as void rather than approximate.**
-- **`env(safe-area-inset-*)` read 0 on that phone** while Safari's bars were on screen —
-  every side, from a static element and a fixed one. That is consistent with the page
-  never reaching the home indicator while the toolbar covers it, but it is not confirmed:
-  the insets have to be read again in the bars-hidden state, which a page can only reach
-  if it is tall enough to scroll. Until that reading exists, do not assume 34px at the
-  bottom, and do not assume 0 either.
+- **`env(safe-area-inset-*)` is 0 on that phone, in every state.** Measured across 36
+  distinct states, bars visible and bars hidden, from a static element and a fixed one:
+  every side reads 0px. **The 34px this repo assumed for the home indicator never existed
+  here.** Drop it from measurements rather than carrying it as an estimate; it was a
+  number we wrote down, not one the device ever reported.
 - **A card that shrinks is the thing to watch.** The question card is `flex: 0 1 auto`
   with `min-h-0` and `overflow-y: auto`, so it is sized by leftover space, not by its
   content, and it clips from the bottom. Its content — the kancil slot above the audio
@@ -343,11 +346,15 @@ note. When a summary and a file disagree, the file is right.
 - **A colour test has to be specific enough to fail.** "Any green pixel" passed a
   kancil standing waist-deep in bushes, because bushes are green too. The test
   that worked was low blue — meadow grass is, foliage shadow is not.
-- **The pane reports `env(safe-area-inset-bottom)` as `0`.** With
+- ~~**The pane reports `env(safe-area-inset-bottom)` as `0`.** With
   `viewport-fit=cover` an iPhone's home indicator reports 34px, so anything laid
   out against that inset is measured here at its most generous. Substitute 34px
   in the computation to see what the phone will do; two real layout defects hid in
-  that difference.
+  that difference.~~ **The pane does report 0 — and so does the phone.** Measured on
+  the device across 36 states, bars up and bars hidden, static element and fixed:
+  every inset is 0px. The 34px was ours, never the device's, and substituting it
+  put a phantom number into five sets of measurements (PRD §16 item 44). Do not
+  substitute anything; measure at 393×695.
 - This is not only an obstacle. It is a free adversarial test for principle 5:
   anything that has to be legible without an animation frame fails loudly here.
   Three real bugs were found this way — a first card that rendered blank, a
