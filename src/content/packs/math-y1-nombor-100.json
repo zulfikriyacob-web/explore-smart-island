@@ -475,22 +475,22 @@
       "difficulty": 1,
       "learningStandard": "1.2.2",
       "subSkill": "1.2.2/after",
-      "promptForm": "reverse",
+      "promptForm": "direct",
       "representation": "symbolic",
       "responseMode": "select",
       "wordingVariant": "A",
       "prompt": {
-        "ms": "Nombor 30 datang selepas nombor apa?",
-        "en": "The number 30 comes after what number?"
+        "ms": "Apakah nombor selepas 39?",
+        "en": "What is the number after 39?"
       },
       "promptAudio": { "ms": "/audio/ms/q016.mp3", "en": "/audio/en/q016.mp3" },
-      "hint": { "ms": "Kira menurun satu langkah.", "en": "Count back one step." },
-      "explain": { "ms": "29, kemudian 30.", "en": "29, then 30." },
+      "hint": { "ms": "Kira satu lagi selepas 39.", "en": "Count one more after 39." },
+      "explain": { "ms": "39, kemudian 40.", "en": "39, then 40." },
       "payload": {
         "options": [
-          { "id": "a", "text": { "ms": "28", "en": "28" } },
-          { "id": "b", "text": { "ms": "29", "en": "29" } },
-          { "id": "c", "text": { "ms": "31", "en": "31" } }
+          { "id": "a", "text": { "ms": "38", "en": "38" } },
+          { "id": "b", "text": { "ms": "40", "en": "40" } },
+          { "id": "c", "text": { "ms": "49", "en": "49" } }
         ],
         "correctOptionId": "b",
         "shuffle": true
