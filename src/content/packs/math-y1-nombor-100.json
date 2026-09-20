@@ -153,6 +153,10 @@
         "en": "Tap every rambutan as you count. Then press Sedia."
       },
       "promptAudio": { "ms": "/audio/ms/q003.mp3", "en": "/audio/en/q003.mp3" },
+      "promptAudioText": {
+        "ms": "Ketuk setiap rambutan sambil mengira. Kemudian tekan Sedia.",
+        "en": "Tap every rambutan as you count. Then press Sedia."
+      },
       "payload": {
         "itemImage": "/img/fruit/rambutan.svg",
         "itemCount": 7,
@@ -236,6 +240,10 @@
         "en": "Tap every banana as you count. Then press Sedia."
       },
       "promptAudio": { "ms": "/audio/ms/q006.mp3", "en": "/audio/en/q006.mp3" },
+      "promptAudioText": {
+        "ms": "Ketuk setiap pisang sambil mengira. Kemudian tekan Sedia.",
+        "en": "Tap every banana as you count. Then press Sedia."
+      },
       "payload": {
         "itemImage": "/img/fruit/pisang.svg",
         "itemCount": 5,
@@ -361,6 +369,10 @@
         "en": "Devi picks apples. Tap as you count, then press Sedia."
       },
       "promptAudio": { "ms": "/audio/ms/q011.mp3", "en": "/audio/en/q011.mp3" },
+      "promptAudioText": {
+        "ms": "Devi kutip epal. Ketuk sambil mengira. Kemudian tekan Sedia.",
+        "en": "Devi picks apples. Tap as you count, then press Sedia."
+      },
       "explain": { "ms": "Ada 8 biji epal.", "en": "There are 8 apples." },
       "payload": {
         "itemImage": "/img/fruit/epal.svg",

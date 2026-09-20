@@ -214,6 +214,42 @@ describe('question rules', () => {
     });
     expect(result.success).toBe(false);
   });
+
+  const withOptions = {
+    payload: {
+      options: [
+        { id: 'a', text: { ms: '1', en: '1' } },
+        { id: 'b', text: { ms: '2', en: '2' } },
+      ],
+      correctOptionId: 'a',
+    },
+  };
+
+  // promptAudioText is what the clip says when that is not what the card shows.
+  // audio:script prints it instead of the prompt. (SPEC 3.3, PRD 16 item 26.)
+  it('accepts a prompt whose recording says more than the card', () => {
+    const result = QuestionSchema.safeParse({
+      ...base,
+      promptAudioText: { ms: 'a. Kemudian tekan Sedia.', en: 'a. Then press Sedia.' },
+      ...withOptions,
+    });
+    expect(result.success).toBe(true);
+  });
+
+  it('requires promptAudioText to be bilingual when it is there at all', () => {
+    const result = QuestionSchema.safeParse({
+      ...base,
+      promptAudioText: { ms: 'a. Kemudian tekan Sedia.' },
+      ...withOptions,
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it('leaves promptAudioText undefined when a pack does not carry it', () => {
+    const result = QuestionSchema.safeParse({ ...base, ...withOptions });
+    expect(result.success).toBe(true);
+    if (result.success) expect(result.data.promptAudioText).toBeUndefined();
+  });
 });
 
 describe('pack rules', () => {
