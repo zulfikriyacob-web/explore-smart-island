@@ -450,6 +450,14 @@ note. When a summary and a file disagree, the file is right.
   before measuring anything about it. This cost a whole finding in one session —
   the numbers were wrong, and a comment in `QuizScreen.tsx` that was right was
   reported as wrong on the strength of them. (PRD §16 item 26.)
+
+  **A document-wide check for that button is not enough when walking a session.**
+  The previous question's button is still mounted while the next card renders, so
+  `document.querySelector(...)` returns true immediately and the measurement is
+  taken before this question's float lands. It reported a three-line prompt as two
+  lines, 30px short (PRD §16 item 47). Wait for the button **inside the current
+  card's paragraph** — `document.querySelector('.shadow-float p button[aria-label=
+  "Main audio soalan"]')` — not anywhere on the page.
 - **Measuring how wide the lines are is not measuring where they are.** A
   proposed layout put the audio button out of the text flow and reserved its
   space with `text-indent`. Every check passed: the card did not scroll, the
