@@ -1681,6 +1681,10 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     > kemudian?"*. *"Kira menurun satu langkah."* ialah pancingan q016 — sub-kemahiran sama, `after` —
     > dan ia salah arah untuk q002: q002 bertanya nombor *selepas* 29, iaitu membilang naik. Kedua-duanya
     > pernah dikelirukan semasa soalan ini dibincangkan.
+    >
+    > **Kemas kini, 20 September 2026.** Arah itu ialah petunjuk pertama bahawa q016 sendiri salah
+    > dipetakan: ia meminta nombor sebelum 30. q016 ditulis semula, dan pancingannya kini *"Kira satu
+    > lagi selepas 39."* — membilang naik, seperti q002 (item 42).
 
     **Ditulis semula dalam versi guru, 16 September 2026** (`fix/band-text`):
 
@@ -2161,7 +2165,111 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     - **q022 tiada dalam bukti walaupun ia dimainkan.** Itu soalan latihan (item 37), dan
       `recordSession` tidak meninggalkan apa-apa untuknya.
 
+    > **Bukti `after` datang daripada q016, yang ditulis semula keesokan harinya — item 42.** Rekod
+    > ini kekal sebagaimana ia berlaku: pada 20 September 2026 ambang dicapai dengan teks q016 yang
+    > lama. Bukti itu masih tersimpan di bawah `1.2.2/after` pada telefon pemilik projek sehingga
+    > storan dikosongkan.
+
     **Cara ia dibaca.** Satu halaman sementara dalam `public/`, membaca sahaja, yang memanggil
     `skillState()` dan `standardCoverage()` sebenar terhadap `localStorage` telefon. Ia tidak
     pernah dijejak dan dipadam selepas dibaca, seperti halaman semai sebelum ini. Halaman itu
     sendiri mendedahkan satu perangkap; CLAUDE.md, *"Localhost ialah konteks selamat"*.
+42. **q016 ditulis semula: ia meminta nombor sebelum 30, bukan selepas. 20 September 2026.**
+
+    Teks lama: *"Nombor 30 datang selepas nombor apa?"*, jawapan 29, bertanda `promptForm:
+    reverse`, dipetakan kepada `1.2.2/after`. Ia memberi 30 dan meminta nombor yang 30 ikuti —
+    iaitu nombor **sebelum** 30.
+
+    | | Dahulu | Kini |
+    |---|---|---|
+    | Arahan BM | *Nombor 30 datang selepas nombor apa?* | *Apakah nombor selepas 39?* — 25 aksara |
+    | Arahan EN | *The number 30 comes after what number?* | *What is the number after 39?* |
+    | Pilihan | 28 · **29** · 31 | 38 · **40** · 49 |
+    | Pancingan | *Kira menurun satu langkah.* | *Kira satu lagi selepas 39.* — 26 aksara |
+    | Penerangan | *29, kemudian 30.* | *39, kemudian 40.* — 16 aksara |
+    | `promptForm` | `reverse` | `direct` — ia tidak lagi terbalik |
+
+    Pengganggu, dengan sebabnya (SPEC §3.4): **38** ialah anak yang membilang menurun, dan **49**
+    ialah anak yang menambah sepuluh dan bukan satu, keliru tempat puluh dengan tempat sa. Tiada
+    satu pun sepadan dengan nombor dalam arahan.
+
+    **Ditulis semula, bukan dipetakan semula — keputusan pemilik projek.** Memetakan q016 kepada
+    `before` akan meninggalkan `after` dengan dua soalan dan `before` dengan satu: dua
+    sub-kemahiran di bawah ambang, dan *Dikuasai* pertama pada peranti (item 41) hilang. Menulis
+    semula mengekalkan `after` utuh dan membiarkan `before` bermula bersih.
+
+    #### Keputusan ini dibuat atas bukti dalam repo, bukan atas petikan
+
+    Pembetulan guru tentang q016 **tidak wujud dalam mana-mana fail**. Dicari: `q016` muncul dalam
+    tiga fail sahaja — pek, `soalan-baharu-math-y1.md` dan `pembetulan-akhir-soalan-math-y1.md`,
+    kedua-dua dokumen itu ditulis Claude. Ia **tidak** ada dalam borang bertanda pusingan 2, yang
+    bertarikh 12 September dan menyemak q001 hingga q010; q016 baru ditulis 13 September dan masuk
+    pek 14 September. Ayat yang dikaitkan dengan guru — *"data mastery akan salah walaupun jawapan
+    murid betul"* — tiada di mana-mana dalam repo.
+
+    Yang **ada** dalam repo, dan yang menyokong keputusan ini tanpa petikan:
+
+    - Contoh guru sendiri dalam rekod yang dibina semula: `before` ialah *"Apakah nombor sebelum
+      30?"* dan `after` ialah *"Apakah nombor selepas 29?"*. Teks lama q016 memberi 30 dan meminta
+      29 — contoh `before` guru, dengan nombor yang sama.
+    - Pancingan lama kita sendiri berkata *"Kira menurun satu langkah."* Item 33 sudah menolaknya
+      untuk q002 kerana q002 membilang **naik** — sedangkan kedua-duanya dipetakan kepada `after`.
+      Dua soalan dalam satu sub-kemahiran membilang ke arah bertentangan.
+    - `1.2.2/before` tiada satu soalan pun, manakala `after` ada tiga — satu daripadanya soalan ini.
+
+    **Ayat baharu ialah ayat pemilik projek, bukan ayat guru.** Corak *"Apakah nombor selepas N?"*
+    memang corak contoh guru, tetapi contoh yang difailkan memakai **29**, dan itu q002 hari ini.
+    Ayat dengan 39 tidak ada dalam mana-mana dokumen guru. Disebut di sini supaya ia tidak dibaca
+    sebagai petikan kemudian — kesilapan kelas item 18.
+
+    **Kesannya: q002 dan q016 kini berkongsi ayat yang sama dengan nombor berbeza.** Kedua-duanya
+    `direct`. Menurut dokumen pembetulan (item 29), guru pernah meminta soalan baharu menukar
+    nombor **dan** bentuk. Itu soalan untuk pusingan semakan seterusnya, bukan sekatan di sini.
+
+    #### Jurang: kali ketiga jawapan guru hanya wujud dalam mesej
+
+    Item 29 merekod jurang ini untuk tiga pusingan semakan q011–q023. Item 33 merekodnya untuk dua
+    teks jalur yang guru semak. Ini yang ketiga, dan kali ini ia menggigit: pemetaan yang salah
+    hidup dalam pek selama enam hari, memberi bukti kepada sub-kemahiran yang salah, dan
+    menyumbang kepada *Dikuasai* pertama pada peranti.
+
+    Sehingga jawapan guru difailkan seperti yang diterima, setiap pembetulan yang datang dalam
+    mesej akan hilang dengan cara yang sama.
+
+    #### Rakaman dan storan
+
+    - **Klip BM q016 dikosongkan kepada 0 bait.** Klip lama merakam ayat lama; kalau cawangan ini
+      digabung sebelum rakaman baharu masuk, anak akan mendengar ayat yang tidak lagi di skrin.
+      Klip lama kekal dalam sejarah git (`51,826` bait). Ayat untuk dirakam:
+      `Apakah nombor selepas 39?`
+
+      **Rakaman masuk, 20 September 2026.** Pemilik projek mendengar klip itu sebelum
+      memasangnya: *"Apakah nombor selepas 39?"*
+
+      | Semakan | Sebelum | Selepas |
+      |---|---|---|
+      | Saiz | 64,713 bait | 48,065 bait |
+      | Tag | ID3v2.4, 16,638 bait diisytiharkan, tiada footer — 16,648 dibuang, berakhir tepat pada `ff fb` | tiada; bait pertama `ff fb` |
+      | Bingkai / tempoh, dikira daripada bingkai | 115 / 3.004 s | 115 / 3.004 s |
+      | Bait ekor | 0 | 0 |
+      | Penyahkod pelayar | 3.004 s, 144,195 sampel | 3.004 s, 144,195 sampel; puncak 0.815 |
+
+      Dalam UI sebenar, butang audio q016 dipasang semula (legap penuh, 62px dalam pane), dan
+      `Howler._howls` app sendiri memuatkan `/audio/ms/q016.mp3`. Kandungan pertuturan disahkan
+      oleh telinga pemilik projek, bukan dari sini.
+    - **Bukti q016 pada peranti ujian kekal di bawah `after`** sehingga storan dikosongkan —
+      peraturan 3 SPEC §6 tidak menapis bukti mengikut pemetaan pek semasa (item 37). Pemilik
+      projek akan mengosongkannya.
+
+    **Diukur dalam pane, UI sebenar,** dengan kemajuan di-seed supaya q016 tiba dahulu. Klip beku
+    ditunjukkan kepada rakaman sebenar supaya butang audio dipasang, seperti item 40.
+
+    | Viewport | Arahan | Jalur | Kad menatal, inset 0 / 34 | Butang audio terpotong |
+    |---|---|---|---|---|
+    | 390×740, tiba | 2 baris | — | 0 / 18px | 0 |
+    | 390×740, pancingan | 2 baris | 1 baris, 216px | 7 / 25px | 0 |
+    | 390×740, dedahan | 2 baris | 1 baris, 147px | 7 / 25px | 0 |
+    | 360×780, dedahan | 2 baris | 1 baris, 147px | 0 / 18px | 0 |
+
+    `aria-live` membaca *"Belum betul. Cuba sekali lagi. Kira satu lagi selepas 39."* dan *"Belum
+    betul. 39, kemudian 40."*
