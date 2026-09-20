@@ -2242,6 +2242,21 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
       digabung sebelum rakaman baharu masuk, anak akan mendengar ayat yang tidak lagi di skrin.
       Klip lama kekal dalam sejarah git (`51,826` bait). Ayat untuk dirakam:
       `Apakah nombor selepas 39?`
+
+      **Rakaman masuk, 20 September 2026.** Pemilik projek mendengar klip itu sebelum
+      memasangnya: *"Apakah nombor selepas 39?"*
+
+      | Semakan | Sebelum | Selepas |
+      |---|---|---|
+      | Saiz | 64,713 bait | 48,065 bait |
+      | Tag | ID3v2.4, 16,638 bait diisytiharkan, tiada footer — 16,648 dibuang, berakhir tepat pada `ff fb` | tiada; bait pertama `ff fb` |
+      | Bingkai / tempoh, dikira daripada bingkai | 115 / 3.004 s | 115 / 3.004 s |
+      | Bait ekor | 0 | 0 |
+      | Penyahkod pelayar | 3.004 s, 144,195 sampel | 3.004 s, 144,195 sampel; puncak 0.815 |
+
+      Dalam UI sebenar, butang audio q016 dipasang semula (legap penuh, 62px dalam pane), dan
+      `Howler._howls` app sendiri memuatkan `/audio/ms/q016.mp3`. Kandungan pertuturan disahkan
+      oleh telinga pemilik projek, bukan dari sini.
     - **Bukti q016 pada peranti ujian kekal di bawah `after`** sehingga storan dikosongkan —
       peraturan 3 SPEC §6 tidak menapis bukti mengikut pemetaan pek semasa (item 37). Pemilik
       projek akan mengosongkannya.
