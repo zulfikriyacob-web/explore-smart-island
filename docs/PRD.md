@@ -2257,6 +2257,107 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
       Dalam UI sebenar, butang audio q016 dipasang semula (legap penuh, 62px dalam pane), dan
       `Howler._howls` app sendiri memuatkan `/audio/ms/q016.mp3`. Kandungan pertuturan disahkan
       oleh telinga pemilik projek, bukan dari sini.
+43. **q026, q027, q028 — tiga soalan untuk `1.2.2/before`, yang kosong sejak awal. Ditulis pemilik
+    projek, ditambah 20 September 2026; tidak digabung sebelum rakaman BM masuk.**
+
+    `before` ialah sub-kemahiran yang item 42 tinggalkan bersih: q016 dahulunya mengujinya sambil
+    mendakwa `after`. Kini ia ada bank sendiri.
+
+    | | q026 | q027 | q028 |
+    |---|---|---|---|
+    | Arahan BM | *Apakah nombor sebelum 30?* | *Kumar bilang 46, 47, 48. Apa sebelum 46?* | *Apakah nombor sebelum 71?* |
+    | Pilihan | **29** · 31 · 20 | **45** · 49 · 36 | **70** · 72 · 61 |
+    | Pancingan BM | *Kira satu kurang dari 30.* (25) | *Bilang turun dari 46.* (21) | *Satu kurang daripada 71.* (24) |
+    | Penerangan BM | *29, kemudian 30.* (16) | *45, kemudian 46.* (16) | *70, kemudian 71.* (16) |
+    | `promptForm` | `direct` | `contextual` | `direct` |
+
+    Ketiga-tiganya aras 1, tiga pilihan, dan berada dalam aktiviti baharu `a8` — satu aktiviti satu
+    sub-kemahiran, seperti a2 hingga a7, bertajuk label fail kemahiran.
+
+    **Arahan q026 ialah contoh guru sendiri, kata demi kata**: *"Apakah nombor sebelum 30?"*
+    (`guru-rekod-jawapan-subkemahiran-dan-semakan-soalan.md`, bahagian `before`). q028 ialah ayat
+    yang sama dengan nombor lain, jadi `wordingVariant` kedua-duanya kekal `A`: ayatnya tidak
+    berbeza, hanya nombornya.
+
+    **Pengganggu, dalam perkataan pemilik projek.** Setiap soalan membawa dua salah faham yang
+    boleh dinamakan:
+
+    - **Arah salah — anak membilang naik, bukan turun.** 31 untuk q026, 72 untuk q028. Untuk q027
+      ia lebih tajam: 49 ialah meneruskan urutan 46, 47, 48 ke hadapan, iaitu menjawab *"after"*
+      pada hujung yang salah.
+    - **Puluh bukan sa — anak menolak sepuluh, bukan satu.** 20, 36 dan 61. Keliru tempat puluh
+      dengan tempat sa, keluarga yang sama seperti helah 47/74 dalam q001.
+
+    Tiada pengganggu sepadan dengan nombor dalam arahan (SPEC §3.4).
+
+    **Had sub-kemahiran, bukan kelemahan bank: `before` hanya menyokong `direct` dan
+    `contextual`.** Bentuk `reverse` untuknya ialah *"29 datang sebelum nombor apa?"* — jawapannya
+    30, yang menjadikannya soalan `after`. Itu tepat perangkap q016 (item 42). Jadi dua daripada
+    tiga soalan di sini `direct`, walaupun guru meminta soalan baharu menukar nombor **dan**
+    bentuk: bentuk ketiga tidak wujud untuk sub-kemahiran ini.
+
+    **Kesan pada bank, diukur dengan pemilih sebenar:**
+
+    | | Sebelum | Selepas |
+    |---|---|---|
+    | Soalan boleh dimain, aras 1 | 9 | **12** |
+    | `1.2.2` sub-kemahiran diuji | 4 daripada 9 | **5 daripada 9** |
+    | Aras 1, soalan yang muncul dalam kelima-lima larian | 9 daripada 9 | **3 daripada 12** |
+    | Aras 1, soalan berbeza yang dilihat dalam lima larian | 9 | **12** |
+
+    Itu menyentuh bahagian item 31 yang paling dirasai anak — sembilan soalan yang sama setiap
+    sesi — dan ia ditutup dengan cara yang item 31 sendiri namakan: menulis soalan aras 1 baharu,
+    bukan memindahkan aras.
+
+    **Susun atur, diukur dalam pane dengan klip beku ditunjukkan kepada rakaman sebenar** supaya
+    butang audio dipasang:
+
+    | Viewport | Arahan | Jalur | Kad menatal, inset 0 / 34 | Butang audio terpotong, inset 0 / 34 |
+    |---|---|---|---|---|
+    | 390×740, tiba | q026 dan q028 dua baris, q027 tiga | — | 0 / 18px | 0 / 0 |
+    | 390×740, pancingan | sama | satu baris, 178–220px | 7 / 25px | 0 / **1–5px** |
+    | 390×740, dedahan | sama | satu baris, 145–148px | 7 / 25px | 0 / **1–2px** |
+    | 360×780, ketiga-tiga keadaan (q028) | dua baris | satu baris | 0 / 18px | 0 / 0 |
+
+    Tiada baris teks di bawah mana-mana float, dan `aria-live` membaca verdict bersama teks jalur.
+
+    > **Diterima buat masa ini, dan bukan kelas q013: potongan 1–5px pada 390×740 dengan inset
+    > 34.** Dalam keadaan pancingan dan dedahan, tepi bawah butang audio berada 1–5px di bawah
+    > tepi kad yang kelihatan. Kad menatal 25px, jadi butang masih boleh dicapai.
+    >
+    > **Ia berbeza daripada potongan q013 (item 33), dan tidak boleh direkod sebagai kelas yang
+    > sama** — keputusan pemilik projek. q013 memotong padding kad; ini memotong tepi butang yang
+    > anak perlu tekan. Lantai sasaran sentuh SPEC §9 ialah 64px, dan yang kelihatan semasa rehat
+    > kurang daripada itu.
+    >
+    > Soalan sebelum ini — q016, q019, q025 — diukur 0 dalam keadaan yang sama, dan 360×780
+    > bersih. Nilai inset 34 **dikira**, bukan diukur pada telefon: andaiannya kad mengecut 18px.
+    > Pemilik projek akan mengesahkannya pada telefon selepas rakaman masuk.
+
+    **Rakaman menahan merge.** Enam klip 0 bait: BM dan EN bagi ketiga-tiga soalan. Ayat BM untuk
+    dirakam:
+
+    ```
+    q026  Apakah nombor sebelum 30?
+    q027  Kumar bilang 46, 47, 48. Apa sebelum 46?
+    q028  Apakah nombor sebelum 71?
+    ```
+
+    **Rakaman BM masuk, 20 September 2026.** Pemilik projek mendengar ketiga-tiganya sebelum
+    memasangnya. Setiap satu membawa tag ID3v2.4 yang sama: 16,638 bait diisytiharkan, tiada
+    footer, 16,648 dibuang, dan hujung tag mendarat tepat pada `ff fb`.
+
+    | Klip | Saiz sebelum → selepas | Bingkai | Tempoh, dari bingkai | Penyahkod pelayar | Puncak |
+    |---|---|---|---|---|---|
+    | q026 | 54,264 → 37,616 | 90 | 2.351 s | 2.351 s · 112,848 sampel | 0.815 |
+    | q027 | 119,465 → 102,817 | 246 | 6.426 s | 6.426 s · 308,453 sampel | 0.414 |
+    | q028 | 60,951 → 44,303 | 106 | 2.769 s | 2.769 s · 132,911 sampel | 0.730 |
+
+    Bingkai, tempoh dan bilangan sampel sama sebelum dan selepas tag dibuang, dan tiada bait ekor
+    selepas bingkai terakhir. Dalam UI sebenar, ketiga-tiga butang audio dipasang (legap penuh,
+    62px dalam pane) dan `Howler._howls` app memuatkan ketiga-tiga klip. Kandungan pertuturan
+    disahkan oleh telinga pemilik projek, bukan dari sini. Klip EN kekal 0 bait, seperti semua klip
+    EN lain.
     - **Bukti q016 pada peranti ujian kekal di bawah `after`** sehingga storan dikosongkan —
       peraturan 3 SPEC §6 tidak menapis bukti mengikut pemetaan pek semasa (item 37). Pemilik
       projek akan mengosongkannya.
