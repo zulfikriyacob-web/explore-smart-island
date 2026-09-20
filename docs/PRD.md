@@ -2136,3 +2136,32 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     Dalam UI sebenar, butang audio q025 kini dipasang (legap penuh), dan `Howler._howls` app sendiri
     memuatkan `/audio/ms/q025.mp3`. Kandungan pertuturan disahkan oleh telinga pemilik projek, bukan
     dari sini.
+41. **Status *Dikuasai* dicapai pada peranti sebenar buat kali pertama — 20 September 2026.**
+
+    Tiga larian pada iPhone, melalui alamat LAN pelayan pembangunan, dengan jawapan betul. Dua
+    sub-kemahiran mencapai ambang SPEC §5.7:
+
+    | Sub-kemahiran | Bukti | Sesi | Tekaan gabungan |
+    |---|---|---|---|
+    | `1.2.2/compare_greater` | q001, q012, q013 | 2 | 1 dalam 27 |
+    | `1.2.2/after` | q002, q016, q017 | 2 | 1 dalam 27 |
+
+    Rantaian penuh berjalan pada peranti untuk kali pertama: pemilih memilih soalan, sesi
+    merekodnya, `recordSession` menulis bukti ke `esi.progress.v1`, dan `skillState` membacanya
+    sebagai *Dikuasai*. Dua semakan lain dalam larian yang sama: tiga bintang bersama *"9 daripada
+    9"* selepas q022 dijawab salah (item 37), dan q025 dengan rakamannya (item 40).
+
+    **Tiga perkara yang data mentah sahkan, yang dibina tanpa pernah dilihat:**
+
+    - **q001 muncul dalam kedua-dua sesi dan dikira sekali.** Bukti dikira mengikut `questionId`
+      berbeza, bukan bilangan jawapan (SPEC §5.7). Tanpa itu, `compare_greater` akan mencapai
+      ambang dengan dua soalan sahaja.
+    - **`masteredOnce: true` melekat pada kedua-duanya**, dan akan kekal walaupun status turun
+      kepada *Sedang dinilai* selepas satu jawapan salah.
+    - **q022 tiada dalam bukti walaupun ia dimainkan.** Itu soalan latihan (item 37), dan
+      `recordSession` tidak meninggalkan apa-apa untuknya.
+
+    **Cara ia dibaca.** Satu halaman sementara dalam `public/`, membaca sahaja, yang memanggil
+    `skillState()` dan `standardCoverage()` sebenar terhadap `localStorage` telefon. Ia tidak
+    pernah dijejak dan dipadam selepas dibaca, seperti halaman semai sebelum ini. Halaman itu
+    sendiri mendedahkan satu perangkap; CLAUDE.md, *"Localhost ialah konteks selamat"*.
