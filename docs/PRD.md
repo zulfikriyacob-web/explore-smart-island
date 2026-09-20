@@ -2499,3 +2499,26 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
 
     Sementara itu kad masih boleh ditatal, jadi butang itu boleh dicapai — tetapi semasa rehat anak
     nampak separuh bulatan, dan yang kelihatan jauh di bawah lantai sasaran sentuh 64px SPEC §9.
+45. **Empat arah untuk membaiki potongan kad, dan kenapa tiada satu pun boleh diukur sebelum
+    sekarang. Direkod 20 September 2026; tiada satu pun dipilih.**
+
+    Kandungan kad ialah kira-kira 196px: slot kancil 88px, butang audio 64px di bawahnya dengan
+    `clear`, dan padding kad. Pada 393×695 telefon memberi kad kira-kira 143px. Jurang itu, kira-kira
+    53px, ialah apa yang mana-mana pembaikan mesti hapuskan.
+
+    | Arah | Apa yang berubah | Apa yang perlu diukur dahulu | Kos yang sudah diketahui |
+    |---|---|---|---|
+    | **A. Tinggi minimum untuk kad** | Kad berhenti mengecut di bawah kandungannya | Apa yang mengalah sebagai ganti: padang dan maskot, butang jawapan, atau halaman mula menatal | Menolak butang jawapan ke bawah pada skrin pendek; DESIGN §7 meletakkan maskot pada padang atas sebab yang diukur |
+    | **B. Butang audio keluar daripada aliran kad** | Butang jadi mutlak atau tetap di penjuru kad | Kedudukan setiap baris teks berbanding kotak butang, bukan hanya lebar baris | Sudah cuba sekali dan gagal: `text-indent` menempah baris pertama sahaja, dan teks berjalan di belakang butang (item 33) |
+    | **C. Slot kancil dikecilkan** | Timbunan float jadi lebih pendek, contohnya 88px kepada 64px | Sama ada maskot masih terbaca pada saiz itu, dan kesan pada baris arahan | **Bercanggah dengan keputusan sedia ada**: maskot tidak dikecilkan, atas arahan pemilik projek (item 33) |
+    | **D. Tukar apa yang mengecut** | Kad membesar penuh dan halaman yang menatal, bukan kad | Sama ada menatal halaman merosakkan kedudukan jalur dan butang jawapan | Menatal halaman pada skrin soalan belum pernah diuji pada kanak-kanak |
+
+    **Kenapa tiada satu pun boleh diukur sebelum ini.** Setiap calon akan kelihatan lulus pada
+    390×740, kerana pada tinggi itu kad tidak mengecut langsung dan butang berada 25px di atas tepi
+    kad. Dan aritmetik di atasnya salah dua kali: viewport 45px terlalu tinggi, dan inset 34px yang
+    digantikan tidak pernah wujud pada peranti (item 44). Ukuran pertama yang bermakna bagi
+    mana-mana arah ialah pada **393×695 dengan inset 0**.
+
+    Satu bacaan masih terbuka dan ia menyentuh arah A dan D: sama ada `dvh` naik kepada 735 apabila
+    bar Safari menyorot. Kalau ya, kad mendapat 40px lagi dalam keadaan itu, dan pembaikan perlu
+    bekerja pada kedua-dua tinggi; kalau tidak, 695 satu-satunya kes.
