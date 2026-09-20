@@ -231,6 +231,32 @@ Two lessons came with it, both cheap:
 - **Print the raw data too.** The page's job was to read `esi.progress.v1`; dumping the raw
   string at the end means even a half-broken page returns something worth pasting.
 
+### The test viewport has to come from the phone
+
+**390×740 and 360×780 were our numbers, not the device's.** They came from our own
+documents, were never checked against a phone, and every layout measurement taken in
+the pane used them. On a real iPhone the same screen gives the card about 53px less
+height: the audio button — the lowest thing in the card — is cut in half, on every
+question, and the pane reported no cut at all. Reproduced by setting the pane to
+390×620, which matches the phone's card to within 3px. (PRD §16 item 44.)
+
+Why the pane cannot find this on its own: it has no status bar, no browser chrome and
+no safe-area insets, so the height we type in is the height the layout gets. On the
+phone the same page starts 58px lower and ends above Safari's toolbar.
+
+- **Take the real numbers from the device once, and use them everywhere after that.**
+  `public/viewport.html` in this repo's history prints `innerHeight`, `innerWidth`,
+  `visualViewport`, `100dvh/svh/lvh/vh` read back from real elements, and
+  `env(safe-area-inset-*)` read back from padding. It is a throwaway page: untracked,
+  deleted once the numbers are written down.
+- **Record the measured viewport here** when it arrives, and treat any figure taken at a
+  different height as void rather than approximate.
+- **A card that shrinks is the thing to watch.** The question card is `flex: 0 1 auto`
+  with `min-h-0` and `overflow-y: auto`, so it is sized by leftover space, not by its
+  content, and it clips from the bottom. Its content — the kancil slot above the audio
+  button — is about 196px; anything that leaves less than that clips something a child
+  has to press.
+
 ### Received documents, and what is said about them
 
 **A description of a document is not the document.** `docs/kssr/` holds what
