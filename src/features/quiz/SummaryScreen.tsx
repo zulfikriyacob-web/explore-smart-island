@@ -57,10 +57,19 @@ function CountUp({ to }: { to: number }) {
 const STAR_PX = 72;
 /**
  * The kancil on the reward screen, sized to the grass left above two buttons.
- * Measured at 390×740: 160 overflowed the screen by 8.4px with every other
- * piece at its natural height; 150 fits with the hooves still on the meadow.
+ *
+ * It is the one block on this screen with no control in it, so it is the one
+ * that gives way: every other child is `shrink-0` and the `flex-1` spacer is
+ * already at 0, so whatever does not fit spills out of a `100dvh` column and
+ * lands on the buttons. At 150 it did exactly that — 734px of content in a
+ * 695px screen, with Seterusnya 23px below the visible edge (PRD 16 item 46).
+ *
+ * 150 was measured at 390×740, a viewport the phone never had. Redone at the
+ * real 393×695: the rest of the screen is 584px, so 111 is the largest that
+ * fits and 104 keeps 7px in hand — the same margin the old number kept when
+ * 160 overflowed by 8.4 and 150 was taken instead.
  */
-const KANCIL_PX = 150;
+const KANCIL_PX = 104;
 /**
  * A 4px outline, expressed in the 24-unit viewBox. At 72px one unit is 3px.
  * Half of a stroke sits outside the polygon, which spans 2-22, so the ink
