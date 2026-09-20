@@ -79,6 +79,15 @@
       },
       "questionCount": 4,
       "questionIds": ["q008", "q022", "q023", "q025"]
+    },
+    {
+      "activityId": "math-y1-nombor-100-a8",
+      "title": {
+        "ms": "Menentukan nombor sebelum",
+        "en": "Finding the number before"
+      },
+      "questionCount": 3,
+      "questionIds": ["q026", "q027", "q028"]
     }
   ],
   "questions": [
@@ -709,6 +718,87 @@
           { "id": "a", "text": { "ms": "59", "en": "59" } },
           { "id": "b", "text": { "ms": "69", "en": "69" } },
           { "id": "c", "text": { "ms": "95", "en": "95" } }
+        ],
+        "correctOptionId": "a",
+        "shuffle": true
+      }
+    },
+    {
+      "id": "q026",
+      "type": "mcq",
+      "difficulty": 1,
+      "learningStandard": "1.2.2",
+      "subSkill": "1.2.2/before",
+      "promptForm": "direct",
+      "representation": "symbolic",
+      "responseMode": "select",
+      "wordingVariant": "A",
+      "prompt": {
+        "ms": "Apakah nombor sebelum 30?",
+        "en": "What is the number before 30?"
+      },
+      "promptAudio": { "ms": "/audio/ms/q026.mp3", "en": "/audio/en/q026.mp3" },
+      "hint": { "ms": "Kira satu kurang dari 30.", "en": "Count one less than 30." },
+      "explain": { "ms": "29, kemudian 30.", "en": "29, then 30." },
+      "payload": {
+        "options": [
+          { "id": "a", "text": { "ms": "29", "en": "29" } },
+          { "id": "b", "text": { "ms": "31", "en": "31" } },
+          { "id": "c", "text": { "ms": "20", "en": "20" } }
+        ],
+        "correctOptionId": "a",
+        "shuffle": true
+      }
+    },
+    {
+      "id": "q027",
+      "type": "mcq",
+      "difficulty": 1,
+      "learningStandard": "1.2.2",
+      "subSkill": "1.2.2/before",
+      "promptForm": "contextual",
+      "representation": "symbolic",
+      "responseMode": "select",
+      "wordingVariant": "A",
+      "prompt": {
+        "ms": "Kumar bilang 46, 47, 48. Apa sebelum 46?",
+        "en": "Kumar counts 46, 47, 48. What comes before 46?"
+      },
+      "promptAudio": { "ms": "/audio/ms/q027.mp3", "en": "/audio/en/q027.mp3" },
+      "hint": { "ms": "Bilang turun dari 46.", "en": "Count back from 46." },
+      "explain": { "ms": "45, kemudian 46.", "en": "45, then 46." },
+      "payload": {
+        "options": [
+          { "id": "a", "text": { "ms": "45", "en": "45" } },
+          { "id": "b", "text": { "ms": "49", "en": "49" } },
+          { "id": "c", "text": { "ms": "36", "en": "36" } }
+        ],
+        "correctOptionId": "a",
+        "shuffle": true
+      }
+    },
+    {
+      "id": "q028",
+      "type": "mcq",
+      "difficulty": 1,
+      "learningStandard": "1.2.2",
+      "subSkill": "1.2.2/before",
+      "promptForm": "direct",
+      "representation": "symbolic",
+      "responseMode": "select",
+      "wordingVariant": "A",
+      "prompt": {
+        "ms": "Apakah nombor sebelum 71?",
+        "en": "What is the number before 71?"
+      },
+      "promptAudio": { "ms": "/audio/ms/q028.mp3", "en": "/audio/en/q028.mp3" },
+      "hint": { "ms": "Satu kurang daripada 71.", "en": "One less than 71." },
+      "explain": { "ms": "70, kemudian 71.", "en": "70, then 71." },
+      "payload": {
+        "options": [
+          { "id": "a", "text": { "ms": "70", "en": "70" } },
+          { "id": "b", "text": { "ms": "72", "en": "72" } },
+          { "id": "c", "text": { "ms": "61", "en": "61" } }
         ],
         "correctOptionId": "a",
         "shuffle": true
