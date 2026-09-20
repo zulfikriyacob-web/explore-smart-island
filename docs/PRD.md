@@ -2526,8 +2526,28 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
        aliran kad; atau mengecilkan slot kancil. Tiada satu pun boleh diukur dengan betul sebelum
        langkah 1.
 
-    Sementara itu kad masih boleh ditatal, jadi butang itu boleh dicapai — tetapi semasa rehat anak
-    nampak separuh bulatan, dan yang kelihatan jauh di bawah lantai sasaran sentuh 64px SPEC §9.
+    ~~Sementara itu kad masih boleh ditatal, jadi butang itu boleh dicapai~~ — tetapi semasa rehat
+    anak nampak separuh bulatan, dan yang kelihatan jauh di bawah lantai sasaran sentuh 64px
+    SPEC §9.
+
+    #### Menatal kad bukan mitigasi: ia menukar satu potongan dengan satu lagi
+
+    Dilihat pada telefon, kemudian diukur di pane pada 393×695 dalam keadaan jalur. Kad boleh
+    ditatal 52px, dan menatalnya untuk mencapai butang audio mengangkat baris pertama soalan
+    keluar dari atas kad:
+
+    | | Kad di atas (seperti ia tiba) | Kad ditatal ke bawah |
+    |---|---|---|
+    | Baris pertama soalan | y 90, penuh | y 39 — **25px di atas tepi kad**, terpotong |
+    | Butang audio | **26px di bawah tepi kad** | penuh dalam kad |
+
+    **Anak tidak boleh melihat soalan penuh dan butang audio serentak.** Menatal untuk mencapai
+    satu menyembunyikan yang lain, dan anak yang belum boleh membaca memerlukan kedua-duanya —
+    butang itu yang membacakan baris yang baru hilang.
+
+    Puncanya sama, jadi ia di sini dan bukan item baharu: kotak kandungan kad ialah 94px (142
+    tolak padding 48), dan ia memegang slot kancil 88px dan butang audio 62px. Dua kandungan
+    wajib berebut satu kotak yang tidak muat satu pun daripadanya bersama yang lain.
 45. **Empat arah untuk membaiki potongan kad, dan kenapa tiada satu pun boleh diukur sebelum
     sekarang. Direkod 20 September 2026; tiada satu pun dipilih.**
 
@@ -2547,6 +2567,41 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     kad. Dan aritmetik di atasnya salah dua kali: viewport 45px terlalu tinggi, dan inset 34px yang
     digantikan tidak pernah wujud pada peranti (item 44). Ukuran pertama yang bermakna bagi
     mana-mana arah ialah pada **393×695 dengan inset 0**.
+
+    #### Diukur pada 393×695, 20 September 2026 — dan B tidak boleh bersendirian
+
+    Defisit skrin soalan ialah **52px**, dan hanya dalam keadaan jalur: pada keadaan tiba ada 22px
+    lapang dan tiada apa terpotong (disahkan pada telefon). Jalur kos 71px — 51 jalur campur jurang
+    20 — jadi kad kehilangan 49 dan butang audio jatuh 26px di bawah tepi kad.
+
+    B dicuba dengan `position:absolute` di penjuru kad, diukur di pane:
+
+    | | Sebelum | Dengan B |
+    |---|---|---|
+    | Kandungan kad | 196 | **136** |
+    | Tinggi kad | 142 (terpotong 54) | 134 — muat, tiada potongan |
+    | Baris teks di belakang butang | — | **tiada** (semakan `x` setiap baris) |
+    | Butang vs slot kancil | — | **bertindih** |
+
+    **B membebaskan tinggi kad; ia tidak memberi butang itu tempat.** Kotak kandungan kad dalam
+    keadaan jalur ialah 94px, slot kancil 88px, butang audio 62px — 88 + 62 dalam 94 tidak muat
+    dalam apa jua susunan, jadi mana-mana kedudukan dalam kad bertindih dengan slot kancil, dan
+    penjuru bawah-kiri berlanggar dengan baris teks. Semakan `x` setiap baris lulus; yang gagal
+    ialah maskot, dan maskot hadir tepat dalam keadaan yang sama (maklum balas).
+
+    Tuas yang tinggal, dengan nombornya:
+
+    | Pilihan | Beri | Kos |
+    |---|---|---|
+    | Butang jawapan 88 → 72 | 48, campur 6 lapang = **54** | Menyentuh saiz butang pilihan DESIGN §5.2; 72 masih di atas lantai sentuh 64px SPEC §9, dan sama dengan slot Seterusnya |
+    | Slot kancil keluar daripada kad | **88** | DESIGN §7: penjuru ditempah supaya tiada apa berganjak bila maskot tiba. Maskot perlu rumah lain |
+    | B sahaja | 60 tinggi kad, **0** tempat untuk butang | Tidak menutup |
+
+    **Peraturan yang menutup kedua-dua pepijat bukan satu perubahan:** setiap skrin `100dvh`
+    menamakan kotak yang menyerap kekurangan, dan kotak itu tidak boleh memegang kawalan. Pada
+    skrin ganjaran kotak itu ialah kancil — satu-satunya blok tanpa kawalan, dan item 46 sudah
+    dibaiki begitu. Pada skrin soalan kotak itu hari ini ialah **kad**, yang memegang butang audio,
+    dan itulah pepijatnya. Dua tuas di atas ialah dua cara menamakan kotak lain.
 
     ~~Satu bacaan masih terbuka dan ia menyentuh arah A dan D: sama ada `dvh` naik kepada 735
     apabila bar Safari menyorot.~~ **Ditutup, 20 September 2026: satu tinggi.** `dvh` memang naik
@@ -2600,3 +2655,23 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     Komen dalam `SummaryScreen.tsx` merekod limpahan yang diukur pada 390×740 dan lantai yang
     dipilih untuk menghapuskannya. Nombor itu diambil pada viewport yang tidak pernah wujud (item
     44), jadi lantai itu disaiz untuk skrin 45px lebih tinggi daripada telefon.
+
+    **DIBAIKI, 20 September 2026: kancil yang menyerap.** `KANCIL_PX` 150 → **104**. Kaedahnya sama
+    seperti yang memilih 150, dijalankan semula pada tinggi sebenar: baki skrin ialah 584px, jadi
+    111 yang terbesar muat pada 695 dan 104 menyimpan 7px di tangan — margin yang sama seperti
+    nombor lama simpan apabila 160 melimpah 8.4px dan 150 diambil.
+
+    Kancil dipilih kerana ia **satu-satunya blok pada skrin itu yang tidak memegang kawalan**
+    (peraturan dalam item 45), atas keputusan pemilik projek.
+
+    Diukur selepas perubahan, pane 393×695, UI sebenar:
+
+    | | Sebelum | Selepas |
+    |---|---|---|
+    | `scrollHeight` vs `clientHeight` | 734 / 695 | **695 / 695** |
+    | Halaman boleh ditatal | ya | **tidak** |
+    | Butang Seterusnya | 607–718, 23px di bawah tepi | **607–679, penuh kelihatan** |
+    | Kancil | 150 | 104, kaki masih di atas padang |
+
+    Baki 7px duduk dalam pelapik `flex-1`, iaitu kotak yang memang direka untuk memegangnya.
+    Belum dilihat pada telefon.
