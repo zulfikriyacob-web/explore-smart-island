@@ -66,13 +66,39 @@ export interface PackProgress {
   /** The run banked most recently, so banking it again changes nothing. */
   lastSessionId: string | null;
   lastAsked: Record<string, number>;
+  /**
+   * How many runs each question has been in. `lastAsked` answers *when*;
+   * this answers *how often*, and that is the question the selector is really
+   * asking when it decides what a child has seen too much of (SPEC 5.5).
+   *
+   * Missing reads as 0, which is what a store written before this field gives:
+   * every question then looks never-asked for one run. Recorded rather than
+   * hidden — SPEC 6, and PRD 16 item 38.
+   */
+  timesAsked: Record<string, number>;
 }
 
 export function emptyProgress(): Progress {
   return { subSkills: {} };
 }
 
-const FIRST_RUN: PackProgress = { level: 1, runs: 0, lastSessionId: null, lastAsked: {} };
+const FIRST_RUN: PackProgress = {
+  level: 1,
+  runs: 0,
+  lastSessionId: null,
+  lastAsked: {},
+  timesAsked: {},
+};
+
+/** A stored `{ questionId: count }` map, keeping only the entries that read. */
+function readCounts(raw: unknown): Record<string, number> {
+  const out: Record<string, number> = {};
+  if (typeof raw !== 'object' || raw === null) return out;
+  for (const [id, n] of Object.entries(raw as Record<string, unknown>)) {
+    if (typeof n === 'number' && Number.isInteger(n) && n >= 0) out[id] = n;
+  }
+  return out;
+}
 
 /** A pack's state, or a child's first run at it. Unreadable counts as first. */
 export function packProgress(progress: Progress, topicId: string): PackProgress {
@@ -83,17 +109,12 @@ export function packProgress(progress: Progress, topicId: string): PackProgress 
   const runs = p.runs;
   if (level !== 1 && level !== 2 && level !== 3) return FIRST_RUN;
   if (typeof runs !== 'number' || !Number.isInteger(runs) || runs < 0) return FIRST_RUN;
-  const lastAsked: Record<string, number> = {};
-  if (typeof p.lastAsked === 'object' && p.lastAsked !== null) {
-    for (const [id, run] of Object.entries(p.lastAsked as Record<string, unknown>)) {
-      if (typeof run === 'number' && Number.isInteger(run) && run >= 0) lastAsked[id] = run;
-    }
-  }
   return {
     level,
     runs,
     lastSessionId: typeof p.lastSessionId === 'string' ? p.lastSessionId : null,
-    lastAsked,
+    lastAsked: readCounts(p.lastAsked),
+    timesAsked: readCounts(p.timesAsked),
   };
 }
 
@@ -217,8 +238,11 @@ export function recordSession(progress: Progress, run: RunRecord): Progress {
  * run, and every question it asked stamped with that run number.
  *
  * `lastAsked` stamps every answer, not only the ones that became evidence — it
- * answers "when did the child last see this question", which is what keeps the
- * selector from asking the same ten in the same order for ever.
+ * answers "when did the child last see this question". `timesAsked` counts the
+ * same answers, and answers "how often", which is the one that actually rotates
+ * the bank: every question in a run gets the same `lastAsked`, so after the
+ * never-asked ones are used up that term ties and pack order decided the rest —
+ * measured, the same five level-2 questions in all five runs (PRD 16 item 38).
  *
  * Banking the same run twice changes nothing here either: `lastSessionId` says
  * this run has already been counted, so the level does not climb twice on one
@@ -235,7 +259,11 @@ function packsAfter(progress: Progress, run: RunRecord): Record<string, unknown>
 
   const runs = before.runs + 1;
   const lastAsked = { ...before.lastAsked };
-  for (const a of run.answers) lastAsked[a.questionId] = runs;
+  const timesAsked = { ...before.timesAsked };
+  for (const a of run.answers) {
+    lastAsked[a.questionId] = runs;
+    timesAsked[a.questionId] = (timesAsked[a.questionId] ?? 0) + 1;
+  }
 
   const asked = new Map(run.answered.map((q) => [q.id, q]));
   const scored = run.answers.filter((a) => {
@@ -248,6 +276,7 @@ function packsAfter(progress: Progress, run: RunRecord): Record<string, unknown>
     runs,
     lastSessionId: run.sessionId,
     lastAsked,
+    timesAsked,
   };
   return packs;
 }

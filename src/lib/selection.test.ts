@@ -47,6 +47,7 @@ function input(over: Partial<SelectionInput> = {}): SelectionInput {
     total: 10,
     rank: () => 1,
     banked: () => false,
+    timesAsked: () => 0,
     lastAsked: () => 0,
     ...over,
   };
@@ -187,12 +188,57 @@ describe('selectSession', () => {
     expect(ids(counting)[0]).toBe('q003');
   });
 
+  /*
+    Then the one seen least often, and this is the term that actually rotates a
+    bank. Every question in a run gets the same `lastAsked`, so once the
+    never-asked ones are gone that term ties and pack order used to decide the
+    rest: the same five level-2 questions in all five runs, six of twelve at
+    level 1. (PRD 16 item 38.)
+
+    Here every level-2 question was last asked in the same run — which is what a
+    finished run leaves behind — and the two the child has seen least are the two
+    that must come in. Without this term the pick is the first seven in pack
+    order and q017 and q018 are never asked.
+  */
+  it('prefers the questions a child has been asked least often', () => {
+    const seenOften = ['q010', 'q011', 'q012', 'q013', 'q014', 'q015', 'q016'];
+    const picked = selectSession(
+      input({
+        level: 2,
+        lastAsked: () => 5,
+        timesAsked: (id) => (seenOften.includes(id) ? 3 : 0),
+      }),
+    ).questions;
+    const levelTwo = ids(picked).filter((id) => seenOften.includes(id) || ['q017', 'q018'].includes(id));
+    expect(levelTwo).toContain('q017');
+    expect(levelTwo).toContain('q018');
+    expect(levelTwo.filter((id) => seenOften.includes(id))).toHaveLength(5);
+  });
+
   it('then asks whatever the child has not seen for longest', () => {
     const lastAsked = (id: string) => ({ q001: 7, q002: 2, q003: 5 })[id] ?? 0;
     const picked = selectSession(
       input({ bank: bank().slice(0, 3), level: 1, total: 2, lastAsked }),
     ).questions;
     expect(ids(picked)).toEqual(['q002', 'q003']);
+  });
+
+  /*
+    The count comes before the date, and this is the case that separates them:
+    q001 was asked twice and longest ago, q002 once and recently. The child has
+    seen q002 less, so q002 waits and q001 does not.
+  */
+  it('counts how often before it counts how long ago', () => {
+    const picked = selectSession(
+      input({
+        bank: bank().slice(0, 3),
+        level: 1,
+        total: 1,
+        timesAsked: (id) => ({ q001: 2, q002: 1, q003: 2 })[id] ?? 0,
+        lastAsked: (id) => ({ q001: 1, q002: 4, q003: 3 })[id] ?? 0,
+      }),
+    ).questions;
+    expect(ids(picked)).toEqual(['q002']);
   });
 
   it('falls back to pack order, so nothing is ever decided by chance', () => {

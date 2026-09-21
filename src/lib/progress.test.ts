@@ -250,6 +250,7 @@ describe('pack state', () => {
       runs: 0,
       lastSessionId: null,
       lastAsked: {},
+      timesAsked: {},
     });
   });
 
@@ -260,6 +261,7 @@ describe('pack state', () => {
       runs: 1,
       lastSessionId: 's1',
       lastAsked: { q1: 1 },
+      timesAsked: { q1: 1 },
     });
   });
 
@@ -267,6 +269,52 @@ describe('pack state', () => {
     subSkills: {},
     packs: { [TOPIC]: { level: 2, runs: 3, lastSessionId: 's0', lastAsked: {} } },
   };
+
+  /*
+    `lastAsked` says when, `timesAsked` says how often, and the selector needs
+    the second: every question in a run carries the same `lastAsked`, so after
+    the never-asked ones are gone it ties and pack order decided the rest
+    (PRD 16 item 38). The count has to survive across runs to be worth anything.
+  */
+  it('counts how many runs a question has been in, run after run', () => {
+    const q2 = mcq('q2', 3, AFTER);
+    const both = pack([q, q2]);
+    const first = record(emptyProgress(), 's1', [right('q1'), right('q2')], [q, q2], both);
+    const second = record(first, 's2', [right('q1')], [q], both);
+    expect(packProgress(second, TOPIC).timesAsked).toEqual({ q1: 2, q2: 1 });
+    // and the date still says only when, so the two do not say the same thing
+    expect(packProgress(second, TOPIC).lastAsked).toEqual({ q1: 2, q2: 1 });
+  });
+
+  /*
+    A store written before this field exists reads as no counts at all, which is
+    one run where every question looks never-asked. Written down rather than
+    hidden: SPEC 6.
+  */
+  it('reads a store written without the count as no counts', () => {
+    const old: Progress = {
+      subSkills: {},
+      packs: { [TOPIC]: { level: 2, runs: 3, lastSessionId: 's0', lastAsked: { q1: 3 } } },
+    };
+    expect(packProgress(old, TOPIC).timesAsked).toEqual({});
+    expect(packProgress(old, TOPIC).lastAsked).toEqual({ q1: 3 });
+  });
+
+  it('drops count entries it cannot read, and keeps the rest', () => {
+    const messy: Progress = {
+      subSkills: {},
+      packs: {
+        [TOPIC]: {
+          level: 1,
+          runs: 1,
+          lastSessionId: 's0',
+          lastAsked: {},
+          timesAsked: { q1: 2, q2: 'lots', q3: -1, q4: 1.5, q5: 0 },
+        },
+      },
+    };
+    expect(packProgress(messy, TOPIC).timesAsked).toEqual({ q1: 2, q5: 0 });
+  });
 
   it('drops a rung below 0.55, which a run of missed questions is', () => {
     const p = record(atLevelTwo, 's1', [missed('q1')], [q], live);
