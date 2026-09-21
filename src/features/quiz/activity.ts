@@ -101,6 +101,7 @@ export function buildSession(progress: Progress): Selection {
     total: SESSION_LENGTH,
     rank: (subSkillId) => skillRank(progress, subSkillId),
     banked: (questionId) => banked.has(questionId),
+    timesAsked: (questionId) => state.timesAsked[questionId] ?? 0,
     lastAsked: (questionId) => state.lastAsked[questionId] ?? 0,
   });
   return { ...selection, questions: selection.questions.map(withShuffledOptions) };

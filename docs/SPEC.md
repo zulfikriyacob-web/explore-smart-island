@@ -778,8 +778,18 @@ Keutamaan dalam setiap aras, mengikut turutan:
    > Ia tetap mengambil gilirannya melalui `lastAsked`.
 
 Dalam setiap kumpulan: soalan yang belum pernah memberi bukti cubaan pertama didahulukan, kerana
-penguasaan mengira soalan berbeza (§5.7); kemudian soalan yang paling lama tidak ditanya
-(`lastAsked`, §6); kemudian susunan dalam pek sebagai pemecah seri terakhir.
+penguasaan mengira soalan berbeza (§5.7); kemudian soalan yang **paling jarang ditanya**
+(`timesAsked`, §6); kemudian soalan yang paling lama tidak ditanya (`lastAsked`, §6); kemudian
+susunan dalam pek sebagai pemecah seri terakhir.
+
+**`timesAsked` di hadapan `lastAsked`, dan itu yang memutar bank.** Setiap soalan dalam satu
+larian mendapat `lastAsked` yang sama, jadi sebaik soalan yang belum pernah ditanya habis,
+medan itu seri untuk semua yang lain dan susunan pek memutuskan bakinya — lima soalan aras 2
+yang sama dalam kelima-lima larian, dan enam daripada dua belas pada aras 1. Dengan `timesAsked`
+di hadapannya: **sifar** pada kedua-dua aras, dan kiraan rata (PRD §16 item 38).
+
+Dalam ayat untuk ibu bapa: *app tanya yang anak paling jarang lihat; bila dua sama, yang paling
+lama tidak dilihat.*
 
 **Campuran ialah sasaran, bukan jaminan.** Aras yang tidak dapat mengisi bahagiannya diisi daripada
 aras terdekat, dan kekurangan itu **dilaporkan** sebagai `gaps`, bukan disembunyikan. Hari ini bank
@@ -1228,7 +1238,8 @@ esi.progress.v1 = {
       level: 1 | 2 | 3,              // tangga §5.5, dinaikkan selepas setiap larian
       runs: number,                  // bilangan larian yang sudah direkod
       lastSessionId: string | null,  // larian terakhir yang direkod; penjaga rekod berganda
-      lastAsked: { "q001": 3 }       // soalan → nombor larian ia terakhir ditanya
+      lastAsked: { "q001": 3 },      // soalan → nombor larian ia terakhir ditanya
+      timesAsked: { "q001": 2 }      // soalan → berapa larian ia pernah masuk
     }
   }
 }
@@ -1241,8 +1252,18 @@ sub-kemahiran tidak bermakna dalam bank ini: setiap soalan dalam satu sub-kemahi
 yang sama (PRD §16 item 31).
 
 `lastAsked` menanda **setiap** soalan yang dijawab, bukan hanya yang menjadi bukti. Ia menjawab
-"bila anak terakhir nampak soalan ini", iaitu yang menghalang pemilih daripada bertanya sepuluh
-soalan yang sama dalam susunan yang sama selama-lamanya.
+"bila anak terakhir nampak soalan ini".
+
+`timesAsked` mengira jawapan yang sama dan menjawab "**berapa kerap**". Kedua-duanya diperlukan:
+`lastAsked` tidak boleh memisahkan sepuluh soalan yang ditanya dalam larian yang sama, dan itulah
+sebabnya pemilih mengulang soalan yang sama — lihat §5.5 dan PRD §16 item 38.
+
+> **Medan yang tiada dibaca sebagai 0, dan itu satu larian yang rata.** Stor yang ditulis sebelum
+> `timesAsked` wujud tidak membawanya, jadi setiap soalan kelihatan belum pernah ditanya untuk
+> **satu** larian selepas naik taraf; pemilih kemudian jatuh kepada `lastAsked` seperti dahulu
+> untuk larian itu sahaja, dan kiraan bermula selepasnya. Ditulis di sini dan bukan disembunyikan.
+> App belum dilancar, jadi kosnya ialah satu larian pada peranti ujian pemilik projek — keputusan
+> pemilik projek, 22 September 2026.
 
 - **Direkod sekali, pada langkah masuk ke `summary`.** Sesi yang dipulihkan pada `summary` tidak
   direkod semula.

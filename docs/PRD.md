@@ -1632,7 +1632,8 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     pelayan patut mencerminkannya — bukti per sub-kemahiran, gulungan dikira semasa baca — apabila ia
     direka.
 31. **Tangga aras SPEC §5.5 memilih kemahiran, bukan kesukaran. Jurang kandungan, bukan pepijat
-    enjin.**
+    enjin.** ~~Terbuka sepenuhnya.~~ **Dipisahkan 22 September 2026: aras 1 dan 2 ditutup dengan
+    nombor, aras 3 kekal terbuka.** Lihat hujung item ini.
 
     Tangga itu direka untuk memilih kesukaran **dalam satu kemahiran**: 70% pada aras semasa, 20% di
     bawah, 10% di atas. Dalam bank hari ini setiap soalan dalam satu sub-kemahiran membawa aras yang
@@ -1696,6 +1697,30 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     pemilik projek menilainya lebih mudah daripada *34 + 25* dan *32 + 14* yang berkongsi aras 3
     dengannya. Memindahkannya ke aras 2 akan menukar apa yang anak lihat hari ini, pada soalan yang
     guru sudah semak, untuk faedah yang belum diukur. Tidak dibuat, atas keputusan pemilik projek.
+
+    #### Dipisahkan dua, 22 September 2026: aras 1 dan 2 DITUTUP, aras 3 kekal terbuka
+
+    Item ini mencampurkan dua perkara, dan hanya satu daripadanya kerja kandungan.
+
+    **Apa yang anak sebenarnya rasa — soalan yang sama setiap sesi — ialah item 38, dan ia
+    ditutup.** Soalan `before` (item 43) menaikkan bank aras 1 daripada 9 kepada 12, dan pemecah
+    seri `timesAsked` (item 38) menghabiskan set tetap itu. Diukur dengan pemilih dan stor sebenar,
+    lima larian, selepas kedua-duanya:
+
+    | Aras | Bank | Slot setiap larian | Muncul dalam setiap larian |
+    |---|---|---|---|
+    | 1 | 12 | 9 | **0** — dahulu 9 daripada 9 |
+    | 2 | 9 | 7 | **0** — dahulu 5 daripada 9 |
+    | 3 | **4** | 8 diminta | **4** — kesemuanya |
+
+    Aras 1 dan 2 **ditutup**. Bank masih kecil — 9 daripada 12 dan 7 daripada 9 di skrin setiap
+    larian, iaitu 75% dan 78% — tetapi tiada soalan yang muncul setiap kali, dan kiraannya rata.
+    Menulis lebih banyak soalan aras 1 dan 2 masih berfaedah; ia bukan lagi pepijat.
+
+    **Aras 3 kekal terbuka, dan ia kini satu-satunya bahagian item ini.** Empat soalan boleh dimain
+    — q008, q023, q025 sebagai bukti dan q022 sebagai latihan — untuk lapan slot yang sesi aras 3
+    minta. Bank lebih kecil daripada satu sesi, jadi kesemua empat muncul dalam setiap larian dan
+    tiada pemecah seri boleh mengubahnya. **Itu kerja kandungan: tulis soalan aras 3.**
 32. **Model aktiviti PRD §10 ditulis sebelum enjin wujud. Direkod, belum diputuskan.**
 
     §10 menganggap aktiviti ialah senarai soalan tetap: *"Aktiviti (10 soalan) → 0–3 ⭐"*,
@@ -2169,8 +2194,10 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
       Borang `kssr:review` masih memaparkannya dalam jadual paksi, sebagai *Terbalik*, bersama
       pengenalan yang masih berkata *"kesepuluh-sepuluh soalan pek ini"* — pek ada 23. Pengenalan
       itu dibetulkan pada hari yang sama; tanda *Terbalik* kekal, untuk guru semak.
-38. **Putaran soalan terlalu perlahan walaupun bank mencukupi. Jurang, berasingan daripada item 31.
-    Direkod 17 September 2026, belum dibaiki.**
+38. ~~**Putaran soalan terlalu perlahan walaupun bank mencukupi. Jurang, berasingan daripada item
+    31. Direkod 17 September 2026, belum dibaiki.**~~ **DIBAIKI 22 September 2026: `timesAsked`
+    menjadi pemecah seri sebelum `lastAsked`.** Diagnosis dikekalkan di bawah; pembaikan dan
+    nombornya selepasnya.
 
     Item 31 ialah bank yang terlalu kecil. Ini masalah lain: aras 2 ada sembilan soalan dan sesi
     meminta tujuh, jadi putaran sepatutnya mungkin — tetapi lima soalan yang sama kembali setiap
@@ -2192,6 +2219,48 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
 
     Yang tidak diukur: keutamaan sub-kemahiran yang berbeza-beza (dikuasai, tergelincir), yang
     mengubah susunan bagi anak sebenar. Tiada kerja dirancang.
+
+    #### Pembaikan, 22 September 2026: kira **berapa kerap**, bukan hanya **bila**
+
+    `lastAsked` menjawab *bila*; ia tidak boleh memisahkan sepuluh soalan yang ditanya dalam larian
+    yang sama, dan satu larian menanya sepuluh sekali gus. `timesAsked` menjawab *berapa kerap*,
+    dan ia diletakkan **sebelum** `lastAsked` dalam rantaian pemecah seri.
+
+    Tiga calon disimulasi sebelum memilih, semuanya tanpa rawak — lima larian setiap satu, pemilih
+    dan stor kemajuan sebenar, anak aras 1 dan aras 2, dengan dan tanpa bukti:
+
+    | Calon | Aras 1: muncul setiap larian | Aras 2 |
+    |---|---|---|
+    | Sekarang (`lastAsked` → susunan pek) | 6 / 3 | 5 / 5 |
+    | Putaran susunan pek menggantikan `lastAsked` | 7 / 6 | **7** / 5 — lebih teruk |
+    | Putaran susunan pek sebagai seri terakhir | 3 / 3 | 5 / 5 — hampir tiada kesan |
+    | **`timesAsked` sebelum `lastAsked`** | **0 / 0** | **0 / 0** |
+
+    **Diukur semula selepas dibina, dengan `buildSession` dan `recordSession` sebenar:**
+
+    | Anak | Muncul dalam setiap larian | Taburan |
+    |---|---|---|
+    | Aras 1, tiada bukti | **0** daripada 12 | 4,4,4,4,4,4,4,4,4,3,3,3 |
+    | Aras 1, mengumpul bukti | **0** daripada 12 | sama |
+    | Aras 2, tiada bukti | **0** daripada 9 | 4,4,4,4,4,4,4,4,3 |
+    | Aras 2, mengumpul bukti | **0** daripada 9 | sama |
+
+    **Susunan keutamaan tidak berubah, dan itu diukur.** Pemecah seri duduk selepas `rank` dan
+    `banked`, jadi tergelincir → belum dikuasai → dikuasai tidak disentuh. Semakan mekanikal
+    merentas **80 larian simulasi**: tiada soalan yang ditinggalkan mempunyai pasangan
+    (rank, banked) yang lebih baik daripada soalan yang dipilih — **0 pelanggaran**. q022 juga
+    kekal di tempatnya: sekali dalam lima larian aras 2, sama seperti sebelum ini.
+
+    **Kos naik taraf:** stor yang ditulis sebelum medan ini wujud membaca kiraan sebagai kosong,
+    jadi satu larian melayan setiap soalan sebagai belum pernah ditanya. Diterima oleh pemilik
+    projek — app belum dilancar, dan kosnya satu larian pada peranti ujiannya. SPEC §6 menulisnya.
+
+    **Ujian yang gagal terhadap pemecah seri lama**, seperti item 39:
+    *"prefers the questions a child has been asked least often"* dan *"counts how often before it
+    counts how long ago"* dalam `selection.test.ts`, dan *"counts how many runs a question has been
+    in, run after run"* dalam `progress.test.ts`. Disahkan dengan mengeluarkan medan itu semula:
+    kedua-dua ujian pemilih gagal tanpa term `timesAsked`, dan ujian kiraan gagal tanpa kenaikan
+    dalam `recordSession`.
 39. ~~**Soalan `practice` mendahului soalan yang sudah dikuasai, selama-lamanya. Kecacatan dalam item
     37, dijumpai 17 September 2026. Belum dibaiki.**~~ **DIBAIKI 18 September 2026, sebelum soalan
     tambah keempat dihantar.**

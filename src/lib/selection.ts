@@ -42,6 +42,8 @@ export interface SelectionInput {
   rank: (subSkillId: string) => SkillRank;
   /** Has this question already been answered right on a first attempt? */
   banked: (questionId: string) => boolean;
+  /** How many runs this question has been in; 0 for never asked. */
+  timesAsked: (questionId: string) => number;
   /** The run this question was last asked in; 0 for never asked. */
   lastAsked: (questionId: string) => number;
 }
@@ -100,12 +102,26 @@ export function selectSession(input: SelectionInput): Selection {
    * Slipped sub-skills first, then ones not mastered, then mastered and
    * practice. Inside a group: questions that have never been answered right on
    * a first attempt first, because mastery counts distinct questions (SPEC 5.7)
-   * — then whatever the child has not seen for longest, then pack order as the
-   * last tiebreak.
+   * — then the ones the child has seen **least often**, then the one they have
+   * not seen for **longest**, then pack order as the last tiebreak.
+   *
+   * `timesAsked` sits ahead of `lastAsked` because `lastAsked` cannot separate
+   * questions asked in the same run, and a run asks ten at once. Once the
+   * never-asked ones were used up that term tied for everything else and pack
+   * order decided the rest — the same five level-2 questions in all five runs,
+   * and six of twelve at level 1. Measured with this term in front: none at
+   * either level, and the counts come out 4,4,4,4,4,4,4,4,4,3,3,3 across a
+   * twelve-question level. (PRD 16 item 38.)
+   *
+   * It sits *behind* rank and banked, so what a child is asked about is still
+   * decided by where their sub-skills stand; only the order inside a group
+   * changes. Checked over 80 simulated runs: no question was left out while a
+   * question with a worse rank was picked.
    */
   const compare = (a: Question, b: Question): number =>
     rank(a) - rank(b) ||
     Number(banked(a)) - Number(banked(b)) ||
+    input.timesAsked(a.id) - input.timesAsked(b.id) ||
     input.lastAsked(a.id) - input.lastAsked(b.id) ||
     (order.get(a.id) as number) - (order.get(b.id) as number);
 
