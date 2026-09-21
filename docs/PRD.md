@@ -705,221 +705,13 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     **anak sebagai subjek separuh pertama** dan **app sebagai subjek separuh kedua** — tiada
     apa yang hilang, app yang sedang bekerja.
 
-    **Belum dikunci:** akan diuji pada seorang ibu bapa sebenar sebelum dihantar.
+    **Belum dikunci:** ~~akan diuji pada seorang ibu bapa sebenar sebelum dihantar.~~ Sudah diuji,
+    12 September 2026 — `docs/kssr/ibu-bapa-ayat-status.md` (`fb599a6`). Apa yang ibu bapa itu kata
+    dan apa yang belum diputuskan: item 35.
 
     **Susunan "Fokus minggu ini"** (§11): kemahiran yang tergelincir mendahului yang belum
     pernah dimulakan. `standardCoverage()` memulangkan `slippedIds` untuk kedua-duanya.
     Perincian dalam SPEC §5.7.
-19. **Merekod ketukan dan nombor akhir secara berasingan pada count-tap — bertembung dengan
-    ujian pengguna. Belum diputuskan.**
-
-    Borang bertanda mencatat pada q003 dan q006: *"Jika app merekod ketukan dan nombor akhir
-    secara berasingan, aktiviti ini boleh memberi bukti kepada membilang objek dan menamakan
-    nombor bagi kuantiti."* Itu akan membolehkan satu count-tap menyumbang kepada dua
-    sub-kemahiran 1.2.1: `count_objects` dan `quantity_to_number`.
-
-    **Tetapi count-tap hari ini tiada nombor akhir yang berasingan.** Ketukan itu sendiri ialah
-    jawapan, dan kiraan ketukan dihantar terus. Langkah nombor dibuang dengan sengaja:
-
-    > *"The number pad this used to name is gone — user testing showed it made counting two
-    > steps, and a 7-year-old could not tell which step had failed."* — `schema.ts`,
-    > `CountTapSchema`, `answerInput` (SPEC §3.4)
-
-    Jadi "merekod berasingan" hanya boleh bermakna satu daripada dua perkara, dan kedua-duanya
-    berharga:
-
-    | Pilihan | Harga |
-    |---|---|
-    | **Kembalikan langkah nombor** — anak mengetuk, kemudian memilih atau menaip jumlah | Membalikkan keputusan ujian pengguna: kanak-kanak tersekat antara dua langkah dan tidak tahu yang mana gagal |
-    | **Kira satu ketukan sebagai bukti untuk kedua-dua sub-kemahiran** | Mengira satu tindakan sebagai dua bukti. Tiada tindakan menamakan nombor untuk diperhati, jadi `quantity_to_number` akan menerima bukti yang tidak pernah berlaku |
-
-    Pilihan pertama mungkin betul — tetapi ia keputusan reka bentuk yang perlu diuji semula
-    pada kanak-kanak, bukan suntingan pemetaan.
-
-    **Tidak dilaksana.** Sehingga diputuskan, count-tap memberi bukti kepada `count_objects`
-    sahaja, seperti hari ini.
-18. ~~**Borang bertanda membatalkan ambang yang PR #43 gabungkan. Belum diputuskan.**~~
-    **DISELESAIKAN — bar bentuk dibalikkan mengikut borang.**
-
-    `docs/kssr/guru-semakan-pusingan-2-bertanda.md` dikembalikan bertanda pada 12 September
-    2026. Empat jawapannya **membatalkan** keputusan yang kami rekod sebagai diluluskan pada
-    hari yang sama — PR #43 digabung pada 12 September 2026, 19:55; rekod asal di sini tersilap
-    menyebut "sehari sebelumnya" — dan satu daripadanya membatalkan asas kepada tiga yang lain.
-
-    | Soalan | Kami rekod | Borang bertanda kata |
-    |---|---|---|
-    | Paksi bukti | `promptForm` dikira | **☑ Tidak** — *"Kepelbagaian prompt_form ialah penguat bukti dan ukuran kualiti bank soalan, bukan syarat universal untuk Dikuasai."* |
-    | Ambang | 3 soalan · 2 sesi · **2 bentuk** | *"Baseline mastery kekal: 3 item berbeza, betul cubaan pertama, merentas sekurang-kurangnya 2 sesi."* — tiada syarat bentuk |
-    | Pengecualian | 9 diluluskan | **Kesepuluh-sepuluh ☑ Tidak.** *"Senarai pengecualian dibatalkan seluruhnya."* |
-    | Peraturan "reverse ialah sebelah" | Disahkan dengan syarat | **☑ Tidak** — *"tidak lagi diperlukan kerana kepelbagaian bentuk bukan syarat wajib mastery."* |
-    | q005/q009 | Kekal, tulis pasangan `direct` | **☑ Kemahiran lain, tulis semula** |
-
-    Sebabnya satu dan konsisten: **kekurangan variasi bentuk ialah isu liputan bank soalan,
-    bukan kegagalan murid mencapai penguasaan.** Kalau itu betul, bar bentuk sepatutnya menjadi
-    laporan kualiti kandungan — yang `validate:content` sudah cetak setiap binaan — dan bukan
-    gerbang yang menahan label seorang anak.
-
-    **Dilaksana, atas keputusan pemilik projek selepas membaca borang.** `FORMS_FOR_MASTERY`
-    dan `formExempt` dibuang daripada `coverage.ts`; bukti kini hanya `questionId` dan
-    `sessionId`. Blok pengecualian dibuang daripada fail kemahiran, digantikan satu nota
-    pembatalan. SPEC §5.7 menulis semula bahagian ambang. `validate:content` kini melaporkan
-    dua perkara berasingan: jurang bar tiga soalan, iaitu jurang sebenar, dan kepelbagaian
-    bentuk berlabel `item bank:`, iaitu laporan kualiti kandungan dan bukan gerbang. Borang
-    `kssr:review` berhenti bertanya soalan paksi, pengecualian dan peraturan sebelah, kerana
-    ketiga-tiganya sudah dijawab.
-
-    **Tiga nota kandungan dalam borang yang sama:**
-
-    - **1.2.1 — dilaksana.** *"Memilih nombor yang mewakili kuantiti yang dibilang"* dinamakan
-      semula *"Menamakan nombor bagi kumpulan objek sebagai mewakili kuantiti"*, iaitu
-      perkataan DSKP 1.2.1(ii). Alasannya tajam: **"Memilih" ialah cara jawab, bukan nama
-      kemahiran.** Nama sub-kemahiran kita membawa `responseMode` di dalamnya, dan itu
-      mencampurkan dua paksi yang guru sendiri asingkan.
-
-      Label `1.2.2/quantity_to_number` — *"Memilih nombor bagi sekumpulan objek"* — membawa
-      kecacatan yang sama. Guru tidak menyentuhnya, jadi ia **tidak diubah**; disebut di sini
-      supaya ia ditanya, bukan diteka.
-    - **2.2.2 — dilaksana.** *"Menambah gandaan sepuluh"* dan *"Tambah dalam bentuk situasi
-      harian"* bukan sub-kemahiran wajib. Empat kelompok, id verbatim guru:
-      `two_digit_plus_one_digit_no_bridge`, `two_digit_plus_one_digit_bridge`,
-      `two_digit_plus_two_digit_no_bridge`, `two_digit_plus_two_digit_bridge`. q008 masuk yang
-      ketiga, dengan tag diagnostik `multiple_of_10`. Situasi harian direkod sebagai milik
-      **2.4.2**, belum dipecahkan kerana tiada soalan memetik 2.4.2.
-    - **1.2.1 / q003, q006 — tidak dilaksana.** Merekod ketukan dan nombor akhir secara
-      berasingan bertembung dengan keputusan ujian pengguna yang membuang langkah nombor.
-      Item 19.
-
-    **1.6.1 — nama berbeza, bukan pemetaan salah.** Catatan guru pada 1.6.1 menamakan empat
-    pecahannya `place_tens`, `place_ones`, `value_tens`, `value_ones`; id kita ialah
-    `digit_at_tens`, `digit_at_ones`, `value_of_tens_digit`, `value_of_ones_digit`. Pemetaan q004
-    betul menurut kedua-dua dokumen guru: borang ini kata *"Sesuai untuk place_tens sahaja"*, dan
-    pecahan A dalam `guru-sub-kemahiran-math-y1.md` ialah *"Mengenal digit di tempat puluh"*
-    dengan contoh yang sama seperti q004. Id kita **tidak dinamakan semula** — *"Empat pecahan ini
-    dikekalkan"* bercakap tentang pecahannya, bukan namanya. Kalau id guru mahu diguna, itu
-    keputusan berasingan.
-
-    #### Dua kesilapan pemilik projek semasa menyerahkan borang ini
-
-    Direkod atas permintaannya sendiri: *"DAN SAYA SALAH PADA DUA PERKARA — rekod
-    kedua-duanya."*
-
-    **1. Dua petikan dikaitkan dengan borang, dan kedua-duanya tiada di dalamnya.** Mesej yang
-    menyerahkan borang berkata guru mengesahkan larangan liputan-bukan-penguasaan *"dengan
-    perkataannya sendiri"*: *"Nisbah 1/6 tidak boleh dianggap murid gagal 5 kemahiran lain."*
-    Mesej itu meminta silang rujuk dari SPEC §5.7 ke fail ini, dan merekod keperluan *"setiap
-    sub-kemahiran patut ada sekurang-kurangnya satu direct + satu reverse, kecuali
-    sub-kemahiran yang membilang"* sebagai datang daripada guru. Dicari dalam fail: tiada
-    kedua-duanya. Dalam perkataan pemilik projek: *"Saya membacanya daripada mesej dan
-    menganggap ia daripada dokumen."*
-
-    Silang rujuk itu **tidak ditulis**, dan keperluan direct + reverse **tidak direkod** sebagai
-    keperluan kandungan guru. Atribusi palsu lebih teruk daripada tiada atribusi: seluruh sebab
-    silang rujuk diminta ialah supaya larangan itu ada sumber manusia yang **benar**. Larangan
-    liputan-bukan-penguasaan kekal sebagai **keputusan projek**, dan SPEC §5.7 kini menandanya
-    begitu.
-
-    **2. Borang ini disebut "ditandatangani", dan `kssr.verified` dikatakan boleh naik.**
-    Dalam perkataan pemilik projek: *"Saya kata kssr.verified boleh naik. Ia tidak boleh."*
-    Borang itu berkata sendiri bahawa ruang nama dan sekolah sengaja tidak diisi, bahawa ia
-    *"bukan tandatangan guru bertauliah"*, dan bahawa ia *"tidak patut digunakan sendiri untuk
-    menaikkan `kssr.verified`"*. **`kssr.verified` kekal `false`.**
-
-    > **Kemas kini, 13 September 2026 (item 20):** `kssr.verified` diganti `kssr.reviewStatus`
-    > tiga peringkat. Atas keputusan pemilik projek, borang ini menaikkan pek kepada
-    > `teacher-reviewed`, dan tidak kepada `certified` — nota statusnya sendiri menolak yang
-    > kedua. Kesilapan di atas kekal kesilapan: borang itu tidak ditandatangani.
-
-    Kedua-duanya bentuk kesilapan yang sama: membaca apa yang dijangka ada dalam dokumen, bukan
-    apa yang ada. Pembetulannya juga sama — buka fail, cari rentetan, baca nota statusnya.
-17. ~~**Bila `responseMode` dikira sebagai bentuk berbeza?**~~ **TIDAK LAGI RELEVAN.**
-    Borang bertanda (item 18) memutuskan bahawa tiada paksi soalan — termasuk `responseMode` —
-    ialah gerbang penguasaan, jadi soalan bila ia *dikira* tidak lagi wujud. Diagnosis di bawah
-    dikekalkan sebagai rekod: ia masih berguna kepada penulis soalan yang memilih
-    `responseMode` atas sebab pedagogi.
-
-    Guru menetapkan peraturannya: ia dikira **hanya jika ia mengubah cara murid berfikir, bukan
-    hanya cara dia menekan.** Dua contohnya menetapkan kedua-dua hujung — `select` → `input`
-    untuk nilai digit puluh **mengubah** pemikiran (pengecaman lawan pengeluaran); `tap` →
-    `select` untuk membilang **tidak** (kedua-duanya memberi bahan jawapan kepada anak).
-
-    **Boleh ia dikuatkuasakan secara mekanikal? Tidak.** Pasangan nilai yang sama membawa
-    jawapan berbeza pada sub-kemahiran berbeza. `select` → `input` mengubah pemikiran untuk
-    nilai digit, tetapi untuk `count_objects` menaip "7" selepas mengetuk tujuh objek tidak
-    menambah apa-apa pemikiran baharu — anak sudah tahu jawapannya sebelum dia menaip.
-    Peraturan itu tentang **apa yang sub-kemahiran itu tuntut**, bukan tentang pasangan mod.
-
-    Satu heuristik mekanikal hampir berjaya dan patut direkod supaya ia tidak dicuba semula
-    secara buta: **pengeluaran lawan pengecaman** — `input` menuntut anak menghasilkan jawapan,
-    manakala `select` dan `tap` mempersembahkan bahannya. Ia meliputi kedua-dua contoh guru.
-    Tetapi ia pecah pada `order` dan `match`: menyusun 18, 42, 27 ialah pengeluaran juga, dan
-    sama ada itu bermakna "bentuk berbeza" bergantung pada sub-kemahiran — untuk
-    `order_ascending` ia **memang** kemahirannya, bukan variasi bentuknya.
-
-    **Cadangan: keputusan penulis kandungan, direkod per sub-kemahiran.** Medan pilihan dalam
-    fail kemahiran, lalai **tidak dikira**:
-
-    ```
-    "value_of_tens_digit": {
-      "responseModeCountsAsForm": true,
-      "why": "select ialah pengecaman, input ialah pengeluaran — anak yang boleh kenal 60
-              dalam senarai belum semestinya boleh mengeluarkannya"
-    }
-    ```
-
-    Tiga sebab bentuk ini:
-
-    - **Lalai selamat.** Tidak dikira bermakna bar lebih tinggi, dan bar lebih tinggi hanya
-      boleh mendakwa terlalu sedikit.
-    - **Ia disemak di tempat yang sama seperti pecahan sub-kemahiran** — borang `kssr:review`
-      sudah merender senarai itu, jadi soalan keempat masuk ke dalam jadual yang sama.
-    - **`validate:content` boleh menyemak bentuknya, bukan kebenarannya** — bahawa medan itu
-      wujud, bahawa `why` ada, dan bahawa sub-kemahiran itu benar-benar mempunyai soalan dalam
-      dua `responseMode` sebelum ia mendakwa faedah itu.
-
-    Tidak dibina sehingga awak setuju pada bentuknya, dan tidak dibina sebelum sesiapa
-    benar-benar perlukannya: hari ini **tiada** sub-kemahiran dalam pek mempunyai dua
-    `responseMode`, jadi medan itu tidak akan mengubah satu pun nombor.
-16. ~~**Jawapan salah kedua pada soalan yang sama tidak diumumkan.**~~ **DISELESAIKAN.**
-    Percubaan kedua kini berkata **"Belum betul. Cuba sekali lagi."** Diukur: mutasi kawasan
-    `aria-live` naik daripada 1 kepada 2, dan teksnya berbeza.
-
-    *"Sekali lagi"* bukan hiasan untuk memaksa rentetan berbeza. Ia membawa maklumat yang sama
-    seperti yang dibaca anak yang melihat daripada pilihan yang layu: **satu percubaan tinggal
-    sebelum jawapan didedah.** Pengguna yang mendengar sebelum ini tidak mendapat apa-apa
-    daripada itu.
-
-    Satu varian ketiga diperlukan dan ia **mengurangkan**, bukan menambah. Pada percubaan yang
-    mendedahkan jawapan, ayat menjadi **"Belum betul."** sahaja — mengundang anak "cuba sekali
-    lagi" selepas jawapan ditunjukkan adalah tidak benar. Diukur pada count-tap selepas tiga
-    percubaan: `"Belum betul. Jawapannya 7."`
-
-    Tiga ayat, satu setiap keadaan, dan tiada satu pun menjanjikan sesuatu yang tidak wujud.
-
-    Diagnosis asal dikekalkan di bawah kerana ia yang menerangkan kenapa rentetan serupa
-    bermakna senyap.
-
-    Kawasan `aria-live` mengumumkan apabila teksnya **berubah**. Pada percubaan salah pertama ia
-    menjadi `"Belum betul. Cuba lagi. <pancingan>"`. Pada percubaan salah kedua, pancingan sudah
-    ada dan verdict sama, jadi rentetannya **serupa** — React tidak menulis apa-apa ke DOM, dan
-    pembaca skrin tidak mengumumkan apa-apa.
-
-    Diukur dengan `MutationObserver` pada kawasan itu: percubaan pertama menghasilkan **1**
-    mutasi, percubaan kedua menghasilkan **0**.
-
-    Anak yang melihat mendapat goncangan dan ikon ✕ pada kedua-dua percubaan. Anak yang
-    mendengar mendapat ayat sekali sahaja, kemudian senyap — dan senyap selepas menekan butang
-    tidak dapat dibezakan daripada butang yang rosak.
-
-    Dua pembetulan, kedua-duanya menyentuh teks yang ibu bapa dan anak dengar, jadi kedua-duanya
-    perlu kelulusan:
-
-    | Pembetulan | Kos |
-    |---|---|
-    | Ayat berbeza pada percubaan kedua, cth. *"Belum betul. Cuba sekali lagi."* | Satu rentetan baharu, dan nadanya mesti dipilih dengan sengaja seperti yang pertama |
-    | Kandungan berubah tanpa teks baharu — cth. menyebut pilihan yang baru digugurkan: *"Belum betul. Cuba lagi. 38 bukan jawapannya."* | Lebih banyak perkataan setiap kali, dan ia menamakan kesilapan anak dengan kuat |
-
-    Cadangan saya yang pertama: ia lebih pendek, dan *"sekali lagi"* membawa maklumat sebenar —
-    anak sudah cuba dua kali dan ada satu percubaan lagi sebelum jawapan didedah.
 14. **Betul/salah tidak sampai kepada pembaca skrin langsung.** ~~Diagnosis, belum dibaiki.~~
     **DISELESAIKAN.** Kawasan `aria-live` kini membawa verdict, dan `aria-disabled` menggantikan
     `disabled` supaya fokus kekal. Perinciannya dalam SPEC §9; had yang tinggal dalam item 16.
@@ -1020,6 +812,216 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     mengukur pembukaan kunci, kerana `Howler.autoUnlock` sudah `false` dan `_audioUnlocked`
     sudah `true` di situ — context pane bermula dalam keadaan berjalan. Peranti yang menutup
     jurang itu, seperti iPhone menutup jurang PR #33.
+16. ~~**Jawapan salah kedua pada soalan yang sama tidak diumumkan.**~~ **DISELESAIKAN.**
+    Percubaan kedua kini berkata **"Belum betul. Cuba sekali lagi."** Diukur: mutasi kawasan
+    `aria-live` naik daripada 1 kepada 2, dan teksnya berbeza.
+
+    *"Sekali lagi"* bukan hiasan untuk memaksa rentetan berbeza. Ia membawa maklumat yang sama
+    seperti yang dibaca anak yang melihat daripada pilihan yang layu: **satu percubaan tinggal
+    sebelum jawapan didedah.** Pengguna yang mendengar sebelum ini tidak mendapat apa-apa
+    daripada itu.
+
+    Satu varian ketiga diperlukan dan ia **mengurangkan**, bukan menambah. Pada percubaan yang
+    mendedahkan jawapan, ayat menjadi **"Belum betul."** sahaja — mengundang anak "cuba sekali
+    lagi" selepas jawapan ditunjukkan adalah tidak benar. Diukur pada count-tap selepas tiga
+    percubaan: `"Belum betul. Jawapannya 7."`
+
+    Tiga ayat, satu setiap keadaan, dan tiada satu pun menjanjikan sesuatu yang tidak wujud.
+
+    Diagnosis asal dikekalkan di bawah kerana ia yang menerangkan kenapa rentetan serupa
+    bermakna senyap.
+
+    Kawasan `aria-live` mengumumkan apabila teksnya **berubah**. Pada percubaan salah pertama ia
+    menjadi `"Belum betul. Cuba lagi. <pancingan>"`. Pada percubaan salah kedua, pancingan sudah
+    ada dan verdict sama, jadi rentetannya **serupa** — React tidak menulis apa-apa ke DOM, dan
+    pembaca skrin tidak mengumumkan apa-apa.
+
+    Diukur dengan `MutationObserver` pada kawasan itu: percubaan pertama menghasilkan **1**
+    mutasi, percubaan kedua menghasilkan **0**.
+
+    Anak yang melihat mendapat goncangan dan ikon ✕ pada kedua-dua percubaan. Anak yang
+    mendengar mendapat ayat sekali sahaja, kemudian senyap — dan senyap selepas menekan butang
+    tidak dapat dibezakan daripada butang yang rosak.
+
+    Dua pembetulan, kedua-duanya menyentuh teks yang ibu bapa dan anak dengar, jadi kedua-duanya
+    perlu kelulusan:
+
+    | Pembetulan | Kos |
+    |---|---|
+    | Ayat berbeza pada percubaan kedua, cth. *"Belum betul. Cuba sekali lagi."* | Satu rentetan baharu, dan nadanya mesti dipilih dengan sengaja seperti yang pertama |
+    | Kandungan berubah tanpa teks baharu — cth. menyebut pilihan yang baru digugurkan: *"Belum betul. Cuba lagi. 38 bukan jawapannya."* | Lebih banyak perkataan setiap kali, dan ia menamakan kesilapan anak dengan kuat |
+
+    Cadangan saya yang pertama: ia lebih pendek, dan *"sekali lagi"* membawa maklumat sebenar —
+    anak sudah cuba dua kali dan ada satu percubaan lagi sebelum jawapan didedah.
+17. ~~**Bila `responseMode` dikira sebagai bentuk berbeza?**~~ **TIDAK LAGI RELEVAN.**
+    Borang bertanda (item 18) memutuskan bahawa tiada paksi soalan — termasuk `responseMode` —
+    ialah gerbang penguasaan, jadi soalan bila ia *dikira* tidak lagi wujud. Diagnosis di bawah
+    dikekalkan sebagai rekod: ia masih berguna kepada penulis soalan yang memilih
+    `responseMode` atas sebab pedagogi.
+
+    Guru menetapkan peraturannya: ia dikira **hanya jika ia mengubah cara murid berfikir, bukan
+    hanya cara dia menekan.** Dua contohnya menetapkan kedua-dua hujung — `select` → `input`
+    untuk nilai digit puluh **mengubah** pemikiran (pengecaman lawan pengeluaran); `tap` →
+    `select` untuk membilang **tidak** (kedua-duanya memberi bahan jawapan kepada anak).
+
+    **Boleh ia dikuatkuasakan secara mekanikal? Tidak.** Pasangan nilai yang sama membawa
+    jawapan berbeza pada sub-kemahiran berbeza. `select` → `input` mengubah pemikiran untuk
+    nilai digit, tetapi untuk `count_objects` menaip "7" selepas mengetuk tujuh objek tidak
+    menambah apa-apa pemikiran baharu — anak sudah tahu jawapannya sebelum dia menaip.
+    Peraturan itu tentang **apa yang sub-kemahiran itu tuntut**, bukan tentang pasangan mod.
+
+    Satu heuristik mekanikal hampir berjaya dan patut direkod supaya ia tidak dicuba semula
+    secara buta: **pengeluaran lawan pengecaman** — `input` menuntut anak menghasilkan jawapan,
+    manakala `select` dan `tap` mempersembahkan bahannya. Ia meliputi kedua-dua contoh guru.
+    Tetapi ia pecah pada `order` dan `match`: menyusun 18, 42, 27 ialah pengeluaran juga, dan
+    sama ada itu bermakna "bentuk berbeza" bergantung pada sub-kemahiran — untuk
+    `order_ascending` ia **memang** kemahirannya, bukan variasi bentuknya.
+
+    **Cadangan: keputusan penulis kandungan, direkod per sub-kemahiran.** Medan pilihan dalam
+    fail kemahiran, lalai **tidak dikira**:
+
+    ```
+    "value_of_tens_digit": {
+      "responseModeCountsAsForm": true,
+      "why": "select ialah pengecaman, input ialah pengeluaran — anak yang boleh kenal 60
+              dalam senarai belum semestinya boleh mengeluarkannya"
+    }
+    ```
+
+    Tiga sebab bentuk ini:
+
+    - **Lalai selamat.** Tidak dikira bermakna bar lebih tinggi, dan bar lebih tinggi hanya
+      boleh mendakwa terlalu sedikit.
+    - **Ia disemak di tempat yang sama seperti pecahan sub-kemahiran** — borang `kssr:review`
+      sudah merender senarai itu, jadi soalan keempat masuk ke dalam jadual yang sama.
+    - **`validate:content` boleh menyemak bentuknya, bukan kebenarannya** — bahawa medan itu
+      wujud, bahawa `why` ada, dan bahawa sub-kemahiran itu benar-benar mempunyai soalan dalam
+      dua `responseMode` sebelum ia mendakwa faedah itu.
+
+    Tidak dibina sehingga awak setuju pada bentuknya, dan tidak dibina sebelum sesiapa
+    benar-benar perlukannya: hari ini **tiada** sub-kemahiran dalam pek mempunyai dua
+    `responseMode`, jadi medan itu tidak akan mengubah satu pun nombor.
+18. ~~**Borang bertanda membatalkan ambang yang PR #43 gabungkan. Belum diputuskan.**~~
+    **DISELESAIKAN — bar bentuk dibalikkan mengikut borang.**
+
+    `docs/kssr/guru-semakan-pusingan-2-bertanda.md` dikembalikan bertanda pada 12 September
+    2026. Empat jawapannya **membatalkan** keputusan yang kami rekod sebagai diluluskan pada
+    hari yang sama — PR #43 digabung pada 12 September 2026, 19:55; rekod asal di sini tersilap
+    menyebut "sehari sebelumnya" — dan satu daripadanya membatalkan asas kepada tiga yang lain.
+
+    | Soalan | Kami rekod | Borang bertanda kata |
+    |---|---|---|
+    | Paksi bukti | `promptForm` dikira | **☑ Tidak** — *"Kepelbagaian prompt_form ialah penguat bukti dan ukuran kualiti bank soalan, bukan syarat universal untuk Dikuasai."* |
+    | Ambang | 3 soalan · 2 sesi · **2 bentuk** | *"Baseline mastery kekal: 3 item berbeza, betul cubaan pertama, merentas sekurang-kurangnya 2 sesi."* — tiada syarat bentuk |
+    | Pengecualian | 9 diluluskan | **Kesepuluh-sepuluh ☑ Tidak.** *"Senarai pengecualian dibatalkan seluruhnya."* |
+    | Peraturan "reverse ialah sebelah" | Disahkan dengan syarat | **☑ Tidak** — *"tidak lagi diperlukan kerana kepelbagaian bentuk bukan syarat wajib mastery."* |
+    | q005/q009 | Kekal, tulis pasangan `direct` | **☑ Kemahiran lain, tulis semula** |
+
+    Sebabnya satu dan konsisten: **kekurangan variasi bentuk ialah isu liputan bank soalan,
+    bukan kegagalan murid mencapai penguasaan.** Kalau itu betul, bar bentuk sepatutnya menjadi
+    laporan kualiti kandungan — yang `validate:content` sudah cetak setiap binaan — dan bukan
+    gerbang yang menahan label seorang anak.
+
+    **Dilaksana, atas keputusan pemilik projek selepas membaca borang.** `FORMS_FOR_MASTERY`
+    dan `formExempt` dibuang daripada `coverage.ts`; bukti kini hanya `questionId` dan
+    `sessionId`. Blok pengecualian dibuang daripada fail kemahiran, digantikan satu nota
+    pembatalan. SPEC §5.7 menulis semula bahagian ambang. `validate:content` kini melaporkan
+    dua perkara berasingan: jurang bar tiga soalan, iaitu jurang sebenar, dan kepelbagaian
+    bentuk berlabel `item bank:`, iaitu laporan kualiti kandungan dan bukan gerbang. Borang
+    `kssr:review` berhenti bertanya soalan paksi, pengecualian dan peraturan sebelah, kerana
+    ketiga-tiganya sudah dijawab.
+
+    **Tiga nota kandungan dalam borang yang sama:**
+
+    - **1.2.1 — dilaksana.** *"Memilih nombor yang mewakili kuantiti yang dibilang"* dinamakan
+      semula *"Menamakan nombor bagi kumpulan objek sebagai mewakili kuantiti"*, iaitu
+      perkataan DSKP 1.2.1(ii). Alasannya tajam: **"Memilih" ialah cara jawab, bukan nama
+      kemahiran.** Nama sub-kemahiran kita membawa `responseMode` di dalamnya, dan itu
+      mencampurkan dua paksi yang guru sendiri asingkan.
+
+      Label `1.2.2/quantity_to_number` — *"Memilih nombor bagi sekumpulan objek"* — membawa
+      kecacatan yang sama. Guru tidak menyentuhnya, jadi ia **tidak diubah**; disebut di sini
+      supaya ia ditanya, bukan diteka.
+    - **2.2.2 — dilaksana.** *"Menambah gandaan sepuluh"* dan *"Tambah dalam bentuk situasi
+      harian"* bukan sub-kemahiran wajib. Empat kelompok, id verbatim guru:
+      `two_digit_plus_one_digit_no_bridge`, `two_digit_plus_one_digit_bridge`,
+      `two_digit_plus_two_digit_no_bridge`, `two_digit_plus_two_digit_bridge`. q008 masuk yang
+      ketiga, dengan tag diagnostik `multiple_of_10`. Situasi harian direkod sebagai milik
+      **2.4.2**, belum dipecahkan kerana tiada soalan memetik 2.4.2.
+    - **1.2.1 / q003, q006 — tidak dilaksana.** Merekod ketukan dan nombor akhir secara
+      berasingan bertembung dengan keputusan ujian pengguna yang membuang langkah nombor.
+      Item 19.
+
+    **1.6.1 — nama berbeza, bukan pemetaan salah.** Catatan guru pada 1.6.1 menamakan empat
+    pecahannya `place_tens`, `place_ones`, `value_tens`, `value_ones`; id kita ialah
+    `digit_at_tens`, `digit_at_ones`, `value_of_tens_digit`, `value_of_ones_digit`. Pemetaan q004
+    betul menurut kedua-dua dokumen guru: borang ini kata *"Sesuai untuk place_tens sahaja"*, dan
+    pecahan A dalam `guru-sub-kemahiran-math-y1.md` ialah *"Mengenal digit di tempat puluh"*
+    dengan contoh yang sama seperti q004. Id kita **tidak dinamakan semula** — *"Empat pecahan ini
+    dikekalkan"* bercakap tentang pecahannya, bukan namanya. Kalau id guru mahu diguna, itu
+    keputusan berasingan.
+
+    #### Dua kesilapan pemilik projek semasa menyerahkan borang ini
+
+    Direkod atas permintaannya sendiri: *"DAN SAYA SALAH PADA DUA PERKARA — rekod
+    kedua-duanya."*
+
+    **1. Dua petikan dikaitkan dengan borang, dan kedua-duanya tiada di dalamnya.** Mesej yang
+    menyerahkan borang berkata guru mengesahkan larangan liputan-bukan-penguasaan *"dengan
+    perkataannya sendiri"*: *"Nisbah 1/6 tidak boleh dianggap murid gagal 5 kemahiran lain."*
+    Mesej itu meminta silang rujuk dari SPEC §5.7 ke fail ini, dan merekod keperluan *"setiap
+    sub-kemahiran patut ada sekurang-kurangnya satu direct + satu reverse, kecuali
+    sub-kemahiran yang membilang"* sebagai datang daripada guru. Dicari dalam fail: tiada
+    kedua-duanya. Dalam perkataan pemilik projek: *"Saya membacanya daripada mesej dan
+    menganggap ia daripada dokumen."*
+
+    Silang rujuk itu **tidak ditulis**, dan keperluan direct + reverse **tidak direkod** sebagai
+    keperluan kandungan guru. Atribusi palsu lebih teruk daripada tiada atribusi: seluruh sebab
+    silang rujuk diminta ialah supaya larangan itu ada sumber manusia yang **benar**. Larangan
+    liputan-bukan-penguasaan kekal sebagai **keputusan projek**, dan SPEC §5.7 kini menandanya
+    begitu.
+
+    **2. Borang ini disebut "ditandatangani", dan `kssr.verified` dikatakan boleh naik.**
+    Dalam perkataan pemilik projek: *"Saya kata kssr.verified boleh naik. Ia tidak boleh."*
+    Borang itu berkata sendiri bahawa ruang nama dan sekolah sengaja tidak diisi, bahawa ia
+    *"bukan tandatangan guru bertauliah"*, dan bahawa ia *"tidak patut digunakan sendiri untuk
+    menaikkan `kssr.verified`"*. **`kssr.verified` kekal `false`.**
+
+    > **Kemas kini, 13 September 2026 (item 20):** `kssr.verified` diganti `kssr.reviewStatus`
+    > tiga peringkat. Atas keputusan pemilik projek, borang ini menaikkan pek kepada
+    > `teacher-reviewed`, dan tidak kepada `certified` — nota statusnya sendiri menolak yang
+    > kedua. Kesilapan di atas kekal kesilapan: borang itu tidak ditandatangani.
+
+    Kedua-duanya bentuk kesilapan yang sama: membaca apa yang dijangka ada dalam dokumen, bukan
+    apa yang ada. Pembetulannya juga sama — buka fail, cari rentetan, baca nota statusnya.
+19. **Merekod ketukan dan nombor akhir secara berasingan pada count-tap — bertembung dengan
+    ujian pengguna. Belum diputuskan.**
+
+    Borang bertanda mencatat pada q003 dan q006: *"Jika app merekod ketukan dan nombor akhir
+    secara berasingan, aktiviti ini boleh memberi bukti kepada membilang objek dan menamakan
+    nombor bagi kuantiti."* Itu akan membolehkan satu count-tap menyumbang kepada dua
+    sub-kemahiran 1.2.1: `count_objects` dan `quantity_to_number`.
+
+    **Tetapi count-tap hari ini tiada nombor akhir yang berasingan.** Ketukan itu sendiri ialah
+    jawapan, dan kiraan ketukan dihantar terus. Langkah nombor dibuang dengan sengaja:
+
+    > *"The number pad this used to name is gone — user testing showed it made counting two
+    > steps, and a 7-year-old could not tell which step had failed."* — `schema.ts`,
+    > `CountTapSchema`, `answerInput` (SPEC §3.4)
+
+    Jadi "merekod berasingan" hanya boleh bermakna satu daripada dua perkara, dan kedua-duanya
+    berharga:
+
+    | Pilihan | Harga |
+    |---|---|
+    | **Kembalikan langkah nombor** — anak mengetuk, kemudian memilih atau menaip jumlah | Membalikkan keputusan ujian pengguna: kanak-kanak tersekat antara dua langkah dan tidak tahu yang mana gagal |
+    | **Kira satu ketukan sebagai bukti untuk kedua-dua sub-kemahiran** | Mengira satu tindakan sebagai dua bukti. Tiada tindakan menamakan nombor untuk diperhati, jadi `quantity_to_number` akan menerima bukti yang tidak pernah berlaku |
+
+    Pilihan pertama mungkin betul — tetapi ia keputusan reka bentuk yang perlu diuji semula
+    pada kanak-kanak, bukan suntingan pemetaan.
+
+    **Tidak dilaksana.** Sehingga diputuskan, count-tap memberi bukti kepada `count_objects`
+    sahaja, seperti hari ini.
 20. **`kssr.reviewStatus` ialah rekod provenance, bukan gerbang. Tiada apa dalam kod
     menguatkuasakannya.**
 
@@ -1509,6 +1511,12 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     **Belum diukur:** susun atur q011–q023, kerana tiada skrin memaparkannya. Yang paling berisiko:
     lapan objek q011 (had 9, SPEC §3.4), arahan tiga ayat q011, q021 dan q023, dan pilihan
     *"Sama banyak"*.
+
+    > **Sudah diukur — ayat di atas ditulis sebelum ada skrin yang memaparkannya.** Kali pertama
+    > dalam item 33, pada 390×740, iaitu viewport yang item 44 batalkan. Pada 393×695: halaman
+    > tidak menatal pada mana-mana count-tap termasuk lapan objek q011 (item 44), dan jurang
+    > keadaan tiba bagi kesemua 25 arahan yang boleh dimain ketika itu — sepuluh dipandu melalui UI
+    > sebenar, lima belas dikira daripada klon perenggan (item 47). Item 35 nombor 6.
 
     **Keutamaan seterusnya, atas keputusan pemilik projek:** enjin yang memilih 10 soalan daripada
     bank, dengan komposisi aras SPEC §5.5. Tanpa ia, soalan baharu hanya lulus `validate:content`.
@@ -2034,6 +2042,10 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
 
     Ayat itu kekal belum dikunci. Keputusannya milik pemilik projek.
 
+    > **Jurang dokumen ditutup 22 September 2026.** SPEC §5.7 dan item 13 kini berkata ayat itu
+    > sudah diuji, dan menunjuk ke fail ibu bapa. **Keputusan tentang ayat itu masih terbuka** —
+    > yang ditutup hanya dakwaan bahawa ujian belum berlaku.
+
     **2. Siapa yang menanda borang pusingan 2 tidak direkod.** Nota status borang itu berkata:
     *"Salinan bertanda berdasarkan semakan pedagogi dalam perbualan ini."* `teacher-reviewed`
     bersandar pada borang ini (item 20), tetapi tiada fail berkata perbualan yang mana, atau siapa
@@ -2047,6 +2059,10 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     `pembetulan-akhir-soalan-math-y1.md` ditulis Claude, dan
     `pemilik-kalibrasi-buku-teks-kpm-tahun-1.md` ialah nota pemilik projek. Pengepala setiap satu
     menyatakannya dengan betul; penerangan folder itu yang tidak.
+
+    > **Ditutup 22 September 2026.** Folder itu kini sembilan fail: enam diterima daripada guru atau
+    > ibu bapa, dan tiga yang sama di atas bukan. CLAUDE.md *"Received documents"* kini berkata
+    > begitu, dan menyuruh pembaca membaca pengepala setiap fail.
 
     **4. HANDOFF.md bertajuk *"Handoff — 12 September 2026"*,** dan kali terakhir diubah dalam
     `e079ef8` (13 September 2026). Stor kemajuan, enjin pemilih, float bertindan dan had jalur
@@ -2065,10 +2081,19 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     **Tidak dilihat dirender:** tiada pemapar Markdown dalam `node_modules`, dan tiada pratonton
     GitHub dari sini.
 
+    > **Ditutup 22 September 2026.** Item 14 hingga 19 disusun semula mengikut nombornya. Teksnya
+    > tidak berubah satu baris pun: skrip yang memindahkannya enggan menulis kalau himpunan baris
+    > berubah, dan menyemak bahawa setiap item §16 kini bernombor mengikut susunan fail, 1 hingga
+    > 49. Rujukan *"item 18"* kini menunjuk kepada item yang dipaparkan sebagai 18.
+
     **6. Item 27 berkata susun atur q011–q023 *"belum diukur"*. Ia sudah diukur.** Item 33 menyapu
     kesemua 21 soalan yang boleh dipilih, dalam keadaan pancingan dan dedahan, pada 390×740, dan
     melaporkan tiada potongan pada 360×780 bagi semua soalan, dengan inset 0 dan 34. Ayat item 27
     ditulis ketika tiada skrin memaparkan soalan itu, dan tidak dikemas kini.
+
+    > **Ditutup 22 September 2026.** Item 27 kini membawa nota yang menunjuk ke ukuran itu. Ukuran
+    > item 33 yang disebut di atas diambil pada 390×740 dan 360×780, yang item 44 kemudian batalkan;
+    > nota itu menunjuk juga ke ukuran pada 393×695 dalam item 44 dan 47.
 36. **q019: tiga nombor, tiga pilihan, dan pengganggu yang tiada dalam arahan. Dibina 17 September
     2026; digabung hanya selepas rakaman BM baharu masuk.**
 
@@ -2496,6 +2521,29 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
       Dalam UI sebenar, butang audio q016 dipasang semula (legap penuh, 62px dalam pane), dan
       `Howler._howls` app sendiri memuatkan `/audio/ms/q016.mp3`. Kandungan pertuturan disahkan
       oleh telinga pemilik projek, bukan dari sini.
+    - **Bukti q016 pada peranti ujian kekal di bawah `after`** sehingga storan dikosongkan —
+      peraturan 3 SPEC §6 tidak menapis bukti mengikut pemetaan pek semasa (item 37). Pemilik
+      projek akan mengosongkannya.
+
+    > **Nombor potongan di bawah tidak sah — item 44.** Viewport ujiannya lebih tinggi daripada
+    > telefon.
+
+    **Diukur dalam pane, UI sebenar,** dengan kemajuan di-seed supaya q016 tiba dahulu. Klip beku
+    ditunjukkan kepada rakaman sebenar supaya butang audio dipasang, seperti item 40.
+
+    | Viewport | Arahan | Jalur | Kad menatal, inset 0 / 34 | Butang audio terpotong |
+    |---|---|---|---|---|
+    | 390×740, tiba | 2 baris | — | 0 / 18px | 0 |
+    | 390×740, pancingan | 2 baris | 1 baris, 216px | 7 / 25px | 0 |
+    | 390×740, dedahan | 2 baris | 1 baris, 147px | 7 / 25px | 0 |
+    | 360×780, dedahan | 2 baris | 1 baris, 147px | 0 / 18px | 0 |
+
+    `aria-live` membaca *"Belum betul. Cuba sekali lagi. Kira satu lagi selepas 39."* dan *"Belum
+    betul. 39, kemudian 40."*
+
+    > **Bullet bukti q016 dan jadual di atasnya pernah duduk di hujung item 43**, selepas rakaman
+    > q026–q028. Ia ditulis dalam `420e24f` sebagai sebahagian item ini, dan item 43 (`621ec6a`)
+    > kemudian dimasukkan di tengahnya. Dipindahkan pulang 22 September 2026, teks tidak berubah.
 43. **q026, q027, q028 — tiga soalan untuk `1.2.2/before`, yang kosong sejak awal. Ditulis pemilik
     projek, ditambah 20 September 2026; tidak digabung sebelum rakaman BM masuk.**
 
@@ -2600,25 +2648,6 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     62px dalam pane) dan `Howler._howls` app memuatkan ketiga-tiga klip. Kandungan pertuturan
     disahkan oleh telinga pemilik projek, bukan dari sini. Klip EN kekal 0 bait, seperti semua klip
     EN lain.
-    - **Bukti q016 pada peranti ujian kekal di bawah `after`** sehingga storan dikosongkan —
-      peraturan 3 SPEC §6 tidak menapis bukti mengikut pemetaan pek semasa (item 37). Pemilik
-      projek akan mengosongkannya.
-
-    > **Nombor potongan di bawah tidak sah — item 44.** Viewport ujiannya lebih tinggi daripada
-    > telefon.
-
-    **Diukur dalam pane, UI sebenar,** dengan kemajuan di-seed supaya q016 tiba dahulu. Klip beku
-    ditunjukkan kepada rakaman sebenar supaya butang audio dipasang, seperti item 40.
-
-    | Viewport | Arahan | Jalur | Kad menatal, inset 0 / 34 | Butang audio terpotong |
-    |---|---|---|---|---|
-    | 390×740, tiba | 2 baris | — | 0 / 18px | 0 |
-    | 390×740, pancingan | 2 baris | 1 baris, 216px | 7 / 25px | 0 |
-    | 390×740, dedahan | 2 baris | 1 baris, 147px | 7 / 25px | 0 |
-    | 360×780, dedahan | 2 baris | 1 baris, 147px | 0 / 18px | 0 |
-
-    `aria-live` membaca *"Belum betul. Cuba sekali lagi. Kira satu lagi selepas 39."* dan *"Belum
-    betul. 39, kemudian 40."*
 44. ~~**Butang audio terpotong separuh pada iPhone, pada setiap soalan — dan setiap ukuran yang
     kata ia tidak terpotong diambil pada viewport yang tidak wujud pada telefon. Didiagnos 20
     September 2026; belum dibaiki.**~~ **DIBAIKI 20 September 2026: slot kancil keluar daripada
@@ -3334,3 +3363,10 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     PRD dan SPEC — item 31, 38, 47, 48, 49 dan tiga bahagian SPEC. `git log` mengesahkan
     commit-commit itu bertarikh 2026-09-21. Kesemuanya dibetulkan di sini. Kelas yang sama seperti
     HANDOFF §6: tarikh daripada ingatan, bukan daripada `git log`.
+
+    **Tempat keempat belas, dijumpai 22 September 2026:** pengepala provenance
+    `docs/kssr/guru-semakan-tambah-melintasi-puluh-dan-nilai-digit.md` berkata fail itu diterima
+    *"pada 22 September 2026"*. Ia masuk ke repo dalam `d7a3d01`, **2026-09-21 21:04**, jadi ia
+    tidak mungkin diterima selepas itu. Sapuan di atas meliputi PRD dan SPEC sahaja; `docs/kssr/`
+    tidak disapu. Dibetulkan dalam pengepala itu, di atas garisnya — teks guru di bawah garis tidak
+    disentuh.

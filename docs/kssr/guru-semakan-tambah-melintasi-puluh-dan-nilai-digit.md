@@ -2,13 +2,17 @@
   DOKUMEN DITERIMA, BUKAN DOKUMEN KAMI.
 
   Semakan guru bagi enam soalan tambah melintasi puluh, dan satu keputusan
-  tentang pengganggu soalan nilai digit. Diterima sebagai FAIL pada 22
+  tentang pengganggu soalan nilai digit. Diterima sebagai FAIL pada 21
   September 2026, bukan sebagai mesej — jadi jurang PRD 16 item 29, di mana
   jawapan guru hidup hanya dalam mesej yang tidak difailkan, tidak berulang
   untuk kelompok ini.
 
   Nama fail semasa diterima:
   semakan_guru_tambah_melintasi_puluh_dan_nilai_digit.md
+
+  Tarikh di atas dibetulkan pada 22 September 2026: ia pernah berkata 22
+  September, tetapi fail ini masuk ke repo dalam d7a3d01 pada 2026-09-21
+  21:04. PRD 16 item 49, "Pembetulan tarikh".
 
   Segala-galanya di bawah garis di bawah ini ialah teksnya, tidak disunting.
   Jangan betulkan ejaan, jangan susun semula, jangan potong. Kalau ada yang

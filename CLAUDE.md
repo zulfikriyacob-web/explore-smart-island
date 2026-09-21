@@ -339,7 +339,11 @@ Whether 39px is enough to make Safari retract has not been checked on the phone.
 ### Received documents, and what is said about them
 
 **A description of a document is not the document.** `docs/kssr/` holds what
-teachers and a parent actually sent, byte-identical under a provenance header. A
+teachers and a parent actually sent, byte-identical under a provenance header — six
+of its nine files. The other three are not received documents: two were written by
+Claude (`soalan-baharu-math-y1.md`, `pembetulan-akhir-soalan-math-y1.md`) and one is
+the project owner's textbook notes (`pemilik-kalibrasi-buku-teks-kpm-tahun-1.md`).
+Each header says which it is; read it before quoting the file as anyone's words. A
 message that relays one can misquote it, and has. A compaction summary is a relay
 too.
 
