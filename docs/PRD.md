@@ -2950,11 +2950,32 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
       kekal dalam DOM sejak muat, teksnya kosong, dan ketukan pertama menukar teks dalam kawasan
       yang sudah ada — mekanisme pengumuman yang sama seperti hari ini.
 
-    **Cadangan: D.** Tali 20px diukur, jadi tinggi yang ditempah ialah 20px. Kalau ruang kad itu
-    yang dikehendaki, B memberi 36px — tetapi ia membelinya dengan anjakan pada ketukan pertama
-    dan dengan pengumuman yang tidak boleh disahkan dari sini.
+    ~~**Cadangan: D.**~~ **DIBINA, 21 September 2026: D.** Tinggi yang ditempah ialah
+    `min-h-[1.35em]` — satu baris `--text-label`, token yang span ini pakai, jadi ia mengikut
+    token dan bukan nombor yang disalin. Diselesaikan pelayar kepada **20.25px**.
 
-    **Tidak dibina.** Diagnosis sahaja, atas arahan pemilik projek.
+    B ditolak walaupun ia memberi 36px ruang kad: ia membelinya dengan anjakan pada ketukan
+    pertama dan dengan kawasan `aria-live` yang dicipta pada ketukan itu.
+
+    **Disahkan pada 393×695, memandu UI sebenar, q003 (7 objek) dan q006 (5 objek):**
+
+    | | Tiba, belum diketuk | Ketukan pertama | Ketukan kedua |
+    |---|---|---|---|
+    | Teks tali | `""` | `"Dibilang: 1"` | `"Dibilang: 2"` |
+    | Kotak tali | atas 485, bawah 505, tinggi 19.9 | **sama** | **sama** |
+    | Tinggi kad | 464.4 | **464.4** | **464.4** |
+    | Jurang ke Sedia | 78 | **78** | **78** |
+    | `aria-live` | `polite`, **sudah dalam DOM** | — | — |
+    | Mutasi kawasan | — | **1** | **2** |
+
+    Ketiga-tiga syarat dipenuhi: tiada anjakan pada ketukan pertama, kawasan wujud sebelum teksnya
+    muncul, dan jurang ke Sedia tidak berubah — 78 pada q003 dan **165** pada q006, sama seperti
+    sebelum perubahan. Kiraan mutasi juga sama seperti sebelum ini, jadi setiap ketukan masih
+    diumumkan.
+
+    Yang tidak boleh disahkan dari sini kekal tidak disahkan: tiada pembaca skrin pada mesin ini,
+    jadi *"diumumkan"* bermakna kawasan itu berubah dengan cara yang sama seperti sebelum ini,
+    bukan bahawa seseorang mendengarnya.
 
     #### 2. Merah selepas mengetuk tujuh daripada lapan
 
