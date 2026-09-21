@@ -96,12 +96,34 @@ export function QuestionVisual({
         The tally sits with the objects it counts, not down in the answer stack.
         It used to live above the number pad, which cost the stack a whole extra
         row on a 360x780 screen.
+
+        Empty until the first tap, in a box that is already the right height.
+
+        "Dibilang: 0" told a child who had not started anything at all, and it
+        told a screen reader nothing either: a live region announces changes, not
+        the content it loads with, so the zero was never spoken. What is spoken
+        is every tap after it, and that still works here — the region is in the
+        DOM from the first render and only its text changes, which is the same
+        mechanism as before (measured: 1 mutation on the first tap, 2 on the
+        second).
+
+        `min-h-[1.35em]` is one line of --text-label, the token this span is set
+        in, so the row is the same height before and after the first tap. Three
+        other treatments were measured and refused: dropping the span, or
+        leaving it empty without the floor, both move the layout by 20-36px at
+        the first tap — the moment the child's finger is on the screen — and
+        dropping it also creates the live region at that tap, which cannot be
+        relied on to announce the change that created it. (PRD 16 item 48.)
       */}
       <span
         aria-live="polite"
-        className="col-span-full w-full text-center font-sans text-label text-arang-soft"
+        className="col-span-full min-h-[1.35em] w-full text-center font-sans text-label text-arang-soft"
       >
-        {lang === 'ms' ? `Dibilang: ${counted.length}` : `Counted: ${counted.length}`}
+        {counted.length === 0
+          ? ''
+          : lang === 'ms'
+            ? `Dibilang: ${counted.length}`
+            : `Counted: ${counted.length}`}
       </span>
     </div>
   );
