@@ -88,6 +88,33 @@
       },
       "questionCount": 3,
       "questionIds": ["q026", "q027", "q028"]
+    },
+    {
+      "activityId": "math-y1-nombor-100-a9",
+      "title": {
+        "ms": "Dua digit tambah satu digit, melintasi puluh",
+        "en": "Two digits plus one digit, bridging ten"
+      },
+      "questionCount": 3,
+      "questionIds": ["q029", "q031", "q035"]
+    },
+    {
+      "activityId": "math-y1-nombor-100-a10",
+      "title": {
+        "ms": "Dua digit tambah dua digit, melintasi puluh",
+        "en": "Two digits plus two digits, bridging ten"
+      },
+      "questionCount": 3,
+      "questionIds": ["q032", "q034", "q036"]
+    },
+    {
+      "activityId": "math-y1-nombor-100-a11",
+      "title": {
+        "ms": "Tambah dalam situasi harian",
+        "en": "Adding in an everyday situation"
+      },
+      "questionCount": 2,
+      "questionIds": ["q030", "q033"]
     }
   ],
   "questions": [
@@ -811,6 +838,220 @@
           { "id": "a", "text": { "ms": "70", "en": "70" } },
           { "id": "b", "text": { "ms": "72", "en": "72" } },
           { "id": "c", "text": { "ms": "61", "en": "61" } }
+        ],
+        "correctOptionId": "a",
+        "shuffle": true
+      }
+    },
+    {
+      "id": "q029",
+      "type": "mcq",
+      "difficulty": 3,
+      "learningStandard": "2.2.2",
+      "subSkill": "2.2.2/two_digit_plus_one_digit_bridge",
+      "promptForm": "direct",
+      "representation": "symbolic",
+      "responseMode": "select",
+      "wordingVariant": "A",
+      "prompt": {
+        "ms": "38 tambah 5 jadi berapa?",
+        "en": "What is 38 plus 5?"
+      },
+      "promptAudio": { "ms": "/audio/ms/q029.mp3", "en": "/audio/en/q029.mp3" },
+      "hint": { "ms": "Cukupkan 40 dahulu.", "en": "Make 40 first." },
+      "explain": { "ms": "38 + 2 = 40, 40 + 3 = 43.", "en": "38 + 2 = 40, 40 + 3 = 43." },
+      "payload": {
+        "options": [
+          { "id": "a", "text": { "ms": "43", "en": "43" } },
+          { "id": "b", "text": { "ms": "33", "en": "33" } },
+          { "id": "c", "text": { "ms": "42", "en": "42" } }
+        ],
+        "correctOptionId": "a",
+        "shuffle": true
+      }
+    },
+    {
+      "id": "q030",
+      "type": "mcq",
+      "difficulty": 3,
+      "noEvidence": "practice",
+      "promptForm": "contextual",
+      "representation": "symbolic",
+      "responseMode": "select",
+      "wordingVariant": "A",
+      "prompt": {
+        "ms": "Ali ada 27 guli. Dia dapat 6 lagi. Berapa semua?",
+        "en": "Ali has 27 marbles. He gets 6 more. How many in all?"
+      },
+      "promptAudio": { "ms": "/audio/ms/q030.mp3", "en": "/audio/en/q030.mp3" },
+      "hint": { "ms": "Cukupkan 30 dahulu.", "en": "Make 30 first." },
+      "explain": { "ms": "27 + 3 = 30, 30 + 3 = 33.", "en": "27 + 3 = 30, 30 + 3 = 33." },
+      "payload": {
+        "options": [
+          { "id": "a", "text": { "ms": "33", "en": "33" } },
+          { "id": "b", "text": { "ms": "23", "en": "23" } },
+          { "id": "c", "text": { "ms": "32", "en": "32" } }
+        ],
+        "correctOptionId": "a",
+        "shuffle": true
+      }
+    },
+    {
+      "id": "q031",
+      "type": "mcq",
+      "difficulty": 3,
+      "learningStandard": "2.2.2",
+      "subSkill": "2.2.2/two_digit_plus_one_digit_bridge",
+      "promptForm": "direct",
+      "representation": "symbolic",
+      "responseMode": "select",
+      "wordingVariant": "A",
+      "prompt": {
+        "ms": "46 tambah 7 jadi berapa?",
+        "en": "What is 46 plus 7?"
+      },
+      "promptAudio": { "ms": "/audio/ms/q031.mp3", "en": "/audio/en/q031.mp3" },
+      "hint": { "ms": "Cukupkan 50 dahulu.", "en": "Make 50 first." },
+      "explain": { "ms": "46 + 4 = 50, 50 + 3 = 53.", "en": "46 + 4 = 50, 50 + 3 = 53." },
+      "payload": {
+        "options": [
+          { "id": "a", "text": { "ms": "53", "en": "53" } },
+          { "id": "b", "text": { "ms": "43", "en": "43" } },
+          { "id": "c", "text": { "ms": "52", "en": "52" } }
+        ],
+        "correctOptionId": "a",
+        "shuffle": true
+      }
+    },
+    {
+      "id": "q032",
+      "type": "mcq",
+      "difficulty": 3,
+      "learningStandard": "2.2.2",
+      "subSkill": "2.2.2/two_digit_plus_two_digit_bridge",
+      "promptForm": "direct",
+      "representation": "symbolic",
+      "responseMode": "select",
+      "wordingVariant": "A",
+      "prompt": {
+        "ms": "27 tambah 16 jadi berapa?",
+        "en": "What is 27 plus 16?"
+      },
+      "promptAudio": { "ms": "/audio/ms/q032.mp3", "en": "/audio/en/q032.mp3" },
+      "hint": { "ms": "7 + 6 = 13. Bawa 1 puluh.", "en": "7 + 6 = 13. Carry one ten." },
+      "explain": { "ms": "20 + 10 + 13 = 43.", "en": "20 + 10 + 13 = 43." },
+      "payload": {
+        "options": [
+          { "id": "a", "text": { "ms": "43", "en": "43" } },
+          { "id": "b", "text": { "ms": "33", "en": "33" } },
+          { "id": "c", "text": { "ms": "34", "en": "34" } }
+        ],
+        "correctOptionId": "a",
+        "shuffle": true
+      }
+    },
+    {
+      "id": "q033",
+      "type": "mcq",
+      "difficulty": 3,
+      "noEvidence": "practice",
+      "promptForm": "contextual",
+      "representation": "symbolic",
+      "responseMode": "select",
+      "wordingVariant": "A",
+      "prompt": {
+        "ms": "Mei Lin ada 36 manik. Dia beli 17 lagi. Berapa semua?",
+        "en": "Mei Lin has 36 beads. She buys 17 more. How many in all?"
+      },
+      "promptAudio": { "ms": "/audio/ms/q033.mp3", "en": "/audio/en/q033.mp3" },
+      "hint": { "ms": "6 + 7 = 13. Bawa 1 puluh.", "en": "6 + 7 = 13. Carry one ten." },
+      "explain": { "ms": "30 + 10 + 13 = 53.", "en": "30 + 10 + 13 = 53." },
+      "payload": {
+        "options": [
+          { "id": "a", "text": { "ms": "53", "en": "53" } },
+          { "id": "b", "text": { "ms": "43", "en": "43" } },
+          { "id": "c", "text": { "ms": "35", "en": "35" } }
+        ],
+        "correctOptionId": "a",
+        "shuffle": true
+      }
+    },
+    {
+      "id": "q034",
+      "type": "mcq",
+      "difficulty": 3,
+      "learningStandard": "2.2.2",
+      "subSkill": "2.2.2/two_digit_plus_two_digit_bridge",
+      "promptForm": "direct",
+      "representation": "symbolic",
+      "responseMode": "select",
+      "wordingVariant": "A",
+      "prompt": {
+        "ms": "48 tambah 25 jadi berapa?",
+        "en": "What is 48 plus 25?"
+      },
+      "promptAudio": { "ms": "/audio/ms/q034.mp3", "en": "/audio/en/q034.mp3" },
+      "hint": { "ms": "8 + 5 = 13. Bawa 1 puluh.", "en": "8 + 5 = 13. Carry one ten." },
+      "explain": { "ms": "40 + 20 + 13 = 73.", "en": "40 + 20 + 13 = 73." },
+      "payload": {
+        "options": [
+          { "id": "a", "text": { "ms": "73", "en": "73" } },
+          { "id": "b", "text": { "ms": "63", "en": "63" } },
+          { "id": "c", "text": { "ms": "37", "en": "37" } }
+        ],
+        "correctOptionId": "a",
+        "shuffle": true
+      }
+    },
+    {
+      "id": "q035",
+      "type": "mcq",
+      "difficulty": 3,
+      "learningStandard": "2.2.2",
+      "subSkill": "2.2.2/two_digit_plus_one_digit_bridge",
+      "promptForm": "direct",
+      "representation": "symbolic",
+      "responseMode": "select",
+      "wordingVariant": "A",
+      "prompt": {
+        "ms": "59 tambah 4 jadi berapa?",
+        "en": "What is 59 plus 4?"
+      },
+      "promptAudio": { "ms": "/audio/ms/q035.mp3", "en": "/audio/en/q035.mp3" },
+      "hint": { "ms": "Cukupkan 60 dahulu.", "en": "Make 60 first." },
+      "explain": { "ms": "59 + 1 = 60, 60 + 3 = 63.", "en": "59 + 1 = 60, 60 + 3 = 63." },
+      "payload": {
+        "options": [
+          { "id": "a", "text": { "ms": "63", "en": "63" } },
+          { "id": "b", "text": { "ms": "53", "en": "53" } },
+          { "id": "c", "text": { "ms": "62", "en": "62" } }
+        ],
+        "correctOptionId": "a",
+        "shuffle": true
+      }
+    },
+    {
+      "id": "q036",
+      "type": "mcq",
+      "difficulty": 3,
+      "learningStandard": "2.2.2",
+      "subSkill": "2.2.2/two_digit_plus_two_digit_bridge",
+      "promptForm": "direct",
+      "representation": "symbolic",
+      "responseMode": "select",
+      "wordingVariant": "A",
+      "prompt": {
+        "ms": "34 tambah 28 jadi berapa?",
+        "en": "What is 34 plus 28?"
+      },
+      "promptAudio": { "ms": "/audio/ms/q036.mp3", "en": "/audio/en/q036.mp3" },
+      "hint": { "ms": "4 + 8 = 12. Bawa 1 puluh.", "en": "4 + 8 = 12. Carry one ten." },
+      "explain": { "ms": "30 + 20 + 12 = 62.", "en": "30 + 20 + 12 = 62." },
+      "payload": {
+        "options": [
+          { "id": "a", "text": { "ms": "62", "en": "62" } },
+          { "id": "b", "text": { "ms": "52", "en": "52" } },
+          { "id": "c", "text": { "ms": "26", "en": "26" } }
         ],
         "correctOptionId": "a",
         "shuffle": true

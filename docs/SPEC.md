@@ -298,6 +298,23 @@ arahan namakan: q013 menamakan Ali dan Kumar, kedua-duanya pilihan, jadi memadan
 membuang apa-apa. Sebab itu ia **tidak disemak mesin** — semakan "pilihan ada dalam arahan" akan
 menanda q013 tanpa memahami bezanya. Tempatnya ialah mata penulis dan borang `kssr:review`.
 
+**Pengecualian kedua, daripada guru, 22 September 2026: bila salah faham yang diuji IALAH
+melaporkan apa yang arahan tunjuk.** Untuk *"Apakah nilai digit 6 dalam 63?"*, guru meluluskan
+pengganggu **`6`** walaupun ia digit dalam nombor arahan — dan kerana ia digit itu:
+
+> *"Tak ada masalah `6` memang sudah muncul dalam nombor `63`. Malah itu yang menjadikan pengganggu
+> tersebut berguna."*
+> (`docs/kssr/guru-semakan-tambah-melintasi-puluh-dan-nilai-digit.md`)
+
+Anak yang memilih `6` menunjukkan dia tahu digit mana yang ditanya tetapi belum membezakan *digit*
+daripada *nilai digit*. Itu salah faham yang boleh dinamakan, dan ia **tidak boleh** diuji dengan
+pengganggu yang tiada dalam arahan: keseluruhan kesilapan itu ialah melaporkan digit yang arahan
+tunjukkan. Membuangnya kerana ia memadankan rentetan akan membuang soalan itu sendiri.
+
+Ujian yang membezakan kedua-dua kes: **adakah memadankan rentetan membuang pengganggu itu tanpa
+kemahiran, atau adakah memadankan rentetan ITULAH kesilapannya?** Pada q019 yang pertama; di sini
+yang kedua. Sama seperti q013, ia tidak boleh disemak mesin.
+
 #### `listen-choose` — Dengar & pilih (teras modul Membaca)
 ```json
 {
