@@ -1442,7 +1442,7 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     tetapi ia jenis bukti yang peraturan guru minta sebelum ayat *"Kemudian tekan Sedia."* boleh
     dibuang daripada teks. Keputusan memendekkan teks masih milik pemilik projek.
 
-    #### Ujian kedua, dan teks dipendekkan — 22 September 2026
+    #### Ujian kedua, dan teks dipendekkan — 21 September 2026
 
     **Anak yang sama menekan Sedia sendiri pada hari kedua juga, tanpa diberitahu apa-apa.**
 
@@ -1632,8 +1632,8 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     pelayan patut mencerminkannya — bukti per sub-kemahiran, gulungan dikira semasa baca — apabila ia
     direka.
 31. ~~**Tangga aras SPEC §5.5 memilih kemahiran, bukan kesukaran. Jurang kandungan, bukan pepijat
-    enjin.**~~ ~~Terbuka sepenuhnya.~~ ~~Dipisahkan 22 September 2026: aras 1 dan 2 ditutup dengan
-    nombor, aras 3 kekal terbuka.~~ **DITUTUP 22 September 2026, kedua-dua bahagian.** Lihat hujung
+    enjin.**~~ ~~Terbuka sepenuhnya.~~ ~~Dipisahkan 21 September 2026: aras 1 dan 2 ditutup dengan
+    nombor, aras 3 kekal terbuka.~~ **DITUTUP 21 September 2026, kedua-dua bahagian.** Lihat hujung
     item ini.
 
     Tangga itu direka untuk memilih kesukaran **dalam satu kemahiran**: 70% pada aras semasa, 20% di
@@ -1699,7 +1699,7 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     dengannya. Memindahkannya ke aras 2 akan menukar apa yang anak lihat hari ini, pada soalan yang
     guru sudah semak, untuk faedah yang belum diukur. Tidak dibuat, atas keputusan pemilik projek.
 
-    #### Dipisahkan dua, 22 September 2026: aras 1 dan 2 DITUTUP, aras 3 kekal terbuka
+    #### Dipisahkan dua, 21 September 2026: aras 1 dan 2 DITUTUP, aras 3 kekal terbuka
 
     Item ini mencampurkan dua perkara, dan hanya satu daripadanya kerja kandungan.
 
@@ -1723,7 +1723,7 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     aras 3 minta. Bank lebih kecil daripada satu sesi, jadi kesemua empat muncul dalam setiap
     larian dan tiada pemecah seri boleh mengubahnya. **Itu kerja kandungan: tulis soalan aras 3.**
 
-    **DITUTUP 22 September 2026: kerja kandungan itu dibuat.** Enam soalan tambah melintasi puluh
+    **DITUTUP 21 September 2026: kerja kandungan itu dibuat.** Enam soalan tambah melintasi puluh
     dan dua soalan situasi harian (item 49) menaikkan bank aras 3 daripada 4 kepada **12** soalan
     boleh dimain — sembilan bukti dan tiga latihan — untuk lapan slot. Diukur dengan pemilih
     sebenar, lima larian aras 3: **0 soalan muncul dalam setiap larian**, kiraan
@@ -1794,7 +1794,7 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     > projek: kedua-duanya membawa ayat *"Kemudian tekan Sedia."* yang item 26 akan buang, dan
     > lompatan itu mungkin hilang bersamanya. Angka di bawah ialah keadaan sebelum pembuangan itu.
     >
-    > **Ditutup semula, 22 September 2026: 0 / 25.** Ayat itu dibuang daripada teks skrin q003,
+    > **Ditutup semula, 21 September 2026: 0 / 25.** Ayat itu dibuang daripada teks skrin q003,
     > q006 dan q011 (item 26), dan kedua-dua arahan yang melompat berhenti melompat — seperti yang
     > diramalkan. Diukur pada kesemua 25 arahan pada 393×695.
 
@@ -2205,7 +2205,7 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
       pengenalan yang masih berkata *"kesepuluh-sepuluh soalan pek ini"* — pek ada 23. Pengenalan
       itu dibetulkan pada hari yang sama; tanda *Terbalik* kekal, untuk guru semak.
 38. ~~**Putaran soalan terlalu perlahan walaupun bank mencukupi. Jurang, berasingan daripada item
-    31. Direkod 17 September 2026, belum dibaiki.**~~ **DIBAIKI 22 September 2026: `timesAsked`
+    31. Direkod 17 September 2026, belum dibaiki.**~~ **DIBAIKI 21 September 2026: `timesAsked`
     menjadi pemecah seri sebelum `lastAsked`.** Diagnosis dikekalkan di bawah; pembaikan dan
     nombornya selepasnya.
 
@@ -2230,7 +2230,7 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     Yang tidak diukur: keutamaan sub-kemahiran yang berbeza-beza (dikuasai, tergelincir), yang
     mengubah susunan bagi anak sebenar. Tiada kerja dirancang.
 
-    #### Pembaikan, 22 September 2026: kira **berapa kerap**, bukan hanya **bila**
+    #### Pembaikan, 21 September 2026: kira **berapa kerap**, bukan hanya **bila**
 
     `lastAsked` menjawab *bila*; ia tidak boleh memisahkan sepuluh soalan yang ditanya dalam larian
     yang sama, dan satu larian menanya sepuluh sekali gus. `timesAsked` menjawab *berapa kerap*,
@@ -3027,7 +3027,7 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     besar daripada kandungannya, timbunan yang naik, atau sesuatu yang mengisi padang. Ketiga-tiga
     pilihan menyentuh DESIGN §5.2 (zon ibu jari) dan kedudukan butang yang anak sudah biasa.
 
-    **Kos yang diramal itu sudah tiba — 22 September 2026.** Teks count-tap dipendekkan (item 26),
+    **Kos yang diramal itu sudah tiba — 21 September 2026.** Teks count-tap dipendekkan (item 26),
     dan jurang membesar seperti yang diukur sebelum keputusan itu dibuat:
 
     | | Sebelum | Kini | Diramal |
@@ -3124,7 +3124,7 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
 
     ~~**Direkod, tidak dibaiki, atas arahan pemilik projek:** dia mahu melihat sama ada anak itu
     mencuba lagi atau berhenti sebelum memutuskan sama ada ia perlu disentuh.~~ **DITUTUP TANPA
-    PERUBAHAN, 22 September 2026: anak itu mencuba lagi.** Merah tidak terbaca sebagai hukuman
+    PERUBAHAN, 21 September 2026: anak itu mencuba lagi.** Merah tidak terbaca sebagai hukuman
     kepadanya; ia terbaca sebagai *cuba sekali lagi*, yang memang maksudnya.
 
     **Had yang sama seperti di atas: satu anak, dua kali.** Ia menutup item ini kerana pemilik
@@ -3132,7 +3132,7 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     membuktikan merah berfungsi untuk setiap anak; ia membuktikan tiada sebab untuk mengubahnya
     sekarang.
 49. **Enam soalan tambah melintasi puluh, disemak guru — dan dokumen gurunya sampai sebagai fail.
-    Ditulis 22 September 2026.**
+    Ditulis 21 September 2026.**
 
     `docs/kssr/guru-semakan-tambah-melintasi-puluh-dan-nilai-digit.md`, difailkan verbatim di bawah
     pengepala provenance. **Jurang item 29 tidak berulang untuk kelompok ini:** jawapan guru datang
@@ -3268,3 +3268,46 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
 
     Soalan nilai digit. Keputusan guru tentang pengganggu *"6"* direkod dalam SPEC §3.4 sebagai
     pengecualian kedua, tetapi soalannya ialah kelompok berasingan, atas arahan pemilik projek.
+
+    #### Rakaman BM masuk, 21 September 2026
+
+    Lapan klip. Pemilik projek mendengar kesemuanya sebelum memasangnya; setiap satu menyebut ayat
+    yang betul. **Dua daripadanya tidak sampai ke repo** — q029 dan q030 masih 0 bait dalam
+    `public/audio/ms/` sedangkan failnya berada dalam folder muat turun. Disalin masuk, dan disebut
+    di sini kerana "sudah dipasang" dan "ada dalam repo" bukan perkara yang sama, dan hanya bait
+    yang boleh membezakannya.
+
+    Tag ID3v2.4 yang sama pada kesemuanya: 16,638 bait diisytiharkan, tiada footer, **16,648 bait
+    dibuang** (10 pengepala + 16,638). Panjang yang diisytiharkan mendarat tepat pada `ff fb` bagi
+    kelapan-lapan; skrip berhenti tanpa memotong kalau ia tidak.
+
+    | Klip | Saiz sebelum → selepas | Bingkai | Tempoh dari bingkai | Penyahkod pelayar | Puncak |
+    |---|---|---|---|---|---|
+    | q029 | 70,982 → 54,334 | 130 | 3.396 s | 3.396 s | 0.399 |
+    | q030 | 127,407 → 110,759 | 265 | 6.922 s | 6.922 s | 0.848 |
+    | q031 | 69,728 → 53,080 | 127 | 3.318 s | 3.318 s | 0.876 |
+    | q032 | 78,505 → 61,857 | 148 | 3.866 s | 3.866 s | 0.376 |
+    | q033 | 124,899 → 108,251 | 259 | 6.766 s | 6.766 s | 0.390 |
+    | q034 | 69,728 → 53,080 | 127 | 3.318 s | 3.318 s | 0.383 |
+    | q035 | 73,490 → 56,842 | 136 | 3.553 s | 3.553 s | 0.820 |
+    | q036 | 72,236 → 55,588 | 133 | 3.474 s | 3.474 s | 0.897 |
+
+    Bingkai dan tempoh **tidak berubah** sebelum dan selepas pemotongan, bait ekor selepas bingkai
+    terakhir ialah **0** pada kesemuanya, dan bait pertama `ff fb`. Kadar bingkai 44,100 Hz; kiraan
+    sampel penyahkod lebih tinggi kerana AudioContext pane berjalan pada 48,000 Hz dan menyampel
+    semula — tempoh yang sepadan, bukan kiraan sampel, ialah semakan di sini.
+
+    **q031 dan q034 mempunyai saiz, bingkai dan tempoh yang sama persis** — 53,080 bait, 127
+    bingkai, 3.318 s. Itu kebetulan panjang ayat, bukan fail yang disalin dua kali: SHA-256 kelapan
+    -lapan klip berbeza, dan puncaknya 0.876 lawan 0.383.
+
+    **Dalam UI sebenar**, kelapan-lapan butang audio dipasang pada legap penuh (61.8px dalam pane,
+    iaitu 64px tolak 3% lukisan pane), dan `Howler._howls` app sendiri memuatkan kelapan-lapan
+    klip. Kandungan pertuturan disahkan oleh telinga pemilik projek, bukan dari sini.
+
+    #### Pembetulan tarikh
+
+    Kerja pada **21 September 2026** ditulis sebagai *"22 September 2026"* dalam 13 tempat merentas
+    PRD dan SPEC — item 31, 38, 47, 48, 49 dan tiga bahagian SPEC. `git log` mengesahkan
+    commit-commit itu bertarikh 2026-09-21. Kesemuanya dibetulkan di sini. Kelas yang sama seperti
+    HANDOFF §6: tarikh daripada ingatan, bukan daripada `git log`.

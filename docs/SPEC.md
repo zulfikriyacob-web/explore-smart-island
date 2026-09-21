@@ -298,7 +298,7 @@ arahan namakan: q013 menamakan Ali dan Kumar, kedua-duanya pilihan, jadi memadan
 membuang apa-apa. Sebab itu ia **tidak disemak mesin** — semakan "pilihan ada dalam arahan" akan
 menanda q013 tanpa memahami bezanya. Tempatnya ialah mata penulis dan borang `kssr:review`.
 
-**Pengecualian kedua, daripada guru, 22 September 2026: bila salah faham yang diuji IALAH
+**Pengecualian kedua, daripada guru, 21 September 2026: bila salah faham yang diuji IALAH
 melaporkan apa yang arahan tunjuk.** Untuk *"Apakah nilai digit 6 dalam 63?"*, guru meluluskan
 pengganggu **`6`** walaupun ia digit dalam nombor arahan — dan kerana ia digit itu:
 
@@ -1280,7 +1280,7 @@ sebabnya pemilih mengulang soalan yang sama — lihat §5.5 dan PRD §16 item 38
 > **satu** larian selepas naik taraf; pemilih kemudian jatuh kepada `lastAsked` seperti dahulu
 > untuk larian itu sahaja, dan kiraan bermula selepasnya. Ditulis di sini dan bukan disembunyikan.
 > App belum dilancar, jadi kosnya ialah satu larian pada peranti ujian pemilik projek — keputusan
-> pemilik projek, 22 September 2026.
+> pemilik projek, 21 September 2026.
 
 - **Direkod sekali, pada langkah masuk ke `summary`.** Sesi yang dipulihkan pada `summary` tidak
   direkod semula.
