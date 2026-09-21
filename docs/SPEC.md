@@ -112,7 +112,9 @@ Satu fail = satu topik. Ini yang dimuatkan dan dicache.
 ```
 
 `contentStandards` ialah **jamak**. Satu pek topik meliputi satu tajuk DSKP, dan satu tajuk
-memegang beberapa Standard Kandungan — pek matematik hari ini menyentuh 1.2, 1.5 dan 1.6.
+memegang beberapa Standard Kandungan. Pek matematik hari ini mengisytiharkan 1.2, 1.6 dan 2.2: dua
+di bawah 1.0, dan 2.2 di bawah 2.0 — yang `validate:content` tandakan sebagai merentas dua tajuk
+(PRD §16 item 10).
 Medan tunggal yang pernah ada di sini hanya boleh betul dengan menjadi kabur, dan ia memang
 begitu: ia mengaku "1.1" untuk pek yang tidak mengandungi satu pun soalan 1.1.
 
@@ -180,13 +182,16 @@ dan enjin terpaksa meneka yang mana. Kini pek menyatakannya:
 
 | `noEvidence` | Dimainkan? | Bukti penguasaan | Ketepatan, bintang, tangga aras | Hari ini |
 |---|---|---|---|---|
-| `practice` | Ya, selepas setiap soalan yang masih boleh menjadi bukti (§5.5) | Tidak | **Tidak dikira** | q022 |
+| `practice` | Ya, selepas setiap soalan yang masih boleh menjadi bukti (§5.5) | Tidak | **Tidak dikira** | q022, q030, q033 |
 | `parked` | **Tidak pernah** | Tidak | — | q005, q009 |
 
 - **`practice`** — soalan yang sah sebagai latihan tetapi bukan bukti. q022 (*"Saya tambah 15 jadi
   38."*): guru meluluskan bahasanya sebagai teka-teki hubungan nombor, dan berkata ia bukan bukti
   penguasaan `two_digit_plus_two_digit_no_bridge` — ia mendorong `38 - 15`, bukan penambahan
   (`docs/kssr/guru-rekod-jawapan-subkemahiran-dan-semakan-soalan.md`). Ia tidak mendakwa SP.
+  q030 dan q033 ialah soalan situasi harian yang guru mahu di bawah 2.4.2, bukan bukti 2.2.2; 2.4.2
+  belum dipecahkan kepada sub-kemahiran, jadi kedua-duanya `practice` buat sementara (PRD §16
+  item 49).
 - **`parked`** — item yang sah, menunggu tempat lain. q005 dan q009 ialah latihan pengecaman bentuk
   menurut borang bertanda, bukan 7.2.1, dan milik pek 7.0 Ruang (PRD §16 item 10). Bukan "rosak".
   `validate:content` menyenaraikannya setiap larian supaya "menunggu" tidak menjadi "terlupa".
@@ -375,6 +380,13 @@ tanpa membazir percubaan.
 Objek kesepuluh tidak gagal dengan elok — ia menolak kad ke dalam skrol, iaitu pepijat yang
 menyekat dua kanak-kanak dalam ujian pengguna. Had ini dikuatkuasakan dalam Zod dan
 `validate:content`, bukan garis panduan.
+
+> **Nombor dalam jadual di atas diambil pada 360×780** — viewport yang tidak pernah wujud pada
+> telefon (PRD §16 item 44). Pada 393×695, kiraan terbesar dalam pek — 8 objek, q011 — diukur muat
+> tanpa halaman menatal (PRD §16 item 44), dan dedahan count-tap memotong padding bawah kad sahaja
+> (item 45).
+> **9 objek belum diukur pada 393×695.** Had kekal 9 sehingga ia diukur; ia tidak disahkan oleh
+> peranti.
 
 Papan nombor dibuang selepas ujian pengguna. Ia menjadikan membilang **dua langkah** — bilang,
 kemudian cari digit — dan kanak-kanak 7 tahun tidak dapat membezakan langkah mana yang gagal:
@@ -710,9 +722,10 @@ bintang kelihatan bercanggah.
   kerana `firstTryCount`nya dikira begitu. Diukur di pane: *"9 daripada 10"*, bukan *"9 daripada
   undefined"*.
 - **Sesi tanpa satu pun soalan dikira** tidak memaparkan baris itu langsung, bukan *"0 daripada 0"*.
-  Tiada pek hari ini boleh menghasilkannya — paling banyak satu soalan latihan dalam sepuluh —
-  dan ia diperiksa di pane dengan memaksa `scoredCount: 0` dalam storan. Tangga aras sudah
-  membiarkan aras di tempatnya dalam keadaan itu (§5.5). Bintang akan menjadi sifar; ia tidak
+  Tiada pek hari ini boleh menghasilkannya — paling banyak tiga soalan latihan dalam sepuluh:
+  q022, q030 dan q033, kesemuanya aras 3, dalam sesi aras 3 yang mengambil lapan soalan aras 3
+  (`questionMix`) — dan ia diperiksa di pane dengan memaksa `scoredCount: 0` dalam storan. Tangga
+  aras sudah membiarkan aras di tempatnya dalam keadaan itu (§5.5). Bintang akan menjadi sifar; ia tidak
   diubah, kerana keadaan itu tidak wujud.
 
 Diukur di pane, UI sebenar: sesi aras 3, sembilan jawapan betul dan q022 salah, memaparkan *"3
@@ -809,18 +822,22 @@ Dalam ayat untuk ibu bapa: *app tanya yang anak paling jarang lihat; bila dua sa
 lama tidak dilihat.*
 
 **Campuran ialah sasaran, bukan jaminan.** Aras yang tidak dapat mengisi bahagiannya diisi daripada
-aras terdekat, dan kekurangan itu **dilaporkan** sebagai `gaps`, bukan disembunyikan. Hari ini bank
-hanya ada tiga soalan aras 3, jadi sesi aras 3 ialah tujuh soalan aras 2 dan tiga soalan aras 3.
+aras terdekat, dan kekurangan itu **dilaporkan** sebagai `gaps`, bukan disembunyikan. Pada 22
+September 2026 tiada aras yang kurang: bank memegang 12, 9 dan 12 soalan boleh dimain pada aras 1, 2
+dan 3, dan sesi sepuluh soalan meminta paling banyak 9, 7 dan 8 daripadanya (`questionMix`). Sebelum
+21 September 2026 aras 3 memegang empat, dan sesi aras 3 mengisi bakinya daripada aras 2 (PRD §16
+item 31).
 
 **Susunan sesi: aras rendah dahulu, kemudian aras semasa, kemudian aras tinggi.** Regangan diletak
 di hujung atas sebab yang sama seperti kita menolak tekanan masa — anak tujuh tahun yang gagal pada
 soalan pertama berhenti mencuba.
 
 Soalan `parked` tidak pernah dipilih: hari ini q005 dan q009, yang menunggu pek 7.0 Ruang (PRD §16
-item 10). Soalan `practice` dipilih (§3.3): hari ini q022, pada aras 3.
+item 10). Soalan `practice` dipilih (§3.3): hari ini q022, q030 dan q033, kesemuanya pada aras 3.
 
-**Jurang: putaran terlalu perlahan walaupun bank mencukupi** — PRD §16 item 38, berasingan daripada
-item 31.
+~~**Jurang: putaran terlalu perlahan walaupun bank mencukupi** — PRD §16 item 38, berasingan daripada
+item 31.~~ **Dibaiki 21 September 2026** (`b50d085`, PR #88): `timesAsked` di hadapan `lastAsked`,
+seperti di atas.
 
 ### 5.6 Siri
 
@@ -1090,8 +1107,12 @@ kemahiran ini* — dan **app sebagai subjek separuh kedua** — *app sedang sema
 apa yang hilang; app yang sedang bekerja. Itu bezanya antara laporan dan notis penurunan
 pangkat.
 
-> **Belum dikunci.** Ayat ini akan diuji pada seorang ibu bapa sebenar sebelum ia dihantar.
-> Sehingga itu ia teks yang diluluskan, bukan teks yang disahkan.
+> **Belum dikunci.** ~~Ayat ini akan diuji pada seorang ibu bapa sebenar sebelum ia dihantar.~~
+> **Ia sudah diuji**, pada 12 September 2026, 19 minit selepas nota ini ditulis:
+> `docs/kssr/ibu-bapa-ayat-status.md` (`fb599a6`). Ibu bapa itu faham ayatnya, bertanya *kenapa*
+> app menyemak semula, dan mencadangkan dua ayat — satu daripadanya bertajuk *"Sedang dinilai
+> semula"*, yang berbunyi seperti status keempat. Ayat itu kekal teks yang diluluskan, bukan teks
+> yang disahkan; keputusannya milik pemilik projek (PRD §16 item 35).
 
 **2. Susunan "Fokus minggu ini"** (PRD §11). Kemahiran yang tergelincir mendahului kemahiran
 yang belum pernah dimulakan, kerana ia lebih dekat untuk dipulihkan. `standardCoverage()`
@@ -1300,9 +1321,9 @@ sebabnya pemilih mengulang soalan yang sama — lihat §5.5 dan PRD §16 item 38
   audio berbunyi pada tekanan Mula pertama. Yang disahkan ialah app berjalan tanpa konteks selamat;
   `isSecureContext` pada telefon itu tidak dibaca.
 - **`subSkill` daripada pek hidup (peraturan 4); `twoOptions` daripada soalan yang anak jawab.**
-  Tekaan berharga apa yang anak nampak (§5.7). Soalan tanpa `subSkill` — q022 `practice` hari ini,
-  dan q005 dan q009 `parked` yang tidak pernah dimainkan — tidak meninggalkan bukti. Ia tetap
-  ditanda dalam `lastAsked`.
+  Tekaan berharga apa yang anak nampak (§5.7). Soalan tanpa `subSkill` — q022, q030 dan q033
+  `practice` hari ini, dan q005 dan q009 `parked` yang tidak pernah dimainkan — tidak meninggalkan
+  bukti. Ia tetap ditanda dalam `lastAsked`.
 - **Tangga aras bergerak atas jawapan yang dikira sahaja** (§5.5), dinilai daripada soalan yang anak
   jawab.
 - **Kemajuan yang tidak boleh dibaca tidak ditulis.** Storan yang membaling ralat bermakna kemajuan
@@ -1810,7 +1831,7 @@ daripada `design/brief-01d/handoff/kancil-layered.svg`, viewBox `0 0 1254 1254`.
 | Prop | Jenis | Lalai | Peranan |
 |---|---|---|---|
 | `state` | `KancilState` | — (wajib) | Poz atau reaksi yang dipapar sekarang |
-| `size` | `number` | `88` | Lebar dan tinggi dalam px. 88 ialah slot kad soalan (DESIGN §7); skrin ringkasan merender pada 200 |
+| `size` | `number` | `88` | Lebar dan tinggi dalam px. 88 ialah saiz slot kad soalan, yang dibuang 20 September 2026 (§11.2); kedua-dua pemanggil hari ini menghantar saiz sendiri — skrin mula 210, skrin ringkasan 104 (`KANCIL_PX`) |
 | `strokeWidth` | `number` | `20` | Lebar strok dalam unit viewBox 1254 |
 | `onDone` | `(finished: KancilState) => void` | — | Dipanggil apabila reaksi `happy` atau `sympathy` tamat |
 | `className` | `string` | — | Diteruskan kepada elemen `<svg>` |
@@ -1838,14 +1859,19 @@ disentuh olehnya, sama seperti campuran aditif dalam spesifikasi handoff.
 **Tiada baris gilir.** Satu trigger baharu ialah pertukaran prop `state`, bukan tolakan ke
 dalam timbunan. Reaksi yang sedang bermain dipotong terus.
 
-**Tiga daripada empat keadaan tiada pemanggil hari ini.** DESIGN §6 melarang maskot muncul
-semasa kanak-kanak sedang berfikir tentang soalan, jadi `thinking` tidak pernah dipapar. Dan
-sejak **20 September 2026** kancil dibuang sepenuhnya daripada kad soalan — slot 88×88 di
-penjuru kad tidak lagi wujud — jadi `happy` dan `sympathy` juga tiada pemanggil. Satu-satunya
-pemanggil produksi ialah skrin ganjaran, yang merender `happy` pada `size={104}` dan
-`idle` selepas reaksi itu tamat.
+**Dua daripada empat keadaan tiada pemanggil hari ini: `thinking` dan `sympathy`.** DESIGN §6
+melarang maskot muncul semasa kanak-kanak sedang berfikir tentang soalan, jadi `thinking` tidak
+pernah dipapar. Dan sejak **20 September 2026** kancil dibuang sepenuhnya daripada kad soalan —
+slot 88×88 di penjuru kad tidak lagi wujud — jadi `sympathy` juga tiada pemanggil, dan `happy`
+tiada lagi pada kad. Pemanggil produksi hari ini ada dua: skrin mula, yang merender `idle` pada
+`size={210}`, dan skrin ganjaran, yang merender `happy` pada `size={104}` (`KANCIL_PX`) dan `idle`
+selepas reaksi itu tamat.
 
-Ketiga-tiga keadaan kekal dalam kontrak kerana ia poz yang sah dan sudah dilaksana; di mana —
+> Perenggan ini pernah berkata *tiga* daripada empat keadaan tiada pemanggil dan skrin ganjaran
+> satu-satunya pemanggil — sambil menyebut `happy` pada skrin itu, dan tanpa skrin mula. Dibaca
+> semula terhadap `StartScreen.tsx` dan `SummaryScreen.tsx` pada 22 September 2026.
+
+Kedua-dua keadaan kekal dalam kontrak kerana ia poz yang sah dan sudah dilaksana; di mana —
 dan sama ada — ia dipapar ialah keputusan skrin, bukan keputusan komponen. Sebab kad soalan
 melepaskannya: butang audio terpotong pada setiap soalan pada 393×695, dan slot itu 88px
 daripada kira-kira 143px yang telefon beri kepada kad (DESIGN §6 dan §7, PRD §16 item 44
@@ -1918,7 +1944,7 @@ input mesin keadaan kepada satu prop:
 | `celebrate` Trigger | **Dibuang** — lihat di bawah |
 
 `celebrate` ialah satu-satunya kehilangan sebenar. Ia pernah menjadi reaksi ⭐⭐⭐ yang
-berasingan pada skrin ringkasan; hari ini skrin itu merender `happy` pada `size={200}` bagi
+berasingan pada skrin ringkasan; hari ini skrin itu merender `happy` pada `size={104}` bagi
 setiap keputusan. Confetti yang DESIGN §7 E2 khaskan untuk ⭐⭐⭐ belum dibina, jadi buat masa
 ini tiga bintang dan satu bintang mendapat maskot yang sama. Kalau reaksi raya dikehendaki
 semula, ia ditambah kepada `KancilState` di sini dahulu, kemudian dalam komponen — bukan
