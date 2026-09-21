@@ -1441,6 +1441,41 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     mengetuk, tanpa diberitahu apa-apa.** Itu satu anak, satu kali, dan ia bukan bukti statistik —
     tetapi ia jenis bukti yang peraturan guru minta sebelum ayat *"Kemudian tekan Sedia."* boleh
     dibuang daripada teks. Keputusan memendekkan teks masih milik pemilik projek.
+
+    #### Ujian kedua, dan teks dipendekkan — 22 September 2026
+
+    **Anak yang sama menekan Sedia sendiri pada hari kedua juga, tanpa diberitahu apa-apa.**
+
+    **Hadnya, ditulis supaya ia tidak dibaca lebih besar daripada yang sebenarnya: satu anak, dua
+    kali.** Bukan dua anak, bukan sepuluh, dan bukan seorang anak yang tidak pernah melihat app
+    ini. Anak yang mengulang mungkin mengingati butang itu daripada semalam, bukan membacanya
+    hari ini. Yang boleh dikatakan: isyarat itu memadai untuk anak ini, dua hari berturut-turut,
+    tanpa sebarang kata-kata.
+
+    Atas dasar itu, pemilik projek memutuskan **syarat guru dipenuhi** — *"petunjuk bukan teks
+    yang benar-benar jelas kepada murid yang belum membaca"* — dan ayat *"Kemudian tekan Sedia."*
+    dibuang daripada **teks skrin** q003, q006 dan q011.
+
+    **Audio tidak disentuh, dan itu keputusan, bukan kerja yang tertunggak.** Rekod guru berkata
+    arahan audio *"boleh dinilai semula"* apabila UI mempunyai petunjuk bukan teks — **boleh,
+    bukan mesti.** Klip sedia ada sudah menyebut ayat penuh dan ia berfungsi; tiada sebab merakam
+    semula sesuatu yang berfungsi untuk menjadikan audio sepadan dengan teks yang lebih pendek.
+    `promptAudioText` memegang ayat penuh untuk ketiga-tiganya, jadi `audio:script` masih
+    mencetak apa yang klip itu sebut — disahkan selepas perubahan, keenam-enam baris (BM dan EN)
+    bertanda **bukan teks di skrin**.
+
+    **Diukur pada 393×695 selepas teks dipendekkan:**
+
+    | | Dahulu | Kini |
+    |---|---|---|
+    | q003 | 4 baris, kad 464 | **3 baris**, kad 434 |
+    | q006 | 4 baris, kad 378 | **2 baris**, kad 319 |
+    | q011 | 4 baris, kad 464 | **3 baris**, kad 434 |
+    | Arahan melompat lebar (item 33) | 2 / 25 | **0 / 25** |
+    | q003 dedahan: tinggi kad | 464 tiba → **449** dengan jalur, terpotong 22 | **434 dalam kedua-duanya**, terpotong 7 |
+
+    Potongan 7px yang tinggal ialah padding bawah kad, sama pada keadaan tiba: objek terakhir 59px
+    di dalam tepi, tali kiraan 23px di dalam. **Jalur tidak lagi mengecilkan kad.**
 27. **Tiga belas soalan baharu wujud dalam fail, tetapi tiada anak boleh melihatnya. Enjin pemilih
     soalan ialah keutamaan seterusnya.**
 
@@ -1723,6 +1758,10 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     > sementara baris di bawahnya kini selebar penuh. **Diterima sebagai harga** oleh pemilik
     > projek: kedua-duanya membawa ayat *"Kemudian tekan Sedia."* yang item 26 akan buang, dan
     > lompatan itu mungkin hilang bersamanya. Angka di bawah ialah keadaan sebelum pembuangan itu.
+    >
+    > **Ditutup semula, 22 September 2026: 0 / 25.** Ayat itu dibuang daripada teks skrin q003,
+    > q006 dan q011 (item 26), dan kedua-dua arahan yang melompat berhenti melompat — seperti yang
+    > diramalkan. Diukur pada kesemua 25 arahan pada 393×695.
 
     | | Sebelum | Selepas |
     |---|---|---|
@@ -2908,6 +2947,21 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     disentuh nanti, perkara yang perlu diputuskan ialah ke mana ruang itu pergi: kad yang lebih
     besar daripada kandungannya, timbunan yang naik, atau sesuatu yang mengisi padang. Ketiga-tiga
     pilihan menyentuh DESIGN §5.2 (zon ibu jari) dan kedudukan butang yang anak sudah biasa.
+
+    **Kos yang diramal itu sudah tiba — 22 September 2026.** Teks count-tap dipendekkan (item 26),
+    dan jurang membesar seperti yang diukur sebelum keputusan itu dibuat:
+
+    | | Sebelum | Kini | Diramal |
+    |---|---|---|---|
+    | q006 (5 objek) | 165 | **223** | 219 |
+    | q003, q011 (7 dan 8 objek) | 78 | **109** | 103 |
+
+    Ramalan datang daripada klon perenggan; nombor kini dipandu melalui UI sebenar, dan bezanya
+    4–6px — julat klon-lawan-hidup yang sama seperti sebelum ini.
+
+    **q006 kini jurang terbesar dalam pek: 223px, pada skrin dengan objek paling sedikit.** Itu
+    harga yang diterima sebelum teks dipendekkan, bukan kejutan. Item ini kekal **terbuka**, dan
+    ia kini lebih berbaloi diputuskan daripada semalam.
 48. **Dua perkara yang ujian anak tunjukkan, 21 September 2026. Satu didiagnos, satu direkod.
     Tiada satu pun dibaiki.**
 
@@ -2989,6 +3043,12 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     bukan untuk nombor akhir. Tiada saluran hari ini yang memisahkan *"kiraan kamu tersasar satu"*
     daripada *"kamu salah"*.
 
-    **Direkod, tidak dibaiki, atas arahan pemilik projek:** dia mahu melihat sama ada anak itu
-    mencuba lagi atau berhenti sebelum memutuskan sama ada ia perlu disentuh. Tingkah laku anak
-    itu ialah datanya, bukan pendapat kita tentang warna.
+    ~~**Direkod, tidak dibaiki, atas arahan pemilik projek:** dia mahu melihat sama ada anak itu
+    mencuba lagi atau berhenti sebelum memutuskan sama ada ia perlu disentuh.~~ **DITUTUP TANPA
+    PERUBAHAN, 22 September 2026: anak itu mencuba lagi.** Merah tidak terbaca sebagai hukuman
+    kepadanya; ia terbaca sebagai *cuba sekali lagi*, yang memang maksudnya.
+
+    **Had yang sama seperti di atas: satu anak, dua kali.** Ia menutup item ini kerana pemilik
+    projek menetapkan tingkah laku anak sebagai ujiannya, dan ujian itu memberi jawapan. Ia tidak
+    membuktikan merah berfungsi untuk setiap anak; ia membuktikan tiada sebab untuk mengubahnya
+    sekarang.
