@@ -175,6 +175,30 @@ work ran in the main session.
   (`npm run dev -- --host --port 5174 --strictPort`), added before `preview_start`
   and removed right after, so `launch.json` is never committed with it. Do not stop
   the other project's server.
+- **Prettier has no config in this repo — do not run it.** `npx prettier --write` on
+  `BlockButton.tsx` applied its defaults, double quotes and 80 columns, and turned a
+  ten-line change into a whole-file diff. Reverted with `git checkout -- <file>` and the
+  edits redone by hand. Match the file's existing style with the Edit tool instead.
+- **Vitest here is v5, and two habits from older versions fail.** `--reporter=basic`
+  stops with "Failed to load custom Reporter from basic"; use the default reporter. And
+  `console.log` from inside a test did not reach the captured output of a passing run, so
+  a simulation that printed its results returned nothing. Write results to a file with
+  `node:fs` and read the file.
+- **A throwaway simulation goes in `src/` and leaves before `git add`.** Vitest only
+  imports modules from the project, so a harness that drives `buildSession` and
+  `recordSession` has to live there as a `*.test.ts`. Delete it and its output file before
+  staging, and check "never committed" against git rather than memory:
+  `git rev-list --all --objects | Select-String 'sim|__'` returns nothing when no object in
+  any branch ever held one. (PRD 16 item 38.)
+- **A dev server started from here does not reliably survive between turns.** When the
+  Browser pane reports that navigation "was denied or failed", the server is usually
+  gone — check `Get-NetTCPConnection -LocalPort 5174 -State Listen` before anything
+  else, then start it again with the `quiz-5174` workaround below.
+- **Take today's date from `Get-Date` and a commit's date from `git log`.** Work done on
+  21 September 2026 was written as "22 September 2026" in thirteen places across PRD and
+  SPEC before anyone checked (PRD 16 item 49). The rule in "Received documents" below
+  already says to read `git log` before stating when something merged; it holds for
+  today's date as well.
 - **The permission classifier refuses history rewrites.** `git commit --amend`
   followed by `git push --force-with-lease`, to drop a stray file from a pushed
   commit, was refused. Undo with a follow-up commit instead (`git rm --cached`,
@@ -305,9 +329,12 @@ Whether 39px is enough to make Safari retract has not been checked on the phone.
   picture.
 - **A card that shrinks is the thing to watch.** The question card is `flex: 0 1 auto`
   with `min-h-0` and `overflow-y: auto`, so it is sized by leftover space, not by its
-  content, and it clips from the bottom. Its content — the kancil slot above the audio
-  button — is about 196px; anything that leaves less than that clips something a child
-  has to press.
+  content, and it clips from the bottom. ~~Its content — the kancil slot above the audio
+  button — is about 196px~~ Since the kancil left the card (20 September 2026) its content
+  is 110px for a two-line prompt and 140px for a three-line one, and the worst three-line
+  prompt leaves **4px** in the column with a one-line band showing. A two-line band adds
+  27px and clips again — which is why the 28/37-character band limits now hold the layout
+  up, not only the reading (SPEC §3.5).
 
 ### Received documents, and what is said about them
 
@@ -341,6 +368,14 @@ Before attributing words to a document, search the file for the exact string.
 Before stating when something merged, or in what order, read `git log`. Before
 acting on a status — verified, signed, approved — read the document's own status
 note. When a summary and a file disagree, the file is right.
+
+**The same holds for a file said to be in place.** On 21 September 2026 the owner
+reported eight recordings installed in `public/audio/ms/`. Six were. q029 and q030
+were still 0 bytes there, and the recorded files were sitting in `Downloads\Chrome\`.
+The byte check before stripping the ID3 tags is what caught it — the owner's word was
+honest and wrong, which is the usual shape. **Verify an asset by its size at the repo
+path, not by the report that it is there.** "Installed" and "in the repo" are two
+claims, and only the second one ships. (PRD 16 item 49.)
 
 ### Verifying visual work
 
@@ -458,6 +493,20 @@ note. When a summary and a file disagree, the file is right.
   lines, 30px short (PRD §16 item 47). Wait for the button **inside the current
   card's paragraph** — `document.querySelector('.shadow-float p button[aria-label=
   "Main audio soalan"]')` — not anywhere on the page.
+
+  **And a 0-byte clip means the button never mounts at all.** New questions ship with
+  placeholder recordings, `isAudioAvailable` fails on them, and `AudioButton` stays
+  `null` — so a question measured before its recording lands has one float fewer than
+  the one a child will see. q030 measured as a two-line card that way; with the button
+  present it is three lines and 30px taller. To measure the real layout, point the
+  frozen session's `promptAudio` at an existing clip and reload. Paid three times:
+  PRD §16 items 40, 43 and 49.
+- **A paragraph clone has to be a block formatting context.** The live prompt
+  paragraph is a flex item, so it contains its floats and its height includes the
+  float column. A plain `<p>` clone does not, and reports the text's height instead —
+  62px where the live paragraph was 146. Give the clone `display: flow-root`, then
+  check it against a few live cards before trusting it for the rest (it agreed to
+  within 2px once it had it). (PRD §16 item 45.)
 - **Measuring how wide the lines are is not measuring where they are.** A
   proposed layout put the audio button out of the text flow and reserved its
   space with `text-indent`. Every check passed: the card did not scroll, the

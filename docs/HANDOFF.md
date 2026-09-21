@@ -1,11 +1,89 @@
-# Handoff — 12 September 2026
+# Handoff — 22 September 2026
 
-What lives only in a session transcript until it is written down. Three sessions
-of iOS audio work end here, at a proven root cause with the fix chosen and not
-yet written.
+Start here. Section 0 is where the project stands now. Sections 1–6 below it are the
+record of 12–13 September — the iOS audio root cause and the names copied forward
+without a check — kept because their rules still hold, not because they describe today.
 
-Environment facts from the same sessions went to CLAUDE.md "Working notes"
-instead; they are facts about this machine, not about this feature.
+Environment facts go to CLAUDE.md "Working notes", not here: they are facts about this
+machine, not about the product.
+
+Every date below is from `git log`, not from memory (CLAUDE.md, "This machine").
+
+---
+
+## 0. Where the project stands — 22 September 2026
+
+`main` is at `104f48c`. 258 tests pass, `validate:content` reports 0 errors on 35
+questions. One pack, `math-y1-nombor-100`, `reviewStatus: teacher-reviewed`.
+
+### What changed since 13 September, in the order it landed
+
+| When (git) | What | Where it is written |
+|---|---|---|
+| 15 Sep | **Progress store**, `esi.progress.v1` — evidence per sub-skill, never a rolled-up SP number | SPEC §6 |
+| 16 Sep | **Question selector** replaces the fixed ten-question activity; level ladder, no randomness | SPEC §5.5, PRD 16 item 27 |
+| 17–18 Sep | `noEvidence: practice \| parked`; 4% combined-guess ceiling replaces "four two-option questions" | SPEC §3.3, §5.7, items 22, 37 |
+| 20 Sep | **The test viewport is 393×695**, read off the owner's iPhone. Every earlier "no clipping" was measured on a viewport the phone never had | CLAUDE.md, items 44–45 |
+| 20 Sep | **The kancil left the question card.** The audio button was cut in half on every question; the mascot now lives on the reward screen only | DESIGN §6–7, items 44–45 |
+| 20 Sep | Reward screen: kancil 150 → 104, Seterusnya no longer below the fold | item 46 |
+| 21 Sep | **Sedia step cue** — filled face and forward arrow on the first tap. A seven-year-old pressed it unprompted, twice | DESIGN §5.4, SPEC §9, item 26 |
+| 21 Sep | `promptAudioText`, so `audio:script` keeps printing a spoken line that the screen no longer shows | SPEC §3.3, §3.6 |
+| 21 Sep | "Kemudian tekan Sedia." off the screen for q003, q006, q011 — audio untouched | item 26 |
+| 21 Sep | Tally shows nothing until the first tap, in a box already its height | item 48 |
+| 21 Sep | **`timesAsked` tiebreak** — no question now appears in every run at any level | SPEC §5.5, §6, item 38 |
+| 21 Sep | **Six level-3 bridging questions** from a teacher review that arrived as a file, plus two everyday-situation ones as practice | `docs/kssr/`, item 49 |
+| 21–22 Sep | Their eight Malay recordings, ID3 stripped and verified | item 49 |
+
+Items closed in that stretch, all with numbers in PRD §16: **31, 38, 44, 46, 48**.
+
+### The bank today
+
+| Level | Playable | Evidence | Practice |
+|---|---|---|---|
+| 1 | 12 | 12 | — |
+| 2 | 9 | 9 | — |
+| 3 | 12 | 9 | 3 (q022, q030, q033) |
+
+q005 and q009 are `parked` for a 7.0 Ruang pack (item 10). Every Malay clip is recorded;
+every English clip is still 0 bytes, and `LANG` is `'ms'` in `QuizScreen.tsx`.
+
+### Waiting on someone else
+
+**On the teacher** — the owner is asking:
+
+1. **q023 to 2.4.2?** Her rule — everyday situations are not 2.2.2 evidence — reaches
+   q023, though she did not name it. Moving it leaves
+   `two_digit_plus_two_digit_no_bridge` with two questions, combined guess 1/9 = 11.1%,
+   which cannot reach *Dikuasai*. A replacement direct question has to come first. Item 49.
+2. **Breaking 2.4.2 into sub-skills**, so q030 and q033 can be evidence instead of
+   practice. 2.4.2 is in the DSKP catalogue; the skills file has no sub-skills under it
+   and says why. Item 49.
+
+**On a child** — the loudness of the level-3 clips falls into two groups, peaks about
+0.38–0.40 and 0.82–0.90. Recorded as an observation, not a defect: peak is not perceived
+loudness, and nobody has heard them through a phone speaker in a child's hands. Item 49.
+
+### Next work, as the owner has left it
+
+1. **The digit-value batch is unblocked.** The teacher approved `6` as a distractor for
+   *"Apakah nilai digit 6 dalam 63?"* — because it is in the prompt. SPEC §3.4 records it
+   as the second exception to the string-matching rule. No question written yet. The
+   untested 1.6.1 sub-skills are `digit_at_ones`, `value_of_tens_digit` and
+   `value_of_ones_digit`.
+2. **Item 47 is open for a decision** — the space between a short card and the answer
+   stack. q006 is now 223px, the widest in the pack, on the screen with the fewest objects.
+   Numbers first was the owner's rule; the numbers are in.
+3. **UI sound** is deferred with three recorded constraints: a second player channel, SPEC
+   §8's one-clip rule, and skip-not-park on a suspended context. Item 26.
+4. **2.2.2 is at 3 of 4 sub-skills.** `two_digit_plus_one_digit_no_bridge` has no question.
+
+### Still true, and still not fixed
+
+- **No CI.** `validate:content` blocks nothing unless someone runs it. Item 34.
+- **A hanging `resume()`** on iOS remains unexplained. Section 3 below.
+- **The reward screen can scroll** only if its content ever outgrows 695px again; at 104px
+  the kancil leaves 7px. Whether a 39px overflow was ever enough to make Safari retract its
+  bars was never checked on the phone, and no longer needs to be.
 
 ---
 
