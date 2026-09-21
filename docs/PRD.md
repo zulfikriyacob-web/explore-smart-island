@@ -2053,6 +2053,11 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     (14–16 September) direkod dalam SPEC dan §16 ini sahaja. Pembaca yang bermula di HANDOFF, seperti
     yang disuruh, mendapat gambaran 13 September dahulu.
 
+    > **Ditutup 22 September 2026.** HANDOFF kini bermula dengan bahagian 0, keadaan projek pada
+    > tarikh itu: apa yang mendarat sejak 13 September dengan tarikh daripada `git log`, bank
+    > soalan, apa yang menunggu guru dan anak, dan kerja seterusnya. Bahagian 1–6 kekal sebagai
+    > rekod 12–13 September. Ia akan basi semula — tarikh pada tajuknya ialah amarannya.
+
     **5. Nombor item §16 tidak berturutan dalam fail:** 1–13, kemudian 19, 18, 17, 16, 14, 15, dan
     20 ke atas. Spesifikasi CommonMark hanya memakai nombor item pertama dalam senarai bernombor, dan
     yang lain dinomborkan mengikut susunan. Pemapar yang mengikutnya memaparkan item yang ditaip 19
@@ -3304,6 +3309,24 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     **Dalam UI sebenar**, kelapan-lapan butang audio dipasang pada legap penuh (61.8px dalam pane,
     iaitu 64px tolak 3% lukisan pane), dan `Howler._howls` app sendiri memuatkan kelapan-lapan
     klip. Kandungan pertuturan disahkan oleh telinga pemilik projek, bukan dari sini.
+
+    **Keseimbangan kelantangan — pemerhatian, belum masalah.** Lapan klip ini jatuh kepada dua
+    kumpulan yang jelas pada puncak penyahkod:
+
+    | Kumpulan | Klip | Puncak |
+    |---|---|---|
+    | Perlahan | q029, q032, q033, q034 | 0.376 – 0.399 |
+    | Kuat | q030, q031, q035, q036 | 0.820 – 0.897 |
+
+    Nisbahnya kira-kira dua kali ganda. Rujukan yang sudah lulus telinga pemilik projek: q027 pada
+    0.414 (item 43), iaitu dalam kumpulan perlahan.
+
+    Dua had yang jujur. **Puncak bukan kelantangan yang didengar** — ia sampel tunggal tertinggi,
+    dan dua klip dengan puncak sama boleh berbunyi berbeza kuatnya; kelantangan yang dirasa (RMS
+    atau LUFS) **tidak diukur**. Dan pane tidak mengeluarkan bunyi melalui pembesar suara sebenar.
+    Jadi ini direkod sebagai pemerhatian: **ujian anak yang memutuskan** — sama ada anak perlu
+    menekan butang ulang pada klip yang perlahan, atau terkejut pada yang kuat. Kalau ya, normalkan
+    kelantangan sebelum commit adalah langkah SPEC §8 yang baharu, sama seperti pembuangan ID3.
 
     #### Pembetulan tarikh
 
