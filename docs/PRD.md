@@ -1631,9 +1631,10 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     §6 dan membina jadual yang salah. Stor tempatan `esi.progress.v1` sudah mengikut peraturan 2; jadual
     pelayan patut mencerminkannya — bukti per sub-kemahiran, gulungan dikira semasa baca — apabila ia
     direka.
-31. **Tangga aras SPEC §5.5 memilih kemahiran, bukan kesukaran. Jurang kandungan, bukan pepijat
-    enjin.** ~~Terbuka sepenuhnya.~~ **Dipisahkan 22 September 2026: aras 1 dan 2 ditutup dengan
-    nombor, aras 3 kekal terbuka.** Lihat hujung item ini.
+31. ~~**Tangga aras SPEC §5.5 memilih kemahiran, bukan kesukaran. Jurang kandungan, bukan pepijat
+    enjin.**~~ ~~Terbuka sepenuhnya.~~ ~~Dipisahkan 22 September 2026: aras 1 dan 2 ditutup dengan
+    nombor, aras 3 kekal terbuka.~~ **DITUTUP 22 September 2026, kedua-dua bahagian.** Lihat hujung
+    item ini.
 
     Tangga itu direka untuk memilih kesukaran **dalam satu kemahiran**: 70% pada aras semasa, 20% di
     bawah, 10% di atas. Dalam bank hari ini setiap soalan dalam satu sub-kemahiran membawa aras yang
@@ -1717,10 +1718,19 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     larian, iaitu 75% dan 78% — tetapi tiada soalan yang muncul setiap kali, dan kiraannya rata.
     Menulis lebih banyak soalan aras 1 dan 2 masih berfaedah; ia bukan lagi pepijat.
 
-    **Aras 3 kekal terbuka, dan ia kini satu-satunya bahagian item ini.** Empat soalan boleh dimain
-    — q008, q023, q025 sebagai bukti dan q022 sebagai latihan — untuk lapan slot yang sesi aras 3
-    minta. Bank lebih kecil daripada satu sesi, jadi kesemua empat muncul dalam setiap larian dan
-    tiada pemecah seri boleh mengubahnya. **Itu kerja kandungan: tulis soalan aras 3.**
+    ~~**Aras 3 kekal terbuka, dan ia kini satu-satunya bahagian item ini.**~~ Empat soalan boleh
+    dimain — q008, q023, q025 sebagai bukti dan q022 sebagai latihan — untuk lapan slot yang sesi
+    aras 3 minta. Bank lebih kecil daripada satu sesi, jadi kesemua empat muncul dalam setiap
+    larian dan tiada pemecah seri boleh mengubahnya. **Itu kerja kandungan: tulis soalan aras 3.**
+
+    **DITUTUP 22 September 2026: kerja kandungan itu dibuat.** Enam soalan tambah melintasi puluh
+    dan dua soalan situasi harian (item 49) menaikkan bank aras 3 daripada 4 kepada **12** soalan
+    boleh dimain — sembilan bukti dan tiga latihan — untuk lapan slot. Diukur dengan pemilih
+    sebenar, lima larian aras 3: **0 soalan muncul dalam setiap larian**, kiraan
+    4,4,4,4,3,3,3,3,3,3,3,3.
+
+    Item 31 ditutup sepenuhnya. Yang tinggal bukan lagi pepijat: bank yang lebih besar sentiasa
+    lebih baik, dan `validate:content` masih mencetak sub-kemahiran yang belum diuji setiap larian.
 32. **Model aktiviti PRD §10 ditulis sebelum enjin wujud. Direkod, belum diputuskan.**
 
     §10 menganggap aktiviti ialah senarai soalan tetap: *"Aktiviti (10 soalan) → 0–3 ⭐"*,
@@ -3121,3 +3131,140 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     projek menetapkan tingkah laku anak sebagai ujiannya, dan ujian itu memberi jawapan. Ia tidak
     membuktikan merah berfungsi untuk setiap anak; ia membuktikan tiada sebab untuk mengubahnya
     sekarang.
+49. **Enam soalan tambah melintasi puluh, disemak guru — dan dokumen gurunya sampai sebagai fail.
+    Ditulis 22 September 2026.**
+
+    `docs/kssr/guru-semakan-tambah-melintasi-puluh-dan-nilai-digit.md`, difailkan verbatim di bawah
+    pengepala provenance. **Jurang item 29 tidak berulang untuk kelompok ini:** jawapan guru datang
+    sebagai fail, bukan mesej, jadi setiap keputusan di bawah boleh disemak terhadap perkataannya.
+
+    #### Id sub-kemahiran, disahkan dahulu
+
+    Kedua-duanya wujud dalam `math-y1.skills.json`, dieja sama:
+    `2.2.2/two_digit_plus_one_digit_bridge` dan `2.2.2/two_digit_plus_two_digit_bridge`. Tiada id
+    direka.
+
+    #### Yang ditulis
+
+    | Sub-kemahiran | Soalan | Nota |
+    |---|---|---|
+    | `two_digit_plus_one_digit_bridge` | q029 (38+5), q031 (46+7), **q035 (59+4)** | q035 ialah contoh guru sendiri |
+    | `two_digit_plus_two_digit_bridge` | q032 (27+16), q034 (48+25), **q036 (34+28)** | q036 ialah contoh guru sendiri |
+    | — | q030 (Ali, 27+6), q033 (Mei Lin, 36+17) | situasi harian; `noEvidence: "practice"` |
+
+    Ketiga-tiga bukti setiap sub-kemahiran ialah pengiraan **terus**, seperti yang guru minta. Kedua
+    -duanya kini boleh mencapai *Dikuasai*: tiga soalan tiga pilihan, tekaan gabungan 1/27 = 3.7%,
+    di bawah siling 4% (SPEC §5.7). `validate:content`: 2.2.2 kini **3 daripada 4** sub-kemahiran
+    diuji — yang tinggal `two_digit_plus_one_digit_no_bridge`.
+
+    Aktiviti baharu a9, a10 dan a11 (situasi harian). Rakaman: 16 klip 0 bait, BM dan EN.
+
+    #### 2.4.2 — ada dalam katalog, tiada sub-kemahiran
+
+    Guru mahu q030 dan q033 direkod di bawah `2.4.2`, bukan sebagai bukti 2.2.2. Disemak:
+
+    - **`2.4.2` ADA dalam katalog DSKP** (`math-y1.json`), di bawah SK 2.4 *Penyelesaian masalah*:
+      *"Menyelesaikan masalah tambah dan tolak yang melibatkan situasi harian."*
+    - **Tiada sub-kemahiran di bawahnya** dalam `math-y1.skills.json`. Fail itu sendiri menjelaskan
+      sebabnya, dalam nota `add_word_problem`: *"Belum dipecahkan di fail ini kerana tiada soalan
+      pek memetik 2.4.2."* Sekarang dua soalan memetiknya.
+
+    **Dibina sebagai `practice` buat sementara**, bukan sebagai bukti 2.4.2. Sebabnya: mendakwa
+    2.4.2 memerlukan sub-kemahiran, dan memecahkan satu SP ialah kerja yang guru sendiri lakukan
+    untuk SP yang lain — bukan sesuatu yang kami reka sambil menulis soalan. `practice` bermakna
+    soalan itu dimainkan, tidak dikira dalam skor atau tangga, dan tidak meninggalkan bukti (SPEC
+    §3.3) — iaitu tepat *"kekal dalam bank, fungsi evidencenya berbeza"* tolak bahagian 2.4.2.
+
+    **Keputusan yang menunggu pemilik projek:** pecahkan 2.4.2 dalam fail kemahiran (dan tambah SK
+    2.4 kepada `kssr.contentStandards` pek), atau biarkan `practice`. Kos pilihan pertama: satu
+    sub-kemahiran baharu bernama, `reviewStatus` pek tidak berubah kerana borang pusingan 2 tidak
+    meliputi soalan ini, dan 2.4.2 tidak boleh *Dikuasai* sehingga setiap pecahannya diuji.
+
+    #### q023 — peraturan yang sama menyentuhnya, dan kosnya diukur
+
+    q023 *"Devi ada 32 pensel. Dia beli 14 lagi. Berapa semua?"* ialah cerita penambahan, dan hari
+    ini ia bukti untuk `two_digit_plus_two_digit_no_bridge`. Guru tidak menyebutnya; peraturannya
+    menyentuhnya.
+
+    **Kalau q023 dipindahkan ke 2.4.2:**
+
+    | | Sekarang | Selepas pindah |
+    |---|---|---|
+    | Bukti `two_digit_plus_two_digit_no_bridge` | q008, q023, q025 | **q008, q025 sahaja** |
+    | Tekaan gabungan | 1/27 = 3.7% | **1/9 = 11.1%** |
+    | Boleh capai *Dikuasai*? | Ya | **Tidak** — di bawah bar tiga soalan dan di atas siling 4% |
+    | 2.2.2 boleh capai *Dikuasai*? | Belum (satu sub-kemahiran belum diuji) | Tidak, dan dua sebab sekarang |
+
+    Ia perlukan satu soalan tambah dua-digit tanpa melintasi puluh yang baharu, terus, untuk
+    menggantikan q023. **Tidak dipindahkan** — pemilik projek akan bertanya guru dahulu.
+
+    #### Pancingan dua peringkat guru, dipetakan kepada dua slot yang ada
+
+    Guru menulis dua pancingan: *"Cukupkan 40 dahulu."*, kemudian *"Tambah 2 jadi 40. Baki 3."*
+    App ada satu `hint` dan satu `explain`, bukan dua pancingan.
+
+    - `hint` = **peringkat pertama** guru, dan ia sengaja tidak memberi nombor: *"jangan terus beri
+      angka 2"*.
+    - `explain` = **laluan penuh**, dipaparkan bersama jawapan apabila anak tidak boleh salah lagi
+      (SPEC §4.2) — contohnya *"38 + 2 = 40, 40 + 3 = 43."*
+
+    **Peringkat kedua guru diserap ke dalam `explain`, bukan slot baharu.** Slot pancingan kedua
+    akan bermakna jalur kedua atau jalur yang tumbuh, dan DESIGN §7 memberi satu jalur satu blok.
+    Direkod di sini supaya sesiapa yang membaca dokumen guru tahu ke mana peringkat kedua itu
+    pergi.
+
+    #### Label pengganggu — direkod di sini, tiada medan skema
+
+    Guru menolak satu label untuk semua jawapan salah, dan menamakan tiga keluarga:
+
+    | Soalan | Pengganggu | Label guru |
+    |---|---|---|
+    | q029 | 33 | `missed_new_ten` / `no_regrouping` |
+    | q029 | 42 | `off_by_one` / `remainder_count_error` |
+    | q031 | 43 | `missed_new_ten` |
+    | q031 | 52 | `off_by_one` |
+    | q032 | 33 | `missed_new_ten` |
+    | q032 | 34 | `digit_reversal` |
+    | q034 | 63 | `missed_new_ten` |
+    | q034 | 37 | `digit_reversal` |
+    | q035 | 53 | `missed_new_ten` |
+    | q035 | 62 | `off_by_one` |
+    | q036 | 52 | `missed_new_ten` |
+    | q036 | 26 | `digit_reversal` |
+
+    **Tiada medan skema ditambah, atas arahan pemilik projek.** Tiada kod membaca label itu hari
+    ini, dan medan tanpa pembaca ialah kerja tanpa pengguna — alasan yang sama yang menolak skor
+    keyakinan (SPEC §5.7). Ia dibina apabila sesuatu memerlukannya; sehingga itu jadual ini
+    tempatnya.
+
+    #### Diukur pada 393×695, UI sebenar
+
+    q030 dan q033 ialah arahan terpanjang dalam kelompok ini:
+
+    | | q030 | q033 |
+    |---|---|---|
+    | Baris arahan | **3** | **3** |
+    | Tinggi kad | 138.3 (kandungan 140) | sama |
+    | Dengan jalur pancingan | kad **tidak berubah**, jalur 51px | sama |
+    | Dengan jalur dedahan | kad tidak berubah | sama |
+    | Butang audio vs tepi kad | **52px di dalam** | sama |
+    | Halaman menatal | tidak | tidak |
+
+    Enam soalan terus ialah arahan dua baris, bentuk yang sama seperti q025.
+
+    **Butang audio dipaksa hadir untuk ukuran ini.** Klip baharu 0 bait, jadi `AudioButton`
+    menyembunyikan diri dan ukuran pertama menunjukkan kad dua baris tanpa float — susun atur yang
+    tiada anak akan lihat selepas rakaman mendarat. Klip beku sesi ditukar kepada rakaman sebenar,
+    seperti item 40. Perangkap yang sama, kali ketiga.
+
+    #### Kesan pada item 31
+
+    Bank aras 3 naik daripada **4** soalan boleh dimain kepada **12** (sembilan bukti, tiga
+    latihan), untuk lapan slot yang sesi aras 3 minta. Diukur dengan pemilih sebenar, lima larian:
+    **0 soalan muncul dalam setiap larian**, kiraan 4,4,4,4,3,3,3,3,3,3,3,3. Item 31 ditutup
+    sepenuhnya — lihat item itu.
+
+    #### Yang tidak ditulis di sini
+
+    Soalan nilai digit. Keputusan guru tentang pengganggu *"6"* direkod dalam SPEC §3.4 sebagai
+    pengecualian kedua, tetapi soalannya ialah kelompok berasingan, atas arahan pemilik projek.
