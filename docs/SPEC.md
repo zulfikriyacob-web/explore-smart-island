@@ -157,6 +157,7 @@ interface QuestionBase {
   noEvidence?: 'practice' | 'parked';  // kenapa tiada subSkill — di bawah
   prompt: LocalizedText;         // teks arahan
   promptAudio: LocalizedAudio;   // WAJIB — kanak-kanak umur 7 tidak boleh baca ini
+  promptAudioText?: LocalizedText; // apa yang rakaman sebut, bila ia bukan teks arahan
   hint?: LocalizedText;          // selepas salah, selagi soalan masih terbuka (§4.2)
   explain?: LocalizedText;       // bersama jawapan, apabila anak tidak boleh salah lagi (§4.2)
   tags?: string[];
@@ -506,6 +507,14 @@ daripada tiada salinan kerana ia kelihatan semasa.
 | Skrip | Menjana | Untuk siapa |
 |---|---|---|
 | `npm run audio:script` | Skrip rakaman audio arahan — satu baris setiap fail, dengan ayat yang perlu dibaca dan keadaan fail dalam `public/` | Pelakon suara (§8) |
+
+> **`promptAudioText` menang atas `prompt` dalam skrip itu.** Ayat yang **disebut** tidak
+> semestinya ayat yang **ditunjuk**: peraturan guru menyimpan *"Kemudian tekan Sedia."* dalam
+> audio count-tap sehingga butang membawa isyarat bukan teks yang anak sahkan boleh dibaca,
+> sedangkan teks skrin boleh dipendekkan lebih awal. Tanpa medan ini skrip mengambil ayat
+> daripada kad, dan rakaman seterusnya akan menjatuhkan langkah itu tanpa sesiapa memutuskannya.
+> Baris begitu ditanda **bukan teks di skrin** dalam skrip, supaya pelakon suara tidak
+> "membetulkannya" terhadap kad. (§3.3, PRD §16 item 26.)
 | `npm run kssr:review` | Borang semakan pemetaan KSSR — setiap soalan bersebelahan teks penuh SP yang didakwanya dan CATATAN DSKP, dengan satu soalan Ya/Tidak setiap satu | Guru yang menyemak pemetaan; jawapannya direkod sebagai `kssr.reviewStatus` (§3.2) |
 
 ```
@@ -1638,6 +1647,11 @@ kedua-duanya tidak sepadan, fail itu bukan apa yang anda sangka — berhenti, ja
 - Sasaran sentuhan minimum **64 × 64 px** (lihat DESIGN.md untuk sebab; ini melebihi WCAG 44 px).
 - Nisbah kontras ≥ 4.5:1 untuk semua teks, ≥ 3:1 untuk sempadan butang.
 - Betul/salah **tidak pernah** disampaikan melalui warna sahaja — sentiasa ikon + gerakan + bunyi.
+- **Isyarat langkah tertakluk kepada peraturan yang sama.** Memberitahu anak yang belum boleh
+  membaca apa yang perlu dibuat seterusnya tidak boleh bersandar pada satu pertukaran warna;
+  ia mesti membawa sekurang-kurangnya dua saluran. Butang Sedia count-tap membawa muka terisi
+  **dan** ikon anak panah sejak 20 September 2026; bunyi pendek yang guru minta belum dibina,
+  dan sehingga itu arahan audio kekal menyebut langkah (PRD §16 item 26, DESIGN §5.4).
 - Setiap imej mempunyai `alt` dwibahasa.
 - Fokus papan kekunci kelihatan (cincin 3 px), untuk ibu bapa pada desktop.
 - `aria-live="polite"` pada kawasan maklum balas.

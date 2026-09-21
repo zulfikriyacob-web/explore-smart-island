@@ -93,8 +93,17 @@ function rowsFor(pack) {
   for (const q of pack.questions) {
     for (const lang of LANGS) {
       const file = q.promptAudio[lang];
-      const text = q.prompt[lang];
-      rows.push({ questionId: q.id, type: q.type, lang, file, text });
+      /*
+        `promptAudioText` wins over `prompt` when a pack carries it: it is what
+        the clip is supposed to say, which is not always what the card shows.
+        The count-tap prompts are the case — the teacher's rule keeps "Kemudian
+        tekan Sedia." in the audio while the screen text may be shortened first
+        (SPEC 3.3, PRD 16 item 26). Reading the line off the card here would
+        drop that sentence at the next re-record without anyone deciding to.
+      */
+      const text = q.promptAudioText?.[lang] ?? q.prompt[lang];
+      const spokenOnly = q.promptAudioText != null && q.promptAudioText[lang] !== q.prompt[lang];
+      rows.push({ questionId: q.id, type: q.type, lang, file, text, spokenOnly });
       if (!byPath.has(file)) byPath.set(file, []);
       byPath.get(file).push({ questionId: q.id, lang, text });
     }
@@ -149,9 +158,10 @@ async function emitPack(pack, out) {
   out.push('| # | Fail | questionId | Bahasa | Teks untuk dibaca |');
   out.push('|---|---|---|---|---|');
   rows.forEach((r, i) => {
-    out.push(
-      `| ${i + 1} | \`${r.file}\` | \`${r.questionId}\` | ${r.lang} | ${cell(r.text)} |`,
-    );
+    // A line that is spoken but not shown is marked, so the person recording
+    // does not "correct" it against the card. (PRD 16 item 26.)
+    const text = r.spokenOnly ? `${cell(r.text)} — **bukan teks di skrin**` : cell(r.text);
+    out.push(`| ${i + 1} | \`${r.file}\` | \`${r.questionId}\` | ${r.lang} | ${text} |`);
   });
   out.push('');
 

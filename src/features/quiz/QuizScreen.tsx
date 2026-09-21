@@ -90,9 +90,20 @@ export function QuizScreen() {
 
   const question = currentQuestion(session);
   const [counted, setCounted] = useState<number[]>([]);
+  /*
+    The count that was last sent, so the submit button can tell "you just sent
+    this and it was wrong" from "you have changed it since". Without it the
+    button keeps the wrong face through the whole re-count, and the step cue —
+    the one thing a child who cannot read has — never comes back on the second
+    and third attempts. (PRD 16 item 26.)
+  */
+  const [submittedCount, setSubmittedCount] = useState<number | null>(null);
 
   // Counting state belongs to one question only.
-  useEffect(() => setCounted([]), [session.index]);
+  useEffect(() => {
+    setCounted([]);
+    setSubmittedCount(null);
+  }, [session.index]);
 
   /*
     SPEC 7.6: prefetch exactly one question ahead while the current one is on
@@ -453,14 +464,37 @@ export function QuizScreen() {
               One action, one skill tested.
             */
             <BlockButton
-              onPress={() => answer({ kind: 'count', value: counted.length })}
+              onPress={() => {
+                setSubmittedCount(counted.length);
+                answer({ kind: 'count', value: counted.length });
+              }}
               // Never disabled, not even at a count of zero. Disabling it made
               // the only way to reveal the button the very thing the button is
               // for, and at 35% opacity on the pale ground it was invisible:
               // 1.04:1 against the background, where DESIGN 5.1 asks for 3:1.
               // A stray press with nothing counted is just a wrong answer, and
               // wrong answers already have feedback a child understands.
-              state={session.lastAnswerCorrect === false ? 'wrong' : 'rest'}
+              //
+              // `ready` is the step cue: the first tap on an object fills the
+              // button and puts a forward arrow in it, so the next step is
+              // stated without words. The teacher asked for a non-text signal —
+              // the button's state changing when counting starts, an icon, and
+              // a short sound — and this is the first two of the three. The
+              // prompt and its recording keep saying "Kemudian tekan Sedia."
+              // until a child confirms the signal reads without them; the
+              // teacher's rule is that the words go only once the UI is clear,
+              // and we do not get to declare that ourselves. (PRD 16 item 26.)
+              //
+              // `wrong` still wins while the count is the one that was just
+              // sent, so the miss is not overwritten by the cue for re-sending
+              // it. Change the count and the cue comes back.
+              state={
+                session.lastAnswerCorrect === false && counted.length === submittedCount
+                  ? 'wrong'
+                  : counted.length > 0
+                    ? 'ready'
+                    : 'rest'
+              }
               minHeight={72}
               ariaLabel={`Hantar jawapan, ${counted.length} dibilang`}
             >

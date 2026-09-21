@@ -730,11 +730,37 @@ sama seperti sebelum ini.
 |---|---|---|
 | Rehat | Muka putih, sempadan 4px `--laut-dark`, tepi bawah 4px sama | — |
 | Ditekan | `translateY(4px)`, tepi bawah hilang | `whileTap`, `spring.pop` |
+| **Sedia hantar** | Muka → `--laut`, ikon **anak panah** masuk dalam pil `--laut-dark` | **tiada** |
 | Betul | Muka → `--daun-light`, sempadan → `--daun-dark`, ikon ✓ masuk | `correctPulse` 0.32 s |
 | Salah | Sempadan → `--bunga-dark`, ikon ✕ masuk | `shake` 0.34 s |
 | Dedah jawapan | Sempadan → `--mangga-dark` | denyut B6 |
 | Dilumpuhkan (selepas salah) | `opacity: 0.35`, sempadan → `--garis` | pudar 0.2 s |
 | Fokus (papan kekunci) | Garis luar 4px `--nila`, ofset 2px | — |
+
+**Muka terisi `--laut` bukan lagi "skrin mula sahaja" — dipinda 20 September 2026.** Ia kini
+dipakai oleh dua butang, dan syarat yang membenarkannya sama pada kedua-duanya: **ia
+satu-satunya perkara di skrin yang meminta ditekan seterusnya.** Butang Mula ialah satu-satunya
+butang pada skrinnya; butang Sedia pada count-tap tidak bersaing dengan timbunan jawapan,
+kerana count-tap tiada timbunan. Butang jawapan **tidak pernah** mengambil muka ini: tiga
+butang terisi yang sama bersebelahan tidak menamakan satu pun sebagai yang seterusnya.
+
+Teks kekal `--arang` pada kedua-duanya: putih atas `--laut` ialah 2.57:1 dan gagal (§2.4);
+`--arang` atas `--laut` ialah **4.78:1**, diukur semula daripada piksel yang pelayar selesaikan.
+
+**Keadaan "sedia hantar" ialah isyarat langkah, bukan maklum balas.** Ia menyala pada ketukan
+pertama pada objek dan berkata *"kira sudah bermula, tekan ini bila habis"* — ia tidak tahu
+sama ada kiraan itu betul. Sebab itu ikonnya **anak panah ke hadapan**, bukan tanda semak:
+tanda semak sudah bermaksud *betul* pada butang yang sama. Pil `--laut-dark` dengan strok
+putih ialah pasangan yang §2.4 sahkan, diukur di sini **5.21:1**.
+
+**Tiada gerakan langsung.** Anak yang belum boleh membaca hanya ada warna muka dan anak panah
+ini; isyarat yang menunggu bingkai animasi ialah isyarat yang boleh hilang terus (CLAUDE.md
+prinsip 5). Ikon ✓/✕ pula tidak dilukis semasa keadaan ini, supaya ikon lama yang sedang pudar
+keluar tidak duduk di atas anak panah.
+
+Keadaan ini kekal apabila anak mengubah kiraannya selepas jawapan salah. Muka `salah` menang
+hanya selagi kiraan di skrin **sama** dengan kiraan yang baru dihantar — ubah kiraan itu dan
+isyarat langkah kembali. Tanpa itu, percubaan kedua dan ketiga tiada isyarat langsung.
 
 Sempadan ialah varian `-dark` bagi tokennya, bukan token itu sendiri. Token biasa gagal
 lantai 3:1 terhadap latar; varian gelap lulus. Nombor penuh dalam §2.4.
@@ -744,6 +770,12 @@ putih**. Jangan gelapkan strok juga — §2.4 D3.
 
 **Betul dan salah tidak pernah warna sahaja.** Setiap satu mendapat ikon, gerakan tersendiri,
 dan bunyi tersendiri. Seorang kanak-kanak buta warna mesti masih tahu apa yang berlaku.
+
+**Dan isyarat langkah mengikut peraturan yang sama.** Memberitahu anak yang belum boleh
+membaca *apa yang perlu dibuat seterusnya* bukan kerja yang lebih kecil daripada memberitahunya
+*betul atau salah* — ia lebih besar, kerana tiada perkataan yang boleh menolongnya. Jadi
+pertukaran warna sahaja tidak memadai di situ juga: muka dan ikon mesti datang bersama, dan
+bunyi pendek yang guru minta masih belum ada (SPEC §9, PRD §16 item 26).
 
 ---
 

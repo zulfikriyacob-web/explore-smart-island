@@ -130,6 +130,22 @@ const questionBaseShape = {
   prompt: LocalizedTextSchema,
   /** Mandatory: a 7-year-old cannot read the prompt. (SPEC 3.3) */
   promptAudio: LocalizedAudioSchema,
+  /**
+   * What the recording says, when that is not word for word the prompt.
+   *
+   * `audio:script` prints this instead of `prompt` when it is present, so the
+   * next recording session reads the sentence the clip is supposed to carry.
+   * Without it the script derives the line from the on-screen text, and any
+   * sentence that is deliberately spoken but not shown would be dropped at the
+   * next re-record, silently.
+   *
+   * It exists for the count-tap prompts: the teacher's rule is that the audio
+   * must keep naming the step — "Kemudian tekan Sedia." — until the button
+   * carries a non-text signal a child confirms they can read, while the screen
+   * text may be shortened before then. Today the two still match; this is the
+   * guard for the session that shortens them. (SPEC 3.3, PRD 16 item 26.)
+   */
+  promptAudioText: LocalizedTextSchema.optional(),
   hint: LocalizedTextSchema.optional(),
   explain: LocalizedTextSchema.optional(),
   tags: z.array(z.string().min(1)).optional(),

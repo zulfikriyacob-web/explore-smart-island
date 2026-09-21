@@ -1342,6 +1342,95 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     - **Perangkap ukuran:** `AudioButton` memulangkan `null` sehingga probe `isAudioAvailable`
       selesai, jadi ukuran yang diambil terlalu awal menunjukkan satu float sahaja dan jalur
       terbaca 199px. Tunggu butang audio muncul sebelum mengukur perenggan ini.
+
+    #### DIBINA, 21 September 2026: dua daripada tiga isyarat
+
+    Keputusan pemilik projek: **butang dahulu, teks kemudian.** Sebabnya peraturan guru dan bukan
+    kos — kita tidak boleh mengisytiharkan UI cukup jelas sebelum seorang anak mengesahkannya.
+    Jadi teks arahan **dan** audio kekal menyebut *"Kemudian tekan Sedia."* buat masa ini.
+
+    **Jadual saluran, dijalankan semula terhadap kod 21 September 2026** — sebelum perubahan ini:
+
+    | Saluran | Keadaan | Menyuruh tekan Sedia? |
+    |---|---|---|
+    | Audio arahan | Dimainkan sendiri; klip merakam ayat penuh | **Ya — satu-satunya** |
+    | Butang Sedia | `rest` sejak soalan muncul, `wrong` selepas jawapan salah. Tidak berubah bila ketukan bermula. Slot ikon ditempah tetapi kosong | Tidak |
+    | Lencana nombor | Muncul pada objek yang diketuk | Menunjukkan kiraan, bukan langkah |
+    | Tali *"Dibilang: N"* | Teks + `aria-live` | Sama |
+    | Bunyi UI, getaran | **Tiada** dalam `src/` langsung | Tidak |
+
+    Tiada satu pun berubah sejak jadual 14 September; yang berubah ialah kad, bukan butang.
+
+    **Yang dibina:** keadaan `ready` pada `BlockButton` — muka terisi `--laut` dan ikon anak panah
+    dalam pil `--laut-dark` — dinyalakan oleh ketukan pertama pada objek. Ukuran, di pane pada
+    393×695, dipandu melalui UI sebenar:
+
+    | Keadaan | Muka | Ikon |
+    |---|---|---|
+    | Tiba, 0 dibilang | putih, sempadan `--laut-dark` | **tiada**, slot 36px kekal ditempah |
+    | Ketukan pertama | `rgb(15,181,166)` = `--laut` | anak panah, pil 36px, `opacity: 1`, tiada transform |
+    | Hantar salah | putih, sempadan `--bunga-dark` | ✕ |
+    | Ketuk semula (kiraan berubah) | `--laut` semula | anak panah semula |
+    | Ketuk balik ke kiraan yang dihantar | putih, `--bunga-dark` | ✕ |
+
+    Nisbah kontras dikira daripada piksel yang pelayar selesaikan, bukan daripada token: teks
+    `--arang` atas muka `--laut` **4.78:1**, strok putih atas pil `--laut-dark` **5.21:1**. Pil
+    atas muka ialah 2.03:1 — ia hiasan di sekeliling anak panah, dan yang membawa bentuk ialah
+    strok.
+
+    **`wrong` menang hanya selagi kiraan sama dengan kiraan yang dihantar.** Tanpa itu butang
+    kekal merah sepanjang kiraan semula dan isyarat langkah tidak pernah kembali pada percubaan
+    kedua dan ketiga. Ia perlukan satu keping keadaan baharu, `submittedCount`.
+
+    **Satu kecacatan yang hanya pane boleh tunjukkan, dijumpai dan dibaiki dalam kerja ini.**
+    Ikon ✕ yang sedang keluar masih terpasang semasa `AnimatePresence` memainkan animasi
+    keluarnya — dan animasi keluar yang tidak pernah mendapat bingkai tidak pernah tamat. Slot
+    ikon membesar kepada dua baris, anak panah ditolak ke atas, dan ✕ duduk di bawahnya; dengan
+    kedua-duanya dipaksa ke dalam satu sel grid, ✕ duduk **di atas** anak panah selama-lamanya.
+    Dua isyarat bercanggah pada butang yang anak hendak tekan. Dibaiki dengan menyahlekap
+    `AnimatePresence` sepenuhnya semasa keadaan `ready`. Kosnya, diukur: pada laluan
+    `ready → wrong`, ✕ tiba satu detik lewat di pane (antara 120ms dan 400ms); sempadan merah dan
+    goncangan tiba serta-merta, jadi isyarat salah tidak pernah tiada. Pada peranti yang
+    memberi bingkai itu satu bingkai.
+
+    **Jurang `audio:script` ditutup dalam PR yang sama, walaupun teks belum dipendekkan.** Medan
+    `promptAudioText` pilihan (SPEC §3.3) diisi untuk q003, q006 dan q011 dengan ayat penuh. Sebab
+    ia dibina sekarang dan bukan nanti: skrip itu mengambil ayat rakaman daripada `prompt`, jadi
+    sesi yang memendekkan teks akan menjatuhkan langkah itu daripada rakaman seterusnya tanpa
+    sesiapa memutuskannya — dan sesi itu tidak perlu mengingat sesuatu yang sudah ada.
+
+    **Rakaman tidak berubah.** Item ini pernah merancang *"rakam semula tiga klip"*; tidak perlu.
+    Klip sedia ada sudah menyebut ayat penuh — q003 65,201 bait, q006 78,576, q011 118,282,
+    ketiga-tiganya bersih ID3 — jadi memendekkan teks skrin nanti tidak menyentuh audio.
+
+    #### Bunyi: menyusul, dengan tiga kekangan yang sudah diketahui
+
+    Tidak dibina, atas keputusan pemilik projek. Yang perlu diselesaikan bila ia dibina:
+
+    - **Saluran kedua diperlukan.** `player.ts` ialah pemain klip arahan tunggal dan ia
+      **menghentikan** klip semasa apabila klip baharu dimainkan. Bunyi ketukan yang berkongsi
+      pemain itu akan memotong arahan yang sedang dibacakan kepada anak.
+    - **SPEC §8 berkata satu klip boleh didengar pada satu masa.** Itu peraturan untuk klip
+      arahan; membenarkan bunyi UI bertindih ialah pindaan bertulis, bukan hanya kod.
+    - **Langkau, jangan parkir.** `Howl.play()` pada context tergantung memarkir main balik dan
+      tidak boleh dibatalkan (SPEC §8 peraturan 5). Bunyi UI mesti menyemak `ctx.state` dan
+      berdiam diri, bukan beratur untuk dimainkan lewat.
+
+    Aset pula tiada: SPEC §8 menyenaraikan lima bunyi UI dan tiada satu pun wujud dalam repo.
+
+    #### Kos yang akan datang bila teks dipendekkan
+
+    Diukur pada 393×695, dan direkod supaya sesi itu tahu ia sebahagian harga:
+
+    | | Sekarang | Ayat dibuang |
+    |---|---|---|
+    | q003 | 4 baris, kad 471, **lompat** (item 33) | 3 baris, kad 440, tiada lompat |
+    | q006 | 4 baris, kad 385, jurang 158px | 2 baris, kad 324, **jurang 219px** |
+    | q011 | 4 baris, kad 471, **lompat** | 3 baris, kad 440, tiada lompat |
+
+    Lompatan item 33 jatuh 2/25 → **0/25**, dan potongan count-tap dedahan hilang. Tetapi jurang
+    kad-ke-butang item 47 pada q006 menjadi **219px**, jurang terbesar dalam pek — pada skrin
+    dengan objek paling sedikit. Itu bukan sebab untuk tidak memendekkan; ia sebahagian harga.
 27. **Tiga belas soalan baharu wujud dalam fail, tetapi tiada anak boleh melihatnya. Enjin pemilih
     soalan ialah keutamaan seterusnya.**
 

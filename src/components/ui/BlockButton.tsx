@@ -4,7 +4,14 @@ import { useCallback, useRef, useState, type ReactNode } from 'react';
 import { correctPulse, shake } from '../../motion/variants.ts';
 import { ease, spring } from '../../motion/tokens.ts';
 
-export type BlockState = 'rest' | 'correct' | 'wrong' | 'disabled' | 'revealed' | 'start';
+export type BlockState =
+  | 'rest'
+  | 'ready'
+  | 'correct'
+  | 'wrong'
+  | 'disabled'
+  | 'revealed'
+  | 'start';
 
 interface Ripple {
   id: number;
@@ -50,6 +57,19 @@ interface BlockButtonProps {
 */
 const FACE: Record<BlockState, string> = {
   rest: 'bg-white border-laut-dark shadow-[0_4px_0_0_theme(colors.laut.dark)]',
+  /*
+    The count-tap submit button, once the child has counted something. The same
+    filled face as `start`, for the same reason: it is the only thing on screen
+    asking to be pressed next, so nothing competes with it. --arang on --laut is
+    4.78:1 (DESIGN 2.4, and measured again here from the resolved pixels); white
+    on --laut is 2.57:1 and is the mistake that audit calls out by name, so the
+    label stays --arang.
+
+    Not green and not red-bordered: those two already mean right and wrong on
+    this very button, and "you have counted, now send it" is neither.
+    (DESIGN 5.4, PRD 16 item 26.)
+  */
+  ready: 'bg-laut border-laut-dark shadow-[0_4px_0_0_theme(colors.laut.dark)]',
   correct: 'bg-daun-light border-daun-dark shadow-[0_4px_0_0_theme(colors.daun.dark)]',
   wrong: 'bg-white border-bunga-dark shadow-[0_4px_0_0_theme(colors.bunga.dark)]',
   // Untouched: the audit records this one as not covered. It is drawn at
@@ -227,9 +247,52 @@ export function BlockButton({
         aria-hidden
         className="pointer-events-none absolute right-6 top-1/2 grid h-9 w-9 -translate-y-1/2 place-items-center"
       >
-        <AnimatePresence>
-          {(state === 'correct' || state === 'wrong') && (
-            <motion.span
+        {/*
+          The step cue: a forward arrow, drawn as soon as the child has counted
+          something. Not a tick — a tick means "correct" on this same button,
+          and this button does not know whether the count is right.
+
+          No animation at all, in opacity or scale. A child who cannot read has
+          the face colour and this arrow and nothing else, and a cue that waits
+          for a frame is a cue that can simply be absent (CLAUDE.md principle 5,
+          the rule the counting badges already follow).
+
+          --laut-dark with a white stroke is the pair DESIGN 2.4 validates, and
+          the one the counting badges use: measured here at 5.21:1.
+
+          `col-start-1 row-start-1` on this and on the tick/cross below, so the
+          two share one grid cell rather than taking a row each. Without it the
+          slot grew to two rows while the outgoing icon was still mounted, and
+          the arrow was pushed up with a cross sitting under it.
+        */}
+        {state === 'ready' && (
+          <span className="col-start-1 row-start-1 grid h-9 w-9 place-items-center rounded-full bg-laut-dark">
+            <svg
+              viewBox="0 0 24 24"
+              className="h-[22px] w-[22px] fill-none stroke-white"
+              strokeWidth={3.5}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M5 12h13M12 5l7 7-7 7" />
+            </svg>
+          </span>
+        )}
+        {/*
+          `AnimatePresence` is unmounted entirely when the arrow takes over, so
+          the outgoing tick or cross goes at once instead of fading.
+
+          A fade is an exit animation, and an exit animation that never gets a
+          frame never ends. Measured in the pane: a child who answered wrong and
+          then tapped an object again got a red cross drawn on top of the arrow,
+          on a button whose face had already turned to `ready` — two
+          contradictory signals with the stale one on top. Every other
+          transition keeps the fade. (CLAUDE.md principle 5.)
+        */}
+        {state !== 'ready' && (
+          <AnimatePresence>
+            {(state === 'correct' || state === 'wrong') && (
+              <motion.span
               /*
                 D3: the pill is the dark variant and the stroke stays white.
                 White on the plain tokens measured 2.38:1 and 2.78:1, under the
@@ -245,30 +308,35 @@ export function BlockButton({
                 Do not darken the stroke as well. --arang on these dark pills is
                 2.27:1 and 1.13:1 — darkening both breaks the icon.
               */
-              className={`grid h-9 w-9 place-items-center rounded-full ${
-                state === 'correct' ? 'bg-daun-dark' : 'bg-bunga-dark'
-              }`}
-              // Opacity starts at 1 and only scale animates. SPEC section 9
-              // forbids conveying right/wrong by colour alone, so the icon has
-              // to be legible even if the animation never runs — a throttled
-              // device, a backgrounded tab.
-              initial={reduce ? { opacity: 1 } : { scale: 0.6, opacity: 1 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={reduce ? { duration: 0.15 } : spring.pop}
-            >
-              <svg
-                viewBox="0 0 24 24"
-                className="h-[22px] w-[22px] fill-none stroke-white"
-                strokeWidth={3.5}
-                strokeLinecap="round"
-                strokeLinejoin="round"
+                className={`col-start-1 row-start-1 grid h-9 w-9 place-items-center rounded-full ${
+                  state === 'correct' ? 'bg-daun-dark' : 'bg-bunga-dark'
+                }`}
+                // Opacity starts at 1 and only scale animates. SPEC section 9
+                // forbids conveying right/wrong by colour alone, so the icon has
+                // to be legible even if the animation never runs — a throttled
+                // device, a backgrounded tab.
+                initial={reduce ? { opacity: 1 } : { scale: 0.6, opacity: 1 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={reduce ? { duration: 0.15 } : spring.pop}
               >
-                {state === 'correct' ? <path d="M20 6 9 17l-5-5" /> : <path d="M18 6 6 18M6 6l12 12" />}
-              </svg>
-            </motion.span>
-          )}
-        </AnimatePresence>
+                <svg
+                  viewBox="0 0 24 24"
+                  className="h-[22px] w-[22px] fill-none stroke-white"
+                  strokeWidth={3.5}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  {state === 'correct' ? (
+                    <path d="M20 6 9 17l-5-5" />
+                  ) : (
+                    <path d="M18 6 6 18M6 6l12 12" />
+                  )}
+                </svg>
+              </motion.span>
+            )}
+          </AnimatePresence>
+        )}
       </span>
     </motion.button>
   );
