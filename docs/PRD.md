@@ -3365,10 +3365,12 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     Sepuluh draf lain lulus tanpa perubahan besar; B1, B2 dan B4 cuma perlu ayat akhir dalam
     penerangan, dan guru mencadangkan pancingan *"Cari digit sa dahulu."* untuk B11–B13.
 
-    **Kesan yang belum berlaku, apabila 2.4.2 dibina.** q023, q030 dan q033 berhenti menjadi
-    `practice` dan menjadi bukti, jadi **ketiga-tiganya mula dikira dalam ketepatan, bintang dan
-    tangga aras** (SPEC §3.3, §5.2, §5.5). Hari ini soalan latihan tidak dikira dalam mana-mana
-    daripadanya.
+    **Kesan yang belum berlaku, apabila 2.4.2 dibina.** **q030 dan q033** yang mula dikira dalam
+    ketepatan, bintang dan tangga aras: kedua-duanya `noEvidence: "practice"` hari ini, dan soalan
+    latihan tidak dikira dalam mana-mana daripadanya (SPEC §3.3, §5.2, §5.5). **q023 sudah dikira**
+    — ia membawa `subSkill: 2.2.2/two_digit_plus_two_digit_no_bridge` dan bukan `practice`, jadi
+    `isScored()` sudah benar untuknya. Yang berubah bagi q023 ialah sub-kemahiran mana yang menerima
+    buktinya.
 
     **Dan satu perkara yang tidak hilang dengan pemindahan.** Bukti q023 yang sudah tersimpan di bawah
     `two_digit_plus_two_digit_no_bridge` kekal dalam storan peranti selepas ia dipindahkan ke 2.4.2 —
