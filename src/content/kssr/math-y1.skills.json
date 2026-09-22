@@ -169,8 +169,29 @@
       ],
       "removedOnReview": {
         "add_multiple_of_10": "Bukan sub-kemahiran wajib. Guru: jadikannya tag diagnostik multiple_of_10 pada soalan. 45 + 10 ialah dua digit tambah dua digit tanpa melintasi puluh; 'gandaan sepuluh' ialah ciri soalan itu, bukan kemahiran berasingan yang anak mesti kuasai.",
-        "add_word_problem": "Bukan sub-kemahiran 2.2.2. Guru: letakkan di bawah 2.4.2, Menyelesaikan masalah tambah dan tolak yang melibatkan situasi harian. Situasi harian ialah SP tersendiri dalam DSKP, bukan pecahan tambah. Belum dipecahkan di fail ini kerana tiada soalan pek memetik 2.4.2."
+        "add_word_problem": "Bukan sub-kemahiran 2.2.2. Guru: letakkan di bawah 2.4.2, Menyelesaikan masalah tambah dan tolak yang melibatkan situasi harian. Situasi harian ialah SP tersendiri dalam DSKP, bukan pecahan tambah. Dipecahkan di fail ini pada 23 September 2026, selepas guru menetapkan pecahannya — lihat 2.4.2."
       }
+    },
+    "2.4.2": {
+      "title": "Menyelesaikan masalah tambah dan tolak yang melibatkan situasi harian.",
+      "source": "dskp-sentence",
+      "sourceNote": "Ayat SP menamakan dua operasi — tambah dan tolak — dan guru memecahkannya mengikut operasi itu, bukan mengikut empat profil pengiraan 2.2.2, kerana 2.4.2 mengukur membaca situasi dan mengenal operasi yang sesuai, bukan pengiraan (docs/kssr/guru-semakan-nilai-digit-dan-tambah.md, A2, 23 September 2026). Struktur nombor soalan — operation, operand_profile, bridge — disimpan sebagai tag diagnostik pada soalan dan bukan sebagai gerbang penguasaan berasingan, atas keputusan guru yang sama; medan tags skema ialah senarai rentetan rata, jadi strukturnya direkod dalam PRD 16 item 49. Id verbatim daripada guru.",
+      "subSkills": [
+        {
+          "id": "solve_addition_daily_problem",
+          "label": {
+            "ms": "Menyelesaikan masalah tambah dalam situasi harian",
+            "en": "Solving an addition problem in an everyday situation"
+          }
+        },
+        {
+          "id": "solve_subtraction_daily_problem",
+          "label": {
+            "ms": "Menyelesaikan masalah tolak dalam situasi harian",
+            "en": "Solving a subtraction problem in an everyday situation"
+          }
+        }
+      ]
     },
     "7.2.1": {
       "title": "Menamakan bentuk segiempat sama, segiempat tepat, segitiga dan bulatan.",

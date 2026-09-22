@@ -7,8 +7,8 @@
   "title": { "ms": "Nombor Hingga 100", "en": "Numbers to 100" },
   "kssr": {
     "document": "DSKP KSSR (Semakan) Matematik Tahun 1, Bahagian Pembangunan Kurikulum KPM, cetakan pertama Mei 2015",
-    "contentStandards": ["1.2", "1.6", "2.2"],
-    "learningStandards": ["1.2.1", "1.2.2", "1.6.1", "2.2.2"],
+    "contentStandards": ["1.2", "1.6", "2.2", "2.4"],
+    "learningStandards": ["1.2.1", "1.2.2", "1.6.1", "2.2.2", "2.4.2"],
     "reviewStatus": "teacher-reviewed",
     "review": {
       "by": "Guru penyemak pemetaan KSSR — tidak dinamakan; ruang nama dan sekolah dalam borang sengaja dibiarkan kosong",
@@ -77,8 +77,8 @@
         "ms": "Dua digit tambah dua digit, tanpa melintasi puluh",
         "en": "Two digits plus two digits, without bridging a ten"
       },
-      "questionCount": 4,
-      "questionIds": ["q008", "q022", "q023", "q025"]
+      "questionCount": 3,
+      "questionIds": ["q008", "q022", "q025"]
     },
     {
       "activityId": "math-y1-nombor-100-a8",
@@ -113,8 +113,8 @@
         "ms": "Tambah dalam situasi harian",
         "en": "Adding in an everyday situation"
       },
-      "questionCount": 2,
-      "questionIds": ["q030", "q033"]
+      "questionCount": 3,
+      "questionIds": ["q023", "q030", "q033"]
     }
   ],
   "questions": [
@@ -712,8 +712,9 @@
       "id": "q023",
       "type": "mcq",
       "difficulty": 3,
-      "learningStandard": "2.2.2",
-      "subSkill": "2.2.2/two_digit_plus_two_digit_no_bridge",
+      "learningStandard": "2.4.2",
+      "subSkill": "2.4.2/solve_addition_daily_problem",
+      "tags": ["addition", "two_digit_plus_two_digit", "no_bridge"],
       "promptForm": "contextual",
       "representation": "symbolic",
       "responseMode": "select",
@@ -874,7 +875,9 @@
       "id": "q030",
       "type": "mcq",
       "difficulty": 3,
-      "noEvidence": "practice",
+      "learningStandard": "2.4.2",
+      "subSkill": "2.4.2/solve_addition_daily_problem",
+      "tags": ["addition", "two_digit_plus_one_digit", "bridge"],
       "promptForm": "contextual",
       "representation": "symbolic",
       "responseMode": "select",
@@ -954,7 +957,9 @@
       "id": "q033",
       "type": "mcq",
       "difficulty": 3,
-      "noEvidence": "practice",
+      "learningStandard": "2.4.2",
+      "subSkill": "2.4.2/solve_addition_daily_problem",
+      "tags": ["addition", "two_digit_plus_two_digit", "bridge"],
       "promptForm": "contextual",
       "representation": "symbolic",
       "responseMode": "select",
