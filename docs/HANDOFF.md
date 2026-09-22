@@ -64,7 +64,10 @@ every English clip is still 0 bytes, and `LANG` is `'ms'` in `QuizScreen.tsx`.
 loudness, and nobody has heard them through a phone speaker in a child's hands. Item 49.~~
 **Answered 22 September 2026, item 50.** A child played level 3 and noticed the loudness
 difference, so it is now a defect. Integrated LUFS across all 35 Malay clips spans 8.79 LU in
-three groups, and q027 is the quietest in the bank. The fix is waiting on the owner's choice.
+three groups, and q027 is the quietest in the bank. Fixed on `fix/loudness`: every clip is
+brought to −17 LUFS by editing `global_gain` inside the MP3, which is lossless, and the
+measured spread is now 1.41 LU. This is a fixed step for every new recording (SPEC §8,
+`npm run audio:gain`). iOS Safari has not been checked yet; the owner tests on the iPhone.
 The same test showed the "Cukupkan 40 dahulu." hint helping, and q030/q033 understood. One
 child.
 
