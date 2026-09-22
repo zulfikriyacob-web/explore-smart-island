@@ -3303,6 +3303,16 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     Soalan nilai digit. Keputusan guru tentang pengganggu *"6"* direkod dalam SPEC §3.4 sebagai
     pengecualian kedua, tetapi soalannya ialah kelompok berasingan, atas arahan pemilik projek.
 
+    **Dua soalan pemilik projek untuk guru, belum dijawab — 22 September 2026.** Dalam perkataan
+    pemilik projek:
+
+    1. *"30 sebagai pengganggu value_of_ones_digit"*
+    2. *"aras 2 untuk nilai digit"*
+
+    Tentang soalan 1: di bawah SPEC §3.4, 30 tidak memerlukan pengecualian — peraturan padanan
+    rentetan hanya menyentuh pengganggu yang muncul dalam teks arahan, dan 30 muncul di situ hanya
+    jika nombor dalam soalan itu sendiri mengandungi 30.
+
     #### Rakaman BM masuk, 21 September 2026
 
     Lapan klip. Pemilik projek mendengar kesemuanya sebelum memasangnya; setiap satu menyebut ayat
