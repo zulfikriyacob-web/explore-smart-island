@@ -1745,8 +1745,10 @@ kali. Kelantangan ialah perbandingan.
 puncak tertinggi 0.860; setiap klip dalam 0.005 LU daripada ramalan. Baki sebaran datang daripada
 langkah 1.505 dB: tiada klip boleh lebih dekat daripada separuh langkah.
 
-> **Penyahkod iOS Safari telah diuji pada iPhone, dan ia memakai `global_gain` yang disunting;
-> lapisan yang diukur, syarat yang tidak dipenuhi dan sebabnya direkod dalam PRD §16 item 50.**
+> **Penyahkod iOS Safari telah diuji pada iPhone, dan ia memakai `global_gain` yang disunting.**
+> Pemilik projek mendengar sekali, melalui halaman ujian dan bukan app. **Ujian anak di aras 3
+> dengan klip yang sudah disamakan masih terbuka.** Lapisan yang diukur, syarat yang tidak
+> dipenuhi dan sebabnya direkod dalam PRD §16 item 50.
 
 ---
 
