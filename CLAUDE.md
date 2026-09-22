@@ -162,7 +162,8 @@ work ran in the main session.
   `numpy` and no MP3 decoder. Decode in the Browser pane instead:
   `new OfflineAudioContext(1, 1, rate).decodeAudioData(buf)` settles there, and a rate of
   44100 decodes the clips without resampling. `Math.max(...samples)` on a decoded clip
-  overflows the call stack — loop instead. (PRD 16 item 50.)
+  overflows the call stack — loop instead. `scripts/loudness.html` does all of this for
+  every clip; start there. (PRD 16 item 50.)
 - **The dev server's Network URL changes.** The DHCP lease moves, so an address
   that worked yesterday may belong to another device today. Re-read the IP before
   handing a URL to a phone, and start the server with `--host` or the phone gets
@@ -526,6 +527,20 @@ claims, and only the second one ships. (PRD 16 item 49.)
   fixed, a negative margin — take each line's `x` and compare it against that
   element's box, not just the line's width. Ranges give both:
   `range.getClientRects()` per text node. (PRD §16 item 33.)
+
+### Loudness only shows when clips are heard one after another
+
+**A clip checked on its own cannot fail a loudness check.** q027 passed the project
+owner's ear alone when it was recorded (PRD 16 item 43). A child playing level 3 heard
+clips back to back and noticed the difference. Measured afterwards, q027 was the quietest
+clip in the bank: −23.64 LUFS, 8.8 LU under the loudest (item 50). Nobody's ear was wrong.
+Loudness is a comparison, and a single clip gives the ear nothing to compare against.
+
+So a new recording is never checked on its own. `scripts/loudness.html` measures every
+clip in the bank each time, and SPEC 8 makes that a fixed step after the ID3 strip. When a
+clip is checked by ear, play it next to the clips around it in a session, not alone. The
+peak figures taken first ("0.38–0.40 and 0.82–0.90", item 49) put q027 in the quiet group
+and still could not say how quiet it was. Peak is one sample; measure integrated LUFS.
 
 ### Controls that unmount themselves
 

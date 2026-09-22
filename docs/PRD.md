@@ -3340,7 +3340,8 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     klip. Kandungan pertuturan disahkan oleh telinga pemilik projek, bukan dari sini.
 
     **Keseimbangan kelantangan — ~~pemerhatian, belum masalah~~ masalah sejak 22 September 2026:
-    anak perasan bezanya, dan LUFS merentas kesemua 35 klip BM diukur. Item 50.** Lapan klip ini
+    anak perasan bezanya, dan LUFS merentas kesemua 35 klip BM diukur. Dibaiki pada −17 LUFS, item
+    50.** Lapan klip ini
     jatuh kepada dua kumpulan yang jelas pada puncak penyahkod:
 
     | Kumpulan | Klip | Puncak |
@@ -3489,4 +3490,42 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     +4 langkah menjadi −17.62. −16.5 menghadkan q021, q027 dan q032 dan melebarkan sebaran kepada 1.90;
     −18 memberi sebaran 1.38 tetapi merendahkan setiap klip.
 
-    **Keputusan milik pemilik projek.** Tiada fail audio diubah.
+    ~~**Keputusan milik pemilik projek.** Tiada fail audio diubah.~~
+
+    #### DIPUTUSKAN dan DILAKSANA, 22 September 2026: A pada −17 LUFS, sebagai langkah tetap
+
+    Keputusan pemilik projek: A, dan bukan kerja sekali — setiap rakaman baharu melaluinya selepas
+    pembuangan ID3. Prosedur, sasaran dan sebabnya dalam SPEC §8.
+
+    | Bahagian | Fail |
+    |---|---|
+    | Pembaca bingkai, suntingan `global_gain`, LUFS BS.1770-4 pada sebarang kadar, pelan langkah — fungsi tulen, diuji | `scripts/loudness.ts`, `scripts/loudness.test.ts` |
+    | Ukuran dengan penyahkod pelayar, mencetak arahan dengan sha setiap fail | `scripts/loudness.html` pada `npm run dev` |
+    | Suntingan fail; menolak fail yang berubah sejak diukur | `npm run audio:gain -- check` · `apply` |
+
+    **Diukur sebelum, dengan halaman itu:** 35 klip, −23.63 hingga −14.84 LUFS, sebaran 8.79 LU —
+    dalam 0.01 LU daripada ukuran 48 kHz di atas, kini pada 44.1 kHz asal tanpa sampel semula. Pelan
+    sama: 33 klip, 15 naik, 18 turun, q011 dan q028 tidak disentuh.
+
+    **Dilaksana** dengan arahan yang halaman cetak, tepat seperti dicetak. Arahan yang sama dijalankan
+    semula ditolak — *"file is 6a302a8b, not the f3072031 that was measured"* — dan tiada fail
+    berubah. Setiap fail yang diubah, diterbalikkan dalam memori dengan −n langkah, sama bait demi
+    bait dengan HEAD: **33 daripada 33**. Saiz fail tidak berubah; antara 147 dan 633 bait berubah
+    setiap fail, semuanya dalam medan `global_gain`.
+
+    **Diukur selepas, dengan penyahkod yang sama:**
+
+    | | Sebelum | Selepas |
+    |---|---|---|
+    | Julat | −23.63 hingga −14.84 LUFS | **−17.68 hingga −16.27 LUFS** |
+    | Sebaran | 8.79 LU | **1.41 LU** |
+    | Puncak tertinggi | 0.954 | 0.860 |
+    | Klip yang masih meminta langkah | 33 | **0** |
+    | Sisihan terbesar daripada ramalan | — | 0.005 LU |
+
+    Baki 1.41 LU ialah kuantisasi: satu langkah 1.505 dB, jadi tiada klip boleh lebih dekat kepada
+    sasaran daripada separuh langkah.
+
+    **Belum disahkan:** penyahkod iOS Safari, dan telinga pada telefon — yang diukur ialah penyahkod
+    Chromium dalam pane. Pemilik projek menguji pada iPhone. Dan had yang sama seperti dapatan di
+    atas: sama ada 1.41 LU cukup kecil untuk anak tidak perasan lagi hanya boleh dijawab oleh anak.

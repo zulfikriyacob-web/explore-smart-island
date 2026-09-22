@@ -13,6 +13,7 @@
     "typecheck": "tsc --noEmit",
     "validate:content": "node scripts/validate-content.js",
     "audio:script": "node scripts/audio-script.js",
+    "audio:gain": "node scripts/audio-gain.js",
     "kssr:review": "node scripts/kssr-review.js"
   },
   "engines": {

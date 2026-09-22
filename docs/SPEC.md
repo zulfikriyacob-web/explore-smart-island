@@ -1699,6 +1699,56 @@ kedua-duanya tidak sepadan, fail itu bukan apa yang anda sangka — berhenti, ja
 - Haptik melalui `navigator.vibrate`: 10 ms pada ketukan, 30 ms pada betul. Langkau pada iOS
   (tidak disokong). Hormati suis "senyap" dalam tetapan.
 
+### Samakan kelantangan kepada −17 LUFS — langkah tetap selepas pembuangan ID3
+
+**Alat TTS tidak memberi kelantangan yang sama, walaupun dalam satu duduk.** Seorang anak
+perasan bezanya pada aras 3, dan diukur merentas kesemua 35 klip BM sebarannya **8.79 LU**:
+q026, q027 dan q028 datang dalam commit yang sama dan membaca −15.86, −23.64 dan −16.28 LUFS.
+q027 — klip paling perlahan dalam bank — lulus telinga pemilik projek apabila didengar sendirian
+(PRD §16 item 50). Jadi setiap rakaman baharu disamakan, seperti setiap rakaman baharu dibuang
+tag ID3nya: langkah tetap, bukan kejadian.
+
+**Ukuran: LUFS bersepadu (ITU-R BS.1770-4), bukan puncak dan bukan RMS seluruh fail.** Puncak
+ialah satu sampel. RMS mengira senyap di hujung klip — q011 membaca −18.69 dBFS RMS tetapi
+−16.84 LUFS. LUFS mengeget blok senyap. Ia diukur pada output **penyahkod pelayar**, pada
+kadar sampel klip sendiri, kerana itu lapisan paling dekat dengan apa yang anak dengar yang
+boleh dicapai dari sini (CLAUDE.md prinsip 5).
+
+**Pembetulan: medan `global_gain` dalam MP3, bukan `volume` Howler.** Satu langkah menukar
+setiap granul sebanyak ×2^¼, **1.505 dB**, dan tiada bait lain — cara mp3gain. Ia tanpa
+kerugian dan boleh diterbalikkan: −n langkah memulangkan bait asal, disahkan pada 33 daripada
+33 fail. `volume` Howler berhenti pada 1.0, jadi ia hanya boleh memperlahankan yang kuat ke
+paras yang paling perlahan, dan setiap klip menjadi lebih perlahan pada pembesar suara telefon.
+
+**Kenapa −17 LUFS.** Ia sasaran tertinggi yang klip paling perlahan boleh capai tanpa puncaknya
+melepasi **0.95**: q027 pada +4 langkah menjadi −17.62. Siling di bawah 1.0 kerana penyahkod
+pelayar mengapit pada 1.0 (diukur: +5 langkah pada q032 memberi 2 sampel pada 1.0), dan peranti
+yang menyampel semula 44.1 kHz ke 48 kHz boleh meletakkan puncak di antara sampel. Kedua-dua
+nombor ialah pemalar dalam `scripts/loudness.ts`, dan diuji.
+
+**Langkah, selepas ID3 dibuang dan disahkan:**
+
+1. `npm run audio:gain -- check` — setiap klip MPEG-1 Layer III, tanpa CRC, tanpa bingkai
+   Xing/Info, tanpa bait ekor. Suntingan gain enggan menyentuh fail yang tidak lulus; begitu juga
+   ujian dalam `npm test`, jadi klip yang tag ID3nya belum dibuang gagal di situ.
+2. `npm run dev`, buka `http://localhost:5173/scripts/loudness.html` — pada localhost, kerana ia
+   perlukan `crypto.subtle`. Ia mengukur setiap klip yang pek rujuk dan mencetak arahan `apply`.
+3. Jalankan arahan itu, tepat seperti dicetak. Setiap argumen membawa sha fail seperti ia diukur,
+   jadi arahan yang dijalankan dua kali ditolak dan tiada gain digandakan.
+4. Muat semula halaman. **Setiap klip mesti meminta 0 langkah**, dan halaman melaporkan sebaran
+   sebenar. Itu ukuran selepas, dengan penyahkod yang sama.
+
+Klip baharu diukur **bersama bank**, bukan sendirian — halaman itu mengukur setiap klip setiap
+kali. Kelantangan ialah perbandingan.
+
+**Diukur selepas pembetulan, 22 September 2026:** −17.68 hingga −16.27 LUFS, **sebaran 1.41 LU**,
+puncak tertinggi 0.860; setiap klip dalam 0.005 LU daripada ramalan. Baki sebaran datang daripada
+langkah 1.505 dB: tiada klip boleh lebih dekat daripada separuh langkah.
+
+> **Belum disahkan: penyahkod iOS Safari dan telinga pada telefon.** `global_gain` ialah medan
+> piawai yang setiap penyahkod MP3 patut hormati, tetapi yang diukur di sini ialah penyahkod
+> Chromium dalam pane. Pemilik projek menguji pada iPhone.
+
 ---
 
 ## 9. Kebolehcapaian
