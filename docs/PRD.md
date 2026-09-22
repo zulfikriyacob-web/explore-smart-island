@@ -3313,6 +3313,68 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     rentetan hanya menyentuh pengganggu yang muncul dalam teks arahan, dan 30 muncul di situ hanya
     jika nombor dalam soalan itu sendiri mengandungi 30.
 
+    #### Jawapan guru, 23 September 2026 — direkod, belum dilaksana
+
+    Pakej yang dihantar dan jawapan guru kedua-duanya difailkan:
+    `docs/kssr/pakej-semakan-nilai-digit-dan-tambah.md` (ditulis Claude) dan
+    `docs/kssr/guru-semakan-nilai-digit-dan-tambah.md` (diterima sebagai fail, bukan mesej — jurang
+    item 29 tidak berulang). **Tiada soalan ditulis atau diubah, dan tiada sub-kemahiran ditambah.**
+
+    **Semakan yang boleh menyekat, dibuat dahulu.** SK **2.4** *"Penyelesaian masalah."* dan SP
+    **2.4.2** *"Menyelesaikan masalah tambah dan tolak yang melibatkan situasi harian."* kedua-duanya
+    ada dalam `src/content/kssr/math-y1.json`, di bawah tajuk 2.0 Operasi Asas. Pemindahan 2.4.2 tidak
+    tersekat pada katalog, dan tiada apa ditambah kepadanya.
+
+    | | Keputusan guru |
+    |---|---|
+    | **A1** q023 ke 2.4.2? | **Pindah ke 2.4.2.** Ia masalah situasi harian dan bukan bukti mastery utama 2.2.2; ia kekal dalam bank sebagai bukti 2.4.2. B1 menggantikannya dalam `two_digit_plus_two_digit_no_bridge` supaya kelompok itu kembali tiga soalan pengiraan terus |
+    | **A2** pecahan 2.4.2 | **Bukan empat kelompok 2.2.2.** 2.2.2 mengukur pengiraan; 2.4.2 mengukur membaca situasi, mengenal operasi dan menyelesaikannya — di bawah |
+    | **A3** aras | **Tiada bantahan.** Ia kekal keputusan reka bentuk app, bukan keputusan DSKP |
+    | **A4** `30` sebagai pengganggu | **Munasabah**, bersama 70 dan 20 untuk B11–B13, dengan syarat pengganggu lain dalam soalan yang sama datang daripada salah faham yang berbeza |
+    | **A5** bentuk soalan nilai digit sa | **Guna bentuk cadangan**, *"Dalam 63, apakah nilai digit di tempat sa?"*, kerana ia memaksa murid mencari digit di tempat sa dahulu |
+    | **A6** nombor penuh sebagai pengganggu | **Setuju untuk B9 dan B10**, dan **B8 juga tukar `3` kepada `63`** |
+
+    **A2 penuh.** Dua sub-kemahiran utama: `solve_addition_daily_problem` dan
+    `solve_subtraction_daily_problem`. Struktur nombor disimpan sebagai tag diagnostik, bukan sebagai
+    gerbang penguasaan berasingan: `operation` (`addition` | `subtraction`), `operand_profile`
+    (`two_digit_plus_one_digit`, `two_digit_plus_two_digit`, dan profil tolak apabila dibina), dan
+    `bridge` (`true` | `false`). `problem_schema` — contohnya *"dapat lagi"* atau *"jumlah semua"* —
+    disebut sebagai kemungkinan masa depan kalau diagnosis lebih halus dikehendaki. Guru tidak mahu
+    `bridge`/`no_bridge` atau bentuk operand menjadi gerbang penguasaan 2.4.2 buat masa ini. q023,
+    q030 dan q033 kemudian menjadi bukti `solve_addition_daily_problem` sambil membawa tag itu.
+
+    > **Medan `tags` dalam skema ialah senarai rentetan rata** (`z.array(z.string())`), jadi struktur
+    > bernama di atas tidak boleh masuk ke situ tanpa perubahan skema. Ia direkod di sini, sama
+    > seperti label pengganggu guru pada 21 September di atas, dan dibina apabila ada yang membacanya.
+
+    **Nota guru tentang `value_ones`.** Pada tempat sa, nilai digit sama **secara nombor** dengan
+    digit itu sendiri — digit 3, nilai digit 3 — jadi satu soalan simbolik biasa tidak boleh
+    memisahkan sepenuhnya murid yang faham nilai digit daripada murid yang hanya tahu digit di
+    sebelah kanan. B11–B13 masih boleh digunakan. Satu item dengan perwakilan lain — kad nilai tempat,
+    atau pilihan seperti *"3 sa"* lawan *"3 puluh"* — ialah **peningkatan bank masa depan, bukan
+    blocker** untuk kelompok ini.
+
+    **Tiga pembetulan pada draf:**
+
+    | Draf | Pembetulan |
+    |---|---|
+    | B3 `83 + 6` | Pengganggu **99 → 88**: kesilapan kira satu langkah lebih munasabah daripada membawa satu puluh tanpa sebab |
+    | B6 | **Ditulis semula** kepada *"Nombor manakah ada 1 puluh dan 5 sa?"* dengan pilihan 15 · 51 · 5, kerana 51 dan 50 mewakili salah faham yang sama |
+    | B8 `nilai digit 6 dalam 63` | Pengganggu **3 → 63**, supaya dua jawapan salah membawa dua salah faham yang jelas dan corak *"yang dua digit mesti betul"* hilang |
+
+    Sepuluh draf lain lulus tanpa perubahan besar; B1, B2 dan B4 cuma perlu ayat akhir dalam
+    penerangan, dan guru mencadangkan pancingan *"Cari digit sa dahulu."* untuk B11–B13.
+
+    **Kesan yang belum berlaku, apabila 2.4.2 dibina.** q023, q030 dan q033 berhenti menjadi
+    `practice` dan menjadi bukti, jadi **ketiga-tiganya mula dikira dalam ketepatan, bintang dan
+    tangga aras** (SPEC §3.3, §5.2, §5.5). Hari ini soalan latihan tidak dikira dalam mana-mana
+    daripadanya.
+
+    **Dan satu perkara yang tidak hilang dengan pemindahan.** Bukti q023 yang sudah tersimpan di bawah
+    `two_digit_plus_two_digit_no_bridge` kekal dalam storan peranti selepas ia dipindahkan ke 2.4.2 —
+    kelas yang sama seperti q022, peraturan 3 stor kemajuan (SPEC §6). Analisisnya dalam item 37;
+    tidak diulang di sini.
+
     #### Rakaman BM masuk, 21 September 2026
 
     Lapan klip. Pemilik projek mendengar kesemuanya sebelum memasangnya; setiap satu menyebut ayat
