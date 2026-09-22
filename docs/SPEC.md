@@ -1745,9 +1745,8 @@ kali. Kelantangan ialah perbandingan.
 puncak tertinggi 0.860; setiap klip dalam 0.005 LU daripada ramalan. Baki sebaran datang daripada
 langkah 1.505 dB: tiada klip boleh lebih dekat daripada separuh langkah.
 
-> **Belum disahkan: penyahkod iOS Safari dan telinga pada telefon.** `global_gain` ialah medan
-> piawai yang setiap penyahkod MP3 patut hormati, tetapi yang diukur di sini ialah penyahkod
-> Chromium dalam pane. Pemilik projek menguji pada iPhone.
+> **Penyahkod iOS Safari telah diuji pada iPhone, dan ia memakai `global_gain` yang disunting;
+> lapisan yang diukur, syarat yang tidak dipenuhi dan sebabnya direkod dalam PRD §16 item 50.**
 
 ---
 

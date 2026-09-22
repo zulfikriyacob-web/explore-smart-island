@@ -67,7 +67,8 @@ difference, so it is now a defect. Integrated LUFS across all 35 Malay clips spa
 three groups, and q027 is the quietest in the bank. Fixed on `fix/loudness`: every clip is
 brought to −17 LUFS by editing `global_gain` inside the MP3, which is lossless, and the
 measured spread is now 1.41 LU. This is a fixed step for every new recording (SPEC §8,
-`npm run audio:gain`). iOS Safari has not been checked yet; the owner tests on the iPhone.
+`npm run audio:gain`). iOS Safari's decoder has since been tested on the iPhone and applies the
+edited gain; what was measured, the condition that was not met and why are in PRD §16 item 50.
 The same test showed the "Cukupkan 40 dahulu." hint helping, and q030/q033 understood. One
 child.
 
