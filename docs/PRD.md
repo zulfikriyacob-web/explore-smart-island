@@ -3529,3 +3529,56 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     **Belum disahkan:** penyahkod iOS Safari, dan telinga pada telefon — yang diukur ialah penyahkod
     Chromium dalam pane. Pemilik projek menguji pada iPhone. Dan had yang sama seperti dapatan di
     atas: sama ada 1.41 LU cukup kecil untuk anak tidak perasan lagi hanya boleh dijawab oleh anak.
+
+    > **Penyahkod iOS dan telinga pemilik projek diuji pada 22 September 2026 — di bawah. Ujian anak
+    > masih terbuka.**
+
+    #### Ujian telefon, 22 September 2026: penyahkod iOS Safari
+
+    **Lapisan yang diukur: penyahkod iOS Safari 26.6.1, iOS 18.7, pada asal LAN**
+    (`http://192.168.1.119:5174`, `isSecureContext: false`). Ini bukan ukuran pembesar suara.
+    Halaman sekali guna `public/loudness-phone.html` menyahkod setiap klip dengan `fetch` biasa, iaitu
+    cache HTTP yang sama dengan app, pada 44100 Hz. LUFS dan puncak dikira dengan fungsi
+    `scripts/loudness.ts` yang sama. `esi.progress.v1` **tiada** pada asal itu.
+
+    **Apa yang ujian ini hendak jawab:** sama ada penyahkod iOS memakai `global_gain` yang disunting.
+    Syaratnya ditetapkan sebelum ujian, dan direkod di sini tanpa dilonggarkan:
+
+    | Syarat | Telefon | Dipenuhi? |
+    |---|---|---|
+    | 35/35 klip dinyahkod | 35/35 | Ya |
+    | Setiap klip dalam ±0.1 LU daripada ukuran Chrome | 31/35 | **Tidak dipenuhi — 31/35**: q009 +0.324, q035 −0.148, q031 +0.144, q021 −0.104 |
+    | Sebaran ≤ 1.5 LU | 1.500 | Ya, tepat pada had |
+    | Puncak tertinggi ≤ 0.95 | 0.8601 | Ya |
+
+    Beza lain (telefon tolak Chrome): empat klip antara 0.05 dan 0.1 LU (q018 +0.087, q030 +0.080,
+    q023 −0.076, q017 +0.065). Sepuluh klip antara 0.01 dan 0.05, kesemuanya turun, dan tujuh belas
+    dalam 0.01. Lapan klip yang melebihi 0.05 LU menyimpang ke dua arah, lima naik dan tiga turun, jadi
+    ia bukan beza sistematik ke satu arah.
+
+    **Andaian yang ternyata salah:** kedua-dua penyahkod bermula pada sampel yang sama.
+
+    **Bukti yang tidak bergantung pada model.** Saiz bait dan tempoh setiap klip sama pada kedua-dua
+    penyahkod. Puncak juga sama sehingga 4 perpuluhan, kecuali q005 (−0.0001).
+
+    **Sebabnya — inferensi yang diuji dengan model, bukan bacaan sampel iOS.** Isyarat yang Chrome
+    nyahkod dianjak sebanyak **527–538 sampel** (~12 ms, merangkumi 529, kelewatan penyahkod MP3 yang
+    biasa). Anjakan itu menghasilkan semula kesemua 35 nilai telefon, dengan ralat maksimum **0.0005
+    LU**, iaitu sekadar pembundaran tiga perpuluhan telefon. Anjakan ke arah bertentangan memberi
+    0.278 LU. LUFS bersepadu mengukur dalam grid blok 400 ms, jadi klip pendek berubah bergantung pada
+    di mana grid itu bermula — q009 cuma ada 11 blok. Get relatif tidak menerangkannya: daripada empat
+    klip yang tidak memenuhi syarat, hanya q009 ada blok dalam 0.2 LU dari get, manakala q035 dan q021
+    tiada langsung (blok terdekat 3.55 dan 2.05 LU).
+
+    **Kesimpulan: penyahkod iOS memakai gain yang disunting.** q027 pada −17.625 terhasil semula
+    dengan tepat. Syarat ±0.1 LU tetap tidak dipenuhi. Ia mengukur penjajaran penyahkod dan juga
+    gainnya, dan penjajaran itu yang berbeza.
+
+    **Keputusan dengar pemilik projek** (Main semua, 22 September 2026): *"tiada klip yang senyap,
+    pecah, atau terasa lain kuatnya berbanding jirannya."*
+
+    Halaman itu tidak pernah dijejak, dan dipadam selepas ujian; `git rev-list --all --objects` tiada
+    padanan untuknya.
+
+    **Masih terbuka: ujian anak di aras 3** — sama ada anak masih perasan beza kelantangan pada
+    sebaran 1.41 LU.

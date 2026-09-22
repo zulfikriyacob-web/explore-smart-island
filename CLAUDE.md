@@ -542,6 +542,14 @@ clip is checked by ear, play it next to the clips around it in a session, not al
 peak figures taken first ("0.38–0.40 and 0.82–0.90", item 49) put q027 in the quiet group
 and still could not say how quiet it was. Peak is one sample; measure integrated LUFS.
 
+**On a short clip, integrated LUFS depends on where the 400 ms block grid starts.** Two
+decoders that produced the same samples, shifted by ~529 samples, read up to 0.324 LU
+apart: q009, 11 blocks. That was Chromium against iOS Safari 26.6.1: the same bytes,
+durations and peaks. The shift is inferred from a model that reproduces all 35 of the
+phone's readings within 0.0005 LU; no iOS samples were read. To compare decoders, compare peaks or samples, or align the
+signals first. Do not set a cross-decoder LUFS tolerance tighter than that. (PRD 16 item
+50.)
+
 ### Controls that unmount themselves
 
 **A control that removes itself from the DOM inside its own event handler cancels
