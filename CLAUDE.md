@@ -158,6 +158,11 @@ work ran in the main session.
   JPEG encoding is available through GDI+: `Add-Type -AssemblyName System.Drawing`,
   then `Save()` with an `EncoderParameter` for quality. PSNR between two images
   needs the same route plus `LockBits`; there is no tool that reports it.
+- **No audio tools either.** No `ffmpeg`, `mp3gain`, `sox` or `lame`; Python 3.14 has
+  `numpy` and no MP3 decoder. Decode in the Browser pane instead:
+  `new OfflineAudioContext(1, 1, rate).decodeAudioData(buf)` settles there, and a rate of
+  44100 decodes the clips without resampling. `Math.max(...samples)` on a decoded clip
+  overflows the call stack — loop instead. (PRD 16 item 50.)
 - **The dev server's Network URL changes.** The DHCP lease moves, so an address
   that worked yesterday may belong to another device today. Re-read the IP before
   handing a URL to a phone, and start the server with `--host` or the phone gets

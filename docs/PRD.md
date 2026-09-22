@@ -3339,8 +3339,9 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     iaitu 64px tolak 3% lukisan pane), dan `Howler._howls` app sendiri memuatkan kelapan-lapan
     klip. Kandungan pertuturan disahkan oleh telinga pemilik projek, bukan dari sini.
 
-    **Keseimbangan kelantangan — pemerhatian, belum masalah.** Lapan klip ini jatuh kepada dua
-    kumpulan yang jelas pada puncak penyahkod:
+    **Keseimbangan kelantangan — ~~pemerhatian, belum masalah~~ masalah sejak 22 September 2026:
+    anak perasan bezanya, dan LUFS merentas kesemua 35 klip BM diukur. Item 50.** Lapan klip ini
+    jatuh kepada dua kumpulan yang jelas pada puncak penyahkod:
 
     | Kumpulan | Klip | Puncak |
     |---|---|---|
@@ -3370,3 +3371,122 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     tidak mungkin diterima selepas itu. Sapuan di atas meliputi PRD dan SPEC sahaja; `docs/kssr/`
     tidak disapu. Dibetulkan dalam pengepala itu, di atas garisnya — teks guru di bawah garis tidak
     disentuh.
+50. **Ujian anak pada aras 3, 22 September 2026: dua dapatan yang mengesahkan, dan satu yang
+    menaikkan kelantangan item 49 kepada masalah. Satu anak.**
+
+    Lapan soalan melintasi puluh (item 49) dan rakaman baharunya belum pernah dilihat anak. Anak
+    perlu dua larian ≥ 90% untuk naik dari aras 1 ke aras 3 (SPEC §5.5), jadi aras itu disemai:
+    halaman sementara dalam `public/` menetapkan `packs[topicId].level` kepada 3 dalam
+    `esi.progress.v1` melalui `persistence.ts` dan `progress.ts` app sendiri, tanpa menyentuh bukti,
+    dan membuang `esi.session.v1` — sesi dibina semasa app dibuka, jadi tanpa itu app menyambung
+    larian lama pada aras lama. Diuji dalam pane pada `localhost` dan pada alamat LAN
+    (`isSecureContext: false`) sebelum telefon. Halaman itu tidak pernah dijejak dan dipadam selepas
+    ujian; `git rev-list --all --objects` tiada padanan untuknya.
+
+    **Had, dibaca bersama setiap dapatan di bawah: satu anak.** Bilangan larian, dan soalan mana yang
+    dijawab bagaimana, tidak dilaporkan. Ia membuktikan sesuatu berfungsi atau terdengar untuk anak
+    ini; ia tidak membuktikan untuk setiap anak.
+
+    #### 1. Pancingan "cukupkan puluh" membantu
+
+    Laporan pemilik projek: bila anak salah pada soalan melintasi puluh, dia menjawab betul pada
+    cubaan kedua selepas pancingan *"Cukupkan 40 dahulu."* — pancingan q029, iaitu peringkat pertama
+    guru yang sengaja tidak memberi nombor (item 49). Strategi guru dilihat berfungsi pada seorang
+    anak.
+
+    - **Yang tidak diliputi.** Empat soalan melintasi puluh memakai keluarga *"Cukupkan N dahulu."*
+      (q029, q030, q031, q035). Empat lagi memakai *"… Bawa 1 puluh."* (q032, q033, q034, q036), dan
+      laporan tidak menyebutnya.
+    - **Betul pada cubaan kedua bukan bukti penguasaan** (SPEC §5.7, cubaan pertama sahaja). Pancingan
+      membantu anak sampai ke jawapan, dan app merekodnya sebagai 60 markah tanpa bukti. Itu reka
+      bentuk, bukan kecacatan.
+
+    #### 2. q030 dan q033 difahami
+
+    Dua soalan situasi harian, `practice` sementara menunggu 2.4.2 (item 49). Anak memahaminya.
+    Keputusan 2.4.2 tetap soalan untuk guru.
+
+    Diukur sebelum ujian, dengan `buildSession` dan `recordSession` sebenar dalam simulasi yang tidak
+    di-commit, bermula daripada kemajuan kosong yang disemai aras 3: kedua-duanya **tidak** muncul dalam
+    dua larian aras 3 yang pertama. Soalan `practice` menunggu di belakang setiap soalan yang masih boleh
+    menjadi bukti (SPEC §5.5), jadi ia masuk hanya selepas satu sub-kemahiran aras 3 dikuasai — larian
+    ketiga kalau anak betul semua, ketiga dan keempat kalau soalan melintasi puluh salah pada cubaan
+    pertama. Larian pertama menunjukkan 5 daripada 8 soalan baharu; q036 masuk pada larian kedua.
+    Telefon ujian tidak bermula kosong, jadi urutannya di situ mungkin lain.
+
+    #### 3. Anak perasan beza kelantangan — diagnosis
+
+    Pemerhatian item 49 kini masalah. Diukur **LUFS bersepadu** (ITU-R BS.1770-4: penapis K pada 48
+    kHz, blok 400 ms, get −70 LUFS dan −10 LU) pada output penyahkod pelayar —
+    `OfflineAudioContext.decodeAudioData`, lapisan yang paling dekat dengan apa yang anak dengar yang
+    boleh dicapai dari sini — merentas **kesemua 35 klip BM**, termasuk q005 dan q009 yang diparkir.
+
+    **Kenapa LUFS, bukan RMS seluruh fail:** RMS mengira senyap di awal dan hujung klip. q011 membaca
+    −18.69 dBFS RMS tetapi −16.84 LUFS, q021 −18.49 lawan −16.18; RMS akan menanda klip yang panjang
+    senyapnya sebagai perlahan.
+
+    | Kumpulan | Klip | Tarikh commit | LUFS | Puncak |
+    |---|---|---|---|---|
+    | Kuat | q011–q023, q025, q026, q028, q030, q031, q035, q036 — 20 | 15–21 Sep | −16.84 hingga −14.85 | 0.730–0.955 |
+    | Sederhana | q001–q010 — 10 | 9–13 Sep | −21.22 hingga −18.85 | 0.388–0.576 |
+    | Perlahan | q027, q029, q032, q033, q034 — 5 | 20–21 Sep | −23.64 hingga −22.81 | 0.400–0.431 |
+
+    **Sebaran seluruh bank: 8.79 LU**, daripada q014 (−14.85) ke q027 (−23.64). Dalam satu sesi aras 3
+    sahaja, q025 (−14.88) dan q032 (−23.44) berjarak 8.56 LU.
+
+    - **q027 ialah klip paling perlahan dalam bank.** Ia lulus telinga pemilik projek sendirian (item 43);
+      bersebelahan klip lain ia 8.8 LU di bawah yang paling kuat. Syak pemilik projek betul.
+    - **Bukan sesi rakaman yang berbeza.** q026, q027 dan q028 datang dalam commit yang sama (`fbfddf9`)
+      dan membaca −15.86, −23.64 dan −16.28. Kelapan-lapan klip aras 3 datang dalam `f93e3b8`, empat
+      kuat dan empat perlahan. Output TTS berubah dalam satu duduk.
+    - **Puncak hari ini lebih tinggi daripada jadual di atas** — q029 0.418 berbanding 0.399, q032 0.431
+      berbanding 0.376. Bacaan hari ini sepadan dalam 0.004 antara 48 kHz dan 44.1 kHz asal (tanpa
+      sampel semula). Punca beza dengan bacaan item 49 tidak diketahui; pembahagian kumpulan tidak
+      berubah.
+    - **Had:** LUFS ialah model kelantangan yang dirasa, bukan ukuran pembesar suara telefon, dan pane
+      tidak mengeluarkan bunyi. Bukti bahawa bezanya **kedengaran** datang daripada anak; LUFS hanya
+      berkata **berapa besar**.
+
+    #### Cara menyamakannya — pilihan dengan kos, belum dipilih
+
+    Tiada alat audio pada mesin ini: tiada `mp3gain`, `ffmpeg`, `sox` atau `lame`. Python 3.14 dengan
+    `numpy` ada, tanpa penyahkod MP3.
+
+    **Struktur fail menyokong pilihan A.** Diimbas setiap bingkai: kesemua 35 klip MPEG-1 Layer III,
+    128 kbps CBR, mono, tiada CRC, tiada bingkai Xing/Info/LAME (pembuangan ID3 SPEC §8 meninggalkan
+    audio sahaja), dan bingkai berakhir tepat pada hujung fail. `global_gain` 39–210, jauh di bawah had
+    255. Setiap langkah `global_gain` ialah ×2^¼, **+1.505 dB**.
+
+    **Prototaip dalam memori, tiada fail ditulis:** q029 dan q032 ditambah +4 langkah, dinyahkod semula
+    oleh pelayar, dan dibandingkan sampel demi sampel dengan asal × 2 — **ralat 0**, panjang sama, tiada
+    sampel pada 1.0. +5 langkah mengklip q032: 2 sampel pada 1.0.
+
+    | | A. `global_gain`, cara mp3gain | B. `volume` per klip dalam Howler | C. Rakam semula |
+    |---|---|---|---|
+    | Menguatkan yang perlahan | **Ya** | **Tidak** — had 1.0 | Mungkin |
+    | Kesan pada pembesar suara | Klip perlahan naik sehingga 6 dB, yang kuat turun 1.5 dB | Semua disamakan ke q027: klip terkuat pada `volume` 0.36, dua puluh klip turun 6.8–8.8 dB | Bergantung pada TTS |
+    | Kerugian audio | Tiada — bingkai sama, hanya medan gain | Tiada | — |
+    | Kerja | Skrip Node kecil tanpa kebergantungan, dan ukuran pane yang sudah ada | Data volume per klip dalam pek atau skema, perubahan pemain, ujian | Masa pemilik projek, 15 klip sekurang-kurangnya |
+    | Boleh diterbalikkan | Ya — −n langkah memulangkan bait asal | Ya | — |
+    | Rakaman akan datang | Satu langkah tetap selepas pembuangan ID3 (SPEC §8) | Satu entri volume setiap klip | Tiada jaminan: TTS berubah dalam satu duduk, jadi langkah ukur tetap perlu |
+    | Belum disahkan | Penyahkod iOS Safari, dan telinga pada telefon | Laluan HTML5 | — |
+
+    Ditolak tanpa jadual: **menguatkan melebihi 1.0 melalui GainNode Howler** mencapai dalaman peribadi
+    pada laluan audio iOS yang SPEC §8 lindungi; **enkod semula dengan gain** memerlukan pengekod yang
+    tiada di sini dan menambah satu generasi kerugian.
+
+    **Pelan A pada sasaran −17 LUFS**, dikira daripada ukuran di atas, siling puncak 0.95:
+
+    | | Sebelum | Selepas |
+    |---|---|---|
+    | Julat LUFS | −23.64 hingga −14.85 | −17.69 hingga −16.28 |
+    | Sebaran | 8.79 LU | **1.41 LU** |
+    | Klip berubah | — | 33: 15 naik, 18 turun; q011 dan q028 tidak disentuh |
+    | Puncak tertinggi | 0.955 | 0.862 |
+    | Klip yang dihadkan headroom | — | tiada |
+
+    −17 ialah sasaran tertinggi yang klip paling perlahan boleh capai tanpa hampir mengklip: q027 pada
+    +4 langkah menjadi −17.62. −16.5 menghadkan q021, q027 dan q032 dan melebarkan sebaran kepada 1.90;
+    −18 memberi sebaran 1.38 tetapi merendahkan setiap klip.
+
+    **Keputusan milik pemilik projek.** Tiada fail audio diubah.

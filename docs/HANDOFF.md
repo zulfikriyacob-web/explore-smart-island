@@ -59,9 +59,14 @@ every English clip is still 0 bytes, and `LANG` is `'ms'` in `QuizScreen.tsx`.
    practice. 2.4.2 is in the DSKP catalogue; the skills file has no sub-skills under it
    and says why. Item 49.
 
-**On a child** — the loudness of the level-3 clips falls into two groups, peaks about
+~~**On a child** — the loudness of the level-3 clips falls into two groups, peaks about
 0.38–0.40 and 0.82–0.90. Recorded as an observation, not a defect: peak is not perceived
-loudness, and nobody has heard them through a phone speaker in a child's hands. Item 49.
+loudness, and nobody has heard them through a phone speaker in a child's hands. Item 49.~~
+**Answered 22 September 2026, item 50.** A child played level 3 and noticed the loudness
+difference, so it is now a defect. Integrated LUFS across all 35 Malay clips spans 8.79 LU in
+three groups, and q027 is the quietest in the bank. The fix is waiting on the owner's choice.
+The same test showed the "Cukupkan 40 dahulu." hint helping, and q030/q033 understood. One
+child.
 
 ### Next work, as the owner has left it
 
