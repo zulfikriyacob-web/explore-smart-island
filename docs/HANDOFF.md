@@ -59,17 +59,23 @@ every English clip is still 0 bytes, and `LANG` is `'ms'` in `QuizScreen.tsx`.
    practice. 2.4.2 is in the DSKP catalogue; the skills file has no sub-skills under it
    and says why. Item 49.
 
+**On a child** — **open:** a child playing level 3 with the evened-out clips, to hear whether
+the loudness difference is still noticeable. PRD §16 item 50.
+
 ~~**On a child** — the loudness of the level-3 clips falls into two groups, peaks about
 0.38–0.40 and 0.82–0.90. Recorded as an observation, not a defect: peak is not perceived
 loudness, and nobody has heard them through a phone speaker in a child's hands. Item 49.~~
 **Answered 22 September 2026, item 50.** A child played level 3 and noticed the loudness
 difference, so it is now a defect. Integrated LUFS across all 35 Malay clips spans 8.79 LU in
-three groups, and q027 is the quietest in the bank. Fixed on `fix/loudness`: every clip is
-brought to −17 LUFS by editing `global_gain` inside the MP3, which is lossless, and the
-measured spread is now 1.41 LU. This is a fixed step for every new recording (SPEC §8,
-`npm run audio:gain`). iOS Safari has not been checked yet; the owner tests on the iPhone.
-The same test showed the "Cukupkan 40 dahulu." hint helping, and q030/q033 understood. One
-child.
+three groups, and q027 is the quietest in the bank. Fixed in PR #95, merged 22 September
+2026: every clip is brought to −17 LUFS by editing `global_gain` inside the MP3, which is
+lossless, and the measured spread is now 1.41 LU. This is a fixed step for every new recording
+(SPEC §8, `npm run audio:gain`). iOS Safari's decoder has since been tested on the iPhone and
+applies the edited gain. The owner listened once, through the test page rather than the app.
+What was measured, the condition that was not met and why are in PRD §16 item 50. The child
+test with the evened-out clips is still open; see above.
+The child test that found the difference also showed the "Cukupkan 40 dahulu." hint helping,
+and q030/q033 understood. One child.
 
 ### Next work, as the owner has left it
 
