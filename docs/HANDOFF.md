@@ -11,15 +11,15 @@ Every date below is from `git log`, not from memory (CLAUDE.md, "This machine").
 
 ---
 
-## 0. Where the project stands — 23 September 2026
+## 0. Where the project stands — 24 September 2026
 
-`main` is at `2fab842`. **`feat/digit-value-batch` is seven commits ahead of it and is not
-merged**: the digit-value batch, its recordings, and the measurements below. On that branch
-373 tests pass and `validate:content` reports 0 errors on 48 questions. One pack,
-`math-y1-nombor-100`, `reviewStatus: teacher-reviewed` — and that status still covers only
-the ten questions of 12 September.
+`main` is at `7a1ca2c`. **`feat/digit-value-batch` merged in PR #98 on 23 September 2026**
+and the branch is deleted, local and remote: the digit-value batch, its recordings, and the
+measurements below are all on `main` now. 373 tests pass and `validate:content` reports 0
+errors on 48 questions. One pack, `math-y1-nombor-100`, `reviewStatus: teacher-reviewed` —
+and that status still covers only the ten questions of 12 September.
 
-### The branch waiting to merge, in the order it landed
+### What the merged branch carried, in the order it landed
 
 | Commit | What |
 |---|---|
@@ -53,11 +53,11 @@ measurement, not the pane's.
 | 21–22 Sep | Their eight Malay recordings, ID3 stripped and verified | item 49 |
 | 22 Sep | **Every Malay clip at −17 LUFS** by `global_gain`, and `npm run audio:gain` makes it a fixed step | SPEC §8, item 50 |
 | 22 Sep | The iOS decoder applies that gain; the ±0.1 LU condition was not met, and why | item 50 |
-| 23 Sep | **The digit-value batch** — on the branch above, not on `main` | item 49 |
+| 23 Sep | **The digit-value batch**, merged into `main` in PR #98 | item 49 |
 
 Items closed in that stretch, all with numbers in PRD §16: **31, 38, 44, 46, 48**.
 
-### The bank on the branch
+### The bank on `main`
 
 | Level | Playable | Evidence | Practice |
 |---|---|---|---|
@@ -83,7 +83,11 @@ operation rather than by the four 2.2.2 profiles, and q037 replaces q023 in
 
 **On the teacher, still open** — the thirteen new questions have not been through a review
 round. `kssr.review` in the pack still names the round-2 form and the ten questions of
-12 September, and `reviewStatus` is unchanged.
+12 September, and `reviewStatus` is unchanged. The pack now holds 48 questions, and three
+teacher documents have been filed since that form: `guru-semakan-pusingan-2-bertanda.md`
+(12 Sep), `guru-semakan-tambah-melintasi-puluh-dan-nilai-digit.md` (21 Sep) and
+`guru-semakan-nilai-digit-dan-tambah.md` (23 Sep). The review block describes the first of
+those three documents and ten of the 48 questions.
 
 **On a child** — **open, and now larger:** a child playing level 3 with the evened-out clips,
 and a child meeting the thirteen new questions at all. The bank's spread is 2.56 LU after this
@@ -105,19 +109,41 @@ test with the evened-out clips is still open; see above.
 The child test that found the difference also showed the "Cukupkan 40 dahulu." hint helping,
 and q030/q033 understood. One child.
 
-### Next work, as the owner has left it
+### Next work, by who it waits on
 
-1. ~~**The digit-value batch is unblocked.**~~ **Written, recorded and measured, on
-   `feat/digit-value-batch`.** The branch is not merged, and merging it is the next decision.
-2. **A child has not seen any of it.** Thirteen questions and their recordings, and a bank
-   whose loudness spread went back up to 2.56 LU.
-3. **Item 47 is open for a decision** — the space between a short card and the answer
+**On a child — nothing here has been played by one.** Levels 2 and 3 with the thirteen new
+questions, and the bank at a 2.56 LU spread rather than the 1.41 LU a child last heard
+(q041 is peak-limited at −18.83 LUFS). Items 49 and 50.
+
+**On us — self-host the font, as its own PR.** `index.html` fetches both faces from
+`fonts.googleapis.com` with `display=swap` and no font file is in the repo, so a phone that
+cannot reach the CDN draws the prompts 9.5% narrower than the band limits assume (CLAUDE.md,
+item 49). The next session does not start from nothing: on 23 September the test page served
+Lexend itself from `public/fonts-ujian/` — three woff2 subsets from `fonts.gstatic.com`,
+`wlpwgwvFAVdoq2_v9KQU4Wc.woff2` 13,840 bytes, `wlpwgwvFAVdoq2_v9aQU4Wc.woff2` 34,476 bytes
+and `wlpwgwvFAVdoq2_v-6QU.woff2` 39,680 bytes, with a rewritten `lexend.css` of 3,429 bytes
+holding 9 `@font-face` blocks that point at those three files. **Those files are not on disk
+now** — they were untracked and deleted with the test page, and a search of the repo and the
+profile on 24 September finds no woff2 anywhere. What survives is the recipe: fetch the
+`css2` URL with a browser user-agent, pull every `url(https://fonts.gstatic.com/….woff2)`
+out of the returned CSS, save each one and rewrite the `src` to the local path. A real PR
+has to cover **Baloo 2 as well** — `index.html` asks for `Baloo+2:wght@600;700` in the same
+link — and decide licence and placement, which the test page never had to.
+
+Three smaller things are still open, all on us:
+
+1. **Item 47 is open for a decision** — the space between a short card and the answer
    stack. q006 is now 223px, the widest in the pack, on the screen with the fewest objects.
    Numbers first was the owner's rule; the numbers are in.
-4. **UI sound** is deferred with three recorded constraints: a second player channel, SPEC
+2. **UI sound** is deferred with three recorded constraints: a second player channel, SPEC
    §8's one-clip rule, and skip-not-park on a suspended context. Item 26.
-5. **A subtraction question for 2.4.2** is the only sub-skill of the two new ones with
+3. **A subtraction question for 2.4.2** is the only sub-skill of the two new ones with
    nothing in it.
+
+**On the owner — the pack's `kssr.review` is out of date.** It names the round-2 form and
+the ten questions of 12 September; the bank is 48 questions and three teacher documents on.
+Nothing enforces that block, so it stays wrong until someone rewrites it. See "Waiting on
+someone else" above.
 
 ### Still true, and still not fixed
 
