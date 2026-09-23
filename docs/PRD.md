@@ -3372,6 +3372,42 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     `isScored()` sudah benar untuknya. Yang berubah bagi q023 ialah sub-kemahiran mana yang menerima
     buktinya.
 
+    #### Rakaman BM dan kelantangan, 23 September 2026
+
+    Tiga belas rakaman masuk mentah, dengan tag ID3v2.4 yang sama seperti setiap kelompok sebelum
+    ini. Disahkan di laluan repo dahulu: 13 fail dalam `public/audio/ms/`, tiada dalam `en/`, tiada
+    klip sedia ada ditimpa, tiada yang 0 bait. Tag dibuang dengan panjang daripada pengepalanya
+    sendiri, dan tiga semakan SPEC §8 lulus pada kesemuanya — bait pertama `ff fb`, bingkai dan
+    tempoh tidak berubah, bait ekor 0 — dengan penyahkod pelayar memberi `duration` yang sama
+    sebelum dan selepas.
+
+    Dua perkara ditanya sebelum menyentuh apa-apa, kerana tempoh tidak sepadan dengan jiran yang
+    sama panjang ayatnya. **q039** 5.251 s: pertuturannya 3.54 s, dengan 0.66 s senyap di depan dan
+    1.04 s di belakang — bank sudah ada yang begitu (q021 membawa 2.28 s). **q046 dan q047** berakhir
+    tanpa senyap; diukur setiap 10 ms, kedua-duanya mereput daripada ~0.22 RMS ke lantai bunyi dalam
+    60–70 ms terakhir, jadi penghujung yang selesai, bukan terpotong.
+
+    **Kelantangan dijalankan merentas kesemua 48 klip, bukan 13 sahaja** (SPEC §8): 35 klip lama
+    meminta 0 langkah, dan 13 yang baharu dialihkan.
+
+    | | Sebelum | Selepas |
+    |---|---|---|
+    | Julat | −23.34 hingga −13.97 LUFS | **−18.83 hingga −16.27 LUFS** |
+    | Sebaran | **9.37 LU** | **2.56 LU** |
+    | Puncak tertinggi | — | 0.921 |
+
+    **q041 tidak sampai sasaran, dan sebabnya puncak.** Pada −23.34 LUFS puncaknya sudah 0.500 —
+    faktor krest 17.5 dB berbanding 14.4–15.2 dB pada jirannya, dengan hanya 6 sampel di atas 0.9×
+    puncak, iaitu satu transien pada 1.55 s. Siling 0.95 membenarkan +3 langkah dan bukan +4, jadi ia
+    mendarat pada **−18.83 LUFS**: 1.8 LU di bawah sasaran dan 1.15 LU di bawah klip paling perlahan
+    seterusnya. Menaikkannya lagi akan mengklip.
+
+    **Keputusan dengar pemilik projek, 23 September 2026 — 13 klip dan q041 didengar pada telefon,
+    melalui pembesar suara, dalam urutan:** *"Semuanya ok, sebutan mengikut cara sebut Bahasa
+    Malaysia. Tiada klip pecah, senyap atau tersasar sebutan."* Atas dasar itu **q041 diterima seperti
+    adanya pada −18.83 LUFS; tiada rakaman semula.** Sebaran bank kekal 2.56 LU, lebih besar daripada
+    1.41 LU sebelum kelompok ini, dan seorang anak belum mendengarnya.
+
     #### Susun atur 13 soalan baharu, diukur pada 393×695
 
     Kelompok ini ditulis sebagai q037–q049 pada 23 September 2026. Diukur dalam pane pada 393×695,
