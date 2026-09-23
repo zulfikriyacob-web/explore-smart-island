@@ -3372,6 +3372,137 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     `isScored()` sudah benar untuknya. Yang berubah bagi q023 ialah sub-kemahiran mana yang menerima
     buktinya.
 
+    #### Rakaman BM dan kelantangan, 23 September 2026
+
+    Tiga belas rakaman masuk mentah, dengan tag ID3v2.4 yang sama seperti setiap kelompok sebelum
+    ini. Disahkan di laluan repo dahulu: 13 fail dalam `public/audio/ms/`, tiada dalam `en/`, tiada
+    klip sedia ada ditimpa, tiada yang 0 bait. Tag dibuang dengan panjang daripada pengepalanya
+    sendiri, dan tiga semakan SPEC §8 lulus pada kesemuanya — bait pertama `ff fb`, bingkai dan
+    tempoh tidak berubah, bait ekor 0 — dengan penyahkod pelayar memberi `duration` yang sama
+    sebelum dan selepas.
+
+    Dua perkara ditanya sebelum menyentuh apa-apa, kerana tempoh tidak sepadan dengan jiran yang
+    sama panjang ayatnya. **q039** 5.251 s: pertuturannya 3.54 s, dengan 0.66 s senyap di depan dan
+    1.04 s di belakang — bank sudah ada yang begitu (q021 membawa 2.28 s). **q046 dan q047** berakhir
+    tanpa senyap; diukur setiap 10 ms, kedua-duanya mereput daripada ~0.22 RMS ke lantai bunyi dalam
+    60–70 ms terakhir, jadi penghujung yang selesai, bukan terpotong.
+
+    **Kelantangan dijalankan merentas kesemua 48 klip, bukan 13 sahaja** (SPEC §8): 35 klip lama
+    meminta 0 langkah, dan 13 yang baharu dialihkan.
+
+    | | Sebelum | Selepas |
+    |---|---|---|
+    | Julat | −23.34 hingga −13.97 LUFS | **−18.83 hingga −16.27 LUFS** |
+    | Sebaran | **9.37 LU** | **2.56 LU** |
+    | Puncak tertinggi | — | 0.921 |
+
+    **q041 tidak sampai sasaran, dan sebabnya puncak.** Pada −23.34 LUFS puncaknya sudah 0.500 —
+    faktor krest 17.5 dB berbanding 14.4–15.2 dB pada jirannya, dengan hanya 6 sampel di atas 0.9×
+    puncak, iaitu satu transien pada 1.55 s. Siling 0.95 membenarkan +3 langkah dan bukan +4, jadi ia
+    mendarat pada **−18.83 LUFS**: 1.8 LU di bawah sasaran dan 1.15 LU di bawah klip paling perlahan
+    seterusnya. Menaikkannya lagi akan mengklip.
+
+    **Keputusan dengar pemilik projek, 23 September 2026 — 13 klip dan q041 didengar pada telefon,
+    melalui pembesar suara, dalam urutan:** *"Semuanya ok, sebutan mengikut cara sebut Bahasa
+    Malaysia. Tiada klip pecah, senyap atau tersasar sebutan."* Atas dasar itu **q041 diterima seperti
+    adanya pada −18.83 LUFS; tiada rakaman semula.** Sebaran bank kekal 2.56 LU, lebih besar daripada
+    1.41 LU sebelum kelompok ini, dan seorang anak belum mendengarnya.
+
+    #### Susun atur 13 soalan baharu, diukur pada 393×695
+
+    Kelompok ini ditulis sebagai q037–q049 pada 23 September 2026. Diukur dalam pane pada 393×695,
+    memandu UI sebenar: setiap arahan, dan setiap jalur pancingan dan dedahan, dalam ketiga-tiga
+    keadaan.
+
+    | Soalan | Baris arahan | Kad | Jalur pancingan | Jalur dedahan | Lajur bebas, tiba / pancingan / dedahan |
+    |---|---|---|---|---|---|
+    | q037 | 2 | 110.3 | 1 baris, 51px, 249px | 1 baris, 51px, **261px** | 104.4 / 39.8 / 31.8 |
+    | q038–q040 | 2 | 110.3 | 1 baris, 51px, 164px | 1 baris, 51px, **267–275px** | 104.4 / 39.8 / 31.8 |
+    | q041 | 2 | 110.3 | 1 baris, 51px, 248px | 1 baris, 51px, 189px | 104.4 / 39.8 / 31.8 |
+    | q042, q043 | **3** | 138.3 | 1 baris, 51px, 248px | 1 baris, 51px, 185–186px | 76.5 / 11.4 / **3.4** |
+    | q044–q046 | 2 | 110.3 | 1 baris, 51px, 158–159px | 1 baris, 51px, 109–111px | 104.4 / 39.8 / 31.8 |
+    | q047–q049 | **3** | 138.3 | 1 baris, 51px, 175px | 1 baris, 51px, 68–69px | 76.5 / 11.4 / **3.4** |
+
+    - **Tiada jalur membalut.** Kesemua 26 jalur baharu — 13 pancingan dan 13 dedahan — satu baris,
+      51px. Yang terlebar ialah penerangan guru pada q040, *"4 + 4 = 8. Puluh kekal 5. Jadi 58."*,
+      **275px**. Kapasiti satu baris yang diukur sebelum ini ialah 326px (item 33), jadi bakinya
+      51px. Empat penerangan 33–34 aksara yang `validate:content` beri amaran (q037–q040) muat satu
+      baris; tiada ayat guru dipendekkan.
+    - **Tiada kad terpotong dan tiada halaman menatal** dalam mana-mana keadaan: limpahan kad 0,
+      `scrollHeight − clientHeight` halaman 0.
+    - **Kes paling ketat: 3.4px.** Arahan tiga baris (q042, q043, q047–q049) dengan jalur dedahan
+      meninggalkan 3.4px dalam lajur soalan — kelas yang sama seperti baki 4px item 45, dan sebab
+      yang sama kenapa had jalur 28/37 aksara menahan susun atur, bukan hanya bacaan (SPEC §3.5).
+
+    > **Bagi lima arahan tiga baris — q042, q043, q047, q048, q049 — nombor pane di bawah
+    > digantikan oleh nombor telefon**, dalam bahagian selepas ini. Baki lapan soalan kekal sebagai
+    > ukuran pane.
+
+    **Lapisan yang diukur, dan apa yang ia tidak boleh buktikan.** Ini UI sebenar dalam Chromium
+    pane, bukan telefon. Rakaman BM belum wujud, jadi `AudioButton` akan menyembunyikan diri dan
+    perenggan arahan akan kehilangan satu float — susun atur yang tiada anak akan lihat. Supaya
+    ukuran ini menunjukkan susun atur sebenar, `promptAudio.ms` dalam **salinan sesi beku dalam
+    pane** ditunjuk kepada klip q025 yang sudah wujud; tiada fail audio dibuat dan pek tidak
+    disentuh (kaedah yang sama seperti item 40, 43 dan 49). Pane melukis kira-kira 3% kecil, jadi
+    angka ini baik kepada ±3px, dan baki 3.4px itu lebih kecil daripada ketepatannya sendiri: ia
+    bermakna "hampir tiada ruang", bukan satu nombor yang boleh dipercayai sebagai 3.4. Telefon
+    belum mengesahkan apa-apa daripada ini.
+
+    #### Lima arahan tiga baris, diukur pada telefon — 23 September 2026
+
+    **Lapisan: app dalam iframe `100dvh`, dalam Safari iOS 26.6.1 pada iOS 18.7, pada origin LAN
+    `http://192.168.1.119:5174`, dengan Lexend dihidangkan tempatan oleh halaman ujian.** Bukan app
+    yang dibuka terus sebagai dokumen atas. Empat nombor viewport sepadan pada **695** —
+    `window.innerHeight`, `visualViewport.height`, tinggi iframe yang dirender, dan `innerHeight`
+    dokumen dalam iframe — jadi app di dalam iframe itu disusun atur pada viewport telefon, dan itu
+    yang menjadikan ukuran ini bermakna.
+
+    | | Tiba | Dedahan |
+    |---|---|---|
+    | Baris arahan | 3 | 3 |
+    | Tinggi kad | 138 | 138 |
+    | Limpahan kad | 0 | 0 |
+    | Jalur | — | 1 baris, 51px |
+    | Butang audio | 64.1px, 50px di dalam tepi kad | 50px di dalam |
+    | Lajur bebas | 77 | **6** |
+    | Jurang ke timbunan jawapan | — | 22 |
+    | Halaman menatal | 0 | 0 |
+
+    Kelima-lima soalan memberi nombor yang sama, baris demi baris.
+
+    **Baki 6px itu bukan anggaran.** Ayat ujian mengukur **461px pada telefon dan 461px dalam pane**
+    — metrik teks yang sama, bukan skala yang berbeza — jadi 6px ialah nombor peranti, bukan angka
+    pane yang diskalakan. Baki 4px dalam item 45 ialah ukuran pane; 6px di sini ialah lajur paling
+    ketat yang pernah diukur pada peranti, dan ia diukur, bukan dianggarkan.
+
+    **Larian telefon pertama batal, dan sebabnya fon.** Lexend dimuat dalam `index.html` daripada
+    `fonts.googleapis.com` dengan `display=swap`, dan tiada fail fon dalam repo. Pada telefon ia tidak
+    sampai, jadi arahan dilukis dengan `system-ui`, yang **9.5% lebih sempit** — ayat ujian 461px
+    dalam Lexend, 402px dalam sandaran pada telefon itu. Empat daripada lima arahan membalut kepada
+    **dua** baris dan bukan tiga, dan kad membaca 112 dan bukan 138. Nombor itu mengukur muka taip
+    yang salah dan dibuang; halaman ujian kemudian membawa Lexend sendiri, menggantikan pautan Google
+    dalam iframe, dan menolak mengukur melainkan lebar terukur mengesahkan Lexend yang melukis.
+
+    > **Had jalur 28/37 aksara dikalibrasi pada Lexend** (item 33), jadi app yang dibuka tanpa Internet
+    > melukis dalam muka taip yang lain daripada yang had itu andaikan. Arahnya selamat — sandaran
+    > lebih sempit, jadi kurang membalut — tetapi dua anak boleh melihat susun atur berbeza. Fon
+    > dihoskan sendiri ialah keputusan yang belum dibuat; malam ini fon tempatan itu hanya untuk
+    > alat ujian, dan tidak pernah di-commit.
+
+    **Empat perangkap dalam alat ujian, semuanya ditangkap sebelum nombor direkod.** Tiga daripadanya
+    kelas yang repo ini sudah bayar untuk:
+
+    | Perangkap | Apa yang ia hasilkan | Pembetulan |
+    |---|---|---|
+    | Menunggu **masa**, bukan butang audio | Ukuran diambil sebelum `AudioButton` dipasang | Tunggu butang di dalam perenggan kad semasa (CLAUDE.md, item 26) |
+    | Fon tidak diperiksa langsung | Susun atur sandaran direkod sebagai susun atur telefon | Verdict daripada lebar terukur: terkira lawan Lexend lawan sandaran, dicetak pada setiap baris |
+    | Lembaran fon tempatan disuntik, fon diminta serta-merta | Lembaran belum dihurai, jadi "Lexend" mengukur fon terakhir — 371px, bukan 461 | Tunggu peristiwa `load` lembaran itu |
+    | Pane tersembunyi | `innerHeight` 0, kad 47.3px, arahan 8–9 baris | Tolak mengukur bila viewport 0 (CLAUDE.md) |
+
+    Diagnosis pertama saya untuk percanggahan pane–telefon — perlumbaan probe butang audio — **salah**,
+    dan ditolak oleh data pemilik projek sendiri: kelima-lima baris "tiba" membawa butang 64px. Fon
+    yang menerangkannya, dan ujian yang membezakannya ialah lebar, bukan kehadiran butang.
+
     **Dan satu perkara yang tidak hilang dengan pemindahan.** Bukti q023 yang sudah tersimpan di bawah
     `two_digit_plus_two_digit_no_bridge` kekal dalam storan peranti selepas ia dipindahkan ke 2.4.2 —
     kelas yang sama seperti q022, peraturan 3 stor kemajuan (SPEC §6). Analisisnya dalam item 37;

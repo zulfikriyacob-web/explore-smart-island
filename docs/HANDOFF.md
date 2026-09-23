@@ -11,10 +11,28 @@ Every date below is from `git log`, not from memory (CLAUDE.md, "This machine").
 
 ---
 
-## 0. Where the project stands — 22 September 2026
+## 0. Where the project stands — 23 September 2026
 
-`main` is at `104f48c`. 258 tests pass, `validate:content` reports 0 errors on 35
-questions. One pack, `math-y1-nombor-100`, `reviewStatus: teacher-reviewed`.
+`main` is at `2fab842`. **`feat/digit-value-batch` is seven commits ahead of it and is not
+merged**: the digit-value batch, its recordings, and the measurements below. On that branch
+373 tests pass and `validate:content` reports 0 errors on 48 questions. One pack,
+`math-y1-nombor-100`, `reviewStatus: teacher-reviewed` — and that status still covers only
+the ten questions of 12 September.
+
+### The branch waiting to merge, in the order it landed
+
+| Commit | What |
+|---|---|
+| `ef447a2` | **2.4.2 in the skills file**, split by operation as the teacher asked, and q023 moves to it with flat tags |
+| `5dcd728` | **Thirteen questions, q037–q049**, from the 23 September review, with its three corrections |
+| `14e680e` | Thirteen 0-byte English placeholders |
+| `14093e8` | The batch measured in the pane at 393×695 |
+| `3f6a703` | **The thirteen Malay recordings**, ID3 stripped, three SPEC §8 checks |
+| `0d50874` | **Loudness levelled across the whole bank**: spread 9.37 → 2.56 LU |
+| `d8b817f` | The recordings, the loudness pass, and the owner's listen |
+
+Everything in PRD §16 item 49. The layout record for the five three-line prompts is the phone
+measurement, not the pane's.
 
 ### What changed since 13 September, in the order it landed
 
@@ -33,34 +51,44 @@ questions. One pack, `math-y1-nombor-100`, `reviewStatus: teacher-reviewed`.
 | 21 Sep | **`timesAsked` tiebreak** — no question now appears in every run at any level | SPEC §5.5, §6, item 38 |
 | 21 Sep | **Six level-3 bridging questions** from a teacher review that arrived as a file, plus two everyday-situation ones as practice | `docs/kssr/`, item 49 |
 | 21–22 Sep | Their eight Malay recordings, ID3 stripped and verified | item 49 |
+| 22 Sep | **Every Malay clip at −17 LUFS** by `global_gain`, and `npm run audio:gain` makes it a fixed step | SPEC §8, item 50 |
+| 22 Sep | The iOS decoder applies that gain; the ±0.1 LU condition was not met, and why | item 50 |
+| 23 Sep | **The digit-value batch** — on the branch above, not on `main` | item 49 |
 
 Items closed in that stretch, all with numbers in PRD §16: **31, 38, 44, 46, 48**.
 
-### The bank today
+### The bank on the branch
 
 | Level | Playable | Evidence | Practice |
 |---|---|---|---|
 | 1 | 12 | 12 | — |
-| 2 | 9 | 9 | — |
-| 3 | 12 | 9 | 3 (q022, q030, q033) |
+| 2 | 18 | 18 | — |
+| 3 | 16 | 15 | 1 (q022) |
 
-q005 and q009 are `parked` for a 7.0 Ruang pack (item 10). Every Malay clip is recorded;
-every English clip is still 0 bytes, and `LANG` is `'ms'` in `QuizScreen.tsx`.
+48 questions. q005 and q009 are `parked` for a 7.0 Ruang pack (item 10). **Every Malay clip is
+recorded and levelled**; every English clip is still 0 bytes, and `LANG` is `'ms'` in
+`QuizScreen.tsx`. q030 and q033 are no longer practice: they are 2.4.2 evidence, and they now
+count towards accuracy, stars and the level ladder.
+
+Coverage after the batch: 1.6.1 is 4 of 4 sub-skills tested and 2.2.2 is 4 of 4. What is still
+untested: `2.4.2/solve_subtraction_daily_problem`, four of 1.2.2, and two of 1.2.1.
 
 ### Waiting on someone else
 
-**On the teacher** — the owner is asking:
+~~**On the teacher** — the owner is asking: q023 to 2.4.2, and breaking 2.4.2 into
+sub-skills.~~ **Both answered 23 September 2026** in
+`docs/kssr/guru-semakan-nilai-digit-dan-tambah.md`: q023 moves to 2.4.2, 2.4.2 splits by
+operation rather than by the four 2.2.2 profiles, and q037 replaces q023 in
+`two_digit_plus_two_digit_no_bridge`. Both are built on the branch. Item 49.
 
-1. **q023 to 2.4.2?** Her rule — everyday situations are not 2.2.2 evidence — reaches
-   q023, though she did not name it. Moving it leaves
-   `two_digit_plus_two_digit_no_bridge` with two questions, combined guess 1/9 = 11.1%,
-   which cannot reach *Dikuasai*. A replacement direct question has to come first. Item 49.
-2. **Breaking 2.4.2 into sub-skills**, so q030 and q033 can be evidence instead of
-   practice. 2.4.2 is in the DSKP catalogue; the skills file has no sub-skills under it
-   and says why. Item 49.
+**On the teacher, still open** — the thirteen new questions have not been through a review
+round. `kssr.review` in the pack still names the round-2 form and the ten questions of
+12 September, and `reviewStatus` is unchanged.
 
-**On a child** — **open:** a child playing level 3 with the evened-out clips, to hear whether
-the loudness difference is still noticeable. PRD §16 item 50.
+**On a child** — **open, and now larger:** a child playing level 3 with the evened-out clips,
+and a child meeting the thirteen new questions at all. The bank's spread is 2.56 LU after this
+batch, not the 1.41 LU a child last heard, because q041 is peak-limited at −18.83 LUFS. PRD
+§16 items 49 and 50.
 
 ~~**On a child** — the loudness of the level-3 clips falls into two groups, peaks about
 0.38–0.40 and 0.82–0.90. Recorded as an observation, not a defect: peak is not perceived
@@ -79,21 +107,26 @@ and q030/q033 understood. One child.
 
 ### Next work, as the owner has left it
 
-1. **The digit-value batch is unblocked.** The teacher approved `6` as a distractor for
-   *"Apakah nilai digit 6 dalam 63?"* — because it is in the prompt. SPEC §3.4 records it
-   as the second exception to the string-matching rule. No question written yet. The
-   untested 1.6.1 sub-skills are `digit_at_ones`, `value_of_tens_digit` and
-   `value_of_ones_digit`.
-2. **Item 47 is open for a decision** — the space between a short card and the answer
+1. ~~**The digit-value batch is unblocked.**~~ **Written, recorded and measured, on
+   `feat/digit-value-batch`.** The branch is not merged, and merging it is the next decision.
+2. **A child has not seen any of it.** Thirteen questions and their recordings, and a bank
+   whose loudness spread went back up to 2.56 LU.
+3. **Item 47 is open for a decision** — the space between a short card and the answer
    stack. q006 is now 223px, the widest in the pack, on the screen with the fewest objects.
    Numbers first was the owner's rule; the numbers are in.
-3. **UI sound** is deferred with three recorded constraints: a second player channel, SPEC
+4. **UI sound** is deferred with three recorded constraints: a second player channel, SPEC
    §8's one-clip rule, and skip-not-park on a suspended context. Item 26.
-4. **2.2.2 is at 3 of 4 sub-skills.** `two_digit_plus_one_digit_no_bridge` has no question.
+5. **A subtraction question for 2.4.2** is the only sub-skill of the two new ones with
+   nothing in it.
 
 ### Still true, and still not fixed
 
 - **No CI.** `validate:content` blocks nothing unless someone runs it. Item 34.
+- **The app fetches Lexend from Google Fonts at first paint**, and no font file is in the
+  repo. A phone that cannot reach the CDN draws the prompts in the system fallback, which is
+  9.5% narrower — and the 28/37-character band limits are calibrated on Lexend. It happened
+  on the owner's phone on 23 September and it voided a whole measurement run. Self-hosting
+  the font is an undecided product question, not only a test one. Item 49.
 - **A hanging `resume()`** on iOS remains unexplained. Section 3 below.
 - **The reward screen can scroll** only if its content ever outgrows 695px again; at 104px
   the kancil leaves 7px. Whether a 39px overflow was ever enough to make Safari retract its
