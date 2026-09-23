@@ -3785,5 +3785,39 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     Halaman itu tidak pernah dijejak, dan dipadam selepas ujian; `git rev-list --all --objects` tiada
     padanan untuknya.
 
-    **Masih terbuka: ujian anak di aras 3** — sama ada anak masih perasan beza kelantangan pada
-    sebaran 1.41 LU.
+    ~~**Masih terbuka: ujian anak di aras 3** — sama ada anak masih perasan beza kelantangan pada
+    sebaran 1.41 LU.~~ **Dijawab 24 September 2026 — di bawah.** Bank yang anak dengar ialah bank
+    selepas kelompok nilai digit, iaitu sebaran **2.56 LU**, bukan 1.41 LU.
+
+    #### Ujian anak, 24 September 2026: item 50 ditutup
+
+    Anak bermain **satu aktiviti penuh sampai habis** pada telefon, pada asal LAN
+    `http://192.168.1.119:5174`, **tanpa arahan lisan daripada orang dewasa**. Dia faham soalan.
+
+    **Apa yang sebenarnya diperhatikan tentang bunyi: dia tidak menyebut apa-apa tentangnya.** Itu
+    sahaja yang dilaporkan, dan ia bukan perkara yang sama dengan "dia tidak perasan". Tiada aduan
+    bukan tiada perbezaan; anak tidak ditanya, jadi yang direkod di sini ialah ketiadaan sebutan, dan
+    bukan satu bacaan tentang apa yang dia dengar.
+
+    Atas dasar itu **item 50 ditutup**. Anak yang sama inilah yang mula-mula membangkitkannya pada 22
+    September 2026, ketika dia menyebut sendiri yang klip tidak sama kuat pada sebaran 8.79 LU. Pada
+    sebaran 2.56 LU dia bermain satu aktiviti penuh dan tidak membangkitkannya. Itu perubahan yang
+    boleh diperhatikan antara dua ujian, dengan anak yang sama sebagai ukurannya.
+
+    **SPEC §10 kriteria 7 dipenuhi pada 24 September 2026.** Kriteria itu tinggal di SPEC dan tidak
+    disalin ke sini; yang direkod di sini hanyalah bahawa ia dipenuhi pada tarikh ini, oleh larian ini.
+
+    **Had pemerhatian ini, ditulis sebelum sesiapa memetiknya sebagai lebih daripada yang ada:**
+
+    - Pemilik projek **tidak merekod aras** yang anak main.
+    - **Tidak merekod soalan mana** yang muncul.
+    - **Tidak merekod sama ada mana-mana daripada 13 soalan baharu** (q037–q049) ditanya langsung.
+    - Satu anak, satu larian, seperti setiap dapatan lain dalam item ini.
+
+    Maka larian ini mengesahkan **bunyi dan kebolehfahaman keseluruhan**. Ia **tidak** mengesahkan
+    soalan nilai digit yang baharu — tiada apa-apa dalam laporan yang boleh membezakan larian yang
+    menanyakannya daripada larian yang tidak.
+
+    **Masih terbuka: reaksi anak kepada soalan nilai digit**, khususnya sama ada dia membezakan
+    **digit** daripada **nilai digit** — 1.6.1 dalam pek, dan sebab kelompok q041–q049 ditulis. Itu
+    memerlukan larian yang aras dan soalannya direkod, bukan larian yang hanya diperhatikan.
