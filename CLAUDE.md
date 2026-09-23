@@ -413,6 +413,22 @@ claims, and only the second one ships. (PRD 16 item 49.)
   Lexend')` and `await document.fonts.ready` both resolve, and
   `document.fonts.check('18px Lexend')` then returns `true`. Await one of them
   before measuring text width, or the width is the fallback font's.
+- **And settling in the pane proves nothing about the device: check that Lexend is
+  the face that drew the text, from a measured width.** Lexend is fetched from
+  `fonts.googleapis.com` in `index.html` with `display=swap` and no font file is in
+  the repo, so a phone that cannot reach the CDN draws the prompts in `system-ui`,
+  which is **9.5% narrower** — the test sentence is 461px in Lexend and 402px in the
+  fallback on that phone. On 23 September 2026 that voided a whole run before anyone
+  noticed: four of the five three-line prompts wrapped to **two** lines and the card
+  read 112px instead of 138px, and the first diagnosis blamed the audio-button probe
+  instead. The 28/37-character band limits are calibrated on Lexend (SPEC §3.5, item
+  33), so the fallback is a different layout, not a rounding error. So compute the
+  same sentence in Lexend and in the fallback, print the verdict on every line, and
+  refuse to record a number unless the measured width says Lexend. A local stylesheet
+  injected to supply the font is not ready the moment it is injected either —
+  measuring straight after gave 371px, the previous face, not 461px — so wait for
+  that sheet's `load` event. Self-hosting the font is an open product decision, not
+  only a test one. (PRD §16 item 49.)
 - **A rounded share is not "every one".** A measurement reported 100% of
   41-character sentences wrapping at 326px, and it was written down as "every one".
   The same output gave the narrowest 41-character sentence as 321px, which fits.
