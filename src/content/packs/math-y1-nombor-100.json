@@ -77,8 +77,8 @@
         "ms": "Dua digit tambah dua digit, tanpa melintasi puluh",
         "en": "Two digits plus two digits, without bridging a ten"
       },
-      "questionCount": 3,
-      "questionIds": ["q008", "q022", "q025"]
+      "questionCount": 4,
+      "questionIds": ["q008", "q022", "q025", "q037"]
     },
     {
       "activityId": "math-y1-nombor-100-a8",
@@ -115,6 +115,42 @@
       },
       "questionCount": 3,
       "questionIds": ["q023", "q030", "q033"]
+    },
+    {
+      "activityId": "math-y1-nombor-100-a12",
+      "title": {
+        "ms": "Dua digit tambah satu digit, tanpa melintasi puluh",
+        "en": "Two digits plus one digit, without bridging a ten"
+      },
+      "questionCount": 3,
+      "questionIds": ["q038", "q039", "q040"]
+    },
+    {
+      "activityId": "math-y1-nombor-100-a13",
+      "title": {
+        "ms": "Mengenal digit di tempat sa",
+        "en": "Identifying the digit in the ones place"
+      },
+      "questionCount": 3,
+      "questionIds": ["q041", "q042", "q043"]
+    },
+    {
+      "activityId": "math-y1-nombor-100-a14",
+      "title": {
+        "ms": "Menyatakan nilai digit di tempat puluh",
+        "en": "Stating the value of the digit in the tens place"
+      },
+      "questionCount": 3,
+      "questionIds": ["q044", "q045", "q046"]
+    },
+    {
+      "activityId": "math-y1-nombor-100-a15",
+      "title": {
+        "ms": "Menyatakan nilai digit di tempat sa",
+        "en": "Stating the value of the digit in the ones place"
+      },
+      "questionCount": 3,
+      "questionIds": ["q047", "q048", "q049"]
     }
   ],
   "questions": [
@@ -1057,6 +1093,357 @@
           { "id": "a", "text": { "ms": "62", "en": "62" } },
           { "id": "b", "text": { "ms": "52", "en": "52" } },
           { "id": "c", "text": { "ms": "26", "en": "26" } }
+        ],
+        "correctOptionId": "a",
+        "shuffle": true
+      }
+    },
+    {
+      "id": "q037",
+      "type": "mcq",
+      "difficulty": 3,
+      "learningStandard": "2.2.2",
+      "subSkill": "2.2.2/two_digit_plus_two_digit_no_bridge",
+      "promptForm": "direct",
+      "representation": "symbolic",
+      "responseMode": "select",
+      "wordingVariant": "A",
+      "prompt": {
+        "ms": "41 tambah 27 jadi berapa?",
+        "en": "What is 41 plus 27?"
+      },
+      "promptAudio": { "ms": "/audio/ms/q037.mp3", "en": "/audio/en/q037.mp3" },
+      "hint": { "ms": "Tambah sa, kemudian puluh.", "en": "Add the ones, then the tens." },
+      "explain": { "ms": "1 + 7 = 8. 40 + 20 = 60. Jadi 68.", "en": "1 + 7 = 8. 40 + 20 = 60. So 68." },
+      "payload": {
+        "options": [
+          { "id": "a", "text": { "ms": "68", "en": "68" } },
+          { "id": "b", "text": { "ms": "48", "en": "48" } },
+          { "id": "c", "text": { "ms": "86", "en": "86" } }
+        ],
+        "correctOptionId": "a",
+        "shuffle": true
+      }
+    },
+    {
+      "id": "q038",
+      "type": "mcq",
+      "difficulty": 3,
+      "learningStandard": "2.2.2",
+      "subSkill": "2.2.2/two_digit_plus_one_digit_no_bridge",
+      "promptForm": "direct",
+      "representation": "symbolic",
+      "responseMode": "select",
+      "wordingVariant": "A",
+      "prompt": {
+        "ms": "32 tambah 5 jadi berapa?",
+        "en": "What is 32 plus 5?"
+      },
+      "promptAudio": { "ms": "/audio/ms/q038.mp3", "en": "/audio/en/q038.mp3" },
+      "hint": { "ms": "Tambah sa dahulu.", "en": "Add the ones first." },
+      "explain": { "ms": "2 + 5 = 7. Puluh kekal 3. Jadi 37.", "en": "2 + 5 = 7. The tens stay 3. So 37." },
+      "payload": {
+        "options": [
+          { "id": "a", "text": { "ms": "37", "en": "37" } },
+          { "id": "b", "text": { "ms": "36", "en": "36" } },
+          { "id": "c", "text": { "ms": "82", "en": "82" } }
+        ],
+        "correctOptionId": "a",
+        "shuffle": true
+      }
+    },
+    {
+      "id": "q039",
+      "type": "mcq",
+      "difficulty": 3,
+      "learningStandard": "2.2.2",
+      "subSkill": "2.2.2/two_digit_plus_one_digit_no_bridge",
+      "promptForm": "direct",
+      "representation": "symbolic",
+      "responseMode": "select",
+      "wordingVariant": "A",
+      "prompt": {
+        "ms": "83 tambah 6 jadi berapa?",
+        "en": "What is 83 plus 6?"
+      },
+      "promptAudio": { "ms": "/audio/ms/q039.mp3", "en": "/audio/en/q039.mp3" },
+      "hint": { "ms": "Tambah sa dahulu.", "en": "Add the ones first." },
+      "explain": { "ms": "3 + 6 = 9. Puluh kekal 8. Jadi 89.", "en": "3 + 6 = 9. The tens stay 8. So 89." },
+      "payload": {
+        "options": [
+          { "id": "a", "text": { "ms": "89", "en": "89" } },
+          { "id": "b", "text": { "ms": "88", "en": "88" } },
+          { "id": "c", "text": { "ms": "98", "en": "98" } }
+        ],
+        "correctOptionId": "a",
+        "shuffle": true
+      }
+    },
+    {
+      "id": "q040",
+      "type": "mcq",
+      "difficulty": 3,
+      "learningStandard": "2.2.2",
+      "subSkill": "2.2.2/two_digit_plus_one_digit_no_bridge",
+      "promptForm": "direct",
+      "representation": "symbolic",
+      "responseMode": "select",
+      "wordingVariant": "A",
+      "prompt": {
+        "ms": "54 tambah 4 jadi berapa?",
+        "en": "What is 54 plus 4?"
+      },
+      "promptAudio": { "ms": "/audio/ms/q040.mp3", "en": "/audio/en/q040.mp3" },
+      "hint": { "ms": "Tambah sa dahulu.", "en": "Add the ones first." },
+      "explain": { "ms": "4 + 4 = 8. Puluh kekal 5. Jadi 58.", "en": "4 + 4 = 8. The tens stay 5. So 58." },
+      "payload": {
+        "options": [
+          { "id": "a", "text": { "ms": "58", "en": "58" } },
+          { "id": "b", "text": { "ms": "57", "en": "57" } },
+          { "id": "c", "text": { "ms": "94", "en": "94" } }
+        ],
+        "correctOptionId": "a",
+        "shuffle": true
+      }
+    },
+    {
+      "id": "q041",
+      "type": "mcq",
+      "difficulty": 2,
+      "learningStandard": "1.6.1",
+      "subSkill": "1.6.1/digit_at_ones",
+      "promptForm": "direct",
+      "representation": "symbolic",
+      "responseMode": "select",
+      "wordingVariant": "A",
+      "prompt": {
+        "ms": "Dalam 49, apakah digit di tempat sa?",
+        "en": "In 49, what digit is in the ones place?"
+      },
+      "promptAudio": { "ms": "/audio/ms/q041.mp3", "en": "/audio/en/q041.mp3" },
+      "hint": { "ms": "Tempat sa di sebelah kanan.", "en": "The ones place is on the right." },
+      "explain": { "ms": "49 = 4 puluh dan 9 sa.", "en": "49 = 4 tens and 9 ones." },
+      "payload": {
+        "options": [
+          { "id": "a", "text": { "ms": "9", "en": "9" } },
+          { "id": "b", "text": { "ms": "4", "en": "4" } },
+          { "id": "c", "text": { "ms": "49", "en": "49" } }
+        ],
+        "correctOptionId": "a",
+        "shuffle": true
+      }
+    },
+    {
+      "id": "q042",
+      "type": "mcq",
+      "difficulty": 2,
+      "learningStandard": "1.6.1",
+      "subSkill": "1.6.1/digit_at_ones",
+      "promptForm": "reverse",
+      "representation": "symbolic",
+      "responseMode": "select",
+      "wordingVariant": "A",
+      "prompt": {
+        "ms": "Nombor manakah ada 1 puluh dan 5 sa?",
+        "en": "Which number has 1 ten and 5 ones?"
+      },
+      "promptAudio": { "ms": "/audio/ms/q042.mp3", "en": "/audio/en/q042.mp3" },
+      "hint": { "ms": "Tempat sa di sebelah kanan.", "en": "The ones place is on the right." },
+      "explain": { "ms": "15 = 1 puluh dan 5 sa.", "en": "15 = 1 ten and 5 ones." },
+      "payload": {
+        "options": [
+          { "id": "a", "text": { "ms": "15", "en": "15" } },
+          { "id": "b", "text": { "ms": "51", "en": "51" } },
+          { "id": "c", "text": { "ms": "5", "en": "5" } }
+        ],
+        "correctOptionId": "a",
+        "shuffle": true
+      }
+    },
+    {
+      "id": "q043",
+      "type": "mcq",
+      "difficulty": 2,
+      "learningStandard": "1.6.1",
+      "subSkill": "1.6.1/digit_at_ones",
+      "promptForm": "contextual",
+      "representation": "symbolic",
+      "responseMode": "select",
+      "wordingVariant": "A",
+      "prompt": {
+        "ms": "Raju ada 26 kad. Apakah digit di tempat sa?",
+        "en": "Raju has 26 cards. What digit is in the ones place?"
+      },
+      "promptAudio": { "ms": "/audio/ms/q043.mp3", "en": "/audio/en/q043.mp3" },
+      "hint": { "ms": "Tempat sa di sebelah kanan.", "en": "The ones place is on the right." },
+      "explain": { "ms": "26 = 2 puluh dan 6 sa.", "en": "26 = 2 tens and 6 ones." },
+      "payload": {
+        "options": [
+          { "id": "a", "text": { "ms": "6", "en": "6" } },
+          { "id": "b", "text": { "ms": "2", "en": "2" } },
+          { "id": "c", "text": { "ms": "26", "en": "26" } }
+        ],
+        "correctOptionId": "a",
+        "shuffle": true
+      }
+    },
+    {
+      "id": "q044",
+      "type": "mcq",
+      "difficulty": 2,
+      "learningStandard": "1.6.1",
+      "subSkill": "1.6.1/value_of_tens_digit",
+      "promptForm": "direct",
+      "representation": "symbolic",
+      "responseMode": "select",
+      "wordingVariant": "A",
+      "prompt": {
+        "ms": "Apakah nilai digit 6 dalam 63?",
+        "en": "What is the value of the digit 6 in 63?"
+      },
+      "promptAudio": { "ms": "/audio/ms/q044.mp3", "en": "/audio/en/q044.mp3" },
+      "hint": { "ms": "6 di tempat puluh.", "en": "6 is in the tens place." },
+      "explain": { "ms": "6 puluh = 60.", "en": "6 tens = 60." },
+      "payload": {
+        "options": [
+          { "id": "a", "text": { "ms": "60", "en": "60" } },
+          { "id": "b", "text": { "ms": "6", "en": "6" } },
+          { "id": "c", "text": { "ms": "63", "en": "63" } }
+        ],
+        "correctOptionId": "a",
+        "shuffle": true
+      }
+    },
+    {
+      "id": "q045",
+      "type": "mcq",
+      "difficulty": 2,
+      "learningStandard": "1.6.1",
+      "subSkill": "1.6.1/value_of_tens_digit",
+      "promptForm": "direct",
+      "representation": "symbolic",
+      "responseMode": "select",
+      "wordingVariant": "A",
+      "prompt": {
+        "ms": "Apakah nilai digit 4 dalam 47?",
+        "en": "What is the value of the digit 4 in 47?"
+      },
+      "promptAudio": { "ms": "/audio/ms/q045.mp3", "en": "/audio/en/q045.mp3" },
+      "hint": { "ms": "4 di tempat puluh.", "en": "4 is in the tens place." },
+      "explain": { "ms": "4 puluh = 40.", "en": "4 tens = 40." },
+      "payload": {
+        "options": [
+          { "id": "a", "text": { "ms": "40", "en": "40" } },
+          { "id": "b", "text": { "ms": "4", "en": "4" } },
+          { "id": "c", "text": { "ms": "47", "en": "47" } }
+        ],
+        "correctOptionId": "a",
+        "shuffle": true
+      }
+    },
+    {
+      "id": "q046",
+      "type": "mcq",
+      "difficulty": 2,
+      "learningStandard": "1.6.1",
+      "subSkill": "1.6.1/value_of_tens_digit",
+      "promptForm": "direct",
+      "representation": "symbolic",
+      "responseMode": "select",
+      "wordingVariant": "A",
+      "prompt": {
+        "ms": "Apakah nilai digit 8 dalam 82?",
+        "en": "What is the value of the digit 8 in 82?"
+      },
+      "promptAudio": { "ms": "/audio/ms/q046.mp3", "en": "/audio/en/q046.mp3" },
+      "hint": { "ms": "8 di tempat puluh.", "en": "8 is in the tens place." },
+      "explain": { "ms": "8 puluh = 80.", "en": "8 tens = 80." },
+      "payload": {
+        "options": [
+          { "id": "a", "text": { "ms": "80", "en": "80" } },
+          { "id": "b", "text": { "ms": "8", "en": "8" } },
+          { "id": "c", "text": { "ms": "82", "en": "82" } }
+        ],
+        "correctOptionId": "a",
+        "shuffle": true
+      }
+    },
+    {
+      "id": "q047",
+      "type": "mcq",
+      "difficulty": 2,
+      "learningStandard": "1.6.1",
+      "subSkill": "1.6.1/value_of_ones_digit",
+      "promptForm": "direct",
+      "representation": "symbolic",
+      "responseMode": "select",
+      "wordingVariant": "A",
+      "prompt": {
+        "ms": "Dalam 63, apakah nilai digit di tempat sa?",
+        "en": "In 63, what is the value of the digit in the ones place?"
+      },
+      "promptAudio": { "ms": "/audio/ms/q047.mp3", "en": "/audio/en/q047.mp3" },
+      "hint": { "ms": "Cari digit sa dahulu.", "en": "Find the ones digit first." },
+      "explain": { "ms": "3 sa = 3.", "en": "3 ones = 3." },
+      "payload": {
+        "options": [
+          { "id": "a", "text": { "ms": "3", "en": "3" } },
+          { "id": "b", "text": { "ms": "30", "en": "30" } },
+          { "id": "c", "text": { "ms": "6", "en": "6" } }
+        ],
+        "correctOptionId": "a",
+        "shuffle": true
+      }
+    },
+    {
+      "id": "q048",
+      "type": "mcq",
+      "difficulty": 2,
+      "learningStandard": "1.6.1",
+      "subSkill": "1.6.1/value_of_ones_digit",
+      "promptForm": "direct",
+      "representation": "symbolic",
+      "responseMode": "select",
+      "wordingVariant": "A",
+      "prompt": {
+        "ms": "Dalam 47, apakah nilai digit di tempat sa?",
+        "en": "In 47, what is the value of the digit in the ones place?"
+      },
+      "promptAudio": { "ms": "/audio/ms/q048.mp3", "en": "/audio/en/q048.mp3" },
+      "hint": { "ms": "Cari digit sa dahulu.", "en": "Find the ones digit first." },
+      "explain": { "ms": "7 sa = 7.", "en": "7 ones = 7." },
+      "payload": {
+        "options": [
+          { "id": "a", "text": { "ms": "7", "en": "7" } },
+          { "id": "b", "text": { "ms": "70", "en": "70" } },
+          { "id": "c", "text": { "ms": "4", "en": "4" } }
+        ],
+        "correctOptionId": "a",
+        "shuffle": true
+      }
+    },
+    {
+      "id": "q049",
+      "type": "mcq",
+      "difficulty": 2,
+      "learningStandard": "1.6.1",
+      "subSkill": "1.6.1/value_of_ones_digit",
+      "promptForm": "direct",
+      "representation": "symbolic",
+      "responseMode": "select",
+      "wordingVariant": "A",
+      "prompt": {
+        "ms": "Dalam 82, apakah nilai digit di tempat sa?",
+        "en": "In 82, what is the value of the digit in the ones place?"
+      },
+      "promptAudio": { "ms": "/audio/ms/q049.mp3", "en": "/audio/en/q049.mp3" },
+      "hint": { "ms": "Cari digit sa dahulu.", "en": "Find the ones digit first." },
+      "explain": { "ms": "2 sa = 2.", "en": "2 ones = 2." },
+      "payload": {
+        "options": [
+          { "id": "a", "text": { "ms": "2", "en": "2" } },
+          { "id": "b", "text": { "ms": "20", "en": "20" } },
+          { "id": "c", "text": { "ms": "8", "en": "8" } }
         ],
         "correctOptionId": "a",
         "shuffle": true
