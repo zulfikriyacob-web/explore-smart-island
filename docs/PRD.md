@@ -3372,6 +3372,42 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     `isScored()` sudah benar untuknya. Yang berubah bagi q023 ialah sub-kemahiran mana yang menerima
     buktinya.
 
+    #### Susun atur 13 soalan baharu, diukur pada 393×695
+
+    Kelompok ini ditulis sebagai q037–q049 pada 23 September 2026. Diukur dalam pane pada 393×695,
+    memandu UI sebenar: setiap arahan, dan setiap jalur pancingan dan dedahan, dalam ketiga-tiga
+    keadaan.
+
+    | Soalan | Baris arahan | Kad | Jalur pancingan | Jalur dedahan | Lajur bebas, tiba / pancingan / dedahan |
+    |---|---|---|---|---|---|
+    | q037 | 2 | 110.3 | 1 baris, 51px, 249px | 1 baris, 51px, **261px** | 104.4 / 39.8 / 31.8 |
+    | q038–q040 | 2 | 110.3 | 1 baris, 51px, 164px | 1 baris, 51px, **267–275px** | 104.4 / 39.8 / 31.8 |
+    | q041 | 2 | 110.3 | 1 baris, 51px, 248px | 1 baris, 51px, 189px | 104.4 / 39.8 / 31.8 |
+    | q042, q043 | **3** | 138.3 | 1 baris, 51px, 248px | 1 baris, 51px, 185–186px | 76.5 / 11.4 / **3.4** |
+    | q044–q046 | 2 | 110.3 | 1 baris, 51px, 158–159px | 1 baris, 51px, 109–111px | 104.4 / 39.8 / 31.8 |
+    | q047–q049 | **3** | 138.3 | 1 baris, 51px, 175px | 1 baris, 51px, 68–69px | 76.5 / 11.4 / **3.4** |
+
+    - **Tiada jalur membalut.** Kesemua 26 jalur baharu — 13 pancingan dan 13 dedahan — satu baris,
+      51px. Yang terlebar ialah penerangan guru pada q040, *"4 + 4 = 8. Puluh kekal 5. Jadi 58."*,
+      **275px**. Kapasiti satu baris yang diukur sebelum ini ialah 326px (item 33), jadi bakinya
+      51px. Empat penerangan 33–34 aksara yang `validate:content` beri amaran (q037–q040) muat satu
+      baris; tiada ayat guru dipendekkan.
+    - **Tiada kad terpotong dan tiada halaman menatal** dalam mana-mana keadaan: limpahan kad 0,
+      `scrollHeight − clientHeight` halaman 0.
+    - **Kes paling ketat: 3.4px.** Arahan tiga baris (q042, q043, q047–q049) dengan jalur dedahan
+      meninggalkan 3.4px dalam lajur soalan — kelas yang sama seperti baki 4px item 45, dan sebab
+      yang sama kenapa had jalur 28/37 aksara menahan susun atur, bukan hanya bacaan (SPEC §3.5).
+
+    **Lapisan yang diukur, dan apa yang ia tidak boleh buktikan.** Ini UI sebenar dalam Chromium
+    pane, bukan telefon. Rakaman BM belum wujud, jadi `AudioButton` akan menyembunyikan diri dan
+    perenggan arahan akan kehilangan satu float — susun atur yang tiada anak akan lihat. Supaya
+    ukuran ini menunjukkan susun atur sebenar, `promptAudio.ms` dalam **salinan sesi beku dalam
+    pane** ditunjuk kepada klip q025 yang sudah wujud; tiada fail audio dibuat dan pek tidak
+    disentuh (kaedah yang sama seperti item 40, 43 dan 49). Pane melukis kira-kira 3% kecil, jadi
+    angka ini baik kepada ±3px, dan baki 3.4px itu lebih kecil daripada ketepatannya sendiri: ia
+    bermakna "hampir tiada ruang", bukan satu nombor yang boleh dipercayai sebagai 3.4. Telefon
+    belum mengesahkan apa-apa daripada ini.
+
     **Dan satu perkara yang tidak hilang dengan pemindahan.** Bukti q023 yang sudah tersimpan di bawah
     `two_digit_plus_two_digit_no_bridge` kekal dalam storan peranti selepas ia dipindahkan ke 2.4.2 —
     kelas yang sama seperti q022, peraturan 3 stor kemajuan (SPEC §6). Analisisnya dalam item 37;
