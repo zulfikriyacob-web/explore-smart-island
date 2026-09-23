@@ -3434,6 +3434,10 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
       meninggalkan 3.4px dalam lajur soalan — kelas yang sama seperti baki 4px item 45, dan sebab
       yang sama kenapa had jalur 28/37 aksara menahan susun atur, bukan hanya bacaan (SPEC §3.5).
 
+    > **Bagi lima arahan tiga baris — q042, q043, q047, q048, q049 — nombor pane di bawah
+    > digantikan oleh nombor telefon**, dalam bahagian selepas ini. Baki lapan soalan kekal sebagai
+    > ukuran pane.
+
     **Lapisan yang diukur, dan apa yang ia tidak boleh buktikan.** Ini UI sebenar dalam Chromium
     pane, bukan telefon. Rakaman BM belum wujud, jadi `AudioButton` akan menyembunyikan diri dan
     perenggan arahan akan kehilangan satu float — susun atur yang tiada anak akan lihat. Supaya
@@ -3443,6 +3447,61 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     angka ini baik kepada ±3px, dan baki 3.4px itu lebih kecil daripada ketepatannya sendiri: ia
     bermakna "hampir tiada ruang", bukan satu nombor yang boleh dipercayai sebagai 3.4. Telefon
     belum mengesahkan apa-apa daripada ini.
+
+    #### Lima arahan tiga baris, diukur pada telefon — 23 September 2026
+
+    **Lapisan: app dalam iframe `100dvh`, dalam Safari iOS 26.6.1 pada iOS 18.7, pada origin LAN
+    `http://192.168.1.119:5174`, dengan Lexend dihidangkan tempatan oleh halaman ujian.** Bukan app
+    yang dibuka terus sebagai dokumen atas. Empat nombor viewport sepadan pada **695** —
+    `window.innerHeight`, `visualViewport.height`, tinggi iframe yang dirender, dan `innerHeight`
+    dokumen dalam iframe — jadi app di dalam iframe itu disusun atur pada viewport telefon, dan itu
+    yang menjadikan ukuran ini bermakna.
+
+    | | Tiba | Dedahan |
+    |---|---|---|
+    | Baris arahan | 3 | 3 |
+    | Tinggi kad | 138 | 138 |
+    | Limpahan kad | 0 | 0 |
+    | Jalur | — | 1 baris, 51px |
+    | Butang audio | 64.1px, 50px di dalam tepi kad | 50px di dalam |
+    | Lajur bebas | 77 | **6** |
+    | Jurang ke timbunan jawapan | — | 22 |
+    | Halaman menatal | 0 | 0 |
+
+    Kelima-lima soalan memberi nombor yang sama, baris demi baris.
+
+    **Baki 6px itu bukan anggaran.** Ayat ujian mengukur **461px pada telefon dan 461px dalam pane**
+    — metrik teks yang sama, bukan skala yang berbeza — jadi 6px ialah nombor peranti, bukan angka
+    pane yang diskalakan. Baki 4px dalam item 45 ialah ukuran pane; 6px di sini ialah lajur paling
+    ketat yang pernah diukur pada peranti, dan ia diukur, bukan dianggarkan.
+
+    **Larian telefon pertama batal, dan sebabnya fon.** Lexend dimuat dalam `index.html` daripada
+    `fonts.googleapis.com` dengan `display=swap`, dan tiada fail fon dalam repo. Pada telefon ia tidak
+    sampai, jadi arahan dilukis dengan `system-ui`, yang **9.5% lebih sempit** — ayat ujian 461px
+    dalam Lexend, 402px dalam sandaran pada telefon itu. Empat daripada lima arahan membalut kepada
+    **dua** baris dan bukan tiga, dan kad membaca 112 dan bukan 138. Nombor itu mengukur muka taip
+    yang salah dan dibuang; halaman ujian kemudian membawa Lexend sendiri, menggantikan pautan Google
+    dalam iframe, dan menolak mengukur melainkan lebar terukur mengesahkan Lexend yang melukis.
+
+    > **Had jalur 28/37 aksara dikalibrasi pada Lexend** (item 33), jadi app yang dibuka tanpa Internet
+    > melukis dalam muka taip yang lain daripada yang had itu andaikan. Arahnya selamat — sandaran
+    > lebih sempit, jadi kurang membalut — tetapi dua anak boleh melihat susun atur berbeza. Fon
+    > dihoskan sendiri ialah keputusan yang belum dibuat; malam ini fon tempatan itu hanya untuk
+    > alat ujian, dan tidak pernah di-commit.
+
+    **Empat perangkap dalam alat ujian, semuanya ditangkap sebelum nombor direkod.** Tiga daripadanya
+    kelas yang repo ini sudah bayar untuk:
+
+    | Perangkap | Apa yang ia hasilkan | Pembetulan |
+    |---|---|---|
+    | Menunggu **masa**, bukan butang audio | Ukuran diambil sebelum `AudioButton` dipasang | Tunggu butang di dalam perenggan kad semasa (CLAUDE.md, item 26) |
+    | Fon tidak diperiksa langsung | Susun atur sandaran direkod sebagai susun atur telefon | Verdict daripada lebar terukur: terkira lawan Lexend lawan sandaran, dicetak pada setiap baris |
+    | Lembaran fon tempatan disuntik, fon diminta serta-merta | Lembaran belum dihurai, jadi "Lexend" mengukur fon terakhir — 371px, bukan 461 | Tunggu peristiwa `load` lembaran itu |
+    | Pane tersembunyi | `innerHeight` 0, kad 47.3px, arahan 8–9 baris | Tolak mengukur bila viewport 0 (CLAUDE.md) |
+
+    Diagnosis pertama saya untuk percanggahan pane–telefon — perlumbaan probe butang audio — **salah**,
+    dan ditolak oleh data pemilik projek sendiri: kelima-lima baris "tiba" membawa butang 64px. Fon
+    yang menerangkannya, dan ujian yang membezakannya ialah lebar, bukan kehadiran butang.
 
     **Dan satu perkara yang tidak hilang dengan pemindahan.** Bukti q023 yang sudah tersimpan di bawah
     `two_digit_plus_two_digit_no_bridge` kekal dalam storan peranti selepas ia dipindahkan ke 2.4.2 —
