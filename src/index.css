@@ -1,3 +1,52 @@
+/*
+  The two faces, served from this origin. Nothing is fetched from
+  fonts.googleapis.com any more: a phone that could not reach the CDN drew the
+  prompts in system-ui, which is 9.5% narrower than the 28/37-character band
+  limits assume, and that voided a whole measurement run (CLAUDE.md, "Verifying
+  visual work"; PRD 16 item 49).
+
+  One file per face. Google's css2 serves each subset as a variable woff2, so
+  the same file carries every weight we ask for — Lexend 400/500/600 and
+  Baloo 2 600/700.
+
+  One block per face, with a weight *range*, and not css2's shape of one block
+  per weight. css2 returns three Lexend blocks pointing at one file, which is
+  three separate FontFace objects: measured here, the preload loaded the 400
+  one and left 500 and 600 `unloaded`, so the first prompt drawn at 500 would
+  have started its own load and — under `swap` — could show a fallback frame
+  for text whose 28/37-character band limits are calibrated on Lexend. A range
+  is one FontFace per face, and the preload settles all of it before first
+  paint.
+
+  latin only. The three non-ASCII characters the app draws are U+00B7, U+00D7
+  and U+2026, and all three are inside the range below, so latin-ext and
+  vietnamese are 62KB the child would never see.
+
+  font-display: swap, deliberately, and not block. The files are same-origin
+  now, so the failure block guards against has all but gone; if it happened
+  anyway, block gives a child three seconds of a screen with no text on it,
+  which is the failure class principle 5 rules out. swap fails towards legible.
+*/
+@font-face {
+  font-family: 'Lexend';
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url(/fonts/lexend-latin.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304,
+    U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Baloo 2';
+  font-style: normal;
+  font-weight: 600 700;
+  font-display: swap;
+  src: url(/fonts/baloo2-latin.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304,
+    U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

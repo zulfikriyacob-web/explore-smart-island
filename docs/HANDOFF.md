@@ -115,20 +115,19 @@ and q030/q033 understood. One child.
 questions, and the bank at a 2.56 LU spread rather than the 1.41 LU a child last heard
 (q041 is peak-limited at −18.83 LUFS). Items 49 and 50.
 
-**On us — self-host the font, as its own PR.** `index.html` fetches both faces from
-`fonts.googleapis.com` with `display=swap` and no font file is in the repo, so a phone that
-cannot reach the CDN draws the prompts 9.5% narrower than the band limits assume (CLAUDE.md,
-item 49). The next session does not start from nothing: on 23 September the test page served
-Lexend itself from `public/fonts-ujian/` — three woff2 subsets from `fonts.gstatic.com`,
-`wlpwgwvFAVdoq2_v9KQU4Wc.woff2` 13,840 bytes, `wlpwgwvFAVdoq2_v9aQU4Wc.woff2` 34,476 bytes
-and `wlpwgwvFAVdoq2_v-6QU.woff2` 39,680 bytes, with a rewritten `lexend.css` of 3,429 bytes
-holding 9 `@font-face` blocks that point at those three files. **Those files are not on disk
-now** — they were untracked and deleted with the test page, and a search of the repo and the
-profile on 24 September finds no woff2 anywhere. What survives is the recipe: fetch the
-`css2` URL with a browser user-agent, pull every `url(https://fonts.gstatic.com/….woff2)`
-out of the returned CSS, save each one and rewrite the `src` to the local path. A real PR
-has to cover **Baloo 2 as well** — `index.html` asks for `Baloo+2:wght@600;700` in the same
-link — and decide licence and placement, which the test page never had to.
+~~**On us — self-host the font, as its own PR.**~~ **Done 24 September 2026.** Both faces
+ship in `public/fonts/`: `lexend-latin.woff2` 39,680 bytes and `baloo2-latin.woff2` 33,188
+bytes, 71 KiB together, each one Google's variable woff2 for the latin subset, so one file
+carries every weight the app asks for (Lexend 400/500/600, Baloo 2 600/700). `index.html`
+no longer names `fonts.googleapis.com`; it preloads the two files, and `src/index.css` holds
+one `@font-face` per face with a weight range. Measured in the pane: **zero requests to
+googleapis or gstatic** across a whole session, both files done at 25ms while the app's own
+modules were still arriving at 63ms, and the live prompt measures as Lexend and not the
+fallback. `font-display: swap` was the owner's call over `block` — same-origin files make
+block's failure mode nearly impossible, but if it happened it would give a child three
+seconds of a screen with no text, which principle 5 rules out. **Not yet done on the phone:
+what the device draws on its first frame.** Licences ride along as `OFL-Lexend.txt` and
+`OFL-Baloo2.txt`.
 
 Three smaller things are still open, all on us:
 

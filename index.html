@@ -9,12 +9,15 @@
     -->
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>Explore Smart Island</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700&family=Lexend:wght@400;500;600&display=swap"
-      rel="stylesheet"
-    />
+    <!--
+      Both faces ship with the app; nothing is fetched from Google. The
+      @font-face rules are in src/index.css, which arrives with the bundle, so
+      these preloads start the two files at parse time instead of one round
+      trip later. crossorigin is required even same-origin: a font request is
+      made in CORS-anonymous mode, and without it the preload is not reused.
+    -->
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/lexend-latin.woff2" />
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/baloo2-latin.woff2" />
   </head>
   <body>
     <div id="root"></div>
