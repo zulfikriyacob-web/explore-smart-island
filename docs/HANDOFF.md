@@ -1,4 +1,4 @@
-# Handoff — 22 September 2026
+# Handoff — 24 September 2026
 
 Start here. Section 0 is where the project stands now. Sections 1–6 below it are the
 record of 12–13 September — the iOS audio root cause and the names copied forward
