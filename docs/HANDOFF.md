@@ -139,9 +139,13 @@ googleapis or gstatic** across a whole session, both files done at 25ms while th
 modules were still arriving at 63ms, and the live prompt measures as Lexend and not the
 fallback. `font-display: swap` was the owner's call over `block` — same-origin files make
 block's failure mode nearly impossible, but if it happened it would give a child three
-seconds of a screen with no text, which principle 5 rules out. **Not yet done on the phone:
-what the device draws on its first frame.** Licences ride along as `OFL-Lexend.txt` and
-`OFL-Baloo2.txt`.
+seconds of a screen with no text, which principle 5 rules out. Licences ride along as
+`OFL-Lexend.txt` and `OFL-Baloo2.txt`. **Measured on the phone, 26 September 2026:** 0 requests
+to googleapis or gstatic; Lexend's bytes arrived 8ms before first paint and Baloo 2's 10ms after,
+so at worst the start screen's title and Mula button spend one frame in the fallback — the
+prompt is never exposed. **Still unexplained:** Safari downloads each file twice in full, once
+for the preload and again for `@font-face`, and it is not a 304. Option A (cache headers, when a
+production host exists) is future work and must be re-measured on the phone. PRD §16 item 51.
 
 Three smaller things are still open, all on us:
 
@@ -161,11 +165,13 @@ someone else" above.
 ### Still true, and still not fixed
 
 - **No CI.** `validate:content` blocks nothing unless someone runs it. Item 34.
-- **The app fetches Lexend from Google Fonts at first paint**, and no font file is in the
+- ~~**The app fetches Lexend from Google Fonts at first paint**, and no font file is in the
   repo. A phone that cannot reach the CDN draws the prompts in the system fallback, which is
   9.5% narrower — and the 28/37-character band limits are calibrated on Lexend. It happened
   on the owner's phone on 23 September and it voided a whole measurement run. Self-hosting
-  the font is an undecided product question, not only a test one. Item 49.
+  the font is an undecided product question, not only a test one. Item 49.~~ **Fixed on
+  `feat/self-host-fonts`**: both faces ship in `public/fonts/`, 0 requests to Google measured
+  on the phone. Items 49 and 51.
 - **A hanging `resume()`** on iOS remains unexplained. Section 3 below.
 - **The reward screen can scroll** only if its content ever outgrows 695px again; at 104px
   the kancil leaves 7px. Whether a 39px overflow was ever enough to make Safari retract its
