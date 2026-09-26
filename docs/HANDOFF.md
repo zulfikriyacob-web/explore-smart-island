@@ -54,8 +54,9 @@ measurement, not the pane's.
 | 22 Sep | **Every Malay clip at −17 LUFS** by `global_gain`, and `npm run audio:gain` makes it a fixed step | SPEC §8, item 50 |
 | 22 Sep | The iOS decoder applies that gain; the ±0.1 LU condition was not met, and why | item 50 |
 | 23 Sep | **The digit-value batch**, merged into `main` in PR #98 | item 49 |
+| 24 Sep | **A child played one whole activity with no spoken instruction** and said nothing about the sound; SPEC §10 criterion 7 met | SPEC §10, item 50 |
 
-Items closed in that stretch, all with numbers in PRD §16: **31, 38, 44, 46, 48**.
+Items closed in that stretch, all with numbers in PRD §16: **31, 38, 44, 46, 48, 50**.
 
 ### The bank on `main`
 
@@ -89,10 +90,19 @@ teacher documents have been filed since that form: `guru-semakan-pusingan-2-bert
 `guru-semakan-nilai-digit-dan-tambah.md` (23 Sep). The review block describes the first of
 those three documents and ten of the 48 questions.
 
-**On a child** — **open, and now larger:** a child playing level 3 with the evened-out clips,
+~~**On a child** — **open, and now larger:** a child playing level 3 with the evened-out clips,
 and a child meeting the thirteen new questions at all. The bank's spread is 2.56 LU after this
 batch, not the 1.41 LU a child last heard, because q041 is peak-limited at −18.83 LUFS. PRD
-§16 items 49 and 50.
+§16 items 49 and 50.~~ **Half of it answered 24 September 2026; item 50 is closed.** A child
+played one whole activity through to the end on the phone, at
+`http://192.168.1.119:5174`, with no spoken instruction from an adult, and understood the
+questions. **What was observed about the sound is that the child said nothing about it** —
+which is not the same as not noticing, and is recorded as the absence of a remark. The same
+child is the one who raised the loudness difference unprompted on 22 September at a spread of
+8.79 LU; at 2.56 LU they played a whole activity and did not. SPEC §10 criterion 7 is met as
+of that run. **The other half is not answered:** the owner did not record the level, the
+questions, or whether any of the thirteen new ones were asked, so this run says nothing about
+the digit-value batch. PRD §16 item 50.
 
 ~~**On a child** — the loudness of the level-3 clips falls into two groups, peaks about
 0.38–0.40 and 0.82–0.90. Recorded as an observation, not a defect: peak is not perceived
@@ -111,9 +121,13 @@ and q030/q033 understood. One child.
 
 ### Next work, by who it waits on
 
-**On a child — nothing here has been played by one.** Levels 2 and 3 with the thirteen new
-questions, and the bank at a 2.56 LU spread rather than the 1.41 LU a child last heard
-(q041 is peak-limited at −18.83 LUFS). Items 49 and 50.
+**On a child — the digit-value questions, and one thing to watch for.** A child played a
+whole activity on 24 September and item 50 closed on it (above), but the level and the
+questions were not recorded, so no new question can be shown to have been asked. What is
+still wanted is a run whose level and questions are written down, and inside it **the
+child's reaction to the digit-value questions — whether they tell a digit apart from the
+value of a digit**, which is 1.6.1 in the pack and the reason q041–q049 exist. Items 49
+and 50.
 
 ~~**On us — self-host the font, as its own PR.**~~ **Done 24 September 2026.** Both faces
 ship in `public/fonts/`: `lexend-latin.woff2` 39,680 bytes and `baloo2-latin.woff2` 33,188
