@@ -3941,3 +3941,137 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     di-hash. **Uji semula pada telefon sebelum mempercayainya.** Nombor bait di atas menunjukkan
     padanan yang gagal, bukan semakan semula; kalau itu puncanya, cache yang panjang sahaja mungkin
     tidak membuang muat turun kedua.
+
+52. **Audit semakan guru bagi 48 soalan, 26 September 2026: 30 disemak, 3 separa, 15 belum.
+    Kiraan ini bertarikh — ia mesti dikira semula apabila soalan ditambah atau ditulis semula, atau
+    dokumen guru baharu difailkan, dan `kssr.review.note` dikemas kini bersamanya.**
+
+    Dikira pada pek 48 soalan di `main` `a69fe19`, untuk menentukan apa yang `kssr.review.note` patut
+    kata. Sumbernya fail dalam `docs/kssr/` sahaja, bukan ingatan dan bukan ringkasan.
+
+    #### Apa yang dikira sebagai semakan
+
+    - **Disemak** — dokumen guru menunjukkan soalan itu bersama pilihan atau jawapannya, dan memberi
+      keputusan ke atasnya.
+    - **Separa** — dokumen guru memutuskan satu aspek sahaja: teks arahan, bahasa, atau pemetaan.
+    - **Belum** — tiada dokumen guru yang menunjukkan soalan itu. **Contoh guru bukan semakan:** soalan
+      yang teksnya datang daripada contoh guru, tetapi pilihan dan pancingannya ditulis selepas itu,
+      dikira belum.
+
+    #### Empat dokumen yang dikira
+
+    | Nama pendek | Fail | Tarikh |
+    |---|---|---|
+    | Pusingan 2 | `guru-semakan-pusingan-2-bertanda.md` | Borang bertarikh 12 September; masuk repo 12 September (`e63c630`) |
+    | Rekod jawapan | `guru-rekod-jawapan-subkemahiran-dan-semakan-soalan.md` | Dibina semula oleh guru daripada chat, bukan chat asal. Diserahkan 16 September, masuk repo 17 September (`ec18af3`). Tarikh semakan asal tidak dinyatakan |
+    | Melintasi puluh | `guru-semakan-tambah-melintasi-puluh-dan-nilai-digit.md` | 21 September (`d7a3d01`) |
+    | Nilai digit | `guru-semakan-nilai-digit-dan-tambah.md` | 23 September, dalam teksnya sendiri (`5ca9691`) |
+
+    **Dua dokumen guru lain tidak dikira:** `guru-sub-kemahiran-math-y1.md` dan
+    `guru-struktur-variasi-soalan.md`. Kedua-duanya menjawab soalan tentang struktur — pecahan
+    sub-kemahiran, dan paksi variasi soalan — dengan contoh guru sendiri. Tiada satu pun soalan pek
+    ditunjukkan kepada guru dalam kedua-duanya, jadi tiada soalan disemak di situ.
+
+    **Fail lain dalam folder itu bukan dokumen guru:** `soalan-baharu-math-y1.md`,
+    `pembetulan-akhir-soalan-math-y1.md` dan `pakej-semakan-nilai-digit-dan-tambah.md` ditulis oleh
+    Claude; `pemilik-kalibrasi-buku-teks-kpm-tahun-1.md` ialah nota pemilik projek;
+    `ibu-bapa-ayat-status.md` datang daripada ibu bapa.
+
+    #### Jadual
+
+    | Soalan | Status | Dokumen | Tarikh | Catatan |
+    |---|---|---|---|---|
+    | q001 | Disemak | Pusingan 2 | 12 Sep | Ya. Penerangan diringkaskan selepas itu |
+    | q002 | Disemak | Pusingan 2 | 12 Sep | Ya. Pancingan ditukar selepas itu |
+    | q003 | Disemak | Pusingan 2 | 12 Sep | Ya. "Kemudian tekan Sedia." dibuang dari skrin, audio kekal, ikut peraturan Sedia guru |
+    | q004 | Disemak | Pusingan 2 | 12 Sep | Ya. **Arahan ditulis semula dan pilihan 63 ditambah selepas itu** (dahulu dua pilihan) |
+    | q005 | Disemak | Pusingan 2 | 12 Sep | **Tidak** — bukan 7.2.1; kini `parked` |
+    | q006 | Disemak | Pusingan 2 | 12 Sep | Seperti q003 |
+    | q007 | Disemak | Pusingan 2 | 12 Sep | Ya. Tidak berubah |
+    | q008 | Disemak | Pusingan 2 | 12 Sep | Ya. Tidak berubah |
+    | q009 | Disemak | Pusingan 2 | 12 Sep | **Tidak** — bukan 7.2.1; kini `parked` |
+    | q010 | Disemak | Pusingan 2 | 12 Sep | Ya. Arahan ditulis semula selepas itu |
+    | q011 | Separa | Rekod jawapan | 16 Sep | Teks skrin dan arahan audio "tekan Sedia" sahaja |
+    | q012 | Belum | — | — | Kelompok q011–q023 |
+    | q013 | Belum | — | — | Kelompok q011–q023 |
+    | q014 | Belum | — | — | Kelompok q011–q023 |
+    | q015 | Belum | — | — | Kelompok q011–q023 |
+    | q016 | Belum | — | — | Kelompok q011–q023 |
+    | q017 | Belum | — | — | Kelompok q011–q023 |
+    | q018 | Belum | — | — | Kelompok q011–q023 |
+    | q019 | Disemak | Rekod jawapan | 16 Sep | Tiga nombor diluluskan. **Pilihan ketiga guru `14, 9, 18`, pek `14, 18, 9`** |
+    | q020 | Belum | — | — | Kelompok q011–q023 |
+    | q021 | Belum | — | — | Kelompok q011–q023 |
+    | q022 | Separa | Rekod jawapan | 16 Sep | Bahasa diluluskan; bukan bukti mastery. Pilihan tidak dibincang |
+    | q023 | Separa | Nilai digit | 23 Sep | Pemetaan sahaja: pindah ke 2.4.2. Pilihan dan pancingan tidak disemak |
+    | q025 | Belum | — | — | Disebut dalam pakej kami sahaja, bukan oleh guru |
+    | q026 | Belum | — | — | Teksnya sama dengan contoh guru; soalan itu sendiri tidak disemak |
+    | q027 | Belum | — | — | Tiada jejak dalam `docs/kssr/` |
+    | q028 | Belum | — | — | Tiada jejak dalam `docs/kssr/` |
+    | q029 | Disemak | Melintasi puluh | 21 Sep | Sesuai. Pilihan sama dengan pek |
+    | q030 | Disemak | Melintasi puluh | 21 Sep | Baik; ke 2.4.2 (Nilai digit, 23 Sep) |
+    | q031 | Disemak | Melintasi puluh | 21 Sep | Sesuai. Pilihan sama |
+    | q032 | Disemak | Melintasi puluh | 21 Sep | Sesuai. Pancingan "Bawa 1 puluh" tidak disemak |
+    | q033 | Disemak | Melintasi puluh | 21 Sep | Seperti q030. Pancingan tidak disemak |
+    | q034 | Disemak | Melintasi puluh | 21 Sep | Sesuai. Pancingan tidak disemak |
+    | q035 | Belum | — | — | Contoh guru (59 + 4, 21 Sep); pilihan dan pancingan ditulis selepas itu |
+    | q036 | Belum | — | — | Contoh guru (34 + 28, 21 Sep); sama |
+    | q037 | Disemak | Nilai digit, draf B1 | 23 Sep | Penerangan ikut guru |
+    | q038 | Disemak | Nilai digit, draf B2 | 23 Sep | |
+    | q039 | Disemak | Nilai digit, draf B3 | 23 Sep | 99 → 88 ikut guru; pek sepadan |
+    | q040 | Disemak | Nilai digit, draf B4 | 23 Sep | |
+    | q041 | Disemak | Nilai digit, draf B5 | 23 Sep | |
+    | q042 | Disemak | Nilai digit, draf B6 | 23 Sep | Ditulis semula ikut teks guru; pek sepadan |
+    | q043 | Disemak | Nilai digit, draf B7 | 23 Sep | |
+    | q044 | Disemak | Nilai digit, draf B8 | 23 Sep | Juga diluluskan 21 Sep. 3 → 63 ikut guru; pek sepadan |
+    | q045 | Disemak | Nilai digit, draf B9 | 23 Sep | |
+    | q046 | Disemak | Nilai digit, draf B10 | 23 Sep | |
+    | q047 | Disemak | Nilai digit, draf B11 | 23 Sep | Pancingan "Cari digit sa dahulu" ikut guru |
+    | q048 | Disemak | Nilai digit, draf B12 | 23 Sep | Sama |
+    | q049 | Disemak | Nilai digit, draf B13 | 23 Sep | Sama |
+
+    #### Kiraan
+
+    - **Disemak: 30** — q001–q010, q019, q029–q034, q037–q049. Dua daripadanya (q005, q009) `parked`,
+      jadi 28 soalan yang boleh dimain.
+    - **Separa: 3** — q011, q022, q023.
+    - **Belum: 15** — q012–q018, q020, q021, q025–q028, q035, q036.
+
+    **Lima berubah selepas disemak, tanpa arahan guru** — versi dalam pek bukan versi yang guru lihat:
+
+    | Soalan | Yang guru lihat | Pek sekarang |
+    |---|---|---|
+    | q004 | *Nombor 63. Apakah digit di tempat puluh?* — pilihan 6 · 3 | *Dalam 63, apakah digit di tempat puluh?* — pilihan 6 · 3 · **63**. **Paling besar:** satu pilihan ditambah |
+    | q001 | Penerangan *74 ada 7 puluh. 47 ada 4 puluh sahaja.* | *74: 7 puluh. 47: 4 puluh.* |
+    | q002 | Pancingan *Bilang: dua puluh sembilan, kemudian?* | *Kira satu lagi selepas 29.* |
+    | q010 | *Nombor manakah paling kecil?* | *Apakah nombor paling kecil?* |
+    | q019 | Pilihan ketiga `14, 9, 18` | `14, 18, 9` |
+
+    Yang berubah **dengan** arahan guru tidak dikira dalam lima itu: q003 dan q006 (peraturan Sedia,
+    Rekod jawapan), dan q039, q042, q044 (tiga pembetulan Nilai digit, yang teksnya ialah teks guru
+    sendiri).
+
+    #### Tiga percanggahan dengan apa yang repo katakan sebelum audit ini
+
+    1. **`kssr.review.note` berkata soalan yang ditambah selepas 12 September "belum disemak".**
+       Dokumen menunjukkan 20 soalan yang ditambah selepas tarikh itu disemak dalam tiga dokumen
+       kemudian: q019, q029–q034, q037–q049. Nota itu ditulis semula dalam perubahan yang sama.
+    2. **HANDOFF berkata 13 soalan baharu belum melalui pusingan semakan.** Dokumen Nilai digit
+       berkata: *"Saya semak Bahagian A dan semua 13 draf di Bahagian B."* Yang tidak berlaku ialah
+       versi yang sudah dibetulkan dihantar balik kepada guru. Tiga pembetulan itu (q039, q042, q044)
+       ialah teks guru sendiri, dan pek sepadan dengannya. HANDOFF dibetulkan dalam perubahan yang
+       sama.
+    3. **Sembilan soalan bergantung pada semakan yang tiada dalam repo: q012–q018, q020, q021.**
+       `pembetulan-akhir-soalan-math-y1.md` berkata ia ditulis *"selepas tiga pusingan semakan guru"*
+       bagi kelompok q011–q023. Tetapi fail itu tulisan Claude, dan jawapan guru bagi tiga pusingan
+       itu datang dalam mesej yang tiada dalam repo (item 29). Rekod jawapan, satu-satunya dokumen guru
+       untuk kelompok itu, merekod keputusan tentang q011, q019 dan q022 sahaja. Kalau semakan
+       sembilan soalan itu pernah berlaku, buktinya bukan dalam `docs/kssr/`, dan kiraan ini
+       meletakkannya di bawah **belum**. Kandungan q023 juga begitu; yang disemak hanya pemetaannya.
+
+    **Had yang dibawa bersama:** Rekod jawapan sendiri dibina semula daripada chat, bukan chat asal,
+    dan berkata ia bukan pengesahan rasmi. Pusingan 2 berkata perkara yang sama tentang dirinya.
+    Tiada soalan dalam jadual ini disahkan secara rasmi; yang direkod ialah semakan pedagogi.
+
+    **`reviewStatus` tidak diubah.** `teacher-reviewed` merujuk borang pemetaan yang ditanda (item 20),
+    bukan setiap soalan, dan itu kekal betul.

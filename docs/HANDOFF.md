@@ -82,13 +82,13 @@ sub-skills.~~ **Both answered 23 September 2026** in
 operation rather than by the four 2.2.2 profiles, and q037 replaces q023 in
 `two_digit_plus_two_digit_no_bridge`. Both are built on the branch. Item 49.
 
-**On the teacher, still open** — the thirteen new questions have not been through a review
-round. `kssr.review` in the pack still names the round-2 form and the ten questions of
-12 September, and `reviewStatus` is unchanged. The pack now holds 48 questions, and three
-teacher documents have been filed since that form: `guru-semakan-pusingan-2-bertanda.md`
-(12 Sep), `guru-semakan-tambah-melintasi-puluh-dan-nilai-digit.md` (21 Sep) and
-`guru-semakan-nilai-digit-dan-tambah.md` (23 Sep). The review block describes the first of
-those three documents and ten of the 48 questions.
+~~**On the teacher, still open** — the thirteen new questions have not been through a review
+round.~~ **Corrected 26 September 2026: the teacher reviewed all thirteen**, as drafts B1–B13 in
+`guru-semakan-nilai-digit-dan-tambah.md` on 23 September — *"Saya semak Bahagian A dan semua 13
+draf di Bahagian B."* What did not happen is the corrected versions going back to the teacher.
+The three corrections (q039, q042, q044) are the teacher's own text, and the pack matches them.
+Across the whole bank the audit counts 30 of 48 reviewed, 3 in part and 15 in no teacher
+document, and `kssr.review.note` now says so; `reviewStatus` is unchanged. PRD §16 item 52.
 
 ~~**On a child** — **open, and now larger:** a child playing level 3 with the evened-out clips,
 and a child meeting the thirteen new questions at all. The bank's spread is 2.56 LU after this
