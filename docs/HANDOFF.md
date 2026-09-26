@@ -167,7 +167,7 @@ someone else" above.
 - **No CI.** `validate:content` blocks nothing unless someone runs it. Item 34.
 - ~~**The app fetches Lexend from Google Fonts at first paint**, and no font file is in the
   repo. A phone that cannot reach the CDN draws the prompts in the system fallback, which is
-  9.5% narrower — and the 28/37-character band limits are calibrated on Lexend. It happened
+  12.8% narrower on that phone — and the 28/37-character band limits are calibrated on Lexend. It happened
   on the owner's phone on 23 September and it voided a whole measurement run. Self-hosting
   the font is an undecided product question, not only a test one. Item 49.~~ **Fixed on
   `feat/self-host-fonts`**: both faces ship in `public/fonts/`, 0 requests to Google measured

@@ -3477,11 +3477,23 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
 
     **Larian telefon pertama batal, dan sebabnya fon.** Lexend dimuat dalam `index.html` daripada
     `fonts.googleapis.com` dengan `display=swap`, dan tiada fail fon dalam repo. Pada telefon ia tidak
-    sampai, jadi arahan dilukis dengan `system-ui`, yang **9.5% lebih sempit** — ayat ujian 461px
-    dalam Lexend, 402px dalam sandaran pada telefon itu. Empat daripada lima arahan membalut kepada
+    sampai, jadi arahan dilukis dengan `system-ui`. Empat daripada lima arahan membalut kepada
     **dua** baris dan bukan tiga, dan kad membaca 112 dan bukan 138. Nombor itu mengukur muka taip
     yang salah dan dibuang; halaman ujian kemudian membawa Lexend sendiri, menggantikan pautan Google
     dalam iframe, dan menolak mengukur melainkan lebar terukur mengesahkan Lexend yang melukis.
+
+    **Berapa sempit sandaran itu — dua pasangan, satu lapisan setiap satu.** Ayat ujian yang sama,
+    Lexend 500 22px:
+
+    | Lapisan | Lexend | `system-ui` | Sandaran lebih sempit |
+    |---|---|---|---|
+    | Pane (Chromium) | 461px | 417px | **9.5%** |
+    | Telefon (Safari iOS), larian kedua | 461px | 402px | **12.8%** |
+
+    Kedua-dua baris telefon datang daripada satu keluaran larian kedua, yang pemilik projek tampal,
+    selepas halaman membawa Lexend sendiri. Larian pertama tidak mencetak lebar ayat ujian. Rekod
+    ini dahulu menulis "9.5% lebih sempit — 461px dalam Lexend, 402px dalam sandaran pada telefon
+    itu", iaitu peratus pane dengan sandaran telefon. Dibetulkan 26 September 2026.
 
     > **Had jalur 28/37 aksara dikalibrasi pada Lexend** (item 33), jadi app yang dibuka tanpa Internet
     > melukis dalam muka taip yang lain daripada yang had itu andaikan. Arahnya selamat — sandaran

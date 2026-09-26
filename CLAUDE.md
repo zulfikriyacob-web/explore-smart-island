@@ -415,10 +415,13 @@ claims, and only the second one ships. (PRD 16 item 49.)
   before measuring text width, or the width is the fallback font's.
 - **And settling in the pane proves nothing about the device: check that Lexend is
   the face that drew the text, from a measured width.** The fallback, `system-ui`, is
-  **9.5% narrower** — the test sentence is 461px in Lexend and 402px in the fallback on
-  the owner's phone — and the 28/37-character band limits are calibrated on Lexend
-  (SPEC §3.5, item 33), so a fallback layout is a different layout, not a rounding
-  error. So compute the same sentence in Lexend and in the fallback, print the verdict
+  narrower, and by how much depends on the layer. The same test sentence at Lexend 500
+  22px, 23 September 2026: **in the pane, 461px in Lexend and 417px in the fallback,
+  9.5% narrower; on the owner's phone, 461px and 402px, 12.8% narrower.** Never pair
+  one layer's number with the other's — an earlier version of this note did, and wrote
+  the pane's 9.5% next to the phone's 402px. The 28/37-character band limits are
+  calibrated on Lexend (SPEC §3.5, item 33), so a fallback layout is a different
+  layout, not a rounding error. So compute the same sentence in Lexend and in the fallback, print the verdict
   on every line, and refuse to record a number unless the measured width says Lexend.
 
   **Why the rule exists, from before the fonts were self-hosted.** Lexend used to be

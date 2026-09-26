@@ -1,9 +1,9 @@
 /*
   The two faces, served from this origin. Nothing is fetched from
   fonts.googleapis.com any more: a phone that could not reach the CDN drew the
-  prompts in system-ui, which is 9.5% narrower than the 28/37-character band
-  limits assume, and that voided a whole measurement run (CLAUDE.md, "Verifying
-  visual work"; PRD 16 item 49).
+  prompts in system-ui — 12.8% narrower than Lexend on that phone — while the
+  28/37-character band limits are calibrated on Lexend, and that voided a whole
+  measurement run (CLAUDE.md, "Verifying visual work"; PRD 16 item 49).
 
   One file per face. Google's css2 serves each subset as a variable woff2, so
   the same file carries every weight we ask for — Lexend 400/500/600 and
