@@ -3477,11 +3477,23 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
 
     **Larian telefon pertama batal, dan sebabnya fon.** Lexend dimuat dalam `index.html` daripada
     `fonts.googleapis.com` dengan `display=swap`, dan tiada fail fon dalam repo. Pada telefon ia tidak
-    sampai, jadi arahan dilukis dengan `system-ui`, yang **9.5% lebih sempit** — ayat ujian 461px
-    dalam Lexend, 402px dalam sandaran pada telefon itu. Empat daripada lima arahan membalut kepada
+    sampai, jadi arahan dilukis dengan `system-ui`. Empat daripada lima arahan membalut kepada
     **dua** baris dan bukan tiga, dan kad membaca 112 dan bukan 138. Nombor itu mengukur muka taip
     yang salah dan dibuang; halaman ujian kemudian membawa Lexend sendiri, menggantikan pautan Google
     dalam iframe, dan menolak mengukur melainkan lebar terukur mengesahkan Lexend yang melukis.
+
+    **Berapa sempit sandaran itu — dua pasangan, satu lapisan setiap satu.** Ayat ujian yang sama,
+    Lexend 500 22px:
+
+    | Lapisan | Lexend | `system-ui` | Sandaran lebih sempit |
+    |---|---|---|---|
+    | Pane (Chromium) | 461px | 417px | **9.5%** |
+    | Telefon (Safari iOS), larian kedua | 461px | 402px | **12.8%** |
+
+    Kedua-dua baris telefon datang daripada satu keluaran larian kedua, yang pemilik projek tampal,
+    selepas halaman membawa Lexend sendiri. Larian pertama tidak mencetak lebar ayat ujian. Rekod
+    ini dahulu menulis "9.5% lebih sempit — 461px dalam Lexend, 402px dalam sandaran pada telefon
+    itu", iaitu peratus pane dengan sandaran telefon. Dibetulkan 26 September 2026.
 
     > **Had jalur 28/37 aksara dikalibrasi pada Lexend** (item 33), jadi app yang dibuka tanpa Internet
     > melukis dalam muka taip yang lain daripada yang had itu andaikan. Arahnya selamat — sandaran
@@ -3821,3 +3833,111 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     **Masih terbuka: reaksi anak kepada soalan nilai digit**, khususnya sama ada dia membezakan
     **digit** daripada **nilai digit** — 1.6.1 dalam pek, dan sebab kelompok q041–q049 ditulis. Itu
     memerlukan larian yang aras dan soalannya direkod, bukan larian yang hanya diperhatikan.
+
+51. **Fon dihoskan dalam repo (24 September 2026), dan bingkai pertama diukur pada telefon (26
+    September 2026). Sasaran utama tercapai; satu muatan berganda belum diterangkan.**
+
+    **Apa yang berubah** (`6b8d51c`, cawangan `feat/self-host-fonts`): Lexend dan Baloo 2 dihidang
+    dari `public/fonts/`, bukan dari `fonts.googleapis.com`. Subset latin sahaja, satu woff2
+    boleh-ubah untuk setiap muka — `lexend-latin.woff2` 39,680 bait, `baloo2-latin.woff2` 33,188
+    bait. `index.html` mem-preload kedua-duanya, dan `src/index.css` memegang satu `@font-face`
+    untuk setiap muka dengan julat berat. `font-display: swap` atas keputusan pemilik projek, bukan
+    `block`: kalau fail gagal, `block` memberi anak tiga saat skrin tanpa teks, iaitu kelas
+    kegagalan yang prinsip 5 larang. Punca asal dalam item 49 dan CLAUDE.md.
+
+    **Lapisan yang diukur:** iPhone pemilik projek, Safari, pada origin LAN
+    `http://192.168.1.119:5174` (pelayan dev). App dimuat sekali dalam iframe oleh halaman
+    sekali guna yang hanya membaca timeline prestasi app. Halaman itu tidak pernah dijejak, dan
+    dipadam selepas ujian; `git rev-list --all --objects` tiada padanan untuknya.
+
+    #### Dapatan
+
+    **0 permintaan ke `googleapis` atau `gstatic`**, daripada 48 permintaan. Itu sasaran PR ini, dan
+    ia diukur pada telefon, bukan dalam pane.
+
+    **Bingkai pertama:**
+
+    | | ms |
+    |---|---|
+    | Bait Lexend tiba | **459** |
+    | FCP | **467** |
+    | Bait Baloo 2 tiba | **477** |
+    | Modul app selesai (44 fail) | 402 |
+
+    Bait Lexend tiba **8ms sebelum** cat pertama; masa menyahkod fon selepas itu tidak diukur.
+    Baloo 2 tiba **10ms selepas**. Baloo dilukis juga pada butang jawapan, skrin ganjaran dan lencana
+    kiraan, tetapi semua itu muncul selepas satu ketikan, bila kedua-dua muka sudah lama sedia.
+    **Skrin Mula ialah satu-satunya skrin yang dilukis sebelum ketikan**, dan semua teksnya Baloo:
+    tajuk dan butang Mula. Jadi paling teruk **satu bingkai tajuk dan butang Mula dalam sandaran**.
+    FCP juga tidak berkata apa yang dilukis — ia mungkin foto latar atau SVG kancil, bukan teks.
+
+    **Arahan soalan tidak terdedah.** Ia Lexend 500, teks yang had jalur 28/37 aksara dikalibrasi
+    padanya (item 33), dan ia hanya wujud selepas anak menekan Mula.
+
+    Lebar yang diukur pada telefon, verdict daripada lebar dan bukan daripada `fonts.check`:
+
+    | Baris | Diminta | Sandaran | Beza | Verdict |
+    |---|---|---|---|---|
+    | Arahan, Lexend 500/22px | 607.6 | 525.0 | 82.6 (15.7%) | LEXEND |
+    | Teks asas, Lexend 400/18px | 485.9 | 433.3 | 52.6 (12.1%) | LEXEND |
+    | Tajuk, Baloo 2 700/30px | 724.7 | 751.1 | −26.4 (−3.5%) | BALOO 2 |
+
+    #### Muatan berganda — punca belum pasti
+
+    Setiap fail diminta **dua kali**, kedua-duanya membawa badan penuh:
+
+    | Fail | Mula | Selesai | `transferSize` | `encodedBodySize` | Siapa |
+    |---|---|---|---|---|---|
+    | lexend | 25 | 76 | 39,980 | 39,680 | `<link rel="preload">` |
+    | baloo2 | 27 | 76 | 33,488 | 33,188 | `<link rel="preload">` |
+    | lexend | 447 | 459 | 39,980 | 39,680 | `@font-face` |
+    | baloo2 | 467 | 477 | 33,488 | 33,188 | `@font-face` |
+
+    Preload berjalan seperti dijangka: ia bermula pada 25ms, semasa HTML dihurai, sebelum modul.
+    Yang tidak berlaku ialah penggunaannya. Safari tidak memakai bait preload untuk `@font-face` dan
+    memuat turun kedua-dua fail semula, jadi 72,868 bait badan diambil dua kali pada muatan pertama.
+    `Siapa` dalam jadual diambil daripada masa, bukan daripada `initiatorType`, yang halaman itu
+    tidak cetak. Dalam dev, `index.css` sampai melalui modul JS, jadi peraturan `@font-face` belum
+    wujud sebelum ~400ms.
+
+    - **Bukan halaman ujian.** Halaman itu hanya membaca timeline iframe, guna `system-ui` dan tiada
+      `@font-face`. Dalam pane: timeline halaman induk ada 0 permintaan fon dan 0 peraturan fon.
+      Andaian bahawa iframe tidak berkongsi cache dengan halaman induk ditolak.
+    - **Bukan semakan 304.** Pelayan dev menghantar `Cache-Control: no-cache` dengan ETag lemah dan
+      `Vary: Origin` (diukur 26 September). `no-cache` sahaja meramal permintaan bersyarat yang dijawab
+      304, iaitu ~300 bait tanpa badan — itulah yang pane tunjuk (`transferSize` 300,
+      `encodedBodySize` 0). Telefon menunjukkan badan penuh dua kali. Jadi permintaan kedua tidak
+      jumpa respons tersimpan untuk disemak langsung: preload bukan sahaja tidak dipakai, ia tidak
+      dipadankan. `no-cache` masih calon, tetapi bukan penjelasan yang cukup.
+    - **Calon yang belum diuji:** `Vary: Origin`, kalau preload dan `@font-face` berbeza dalam sama
+      ada mereka menghantar pengepala `Origin`; atau cara WebKit memadankan preload fon. Pane tidak
+      boleh menguji kedua-duanya: Chromium memakai preload, satu entri untuk setiap muka.
+
+    #### Had halaman ujian itu sendiri
+
+    Dua had dalam verdict yang halaman itu cetak, kedua-duanya membuat bacaan kelihatan lebih teruk
+    atau lebih pasti daripada datanya:
+
+    - **Ia membandingkan FCP dengan fon yang paling lewat**, tanpa mengira muka mana ada di skrin.
+      Ia mencetak "bingkai pertama sandaran" sedangkan Lexend tiba sebelum FCP, dan satu-satunya teks
+      pada skrin itu ialah Baloo.
+    - **Ia melabel setiap permintaan `RANGKAIAN` kecuali `transferSize` 0**, jadi 304 dan muat turun
+      penuh kelihatan sama. Di sini jawapannya datang daripada nombor bait dalam blok mentah, bukan
+      daripada label.
+
+    #### Belum diukur, dan yang ditangguhkan
+
+    - **Bingkai pertama pada dokumen atas, tanpa iframe.** Pemilik projek memilih untuk tidak
+      mengukurnya. Tiada data menunjukkan iframe menyebabkan muatan berganda, tetapi tiada data juga
+      yang menolak tingkah laku WebKit yang khusus untuk iframe.
+    - **Hos produksi belum wujud**, jadi header cache untuk `/fonts/*` belum boleh diputuskan.
+      Hari ini anak bermain pada pelayan dev, jadi yang diukur di sini ialah yang anak alami.
+
+    **Keputusan pemilik projek, 26 September 2026: pilihan D — tiada perubahan lagi untuk PR ini.**
+    Sasaran utama tercapai, dan arahan soalan yang menanggung risiko susun atur tidak terdedah.
+
+    **Kerja masa depan — pilihan A, apabila hos dipilih:** `Cache-Control` panjang dengan `immutable`
+    untuk `/fonts/*`, dan nama fail berversi (contoh `lexend-latin.v26.woff2`) kerana `public/` tidak
+    di-hash. **Uji semula pada telefon sebelum mempercayainya.** Nombor bait di atas menunjukkan
+    padanan yang gagal, bukan semakan semula; kalau itu puncanya, cache yang panjang sahaja mungkin
+    tidak membuang muat turun kedua.
