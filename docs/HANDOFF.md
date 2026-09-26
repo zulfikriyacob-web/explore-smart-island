@@ -1,4 +1,4 @@
-# Handoff — 24 September 2026
+# Handoff — 26 September 2026
 
 Start here. Section 0 is where the project stands now. Sections 1–6 below it are the
 record of 12–13 September — the iOS audio root cause and the names copied forward
@@ -11,9 +11,10 @@ Every date below is from `git log`, not from memory (CLAUDE.md, "This machine").
 
 ---
 
-## 0. Where the project stands — 24 September 2026
+## 0. Where the project stands — 26 September 2026
 
-`main` is at `7a1ca2c`. **`feat/digit-value-batch` merged in PR #98 on 23 September 2026**
+This section describes `main` as of PR #102, merged 26 September 2026; anything merged
+after it is in `git log`. **`feat/digit-value-batch` merged in PR #98 on 23 September 2026**
 and the branch is deleted, local and remote: the digit-value batch, its recordings, and the
 measurements below are all on `main` now. 373 tests pass and `validate:content` reports 0
 errors on 48 questions. One pack, `math-y1-nombor-100`, `reviewStatus: teacher-reviewed` —
