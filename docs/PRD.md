@@ -4051,6 +4051,31 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     Rekod jawapan), dan q039, q042, q044 (tiga pembetulan Nilai digit, yang teksnya ialah teks guru
     sendiri).
 
+    #### q004: DIPUTUSKAN pemilik projek, 27 September 2026 — kekal tiga pilihan, ke guru dalam pakej seterusnya
+
+    **Keputusan:** q004 kekal seperti dalam pek sekarang — *Dalam 63, apakah digit di tempat puluh?*
+    dengan pilihan 6 · 3 · 63. Ia dihantar kepada guru dalam **pakej semakan seterusnya**, bersama 15
+    soalan yang belum disemak, dan bukan sebagai pusingan berasingan.
+
+    **Sebabnya:**
+
+    - **Pengganggu 63 mewakili salah faham yang boleh dinamakan:** nombor penuh, bukan digit.
+      Kata-kata itu ialah label guru sendiri untuk pengganggu 26 dalam draf B7 (q043), dan guru
+      meluluskan corak yang sama — nombor penuh sebagai pengganggu — untuk B5 (q041), B7 (q043), dan
+      B8, B9, B10 (q044–q046) pada 23 September (item 49; A6 dan Bahagian B dokumen Nilai digit).
+    - **Tiga pilihan mengetatkan tekaan, bukan melonggarkannya:** dari 1/2 kepada 1/3.
+
+    **Apa yang keputusan ini bukan:** ia **bukan kelulusan guru**. Guru melihat versi dua pilihan
+    pada borang 12 September, dan tidak pernah melihat versi ini. Ini keputusan pemilik projek untuk
+    mengekalkannya sementara menunggu semakan.
+
+    Satu perkara yang guru memang pernah baca, dan yang tetap tidak menjadikannya kelulusan: A6 dalam
+    `pakej-semakan-nilai-digit-dan-tambah.md` memberitahu guru *"q004 sudah guna 63 dengan cara yang
+    sama."* Jawapan guru kepada A6 ialah *"Setuju untuk B9 dan B10"*, dan tidak menyebut q004.
+
+    **Empat lagi yang berubah selepas disemak — q001, q002, q010, q019 — belum diputuskan.** Kesemuanya
+    masuk pakej guru yang sama.
+
     #### Tiga percanggahan dengan apa yang repo katakan sebelum audit ini
 
     1. **`kssr.review.note` berkata soalan yang ditambah selepas 12 September "belum disemak".**
