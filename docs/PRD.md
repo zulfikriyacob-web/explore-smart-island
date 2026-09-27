@@ -4076,6 +4076,25 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
     **Empat lagi yang berubah selepas disemak — q001, q002, q010, q019 — belum diputuskan.** Kesemuanya
     masuk pakej guru yang sama.
 
+    **Sebab q019 diubah, daripada mesej commit `7c3c158` (17 September 2026).** Pilihan ketiga yang
+    guru senaraikan, `14, 9, 18`, ialah susunan yang sama seperti dalam arahan soalan sendiri
+    (*Kad Raju: 14, 9, 18.*). Anak boleh menolaknya dengan memadankan rentetan, jadi bagi anak itu
+    soalan tersebut dua pilihan sedangkan siling tekaan mengiranya tiga. Ia diganti dengan
+    `14, 18, 9`: susunan anak yang membandingkan digit pertama sahaja, atau digit sa sahaja, lalu
+    meletakkan 9 di hujung. Peraturan umumnya dalam SPEC §3.4. Sebab ini perlu diterangkan kepada guru
+    dalam pakej, kerana pilihan yang digantikan ialah pilihan guru sendiri.
+
+    #### Pakej semakan guru seterusnya — tiga kumpulan, 23 soalan
+
+    | Kumpulan | Soalan | Bilangan |
+    |---|---|---|
+    | Belum disemak | q012–q018, q020, q021, q025–q028, q035, q036 | 15 |
+    | Berubah selepas disemak | q004 (dikekalkan pemilik projek, di atas), q001, q002, q010, q019 | 5 |
+    | Disemak separa | q011 (teks skrin dan arahan Sedia sahaja), q022 (bahasa dan peranan sahaja), q023 (pemetaan sahaja) | 3 |
+
+    Satu pakej, bukan pusingan berasingan untuk mana-mana kumpulan. Keputusan pemilik projek,
+    27 September 2026.
+
     #### Tiga percanggahan dengan apa yang repo katakan sebelum audit ini
 
     1. **`kssr.review.note` berkata soalan yang ditambah selepas 12 September "belum disemak".**
