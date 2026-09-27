@@ -163,13 +163,18 @@ Three smaller things are still open, all on us:
 ~~**On the owner — the pack's `kssr.review` is out of date.**~~ Rewritten 26 September with
 the per-question count (PRD §16 item 52).
 
-**On the owner — q004, changed after review without the teacher asking.** The teacher saw
-*Nombor 63. Apakah digit di tempat puluh?* with two options, 6 and 3, on the 12 September
-form. The pack now has a rewritten prompt (*Dalam 63, …*, `ce69ce5`, 13 September) and a
-third option, 63 (`8ca0956`, 14 September). Of the five questions that changed after review
-without the teacher asking — q001, q002, q004, q010, q019 — it is the largest: the teacher
-approved two options and the child gets three. Sending it back, reverting it, or keeping it
-is a decision, not mechanical work. PRD §16 item 52.
+~~**On the owner — q004, changed after review without the teacher asking.**~~ Decided
+27 September 2026: q004 keeps its three options while it waits for review. That is the owner's
+decision, not the teacher's approval — the teacher saw the two-option version. PRD §16 item 52.
+
+**On the owner, then the teacher — the next review package.** What it has to carry:
+
+- **The 15 questions no teacher document covers:** q012–q018, q020, q021, q025–q028, q035,
+  q036.
+- **The five that changed after review without the teacher asking:** q004 as it stands now
+  (kept by the owner, above), and q001, q002, q010 and q019, which are not yet decided.
+
+One package, not a separate round for q004. PRD §16 item 52.
 
 ### Still true, and still not fixed
 
