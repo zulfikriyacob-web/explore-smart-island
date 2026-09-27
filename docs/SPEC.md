@@ -955,6 +955,15 @@ banyak daripadanya dua pilihan.
 > maksimum, bukan minimum: skema membenarkan dua pilihan bagi kedua-dua jenis, dan pek membawa
 > dua soalan begitu — q004 (`mcq`, satu-satunya bukti `1.6.1/digit_at_tens`) dan q009
 > (`mcq-image`, tiada SP). Soalan paling mudah diteka ialah dua pilihan.
+>
+> **Keadaan pek sejak itu, dicatat 27 September 2026.** Ayat di atas benar pada 13 September dan
+> dikekalkan kerana ia merekod sebab pembetulan itu dibuat. Ia tidak lagi menerangkan pek:
+> q004 mendapat pilihan ketiga pada 14 September 2026 (`8ca0956`), dan pada hari yang sama q020
+> dan q021 masuk sebagai bukti `1.6.1/digit_at_tens`. q019 masuk sebagai soalan dua pilihan pada
+> 14 September dan menjadi tiga pilihan pada 17 September 2026 (`7c3c158`). **Sejak 17 September
+> tiada soalan dua pilihan yang membawa sub-kemahiran;** satu-satunya soalan dua pilihan ialah
+> q009, `parked`. Hujahnya tidak berubah: skema masih membenarkan dua pilihan, jadi julat 3.7%
+> hingga 12.5% kekal untuk soalan yang akan ditulis.
 
 **Siling tekaan: 4%.** Daripada rekod guru yang dibina semula
 (`docs/kssr/guru-rekod-jawapan-subkemahiran-dan-semakan-soalan.md`):
@@ -990,6 +999,14 @@ Dua andaian **kita**, bukan peraturan guru:
 > tiga soalan dua pilihan dalam satu sub-kemahiran, dan sejak stor kemajuan wujud q019 ialah
 > satu-satunya soalan dua pilihan yang membawa sub-kemahiran — jadi tiada peranti memegang bukti
 > begitu. Kesimpulan daripada sejarah pek, bukan bacaan storan peranti. PRD §16 item 22.
+>
+> **Keadaan pek sejak itu, dicatat 27 September 2026.** q019 menjadi tiga pilihan pada
+> 17 September 2026 (`7c3c158`), hari yang sama nota ini ditulis. Sejak itu **tiada soalan dua
+> pilihan yang membawa sub-kemahiran**; satu-satunya soalan dua pilihan ialah q009, `parked`.
+> Dikira pada setiap versi pek yang menyentuh fail itu, dari `7c3c158` hingga `eb44db8`.
+> Kesimpulan nota ini tidak dilemahkan: sejak stor kemajuan wujud, hanya satu soalan dua pilihan
+> pernah membawa sub-kemahiran — q019, sehingga 17 September — jadi bukti tiga soalan dua pilihan
+> dalam satu sub-kemahiran tidak mungkin wujud pada mana-mana peranti.
 
 **Dikira daripada apa yang anak jawab, bukan apa yang bank soalan pegang.** Tiga jawapan tiga
 pilihan mencapai ambang walaupun bank sub-kemahiran itu ada soalan dua pilihan. Mengira mengikut
