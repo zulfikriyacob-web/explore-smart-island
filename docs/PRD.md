@@ -4119,3 +4119,129 @@ bersama 5 kanak-kanak sebenar setiap tahun persekolahan.
 
     **`reviewStatus` tidak diubah.** `teacher-reviewed` merujuk borang pemetaan yang ditanda (item 20),
     bukan setiap soalan, dan itu kekal betul.
+
+    #### Semakan guru kedua, 27 September 2026 — direkod, BELUM DILAKSANA
+
+    Pakej 23 soalan dihantar dan dijawab pada hari yang sama. Kedua-duanya difailkan:
+    `pakej-semakan-baki-audit-48-soalan.md` (menurut pengepalanya, ditulis Claude) dan jawapan guru,
+    `guru-semakan-baki-audit-48-soalan.md`, teks tidak disunting. **Langkah ini merekod sahaja:** tiada
+    soalan, skema atau `math-y1.skills.json` diubah.
+
+    **Dua prinsip guru untuk semakan ini**, dalam perkataannya sendiri:
+
+    > *"Kelulusan hanya terpakai pada teks, pilihan, pancingan dan penerangan yang memang sudah
+    > dilihat. Kalau sesuatu berubah selepas semakan, versi baharu perlu dinilai semula."*
+
+    > *"Setiap pengganggu sebaiknya mewakili salah faham yang munasabah. Tetapi jangan cipta salah
+    > faham palsu semata-mata mahu dua pengganggu yang berbeza."*
+
+    **Empat perkara yang wajib diubah:**
+
+    | Soalan | Keputusan guru |
+    |---|---|
+    | q012 | Pilihan **55 → 58**. 58 mewakili *menyamakan “sama dengan” dengan “lebih besar”* |
+    | q014 | Pilihan **37 → 34**. 34 mewakili *menganggap nombor yang sama sebagai “lebih kecil”* |
+    | q018 | **Keluar daripada `order_ascending`.** Pindah ke `1.5.2` / `complete_number_sequence`, atau tulis semula sebagai soalan susunan sebenar. Kalau 1.5.2 belum dibina: simpan sebagai latihan sehingga ia dibina. *"Jangan guna jawapan q018 sebagai bukti mastery `order_ascending`."* Pengganggu 14 dan 16, pancingan dan penerangan sesuai untuk soalan rangkaian |
+    | q020 | Pilihan **14 → 4**, dan guna nama kanonik `place_tens`. 4 mewakili murid yang *mengenal digit 4 tetapi tidak memahami “di tempat puluh”* |
+
+    **Lima cadangan bahasa atau penerangan**, disenaraikan guru dalam ringkasannya:
+
+    | Soalan | Sekarang | Cadangan guru |
+    |---|---|---|
+    | q013 | Guli Ali 45. Guli Kumar 52. Siapa lebih banyak? | Ali ada 45 guli. Kumar ada 52. Siapa ada lebih banyak? |
+    | q015 | Setem Muaz 17. Setem Faris 23. Siapa kurang? | Muaz ada 17 setem. Faris ada 23. Siapa ada kurang setem? |
+    | q025 | Penerangan: 4 + 5 = 9. 30 + 20 = 50. | 4 + 5 = 9. 30 + 20 = 50. Jadi 59. |
+    | q036 | Pancingan: 4 + 8 = 12. Bawa 1 puluh. | 4 + 8 = 12. Jadi 1 puluh 2 sa. |
+    | q019 | Penerangan: 9 paling kecil, kemudian 14. | 9 paling kecil, kemudian 14, 18. |
+
+    Dua lagi dalam Bahagian A yang tidak masuk ringkasan guru:
+    - q017 *Mei Lin bilang 24, 25, 26. Nombor seterusnya?* — guru menulis *"Perubahan ini tidak wajib."*
+    - Pancingan q026 — *"Kira satu kurang dari 30."* boleh digunakan; *"Kira satu kurang daripada 30."*
+      kalau mahu bahasa lebih natural.
+
+    **Diluluskan seperti sekarang, dengan apa yang guru sebut dan tidak sebut:**
+
+    - **Bahagian A:**
+      - q016, q021, q028 — kemahiran, pengganggu, pancingan dan penerangan sesuai.
+      - q035 — pengganggu, pancingan dan penerangan sesuai. Guru memetik penerangannya sebagai
+        *"59 + 1 = 60. 60 + 3 = 63."*, dengan noktah; pek dan pakej menulis *59 + 1 = 60, 60 + 3 = 63.*,
+        dengan koma.
+      - q027 — kemahiran, pengganggu dan pancingan sesuai; penerangan tidak disebut.
+      - q013 — kemahiran dan pengganggu sesuai, pancingan dan penerangan boleh kekal; cadangan bahasa
+        di atas.
+      - q015, q017 — kemahiran dan pengganggu sesuai; pancingan dan penerangan tidak disebut. q015 ada
+        cadangan bahasa di atas.
+      - q025 — kemahiran, pengganggu dan pancingan sesuai; penerangan dilengkapkan seperti di atas.
+      - q026 — pengganggu dan penerangan sesuai; pancingan boleh digunakan.
+      - q036 — pengganggu dan penerangan sesuai; pancingan boleh difahami, tetapi guru lebih suka
+        versi di atas.
+      - q012, q014, q020 — kemahiran sesuai; pancingan dan penerangan boleh kekal. Hanya satu
+        pengganggu setiap satu yang wajib diubah.
+      - q018 — pengganggu, pancingan dan penerangan sesuai untuk soalan rangkaian, bukan untuk
+        `order_ascending`.
+    - **Bahagian B, kelima-lima dikekalkan:** q004 (*"☑ Kekalkan versi sekarang"*; 63 *"mewakili murid
+      yang belum membezakan nombor penuh dengan digit"*), q001, q002, q010, dan q019 termasuk pilihan
+      ketiga baharu `14, 18, 9` (*"Saya setuju dengan sebab perubahan itu."*). **Keputusan pemilik
+      projek tentang q004 pada 27 September kini disokong oleh semakan guru.**
+    - **Bahagian C:**
+      - q011 — `count_objects` sah sebagai bukti kerana ketukan itu sendiri ialah jawapan; 8 objek
+        sesuai dengan empat syarat (tidak bertindih, setiap epal jelas berasingan, bertabur tetapi
+        tidak terlalu rapat, mudah diketuk); penerangan sesuai; aras 1 munasabah. **Bukan** bukti
+        `name_number_for_quantity` dalam UI sekarang. Audio mesti terus menyebut *"Kemudian tekan
+        Sedia."*
+      - q022 — pilihan, pancingan, penerangan dan aras 3 diluluskan. Kekal bukan bukti mastery 2.2.2.
+      - q023 — pilihan, pancingan, penerangan dan aras 3 diluluskan; pemetaan `2.4.2 /
+        solve_addition_daily_problem` kekal.
+
+    Satu dakwaan guru yang repo tidak boleh sahkan: untuk q001, *"Ini juga versi yang saya sudah
+    setuju apabila kita semak had 28 aksara."* Tiada dokumen dalam `docs/kssr/` yang merekod
+    persetujuan itu. Direkod sebagai perkataan guru, bukan sebagai dokumen.
+
+    **Kelulusan guru bersyarat:** *"Selepas perkara ini dikemas kini, baki 23 soalan dalam pakej ini
+    boleh dianggap sudah melalui semakan untuk versi teks yang dinyatakan di sini."*
+
+    #### Yang guru tulis tetapi repo belum ada
+
+    - **Nama kanonik 1.6.1:** `place_tens`, `place_ones`, `value_tens`, `value_ones`. Tentang q020:
+      *"Jika `digit_at_tens` masih wujud dalam kod lama, anggap ia alias lama, bukan sub-kemahiran
+      baharu."* Fail kemahiran kita memakai `digit_at_tens`, `digit_at_ones`, `value_of_tens_digit`,
+      `value_of_ones_digit` sejak 12 September 2026 (`c139f23`). Borang 12 September sudah menamakan
+      empat nama guru, dan item 18 merekod bahawa id kita tidak dinamakan semula dan bahawa
+      menggunakan id guru ialah keputusan berasingan.
+    - **Medan yang skema tiada:**
+      - `practice_only: true` dan `mastery_evidence_2_2_2: false` untuk q022. Skema membawa
+        `noEvidence: "practice" | "parked"` sahaja, dan q022 sudah `noEvidence: "practice"`.
+      - Tag bentuk kunci-nilai: `operation: addition` dan `arithmetic_profile:
+        two_digit_plus_two_digit_no_bridge` untuk q023 — bentuk yang sama seperti A1 pada 23 September.
+        Skema membawa `tags` sebagai senarai rentetan rata; q023 kini membawa `addition`,
+        `two_digit_plus_two_digit`, `no_bridge`.
+      - Tag rata `missing_addend` dan `inverse_addition_subtraction_relation` untuk q022 muat dalam
+        skema sekarang, tetapi belum ditambah.
+    - **`promptForm` q012 dan q014:** guru mengklasifikasinya `direct` (*"Ayat ini masih `direct`.
+      Susunan bahasa berubah, tetapi murid masih mencari nombor yang lebih besar daripada 58."*). Pek
+      kata `reverse` bagi kedua-duanya.
+
+    #### Semakan yang boleh menyekat, dan kiraan yang disahkan dari fail
+
+    - **SP 1.5.2 ADA** dalam `src/content/kssr/math-y1.json`: *"Melengkapkan sebarang rangkaian
+      nombor."*, di bawah SK 1.5 *"Rangkaian nombor."* Jadi pemindahan q018 tidak tersekat di katalog.
+      Tetapi `math-y1.skills.json` tiada sub-kemahiran 1.5.2, dan `contentStandards` serta
+      `learningStandards` pek tidak menyebut 1.5 atau 1.5.2 — kedua-duanya perlu disentuh untuk
+      memindahkannya.
+    - **`1.2.2/order_ascending` dibawa oleh 3 soalan hari ini:** q007, q018, q019. Tanpa q018, tinggal
+      dua.
+
+    #### Belum diputuskan pemilik projek
+
+    1. **Pengganggu 58 dalam q012 bertembung dengan peraturan padanan rentetan SPEC §3.4.** 58 ialah
+       nombor dalam arahan (*"58 lebih kecil daripada nombor yang mana?"*). SPEC §3.4 menolak pengganggu
+       yang boleh dibuang dengan memadankan rentetan, kecuali apabila memadankan rentetan itulah
+       kesilapan yang diuji. Pengganggu baharu guru untuk q014 (34, dalam arahan *"34 lebih besar
+       daripada…"*) dan q020 (4, dalam arahan *"…ada 4 di tempat puluh?"*) membawa bentuk yang sama.
+    2. **Pengganti untuk `order_ascending`.** Kalau q018 keluar, sub-kemahiran itu tinggal dua soalan
+       (q007, q019), di bawah tiga soalan berbeza yang penguasaan perlukan.
+    3. **Penyelarasan nama sub-kemahiran 1.6.1**, antara id kita dan nama kanonik guru.
+
+    **Kiraan 30/3/15 di atas bertarikh 26 September 2026 dan belum dikira semula.** Peraturan item ini
+    memerlukannya apabila dokumen guru baharu difailkan, bersama `kssr.review.note`. Langkah ini tidak
+    menyentuh pek, jadi kedua-duanya ditangguhkan.
